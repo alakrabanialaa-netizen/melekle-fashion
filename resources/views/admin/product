@@ -1,0 +1,39 @@
+@extends('admin.layouts.app')
+
+@section('page-title','المنتجات')
+
+@section('content')
+<div class="mb-4 flex justify-between items-center">
+    <h2 class="text-lg font-semibold">المنتجات</h2>
+    <a href="#" class="px-4 py-2 bg-indigo-600 text-white rounded">إضافة منتج</a>
+</div>
+
+<div class="bg-white rounded shadow p-4">
+    <table class="w-full text-right">
+        <thead>
+            <tr class="text-sm text-gray-500">
+                <th class="p-2">الاسم</th>
+                <th class="p-2">السعر</th>
+                <th class="p-2">الكمية</th>
+                <th class="p-2">الإجراءات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($products as $p)
+                <tr class="border-t">
+                    <td class="p-2">{{ $p->name }}</td>
+                    <td class="p-2">{{ $p->price }}</td>
+                    <td class="p-2">{{ $p->quantity }}</td>
+                    <td class="p-2">تعديل / حذف</td>
+                </tr>
+            @empty
+                <tr><td colspan="4" class="p-4 text-center text-gray-500">لا توجد منتجات</td></tr>
+            @endforelse
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+        {{ $products->links() }}
+    </div>
+</div>
+@endsection
