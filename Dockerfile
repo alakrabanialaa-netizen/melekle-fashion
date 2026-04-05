@@ -1,5 +1,5 @@
-# استخدام نسخة PHP الرسمية مع Apache
-FROM php:8.2-apache
+# استخدام نسخة PHP 8.4 الرسمية مع Apache
+FROM php:8.4-apache
 
 # تثبيت الإضافات اللازمة لـ Laravel
 RUN apt-get update && apt-get install -y \
@@ -30,7 +30,7 @@ COPY . /var/www/html
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# تثبيت المكتبات (تم تعديل هذا السطر ليكون أكثر استقراراً)
+# تثبيت المكتبات مع تجاهل قيود النسخ لضمان النجاح
 RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs --no-scripts
 
 # ضبط الصلاحيات
