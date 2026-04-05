@@ -1,3 +1,4 @@
+# استخدام نسخة PHP الرسمية مع Apache
 FROM php:8.2-apache
 
 # تثبيت الإضافات اللازمة لـ Laravel
@@ -6,13 +7,14 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
+    libicu-dev \
     zip \
     unzip \
     git \
     curl
 
 # تثبيت إضافات PHP الضرورية
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
 
 # تفعيل موديل Rewrite في Apache
 RUN a2enmod rewrite
@@ -28,8 +30,8 @@ COPY . /var/www/html
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# تثبيت المكتبات مع تجاهل بعض القيود لتجنب الخطأ السابق
-RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
+# تثبيت المكتبات (تم تعديل هذا السطر ليكون أكثر استقراراً)
+RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs --no-scripts
 
 # ضبط الصلاحيات
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
