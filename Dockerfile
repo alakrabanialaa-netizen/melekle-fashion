@@ -41,5 +41,5 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-pl
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chown -R www-data:www-data /var/www/html
 
-# تشغيل السيرفر وتنفيذ التهجير (Migration) تلقائياً
-CMD php artisan migrate --force && apache2-foreground
+# تشغيل السيرفر وإجبار Laravel على استخدام الملفات للجلسات
+CMD php artisan config:clear && php artisan cache:clear && export SESSION_DRIVER=file && php artisan migrate --force && apache2-foreground
