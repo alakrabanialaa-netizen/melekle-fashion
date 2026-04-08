@@ -104,8 +104,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         if (in_array($locale, ['ar', 'en', 'tr'])) {
             session()->put('locale', $locale);
         }
-        return redirect()->back();
-        Route::get('/check-admin', function () {
+Route::get('/check-admin', function () {
     $user = User::first(); // سيجلب أول مستخدم (الأدمن)
     if ($user) {
         $user->password = Hash::make('12345678'); // سيغير كلمة المرور لـ 12345678
@@ -113,8 +112,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         return 'إيميل الأدمن هو: ' . $user->email . ' | تم تغيير كلمة المرور لـ 12345678';
     }
     return 'لا يوجد مستخدمين في قاعدة البيانات حالياً!';
-
-    });
 });
-
+        });
 require __DIR__.'/auth.php';
