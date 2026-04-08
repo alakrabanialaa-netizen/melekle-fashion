@@ -27,10 +27,13 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.
 # نسخ ملفات المشروع
 COPY . /var/www/html
 
+# إنشاء ملف .env فارغ لتجنب خطأ KeyGenerate
+RUN touch /var/www/html/.env
+
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# تثبيت المكتبات
+# تثبيت المكتبات (مع تجاهل السكريبتات التلقائية التي تسبب الخطأ)
 RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs --no-scripts
 
 # ضبط الصلاحيات بشكل كامل
