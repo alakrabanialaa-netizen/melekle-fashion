@@ -1,7 +1,7 @@
 # استخدام نسخة PHP 8.4 الرسمية مع Apache
 FROM php:8.4-apache
 
-# تثبيت الإضافات اللازمة لـ Laravel (أضفنا libpq-dev هنا)
+# تثبيت الإضافات اللازمة لـ Laravel
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     git \
     curl
 
-# تثبيت إضافات PHP الضرورية (أضفنا pdo_pgsql هنا)
+# تثبيت إضافات PHP الضرورية
 RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip intl
 
 # تفعيل موديل Rewrite في Apache
@@ -41,5 +41,5 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-pl
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chown -R www-data:www-data /var/www/html
 
-# تشغيل السيرفر
-CMD ["apache2-foreground"]
+# تشغيل السيرفر وتنفيذ التهجير (Migration) تلقائياً
+CMD php artisan migrate --force && apache2-foreground
