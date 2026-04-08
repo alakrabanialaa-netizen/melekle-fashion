@@ -1,20 +1,21 @@
 # استخدام نسخة PHP 8.4 الرسمية مع Apache
 FROM php:8.4-apache
 
-# تثبيت الإضافات اللازمة لـ Laravel
+# تثبيت الإضافات اللازمة لـ Laravel (أضفنا libpq-dev هنا)
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
     libicu-dev \
+    libpq-dev \
     zip \
     unzip \
     git \
     curl
 
-# تثبيت إضافات PHP الضرورية
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
+# تثبيت إضافات PHP الضرورية (أضفنا pdo_pgsql هنا)
+RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip intl
 
 # تفعيل موديل Rewrite في Apache
 RUN a2enmod rewrite
@@ -33,7 +34,7 @@ RUN touch /var/www/html/.env
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# تثبيت المكتبات (مع تجاهل السكريبتات التلقائية التي تسبب الخطأ)
+# تثبيت المكتبات
 RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs --no-scripts
 
 # ضبط الصلاحيات بشكل كامل
