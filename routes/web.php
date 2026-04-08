@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\ExpenseController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Product;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,6 +105,15 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
             session()->put('locale', $locale);
         }
         return redirect()->back();
+        Route::get('/check-admin', function () {
+    $user = User::first(); // سيجلب أول مستخدم (الأدمن)
+    if ($user) {
+        $user->password = Hash::make('12345678'); // سيغير كلمة المرور لـ 12345678
+        $user->save();
+        return 'إيميل الأدمن هو: ' . $user->email . ' | تم تغيير كلمة المرور لـ 12345678';
+    }
+    return 'لا يوجد مستخدمين في قاعدة البيانات حالياً!';
+
     });
 });
 
