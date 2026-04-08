@@ -33,9 +33,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # تثبيت المكتبات
 RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs --no-scripts
 
-# ضبط الصلاحيات بشكل كامل (هذا هو حل خطأ 500)
+# ضبط الصلاحيات بشكل كامل
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chown -R www-data:www-data /var/www/html
 
 # تشغيل السيرفر
-CMD php artisan key:generate --force && apache2-foreground
+CMD ["apache2-foreground"]
