@@ -123,4 +123,18 @@ Route::get('/run-seeder-secret', function () {
         return "حدث خطأ: " . $e->getMessage();
     }
 });
+Route::get('/setup-database-secret', function () {
+    try {
+        // 1. إنشاء الجداول (Migrations)
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        
+        // 2. إضافة حساب المسؤول (Seeder)
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'UsersTableSeeder', '--force' => true]);
+        
+        return "تم إنشاء الجداول وتفعيل حساب المسؤول بنجاح! يمكنك الآن تسجيل الدخول.";
+    } catch (\Exception $e) {
+        return "حدث خطأ أثناء الإعداد: " . $e->getMessage();
+    }
+});
+
 require __DIR__.'/auth.php';
