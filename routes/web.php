@@ -115,4 +115,12 @@ Route::get('/check-admin', function () {
     return 'لا يوجد مستخدمين في قاعدة البيانات حالياً!';
 });
         });
+Route::get('/run-seeder-secret', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'UsersTableSeeder', '--force' => true]);
+        return "تم تفعيل حساب المسؤول بنجاح! يمكنك الآن تسجيل الدخول.";
+    } catch (\Exception $e) {
+        return "حدث خطأ: " . $e->getMessage();
+    }
+});
 require __DIR__.'/auth.php';
