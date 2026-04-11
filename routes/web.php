@@ -76,8 +76,8 @@ Route::middleware('auth')->group(function () {
 });
 
 // --- لوحة التحكم (Admin Panel) ---
-Route::middleware(['auth'])->prefix('admin')->group(function () {
-    });.
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+ });
     
     Route::get('/', function () {
         return redirect()->route('admin.dashboard');
