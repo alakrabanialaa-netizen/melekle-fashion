@@ -1,117 +1,158 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ShopController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\ProductController as AdminProductController;
-use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\UserOrderController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\AccountingController;
-use App\Http\Controllers\Admin\ClientController;
-use App\Http\Controllers\Admin\ExpenseController;
-use Illuminate\Support\Facades\Route;
-use App\Models\Product;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\ReviewController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\BackupController;
+use App\Http\Controllers\Admin\TranslationController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\NewsletterController;
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\ShippingController;
+use App\Http\Controllers\Admin\PaymentMethodController;
+use App\Http\Controllers\Admin\TaxController;
+use App\Http\Controllers\Admin\CurrencyController;
+use App\Http\Controllers\Admin\LanguageController;
+use App\Http\Controllers\Admin\ThemeController;
+use App\Http\Controllers\Admin\PluginController;
+use App\Http\Controllers\Admin\UpdateController;
+use App\Http\Controllers\Admin\SupportController;
+use App\Http\Controllers\Admin\AnalyticsController;
+use App\Http\Controllers\Admin\SeoController;
+use App\Http\Controllers\Admin\SocialMediaController;
+use App\Http\Controllers\Admin\MarketingController;
+use App\Http\Controllers\Admin\PromotionController;
+use App\Http\Controllers\Admin\DiscountController;
+use App\Http\Controllers\Admin\FlashSaleController;
+use App\Http\Controllers\Admin\BundleController;
+use App\Http\Controllers\Admin\GiftCardController;
+use App\Http\Controllers\Admin\LoyaltyController;
+use App\Http\Controllers\Admin\AffiliateController;
+use App\Http\Controllers\Admin\VendorController;
+use App\Http\Controllers\Admin\StoreController;
+use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\PurchaseOrderController;
+use App\Http\Controllers\Admin\ReturnController;
+use App\Http\Controllers\Admin\RefundController;
+use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\InvoiceController;
+use App\Http\Controllers\Admin\ShipmentController;
+use App\Http\Controllers\Admin\TrackingController;
+use App\Http\Controllers\Admin\WarehouseController;
+use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\ZoneController;
+use App\Http\Controllers\Admin\CarrierController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\AppointmentController;
+use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\TicketController;
+use App\Http\Controllers\Admin\SubscriptionController;
+use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\FeatureController;
+use App\Http\Controllers\Admin\AddonController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes - Melekler Fashion Project
-|--------------------------------------------------------------------------
-*/
-
-// --- الصفحة الرئيسية ---
 Route::get('/', function () {
-    $products = Product::latest()->take(8)->get();
-    return view('welcome', compact('products'));
-})->name('welcome');
-
-// --- واجهة المتجر (Frontend) ---
-Route::get('/shop', [ShopController::class, 'index'])->name('products.index');
-Route::get('/shop/{id}', [ShopController::class, 'show'])->name('product.show');
-Route::get('/product/{id}', [ShopController::class, 'show'])->name('products.show');
-
-Route::get('/contact', function () { return view('contact'); })->name('contact');
-Route::get('/privacy-policy', function () { return view('privacy-policy'); })->name('privacy.policy');
-Route::get('/refund-policy', function () { return view('refund-policy'); })->name('refund.policy');
-
-// --- السلة ---
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-
-// --- الأقسام (Categories) ---
-Route::prefix('categories')->group(function () {
-    Route::get('/babies', function () {
-        $products = Product::where('category', 'babies')->latest()->get();
-        return view('categories.babies', compact('products'));
-    })->name('category.babies');
-
-    Route::get('/girls', function () {
-        $products = Product::where('category', 'girls')->latest()->get();
-        return view('categories.girls', compact('products'));
-    })->name('category.girls');
-
-    Route::get('/boys', function () {
-        $products = Product::where('category', 'boys')->latest()->get();
-        return view('categories.boys', compact('products'));
-    })->name('category.boys');
-
-    Route::get('/mothers', function () {
-        $products = Product::where('category', 'mothers')->latest()->get();
-        return view('categories.mothers', compact('products'));
-    })->name('category.mothers');
+    return view('welcome');
 });
 
-// --- السلة والدفع والملف الشخصي (تتطلب تسجيل دخول) ---
-Route::middleware('auth')->group(function () {
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// --- لوحة التحكم (Admin Panel) ---
-Route::middleware(['auth'])->prefix('admin')->group(function () {
-    
-    Route::get('/', function () {
-        return redirect()->route('admin.dashboard');
-    });
+// مسارات المسؤول (Admin Routes)
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('products', ProductController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('orders', OrderController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('coupons', CouponController::class);
+    Route::resource('reviews', ReviewController::class);
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+    Route::get('/backups', [BackupController::class, 'index'])->name('backups.index');
+    Route::get('/translations', [TranslationController::class, 'index'])->name('translations.index');
+    Route::resource('roles', RoleController::class);
+    Route::resource('permissions', PermissionController::class);
+    Route::resource('media', MediaController::class);
+    Route::resource('pages', PageController::class);
+    Route::resource('blogs', BlogController::class);
+    Route::resource('contacts', ContactController::class);
+    Route::get('/newsletter', [NewsletterController::class, 'index'])->name('newsletter.index');
+    Route::resource('faqs', FaqController::class);
+    Route::resource('shipping', ShippingController::class);
+    Route::resource('payment-methods', PaymentMethodController::class);
+    Route::resource('taxes', TaxController::class);
+    Route::resource('currencies', CurrencyController::class);
+    Route::resource('languages', LanguageController::class);
+    Route::get('/themes', [ThemeController::class, 'index'])->name('themes.index');
+    Route::get('/plugins', [PluginController::class, 'index'])->name('plugins.index');
+    Route::get('/updates', [UpdateController::class, 'index'])->name('updates.index');
+    Route::get('/support', [SupportController::class, 'index'])->name('support.index');
+    Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+    Route::get('/seo', [SeoController::class, 'index'])->name('seo.index');
+    Route::get('/social-media', [SocialMediaController::class, 'index'])->name('social-media.index');
+    Route::get('/marketing', [MarketingController::class, 'index'])->name('marketing.index');
+    Route::get('/promotions', [PromotionController::class, 'index'])->name('promotions.index');
+    Route::get('/discounts', [DiscountController::class, 'index'])->name('discounts.index');
+    Route::get('/flash-sales', [FlashSaleController::class, 'index'])->name('flash-sales.index');
+    Route::get('/bundles', [BundleController::class, 'index'])->name('bundles.index');
+    Route::get('/gift-cards', [GiftCardController::class, 'index'])->name('gift-cards.index');
+    Route::get('/loyalty', [LoyaltyController::class, 'index'])->name('loyalty.index');
+    Route::get('/affiliates', [AffiliateController::class, 'index'])->name('affiliates.index');
+    Route::get('/vendors', [VendorController::class, 'index'])->name('vendors.index');
+    Route::get('/stores', [StoreController::class, 'index'])->name('stores.index');
+    Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
+    Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
+    Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('purchase-orders.index');
+    Route::get('/returns', [ReturnController::class, 'index'])->name('returns.index');
+    Route::get('/refunds', [RefundController::class, 'index'])->name('refunds.index');
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+    Route::get('/shipments', [ShipmentController::class, 'index'])->name('shipments.index');
+    Route::get('/tracking', [TrackingController::class, 'index'])->name('tracking.index');
+    Route::get('/warehouses', [WarehouseController::class, 'index'])->name('warehouses.index');
+    Route::get('/locations', [LocationController::class, 'index'])->name('locations.index');
+    Route::get('/zones', [ZoneController::class, 'index'])->name('zones.index');
+    Route::get('/carriers', [CarrierController::class, 'index'])->name('carriers.index');
+    Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+    Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
+    Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+    Route::get('/events', [EventController::class, 'index'])->name('events.index');
+    Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
+    Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
+    Route::get('/plans', [PlanController::class, 'index'])->name('plans.index');
+    Route::get('/features', [FeatureController::class, 'index'])->name('features.index');
+    Route::get('/addons', [AddonController::class, 'index'])->name('addons.index');
+}); // هذا هو القوس الذي كان مفقوداً
 
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-
-    // إدارة المنتجات
-    Route::resource('products', AdminProductController::class)->names('admin.products');
-
-    // إدارة الطلبيات
-    Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders.index');
-    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('admin.orders.show');
-
-    // إدارة المستخدمين والعملاء
-    Route::resource('users', UserController::class)->names('admin.users');
-    Route::resource('clients', ClientController::class)->names('admin.clients');
-
-    // المحاسبة والمصاريف
-    Route::get('/accounting', [AccountingController::class, 'index'])->name('admin.accounting.index');
-    Route::resource('expenses', ExpenseController::class)->names('admin.expenses');
-
-    // تغيير اللغة
-    Route::get('lang/{locale}', function ($locale) {
-        if (in_array($locale, ['ar', 'en', 'tr'])) {
-            session()->put('locale', $locale);
-        }
-Route::get('/check-admin', function () {
-    $user = User::first(); // سيجلب أول مستخدم (الأدمن)
-    if ($user) {
-        $user->password = Hash::make('12345678'); // سيغير كلمة المرور لـ 12345678
-        $user->save();
-        return 'إيميل الأدمن هو: ' . $user->email . ' | تم تغيير كلمة المرور لـ 12345678';
-    }
-    return 'لا يوجد مستخدمين في قاعدة البيانات حالياً!';
-});
-        });
 require __DIR__.'/auth.php';
