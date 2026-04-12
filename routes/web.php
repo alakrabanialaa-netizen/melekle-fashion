@@ -123,18 +123,22 @@ Route::get('/run-seeder-secret', function () {
         return "حدث خطأ: " . $e->getMessage();
     }
 });
-Route::get('/setup-database-secret', function () {
+Route::get('/force-admin-secret', function () {
     try {
-        // 1. إنشاء الجداول (Migrations)
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        // إنشاء المستخدم مباشرة في قاعدة البيانات
+        $user = \App\Models\User::updateOrCreate(
+            ['email' => 'alaa@example.com'],
+            [
+                'name' => 'Alaa Admin',
+                'password' => \Illuminate\Support\Facades\Hash::make('123456'),
+                'is_admin' => 1,
+                'email_verified_at' => now(),
+            ]
+        );
         
-        // 2. إضافة حساب المسؤول (Seeder)
-        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'UsersTableSeeder', '--force' => true]);
-        
-        return "تم إنشاء الجداول وتفعيل حساب المسؤول بنجاح! يمكنك الآن تسجيل الدخول.";
+        return "تم إنشاء حساب المسؤول بنجاح! الإيميل: alaa@example.com | كلمة السر: 123456";
     } catch (\Exception $e) {
-        return "حدث خطأ أثناء الإعداد: " . $e->getMessage();
+        return "حدث خطأ: " . $e->getMessage();
     }
 });
-
 require __DIR__.'/auth.php';
