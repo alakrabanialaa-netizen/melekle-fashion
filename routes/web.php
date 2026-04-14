@@ -1,168 +1,63 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ShopController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\AccountingController;
-use App\Http\Controllers\Admin\ClientController;
-use App\Http\Controllers\Admin\ExpenseController;
-use Illuminate\Support\Facades\Route;
-use App\Models\Product;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\ReviewController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\ReportController;
+use Illuminate\Support\Facades\Schema;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes - Melekler Fashion Project
-|--------------------------------------------------------------------------
-*/
-
-// --- الصفحة الرئيسية ---
+// المسار الرئيسي مع إصلاح الجداول تلقائياً
 Route::get('/', function () {
-    $products = Product::latest()->take(8)->get();
-    return view('welcome', compact('products'));
+    try {
+        if (!Schema::hasTable('users')) {
+            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'UsersTableSeeder', '--force' => true]);
+        }
+        
+        if (auth()->check() && auth()->user()->is_admin) {
+            return redirect('/admin/dashboard');
+        }
+
+        $products = \App\Models\Product::all() ?? collect();
+        return view('welcome', compact('products'));
+    } catch (\Exception $e) {
+        return view('welcome', ['products' => collect()]);
+    }
 })->name('welcome');
 
-// --- واجهة المتجر (Frontend) ---
-Route::get('/shop', [ShopController::class, 'index'])->name('products.index');
-Route::get('/shop/{id}', [ShopController::class, 'show'])->name('product.show');
-Route::get('/product/{id}', [ShopController::class, 'show'])->name('products.show');
+// توجيه تلقائي من /admin إلى لوحة التحكم
+Route::get('/admin', function () {
+    return redirect('/admin/dashboard');
+})->middleware(['auth']);
 
-Route::get('/contact', function () { return view('contact'); })->name('contact');
-Route::get('/privacy-policy', function () { return view('privacy-policy'); })->name('privacy.policy');
-Route::get('/refund-policy', function () { return view('refund-policy'); })->name('refund.policy');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-// --- السلة ---
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-
-// --- الأقسام (Categories) ---
-Route::prefix('categories')->group(function () {
-    Route::get('/babies', function () {
-        $products = Product::where('category', 'babies')->latest()->get();
-        return view('categories.babies', compact('products'));
-    })->name('category.babies');
-
-    Route::get('/girls', function () {
-        $products = Product::where('category', 'girls')->latest()->get();
-        return view('categories.girls', compact('products'));
-    })->name('category.girls');
-
-    Route::get('/boys', function () {
-        $products = Product::where('category', 'boys')->latest()->get();
-        return view('categories.boys', compact('products'));
-    })->name('category.boys');
-
-    Route::get('/mothers', function () {
-        $products = Product::where('category', 'mothers')->latest()->get();
-        return view('categories.mothers', compact('products'));
-    })->name('category.mothers');
-});
-
-// --- السلة والدفع والملف الشخصي (تتطلب تسجيل دخول) ---
 Route::middleware('auth')->group(function () {
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// --- لوحة التحكم (Admin Panel) ---
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
- });
-    
-  Route::get('/', function () {
-    try {
-        // 1. التأكد من وجود الجداول وإنشاؤها إذا لم تكن موجودة
-        if (!Schema::hasTable('users')) {
-            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'UsersTableSeeder', '--force' => true]);
-        }
-Route::get('/admin', function () {
-    return redirect()->route('admin.dashboard');
-})->middleware(['auth', 'admin']);
-
-        // 2. إذا كان المستخدم مسجلاً للدخول كمسؤول، وجهه للوحة التحكم فوراً
-        if (auth()->check() && auth()->user()->is_admin) {
-            return redirect()->route('admin.dashboard');
-        }
-
-        // 3. جلب المنتجات وعرض الصفحة الرئيسية
-        $products = \App\Models\Product::all() ?? collect();
-        return view('welcome', compact('products'));
-        
-    } catch (\Exception $e) {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        return redirect('/');
-    }
-})->name('welcome');
-
-
-
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-
-    // إدارة المنتجات
-    Route::resource('products', AdminProductController::class)->names('admin.products');
-
-    // إدارة الطلبيات
-    Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders.index');
-    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('admin.orders.show');
-
-    // إدارة المستخدمين والعملاء
-    Route::resource('users', UserController::class)->names('admin.users');
-    Route::resource('clients', ClientController::class)->names('admin.clients');
-
-    // المحاسبة والمصاريف
-    Route::get('/accounting', [AccountingController::class, 'index'])->name('admin.accounting.index');
-    Route::resource('expenses', ExpenseController::class)->names('admin.expenses');
-
-    // تغيير اللغة
-    Route::get('lang/{locale}', function ($locale) {
-        if (in_array($locale, ['ar', 'en', 'tr'])) {
-            session()->put('locale', $locale);
-        }
-Route::get('/check-admin', function () {
-    $user = User::first(); // سيجلب أول مستخدم (الأدمن)
-    if ($user) {
-        $user->password = Hash::make('12345678'); // سيغير كلمة المرور لـ 12345678
-        $user->save();
-        return 'إيميل الأدمن هو: ' . $user->email . ' | تم تغيير كلمة المرور لـ 12345678';
-    }
-    return 'لا يوجد مستخدمين في قاعدة البيانات حالياً!';
+// مسارات المسؤول (Admin Routes)
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('products', ProductController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('orders', OrderController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('coupons', CouponController::class);
+    Route::resource('reviews', ReviewController::class);
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 });
-        });
-Route::get('/run-seeder-secret', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'UsersTableSeeder', '--force' => true]);
-        return "تم تفعيل حساب المسؤول بنجاح! يمكنك الآن تسجيل الدخول.";
-    } catch (\Exception $e) {
-        return "حدث خطأ: " . $e->getMessage();
-    }
-});
-Route::get('/force-admin-secret', function () {
-    try {
-        // إنشاء المستخدم مباشرة في قاعدة البيانات
-        $user = \App\Models\User::updateOrCreate(
-            ['email' => 'alaa@example.com'],
-            [
-                'name' => 'Alaa Admin',
-                'password' => \Illuminate\Support\Facades\Hash::make('123456'),
-                'is_admin' => 1,
-                'email_verified_at' => now(),
-            ]
-        );
-        
-        return "تم إنشاء حساب المسؤول بنجاح! الإيميل: alaa@example.com | كلمة السر: 123456";
-    } catch (\Exception $e) {
-        return "حدث خطأ: " . $e->getMessage();
-    }
-});
+
 require __DIR__.'/auth.php';
