@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\UserOrderController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ReviewController;
@@ -13,7 +16,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\ReportController;
 use Illuminate\Support\Facades\Schema;
 
-// المسار الرئيسي مع إصلاح الجداول تلقائياً
+// 1. المسار الرئيسي مع إصلاح الجداول تلقائياً
 Route::get('/', function () {
     try {
         if (!Schema::hasTable('users')) {
@@ -32,7 +35,13 @@ Route::get('/', function () {
     }
 })->name('welcome');
 
-// توجيه تلقائي من /admin إلى لوحة التحكم
+// 2. مسارات الأقسام (لحماية الموقع من خطأ Route not defined)
+Route::get('/category/boys', function() { return view('categories.boys'); })->name('category.boys');
+Route::get('/category/girls', function() { return view('categories.girls'); })->name('category.girls');
+Route::get('/category/babies', function() { return view('categories.babies'); })->name('category.babies');
+Route::get('/category/accessories', function() { return view('categories.accessories'); })->name('category.accessories');
+
+// 3. توجيه تلقائي من /admin إلى لوحة التحكم
 Route::get('/admin', function () {
     return redirect('/admin/dashboard');
 })->middleware(['auth']);
@@ -47,7 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// مسارات المسؤول (Admin Routes)
+// 4. مسارات المسؤول (Admin Routes)
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('products', ProductController::class);
