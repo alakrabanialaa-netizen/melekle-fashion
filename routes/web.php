@@ -80,8 +80,20 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
  });
     
     Route::get('/', function () {
-        return redirect()->route('admin.dashboard');
-    });
+    try {
+        // هذا الكود سيتحقق إذا كانت الجداول موجودة، وإذا لم تكن موجودة سيقوم بإنشائها فوراً
+        if (!Schema::hasTable('users')) {
+            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'UsersTableSeeder', '--force' => true]);
+        }
+        return view('welcome');
+    } catch (\Exception $e) {
+        // إذا حدث خطأ، سيقوم بإنشاء الجداول بأي حال
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return view('welcome');
+    }
+});
+
 
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
