@@ -32,7 +32,10 @@ Route::get('/', function () {
     }
 })->name('welcome');
 
-// 2. تعريف كافة المسارات المطلوبة في قالب welcome (تم استخراجها جميعاً)
+// 2. تعريف كافة المسارات المطلوبة في قالب welcome (مراجعة شاملة)
+Route::get('/products', function() { return view('products.index'); })->name('products.index');
+Route::get('/products/{id}', function($id) { return view('products.show'); })->name('products.show');
+
 Route::get('/category/boys', function() { return view('categories.boys'); })->name('category.boys');
 Route::get('/category/girls', function() { return view('categories.girls'); })->name('category.girls');
 Route::get('/category/babies', function() { return view('categories.babies'); })->name('category.babies');
@@ -43,11 +46,12 @@ Route::get('/offers', function() { return view('offers'); })->name('offers');
 Route::get('/search', function() { return view('search'); })->name('search');
 Route::get('/contact', function() { return view('contact'); })->name('contact');
 Route::get('/about', function() { return view('about'); })->name('about');
+
 Route::get('/cart', function() { return view('cart'); })->name('cart.index');
+Route::post('/cart/add/{id}', function($id) { return back(); })->name('cart.add');
 Route::get('/checkout', function() { return view('checkout'); })->name('checkout');
 Route::get('/orders/history', function() { return view('orders.history'); })->name('orders.history');
 
-// روابط السياسات (التي سببت الخطأ الأخير)
 Route::get('/refund-policy', function() { return view('policies.refund'); })->name('refund.policy');
 Route::get('/privacy-policy', function() { return view('policies.privacy'); })->name('privacy.policy');
 Route::get('/terms-conditions', function() { return view('policies.terms'); })->name('terms.conditions');
