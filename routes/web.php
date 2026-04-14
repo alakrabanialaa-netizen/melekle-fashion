@@ -81,16 +81,24 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     
     Route::get('/', function () {
     try {
-        // هذا الكود سيتحقق إذا كانت الجداول موجودة، وإذا لم تكن موجودة سيقوم بإنشائها فوراً
+        // 1. التأكد من وجود الجداول وإنشاؤها إذا لم تكن موجودة
         if (!Schema::hasTable('users')) {
             \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
             \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'UsersTableSeeder', '--force' => true]);
         }
-        return view('welcome');
+
+        // 2. جلب المنتجات (لحل خطأ Undefined variable $products)
+        // سنحاول جلب المنتجات، وإذا لم تكن هناك منتجات سنرسل مصفوفة فارغة
+        $products = \App\Models\Product::all() ?? collect();
+        
+        // 3. عرض الصفحة مع إرسال المتغيرات المطلوبة
+        return view('welcome', compact('products'));
+        
     } catch (\Exception $e) {
-        // إذا حدث خطأ، سيقوم بإنشاء الجداول بأي حال
+        // في حال حدوث أي خطأ، نحاول تشغيل المايجريشن ثم العودة للصفحة
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        return view('welcome');
+        $products = collect();
+        return view('welcome', compact('products'));
     }
 });
 
