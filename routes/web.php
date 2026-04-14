@@ -32,7 +32,7 @@ Route::get('/', function () {
     }
 })->name('welcome');
 
-// 2. تعريف كافة مسارات الأقسام المطلوبة في قالب welcome
+// 2. تعريف كافة المسارات المطلوبة في القالب (لحل أخطاء Route not defined)
 Route::get('/category/boys', function() { return view('categories.boys'); })->name('category.boys');
 Route::get('/category/girls', function() { return view('categories.girls'); })->name('category.girls');
 Route::get('/category/babies', function() { return view('categories.babies'); })->name('category.babies');
@@ -40,6 +40,11 @@ Route::get('/category/mothers', function() { return view('categories.mothers'); 
 Route::get('/category/accessories', function() { return view('categories.accessories'); })->name('category.accessories');
 Route::get('/offers', function() { return view('offers'); })->name('offers');
 Route::get('/search', function() { return view('search'); })->name('search');
+Route::get('/contact', function() { return view('contact'); })->name('contact');
+Route::get('/about', function() { return view('about'); })->name('about');
+Route::get('/cart', function() { return view('cart'); })->name('cart.index');
+Route::get('/checkout', function() { return view('checkout'); })->name('checkout');
+Route::get('/orders/history', function() { return view('orders.history'); })->name('orders.history');
 
 // 3. توجيه تلقائي من /admin إلى لوحة التحكم
 Route::get('/admin', function () {
