@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ReviewController;
@@ -32,7 +32,7 @@ Route::get('/', function () {
     }
 })->name('welcome');
 
-// 2. تعريف كافة مسارات الأقسام (لحل أخطاء Route not defined)
+// 2. تعريف كافة مسارات الأقسام المطلوبة في قالب welcome
 Route::get('/category/boys', function() { return view('categories.boys'); })->name('category.boys');
 Route::get('/category/girls', function() { return view('categories.girls'); })->name('category.girls');
 Route::get('/category/babies', function() { return view('categories.babies'); })->name('category.babies');
