@@ -79,7 +79,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
  });
     
-    Route::get('/', function () {
+   Route::get('/', function () {
     try {
         // 1. التأكد من وجود الجداول وإنشاؤها إذا لم تكن موجودة
         if (!Schema::hasTable('users')) {
@@ -88,7 +88,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         }
 
         // 2. جلب المنتجات (لحل خطأ Undefined variable $products)
-        // سنحاول جلب المنتجات، وإذا لم تكن هناك منتجات سنرسل مصفوفة فارغة
         $products = \App\Models\Product::all() ?? collect();
         
         // 3. عرض الصفحة مع إرسال المتغيرات المطلوبة
@@ -100,7 +99,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         $products = collect();
         return view('welcome', compact('products'));
     }
-});
+})->name('welcome'); // أضفنا هذا الاسم هنا لحل المشكلة
+
 
 
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
