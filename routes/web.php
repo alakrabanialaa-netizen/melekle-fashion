@@ -79,27 +79,31 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
  });
     
-   Route::get('/', function () {
+  Route::get('/', function () {
     try {
         // 1. التأكد من وجود الجداول وإنشاؤها إذا لم تكن موجودة
         if (!Schema::hasTable('users')) {
             \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
             \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'UsersTableSeeder', '--force' => true]);
         }
+Route::get('/admin', function () {
+    return redirect()->route('admin.dashboard');
+})->middleware(['auth', 'admin']);
 
-        // 2. جلب المنتجات (لحل خطأ Undefined variable $products)
+        // 2. إذا كان المستخدم مسجلاً للدخول كمسؤول، وجهه للوحة التحكم فوراً
+        if (auth()->check() && auth()->user()->is_admin) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        // 3. جلب المنتجات وعرض الصفحة الرئيسية
         $products = \App\Models\Product::all() ?? collect();
-        
-        // 3. عرض الصفحة مع إرسال المتغيرات المطلوبة
         return view('welcome', compact('products'));
         
     } catch (\Exception $e) {
-        // في حال حدوث أي خطأ، نحاول تشغيل المايجريشن ثم العودة للصفحة
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        $products = collect();
-        return view('welcome', compact('products'));
+        return redirect('/');
     }
-})->name('welcome'); // أضفنا هذا الاسم هنا لحل المشكلة
+})->name('welcome');
 
 
 
