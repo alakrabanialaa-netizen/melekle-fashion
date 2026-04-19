@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
-use App\Http\Controllers\Admin\DashboardController;
 
 // 1. المسار الرئيسي مع إصلاح الجداول وتوجيه المسؤول
 Route::get('/', function () {
@@ -41,9 +40,12 @@ Route::get('/terms-conditions', function() { return "الشروط والأحكا
 Route::get('/shipping-policy', function() { return "سياسة الشحن"; })->name('shipping.policy');
 Route::get('/products', function() { return "المنتجات"; })->name('products.index');
 
-// 3. لوحة تحكم المسؤول (بدون Middleware 'admin' مؤقتاً للتأكد من الدخول)
+// 3. لوحة تحكم المسؤول (تعريف مباشر بدون Controller لحل المشكلة فوراً)
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', function () {
+        // سنعرض لك صفحة لوحة التحكم الحقيقية من هنا مباشرة
+        return view('admin.dashboard'); 
+    })->name('dashboard');
 });
 
 require __DIR__.'/auth.php';
