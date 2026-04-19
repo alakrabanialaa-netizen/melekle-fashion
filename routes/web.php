@@ -10,13 +10,10 @@ Route::get('/', function () {
         if (!Schema::hasTable('users')) {
             \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
             \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'UsersTableSeeder', '--force' => true]);
-        }
-        
-     
-
-        return view('welcome', ['products' => collect()]);
+        }     
+return view('welcome', ['products' => collect()]);
     } catch (\Exception $e) {
-        return view('welcome', ['products' => collect()]);
+return view('welcome', ['products' => \App\Models\Product::all()]);
     }
 })->name('welcome');
 
