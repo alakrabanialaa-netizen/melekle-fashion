@@ -47,6 +47,7 @@ Route::get('/shipping-policy', function() { return "سياسة الشحن"; })->
 Route::get('/products', function() { return "المنتجات"; })->name('products.index');
 
 // 3. لوحة تحكم المسؤول وكافة مسارات الإدارة (Resources)
+// 3. لوحة تحكم المسؤول وكافة مسارات الإدارة
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     
     // لوحة التحكم
@@ -67,7 +68,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         ));
     })->name('dashboard');
 
-    // تعريف مسارات الإدارة (Resources) لضمان عدم حدوث خطأ Route not defined
+    // تعريف كافة المسارات التي قد يطلبها القالب لتجنب أخطاء Route not defined
     Route::get('/products-list', function() { return "قائمة المنتجات"; })->name('products.index');
     Route::get('/categories-list', function() { return "قائمة الأقسام"; })->name('categories.index');
     Route::get('/orders-list', function() { return "قائمة الطلبات"; })->name('orders.index');
@@ -77,6 +78,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/reviews-list', function() { return "قائمة التقييمات"; })->name('reviews.index');
     Route::get('/settings-page', function() { return "الإعدادات"; })->name('settings.index');
     Route::get('/reports-page', function() { return "التقارير"; })->name('reports.index');
+    Route::get('/accounting-page', function() { return "المحاسبة"; })->name('accounting.index'); // أضفنا هذا لحل الخطأ الجديد
 });
+
+
 
 require __DIR__.'/auth.php';
