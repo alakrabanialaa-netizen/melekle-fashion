@@ -70,8 +70,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // تعريف كافة المسارات التي قد يطلبها القالب لتجنب أخطاء Route not defined
     // استبدل السطر القديم بهذا:
+// مسارات إدارة المنتجات
 Route::get('/products-list', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
 Route::get('/products/create', [App\Http\Controllers\Admin\ProductController::class, 'create'])->name('products.create');
+Route::post('/products/store', [App\Http\Controllers\Admin\ProductController::class, 'store'])->name('products.store'); // هذا هو السطر المفقود الذي يسبب الخطأ
 
     Route::get('/categories-list', function() { return "قائمة الأقسام"; })->name('categories.index');
     Route::get('/orders-list', function() { return "قائمة الطلبات"; })->name('orders.index');
