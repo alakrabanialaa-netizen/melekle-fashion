@@ -19,6 +19,11 @@
 
     <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-8 rounded-2xl shadow-lg space-y-8">
         @csrf
+<form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+    @csrf {{-- أضف هذا السطر هنا --}}
+
+    <!-- باقي الكود كما هو... -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         {{-- ================================================== --}}
         {{-- 1. المعلومات الأساسية (في عمودين) --}}
