@@ -72,6 +72,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/categories-list', function() { return "قائمة الأقسام"; })->name('categories.index');
     Route::get('/orders-list', function() { return "قائمة الطلبات"; })->name('orders.index');
     Route::get('/users-list', function() { return "قائمة المستخدمين"; })->name('users.index');
+    Route::get('/clients-list', function() { return "قائمة العملاء"; })->name('clients.index');
     Route::get('/coupons-list', function() { return "قائمة الكوبونات"; })->name('coupons.index');
     Route::get('/reviews-list', function() { return "قائمة التقييمات"; })->name('reviews.index');
     Route::get('/settings-page', function() { return "الإعدادات"; })->name('settings.index');
