@@ -46,32 +46,36 @@ Route::get('/terms-conditions', function() { return "الشروط والأحكا
 Route::get('/shipping-policy', function() { return "سياسة الشحن"; })->name('shipping.policy');
 Route::get('/products', function() { return "المنتجات"; })->name('products.index');
 
-// 3. لوحة تحكم المسؤول (تعريف كل المتغيرات التي يطلبها القالب)
+// 3. لوحة تحكم المسؤول وكافة مسارات الإدارة (Resources)
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    
+    // لوحة التحكم
     Route::get('/dashboard', function () {
-        // جلب الإحصائيات الأساسية
         $productsCount = Schema::hasTable('products') ? DB::table('products')->count() : 0;
         $categoriesCount = Schema::hasTable('categories') ? DB::table('categories')->count() : 0;
         $ordersCount = Schema::hasTable('orders') ? DB::table('orders')->count() : 0;
         $usersCount = Schema::hasTable('users') ? DB::table('users')->count() : 0;
         
-        // تعريف المتغيرات التي يطلبها القالب لضمان عدم حدوث خطأ
         $recentOrders = collect();
-        $recentActivities = collect(); // حل مشكلة الخطأ الأخير
+        $recentActivities = collect();
         $totalRevenue = 0;
         $monthlyRevenue = collect();
         
         return view('admin.dashboard', compact(
-            'productsCount', 
-            'categoriesCount', 
-            'ordersCount', 
-            'usersCount', 
-            'recentOrders',
-            'recentActivities',
-            'totalRevenue',
-            'monthlyRevenue'
+            'productsCount', 'categoriesCount', 'ordersCount', 'usersCount', 
+            'recentOrders', 'recentActivities', 'totalRevenue', 'monthlyRevenue'
         ));
     })->name('dashboard');
+
+    // تعريف مسارات الإدارة (Resources) لضمان عدم حدوث خطأ Route not defined
+    Route::get('/products-list', function() { return "قائمة المنتجات"; })->name('products.index');
+    Route::get('/categories-list', function() { return "قائمة الأقسام"; })->name('categories.index');
+    Route::get('/orders-list', function() { return "قائمة الطلبات"; })->name('orders.index');
+    Route::get('/users-list', function() { return "قائمة المستخدمين"; })->name('users.index');
+    Route::get('/coupons-list', function() { return "قائمة الكوبونات"; })->name('coupons.index');
+    Route::get('/reviews-list', function() { return "قائمة التقييمات"; })->name('reviews.index');
+    Route::get('/settings-page', function() { return "الإعدادات"; })->name('settings.index');
+    Route::get('/reports-page', function() { return "التقارير"; })->name('reports.index');
 });
 
 require __DIR__.'/auth.php';
