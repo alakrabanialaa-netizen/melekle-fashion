@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
-use App\Http\Controllers\DashboardController; // تم تصحيح المسار هنا بناءً على ملفك
+use App\Http\Controllers\DashboardController;
 
 // 1. المسار الرئيسي مع إصلاح الجداول وتوجيه المسؤول
 Route::get('/', function () {
@@ -21,6 +21,12 @@ Route::get('/', function () {
         return view('welcome', ['products' => collect()]);
     }
 })->name('welcome');
+
+// --- الحل لمشكلة التوجيه إلى /admin ---
+Route::get('/admin', function () {
+    return redirect('/admin/dashboard');
+})->middleware(['auth']);
+// ---------------------------------------
 
 // 2. تعريف المسارات الأساسية لتجنب أخطاء القالب
 Route::get('/category/boys', function() { return "قسم الأولاد"; })->name('category.boys');
@@ -41,7 +47,7 @@ Route::get('/terms-conditions', function() { return "الشروط والأحكا
 Route::get('/shipping-policy', function() { return "سياسة الشحن"; })->name('shipping.policy');
 Route::get('/products', function() { return "المنتجات"; })->name('products.index');
 
-// 3. لوحة تحكم المسؤول (باستخدام الكنترولر الصحيح)
+// 3. لوحة تحكم المسؤول
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
