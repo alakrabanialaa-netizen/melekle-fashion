@@ -2,7 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
-use App\Http\Controllers\DashboardController;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Order;
+use App\Models\User;
 
 // 1. المسار الرئيسي مع إصلاح الجداول وتوجيه المسؤول
 Route::get('/', function () {
@@ -22,11 +25,10 @@ Route::get('/', function () {
     }
 })->name('welcome');
 
-// --- الحل لمشكلة التوجيه إلى /admin ---
+// توجيه من /admin إلى /admin/dashboard
 Route::get('/admin', function () {
     return redirect('/admin/dashboard');
 })->middleware(['auth']);
-// ---------------------------------------
 
 // 2. تعريف المسارات الأساسية لتجنب أخطاء القالب
 Route::get('/category/boys', function() { return "قسم الأولاد"; })->name('category.boys');
@@ -47,9 +49,24 @@ Route::get('/terms-conditions', function() { return "الشروط والأحكا
 Route::get('/shipping-policy', function() { return "سياسة الشحن"; })->name('shipping.policy');
 Route::get('/products', function() { return "المنتجات"; })->name('products.index');
 
-// 3. لوحة تحكم المسؤول
+// 3. لوحة تحكم المسؤول (نقلنا الكود هنا مباشرة لحل مشكلة Not Found)
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', function () {
+        // جلب البيانات للوحة التحكم (نفس كود الكنترولر الخاص بك)
+        $productsCount = Product::count();
+        $categoriesCount = Category::count();
+        $ordersCount = Order::count();
+        $usersCount = User::count();
+        $recentOrders = Order::with('user')->latest()->take(5)->get();
+        
+        return view('admin.dashboard', compact(
+            'productsCount', 
+            'categoriesCount', 
+            'ordersCount', 
+            'usersCount', 
+            'recentOrders'
+        ));
+    })->name('dashboard');
 });
 
 require __DIR__.'/auth.php';
