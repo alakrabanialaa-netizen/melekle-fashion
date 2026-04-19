@@ -12,9 +12,7 @@ Route::get('/', function () {
             \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'UsersTableSeeder', '--force' => true]);
         }
         
-        if (auth()->check()) {
-            return redirect('/admin/dashboard');
-        }
+     
 
         return view('welcome', ['products' => collect()]);
     } catch (\Exception $e) {
