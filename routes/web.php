@@ -69,7 +69,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     })->name('dashboard');
 
     // تعريف كافة المسارات التي قد يطلبها القالب لتجنب أخطاء Route not defined
-    Route::get('/products-list', function() { return "قائمة المنتجات"; })->name('products.index');
+    // استبدل السطر القديم بهذا:
+Route::get('/products-list', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
+Route::get('/products/create', [App\Http\Controllers\Admin\ProductController::class, 'create'])->name('products.create');
+
     Route::get('/categories-list', function() { return "قائمة الأقسام"; })->name('categories.index');
     Route::get('/orders-list', function() { return "قائمة الطلبات"; })->name('orders.index');
     Route::get('/users-list', function() { return "قائمة المستخدمين"; })->name('users.index');
