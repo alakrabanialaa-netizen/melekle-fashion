@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 // 1. المسار الرئيسي مع إصلاح الجداول وتوجيه المسؤول
 Route::get('/', function () {
@@ -45,22 +46,30 @@ Route::get('/terms-conditions', function() { return "الشروط والأحكا
 Route::get('/shipping-policy', function() { return "سياسة الشحن"; })->name('shipping.policy');
 Route::get('/products', function() { return "المنتجات"; })->name('products.index');
 
-// 3. لوحة تحكم المسؤول (كود مرن يتجاوز أخطاء الموديلات المفقودة)
+// 3. لوحة تحكم المسؤول (تعريف كل المتغيرات التي يطلبها القالب)
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', function () {
-        // سنقوم بجلب البيانات بطريقة يدوية تتجنب خطأ "Class not found"
-        $productsCount = Schema::hasTable('products') ? \Illuminate\Support\Facades\DB::table('products')->count() : 0;
-        $categoriesCount = Schema::hasTable('categories') ? \Illuminate\Support\Facades\DB::table('categories')->count() : 0;
-        $ordersCount = Schema::hasTable('orders') ? \Illuminate\Support\Facades\DB::table('orders')->count() : 0;
-        $usersCount = Schema::hasTable('users') ? \Illuminate\Support\Facades\DB::table('users')->count() : 0;
-        $recentOrders = collect(); // سنتركها فارغة مؤقتاً لضمان الدخول
+        // جلب الإحصائيات الأساسية
+        $productsCount = Schema::hasTable('products') ? DB::table('products')->count() : 0;
+        $categoriesCount = Schema::hasTable('categories') ? DB::table('categories')->count() : 0;
+        $ordersCount = Schema::hasTable('orders') ? DB::table('orders')->count() : 0;
+        $usersCount = Schema::hasTable('users') ? DB::table('users')->count() : 0;
+        
+        // تعريف المتغيرات التي يطلبها القالب لضمان عدم حدوث خطأ
+        $recentOrders = collect();
+        $recentActivities = collect(); // حل مشكلة الخطأ الأخير
+        $totalRevenue = 0;
+        $monthlyRevenue = collect();
         
         return view('admin.dashboard', compact(
             'productsCount', 
             'categoriesCount', 
             'ordersCount', 
             'usersCount', 
-            'recentOrders'
+            'recentOrders',
+            'recentActivities',
+            'totalRevenue',
+            'monthlyRevenue'
         ));
     })->name('dashboard');
 });
