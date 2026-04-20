@@ -15,6 +15,30 @@ class ProductController extends Controller
     /**
      * عرض المنتجات في لوحة التحكم (Admin)
      */
+
+
+    public function store(Request $request)
+{
+    // 1. التحقق من البيانات (تأكد أن المسميات تطابق ملف الـ Blade)
+    $request->validate([
+        'product_name' => 'required|max:255',
+        'product_price' => 'required|numeric',
+    ]);
+
+    // 2. حفظ البيانات في قاعدة البيانات
+    // ملاحظة: تأكد أن أسماء الأعمدة في الجدول هي (name, price, description)
+    \App\Models\Product::create([
+        'name'        => $request->product_name,
+        'price'       => $request->product_price,
+        'description' => $request->product_description,
+        'category'    => $request->product_category,
+        // إذا كان لديك صورة، ستحتاج لمعالجتها هنا أيضاً
+    ]);
+
+    // 3. التوجيه لصفحة القائمة مع رسالة نجاح
+    return redirect()->route('admin.products.index')->with('success', 'تم إضافة المنتج بنجاح');
+}
+
     public function index(Request $request)
     {
         $query = Product::with('images');
