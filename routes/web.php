@@ -7,14 +7,31 @@ use Illuminate\Support\Facades\DB;
 // 1. المسار الرئيسي مع إصلاح الجداول وتوجيه المسؤول
 Route::get('/', function () {
     try {
-        if (!Schema::hasTable('users')) {
-            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'UsersTableSeeder', '--force' => true]);
-        }     
+        // فحص الجداول الأساسية، وإذا نقص أحدها يتم تشغيل الميجريشن فوراً
+        $requiredTables = ['users', 'products', 'orders', 'categories'];
+        $missingTable = false;
         
-        // جلب المنتجات الحقيقية للصفحة الرئيسية
+        foreach ($requiredTables as $table) {
+            if (!Schema::hasTable($table)) {
+                $missingTable = true;
+                break;
+            }
+        }
+
+        if ($missingTable) {
+            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            // اختياري: إذا أردت تشغيل الـ Seed أيضاً
+            // \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        }
+        
         $products = Schema::hasTable('products') ? \App\Models\Product::all() : collect();
         return view('welcome', compact('products'));
+
+    } catch (\Exception $e) {
+        // في حال وجود خطأ، نعرض الصفحة فارغة بدلاً من رسالة الخطأ
+        return view('welcome', ['products' => collect()]);
+    }
+})->name('welcome');
 
     } catch (\Exception $e) {
         return view('welcome', ['products' => collect()]);
