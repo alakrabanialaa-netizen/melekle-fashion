@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
+    protected $table = 'users'; // أو 'clients' إذا عندك جدول
+
     protected $fillable = [
         'name',
         'phone',
@@ -16,4 +18,3 @@ class Client extends Model
         'type',
     ];
 }
-
