@@ -39,7 +39,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. التحقق من البيانات (بناءً على مسميات الحقول في ملف الـ Blade الخاص بك)
+        // 1. التحقق من البيانات
         $validatedData = $request->validate([
             'product_name' => 'required|string|max:255',
             'product_price' => 'required|numeric|min:0',
@@ -53,7 +53,7 @@ class ProductController extends Controller
 
         try {
             return DB::transaction(function () use ($request, $validatedData) {
-                // 2. إنشاء المنتج (ربط حقول الفورم بأعمدة قاعدة البيانات)
+                // 2. إنشاء المنتج
                 $product = Product::create([
                     'name'        => $validatedData['product_name'],
                     'price'       => $validatedData['product_price'],
@@ -63,7 +63,7 @@ class ProductController extends Controller
                     'slug'        => $this->generateSlug($validatedData['product_name']),
                 ]);
 
-                // 3. معالجة الصور إذا وجدت
+                // 3. معالجة الصور
                 if ($request->hasFile('images')) {
                     foreach ($request->file('images') as $image) {
                         $path = $image->store('products', 'public');
@@ -71,7 +71,7 @@ class ProductController extends Controller
                     }
                 }
 
-                // 4. معالجة الفيديو إذا وجد
+                // 4. معالجة الفيديو
                 if ($request->hasFile('video')) {
                     $videoPath = $request->file('video')->store('products/videos', 'public');
                     $product->update(['video' => $videoPath]);
@@ -103,7 +103,6 @@ class ProductController extends Controller
             'product_category' => 'required|string',
             'product_description' => 'nullable|string',
             'product_stock' => 'nullable|integer|min:0',
-            'video' => 'nullable|mimes:mp4,mov,ogg,qt,webm,avi,wmv|max:40000',
         ]);
 
         try {
@@ -115,21 +114,6 @@ class ProductController extends Controller
                 'stock'       => $validatedData['product_stock'] ?? 0,
                 'slug'        => $this->generateSlug($validatedData['product_name'], $product->id),
             ]);
-
-            if ($request->hasFile('images')) {
-                foreach ($request->file('images') as $image) {
-                    $path = $image->store('products', 'public');
-                    $product->images()->create(['image' => $path]);
-                }
-            }
-
-            if ($request->hasFile('video')) {
-                if ($product->video) {
-                    Storage::disk('public')->delete($product->video);
-                }
-                $videoPath = $request->file('video')->store('products/videos', 'public');
-                $product->update(['video' => $videoPath]);
-            }
 
             return redirect()->route('admin.products.index')->with('success', 'تم تعديل المنتج بنجاح');
         } catch (\Exception $e) {
@@ -143,63 +127,33 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         try {
-            return DB::transaction(function () use ($product) {
-                foreach ($product->images as $img) {
-                    if (Storage::disk('public')->exists($img->image)) {
-                        Storage::disk('public')->delete($img->image);
-                    }
-                    $img->delete();
-                }
-
-                if ($product->video && Storage::disk('public')->exists($product->video)) {
-                    Storage::disk('public')->delete($product->video);
-                }
-
-                $product->delete();
-                return redirect()->route('admin.products.index')->with('success', 'تم حذف المنتج بنجاح');
-            });
+            $product->delete();
+            return redirect()->route('admin.products.index')->with('success', 'تم حذف المنتج بنجاح');
         } catch (\Exception $e) {
-            return redirect()->route('admin.products.index')->with('error', 'خطأ في الحذف: ' . $e->getMessage());
+            return redirect()->route('admin.products.index')->with('error', 'خطأ في الحذف');
         }
     }
 
     /**
-     * عرض المنتج في الموقع (Frontend)
+     * عرض المنتج في الموقع
      */
     public function show($slug)
     {
         $product = Product::with('images')->where('slug', $slug)->firstOrFail();
-        
-        $relatedProducts = Product::with('images')
-            ->where('category', $product->category)
-            ->where('id', '!=', $product->id)
-            ->take(4)
-            ->get();
-
-        return view('frontend.shop.show', compact('product', 'relatedProducts'));
+        return view('frontend.shop.show', compact('product'));
     }
 
     /**
-     * توليد الـ Slug بشكل فريد
+     * توليد الـ Slug
      */
     private function generateSlug(string $name, $ignoreId = null): string
     {
         $baseSlug = Str::slug($name) ?: str_replace(' ', '-', $name);
         $slug = $baseSlug;
         $counter = 1;
-        
-        while (true) {
-            $query = Product::where('slug', $slug);
-            if ($ignoreId) {
-                $query->where('id', '!=', $ignoreId);
-            }
-            
-            if (!$query->exists()) {
-                return $slug;
-            }
-            
-            $slug = $baseSlug . '-' . $counter;
-            $counter++;
+        while (Product::where('slug', $slug)->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+            $slug = $baseSlug . '-' . $counter++;
         }
+        return $slug;
     }
 }
