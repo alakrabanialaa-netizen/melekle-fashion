@@ -11,9 +11,13 @@ Route::get('/', function () {
             \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
             \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'UsersTableSeeder', '--force' => true]);
         }     
-return view('welcome', ['products' => collect()]);
+        
+        // جلب المنتجات الحقيقية للصفحة الرئيسية
+        $products = Schema::hasTable('products') ? \App\Models\Product::all() : collect();
+        return view('welcome', compact('products'));
+
     } catch (\Exception $e) {
-return view('welcome', ['products' => \App\Models\Product::all()]);
+        return view('welcome', ['products' => collect()]);
     }
 })->name('welcome');
 
@@ -41,7 +45,6 @@ Route::get('/terms-conditions', function() { return "الشروط والأحكا
 Route::get('/shipping-policy', function() { return "سياسة الشحن"; })->name('shipping.policy');
 Route::get('/products', function() { return "المنتجات"; })->name('products.index');
 
-// 3. لوحة تحكم المسؤول وكافة مسارات الإدارة (Resources)
 // 3. لوحة تحكم المسؤول وكافة مسارات الإدارة
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     
@@ -63,14 +66,13 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         ));
     })->name('dashboard');
 
-    // تعريف كافة المسارات التي قد يطلبها القالب لتجنب أخطاء Route not defined
-    // استبدل السطر القديم بهذا:
-// مسارات إدارة المنتجات
-Route::get('/products-list', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
-Route::get('/products/create', [App\Http\Controllers\Admin\ProductController::class, 'create'])->name('products.create');
-Route::post('/products/store', [App\Http\Controllers\Admin\ProductController::class, 'store'])->name('products.store'); // هذا هو السطر المفقود الذي يسبب الخطأ
+    // مسارات إدارة المنتجات
+    Route::get('/products-list', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/create', [App\Http\Controllers\Admin\ProductController::class, 'create'])->name('products.create');
+    Route::post('/products/store', [App\Http\Controllers\Admin\ProductController::class, 'store'])->name('products.store');
+    
     // 1. الطلبات
-Route::get('/orders-list', [App\Http\Controllers\Admin\OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('/orders-list', [App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
 
     // 2. المستخدمين / العملاء
     Route::get('/users-list', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
@@ -84,8 +86,6 @@ Route::get('/orders-list', [App\Http\Controllers\Admin\OrderController::class, '
     Route::get('/settings-page', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
     Route::get('/reports-page', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
     Route::get('/accounting-page', [App\Http\Controllers\Admin\AccountingController::class, 'index'])->name('accounting.index');
-
-
-
+});
 
 require __DIR__.'/auth.php';
