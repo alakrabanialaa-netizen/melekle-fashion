@@ -69,17 +69,22 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 Route::get('/products-list', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
 Route::get('/products/create', [App\Http\Controllers\Admin\ProductController::class, 'create'])->name('products.create');
 Route::post('/products/store', [App\Http\Controllers\Admin\ProductController::class, 'store'])->name('products.store'); // هذا هو السطر المفقود الذي يسبب الخطأ
+    // 1. الطلبات
+    Route::get('/orders-list', [App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
 
-    Route::get('/categories-list', function() { return "قائمة الأقسام"; })->name('categories.index');
-    Route::get('/orders-list', function() { return "قائمة الطلبات"; })->name('orders.index');
-    Route::get('/users-list', function() { return "قائمة المستخدمين"; })->name('users.index');
-    Route::get('/clients-list', function() { return "قائمة العملاء"; })->name('clients.index');
-    Route::get('/coupons-list', function() { return "قائمة الكوبونات"; })->name('coupons.index');
-    Route::get('/reviews-list', function() { return "قائمة التقييمات"; })->name('reviews.index');
-    Route::get('/settings-page', function() { return "الإعدادات"; })->name('settings.index');
-    Route::get('/reports-page', function() { return "التقارير"; })->name('reports.index');
-    Route::get('/accounting-page', function() { return "المحاسبة"; })->name('accounting.index'); // أضفنا هذا لحل الخطأ الجديد
-});
+    // 2. المستخدمين / العملاء
+    Route::get('/users-list', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+    Route::get('/clients-list', [App\Http\Controllers\Admin\ClientController::class, 'index'])->name('clients.index');
+
+    // 3. الكوبونات والتقييمات
+    Route::get('/coupons-list', [App\Http\Controllers\Admin\CouponController::class, 'index'])->name('coupons.index');
+    Route::get('/reviews-list', [App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('reviews.index');
+
+    // 4. الإعدادات والتقارير والمحاسبة
+    Route::get('/settings-page', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
+    Route::get('/reports-page', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+    Route::get('/accounting-page', [App\Http\Controllers\Admin\AccountingController::class, 'index'])->name('accounting.index');
+
 
 
 
