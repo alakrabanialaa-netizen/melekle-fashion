@@ -17,25 +17,25 @@ class ProductController extends Controller
      */
 
 
-    public function store(Request $request)
+   public function store(Request $request)
 {
-    // 1. التحقق من البيانات (تأكد أن المسميات تطابق ملف الـ Blade)
+    // 1. التحقق من البيانات
     $request->validate([
         'product_name' => 'required|max:255',
         'product_price' => 'required|numeric',
     ]);
 
-    // 2. حفظ البيانات في قاعدة البيانات
-    // ملاحظة: تأكد أن أسماء الأعمدة في الجدول هي (name, price, description)
+    // 2. الحفظ في قاعدة البيانات (الربط الصحيح)
     \App\Models\Product::create([
-        'name'        => $request->product_name,
+        'name'        => $request->product_name,        // يربط الحقل من الفورم بالعمود في الجدول
         'price'       => $request->product_price,
         'description' => $request->product_description,
         'category'    => $request->product_category,
-        // إذا كان لديك صورة، ستحتاج لمعالجتها هنا أيضاً
+        'stock'       => $request->product_stock ?? 0,   // إذا كان لديك حقل للكمية
+        'slug'        => \Illuminate\Support\Str::slug($request->product_name), // مهم لأن الموديل يستخدم slug
     ]);
 
-    // 3. التوجيه لصفحة القائمة مع رسالة نجاح
+    // 3. التوجيه
     return redirect()->route('admin.products.index')->with('success', 'تم إضافة المنتج بنجاح');
 }
 
