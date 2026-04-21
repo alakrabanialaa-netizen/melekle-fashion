@@ -28,13 +28,15 @@ class UserController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|min:6',
+            'type'     => 'required|in:admin,client,supplier',
         ]);
 
         User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => bcrypt($request->password),
-            'is_admin' => $request->is_admin ?? 0,
+            'is_admin' => $request->type === 'admin' ? 1 : 0,
+            'type'     => $request->type,
         ]);
 
         return redirect()
@@ -54,9 +56,15 @@ class UserController extends Controller
         $request->validate([
             'name'  => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
+            'type'  => 'required|in:admin,client,supplier',
         ]);
 
-        $data = $request->only('name', 'email', 'is_admin');
+        $data = [
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'is_admin' => $request->type === 'admin' ? 1 : 0,
+            'type'     => $request->type,
+        ];
 
         if ($request->filled('password')) {
             $data['password'] = bcrypt($request->password);
@@ -72,7 +80,6 @@ class UserController extends Controller
     // 🗑️ حذف مستخدم
     public function destroy(User $user)
     {
-        // منع حذف نفسك
         if ($user->id === auth()->id()) {
             return back()->with('error', 'لا يمكنك حذف حسابك');
         }
