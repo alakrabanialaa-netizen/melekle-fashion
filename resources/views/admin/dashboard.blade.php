@@ -138,10 +138,13 @@ document.addEventListener('DOMContentLoaded', function() {
             toolbar: { show: false },
             fontFamily: 'Cairo, sans-serif'
         },
-        series: [{
-            name: 'المبيعات',
-            data: @json($salesChartData ?? [0,0,0,0,0,0,0])
-        }],
+       series: [{
+    name: 'المبيعات',
+    data: @json(isset($salesChartData) ? $salesChartData : [0,0,0,0,0,0,0])
+}],
+xaxis: {
+    categories: @json(isset($salesChartLabels) ? $salesChartLabels : [])
+},
         xaxis: {
             categories: @json($salesChartLabels ?? [])
         },
