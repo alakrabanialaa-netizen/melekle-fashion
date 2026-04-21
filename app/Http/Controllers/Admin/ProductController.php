@@ -15,30 +15,6 @@ class ProductController extends Controller
     /**
      * عرض المنتجات في لوحة التحكم (Admin)
      */
-
-
-   public function store(Request $request)
-{
-    // 1. التحقق من البيانات
-    $request->validate([
-        'product_name' => 'required|max:255',
-        'product_price' => 'required|numeric',
-    ]);
-
-    // 2. الحفظ في قاعدة البيانات (الربط الصحيح)
-    \App\Models\Product::create([
-        'name'        => $request->product_name,        // يربط الحقل من الفورم بالعمود في الجدول
-        'price'       => $request->product_price,
-        'description' => $request->product_description,
-        'category'    => $request->product_category,
-        'stock'       => $request->product_stock ?? 0,   // إذا كان لديك حقل للكمية
-        'slug'        => \Illuminate\Support\Str::slug($request->product_name), // مهم لأن الموديل يستخدم slug
-    ]);
-
-    // 3. التوجيه
-    return redirect()->route('admin.products.index')->with('success', 'تم إضافة المنتج بنجاح');
-}
-
     public function index(Request $request)
     {
         $query = Product::with('images');
@@ -50,41 +26,44 @@ class ProductController extends Controller
         return view('admin.products.index', compact('products'));
     }
 
+    /**
+     * عرض صفحة إضافة منتج جديد
+     */
     public function create()
     {
         return view('admin.products.create');
     }
 
+    /**
+     * حفظ المنتج الجديد في قاعدة البيانات
+     */
     public function store(Request $request)
     {
+        // 1. التحقق من البيانات (بناءً على مسميات الحقول في ملف الـ Blade الخاص بك)
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'cost_price' => 'required|numeric|min:0',
-            'original_price' => 'nullable|numeric|min:0',
-            'badge_text' => 'nullable|string|max:255',
-            'stock' => 'required|integer|min:0',
-            'category' => 'required|string',
-            'description' => 'nullable|string',
-            'images' => 'required|array|min:1',
-            'images.*' => 'required|image|mimes:jpeg,png,webp,gif|max:4096',
+            'product_name' => 'required|string|max:255',
+            'product_price' => 'required|numeric|min:0',
+            'product_stock' => 'nullable|integer|min:0',
+            'product_category' => 'required|string',
+            'product_description' => 'nullable|string',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,webp,gif|max:4096',
             'video' => 'nullable|file|mimes:mp4,mov,ogg,qt|max:20480',
         ]);
 
         try {
             return DB::transaction(function () use ($request, $validatedData) {
+                // 2. إنشاء المنتج (ربط حقول الفورم بأعمدة قاعدة البيانات)
                 $product = Product::create([
-                    'name' => $validatedData['name'],
-                    'price' => $validatedData['price'],
-                    'cost_price' => $validatedData['cost_price'],
-                    'original_price' => $validatedData['original_price'],
-                    'badge_text' => $validatedData['badge_text'],
-                    'stock' => $validatedData['stock'],
-                    'category' => $validatedData['category'],
-                    'description' => $validatedData['description'] ?? null,
-                    'slug' => $this->generateSlug($validatedData['name']),
+                    'name'        => $validatedData['product_name'],
+                    'price'       => $validatedData['product_price'],
+                    'description' => $validatedData['product_description'] ?? null,
+                    'category'    => $validatedData['product_category'],
+                    'stock'       => $validatedData['product_stock'] ?? 0,
+                    'slug'        => $this->generateSlug($validatedData['product_name']),
                 ]);
 
+                // 3. معالجة الصور إذا وجدت
                 if ($request->hasFile('images')) {
                     foreach ($request->file('images') as $image) {
                         $path = $image->store('products', 'public');
@@ -92,6 +71,7 @@ class ProductController extends Controller
                     }
                 }
 
+                // 4. معالجة الفيديو إذا وجد
                 if ($request->hasFile('video')) {
                     $videoPath = $request->file('video')->store('products/videos', 'public');
                     $product->update(['video' => $videoPath]);
@@ -104,36 +84,36 @@ class ProductController extends Controller
         }
     }
 
+    /**
+     * عرض صفحة تعديل المنتج
+     */
     public function edit(Product $product)
     {
         return view('admin.products.edit', compact('product'));
     }
 
+    /**
+     * تحديث بيانات المنتج
+     */
     public function update(Request $request, Product $product)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'cost_price' => 'required|numeric|min:0',
-            'original_price' => 'nullable|numeric|min:0',
-            'badge_text' => 'nullable|string|max:255',
-            'stock' => 'required|integer|min:0',
-            'category' => 'required|string',
-            'description' => 'nullable|string',
+            'product_name' => 'required|string|max:255',
+            'product_price' => 'required|numeric|min:0',
+            'product_category' => 'required|string',
+            'product_description' => 'nullable|string',
+            'product_stock' => 'nullable|integer|min:0',
             'video' => 'nullable|mimes:mp4,mov,ogg,qt,webm,avi,wmv|max:40000',
         ]);
 
         try {
             $product->update([
-                'name' => $validatedData['name'],
-                'price' => $validatedData['price'],
-                'cost_price' => $validatedData['cost_price'],
-                'original_price' => $validatedData['original_price'],
-                'badge_text' => $validatedData['badge_text'],
-                'stock' => $validatedData['stock'],
-                'category' => $validatedData['category'],
-                'description' => $validatedData['description'] ?? null,
-                'slug' => $this->generateSlug($validatedData['name'], $product->id),
+                'name'        => $validatedData['product_name'],
+                'price'       => $validatedData['product_price'],
+                'category'    => $validatedData['product_category'],
+                'description' => $validatedData['product_description'] ?? null,
+                'stock'       => $validatedData['product_stock'] ?? 0,
+                'slug'        => $this->generateSlug($validatedData['product_name'], $product->id),
             ]);
 
             if ($request->hasFile('images')) {
@@ -157,39 +137,41 @@ class ProductController extends Controller
         }
     }
 
+    /**
+     * حذف المنتج
+     */
     public function destroy(Product $product)
     {
         try {
             return DB::transaction(function () use ($product) {
-                // 1. حذف الصور من السيرفر ومن قاعدة البيانات
                 foreach ($product->images as $img) {
                     if (Storage::disk('public')->exists($img->image)) {
                         Storage::disk('public')->delete($img->image);
                     }
-                    $img->delete(); // حذف السجل من جدول product_images
+                    $img->delete();
                 }
 
-                // 2. حذف الفيديو من السيرفر
                 if ($product->video && Storage::disk('public')->exists($product->video)) {
                     Storage::disk('public')->delete($product->video);
                 }
 
-                // 3. حذف المنتج نهائياً
                 $product->delete();
-
-                return redirect()->route('admin.products.index')->with('success', 'تم حذف المنتج وكافة ملحقاته بنجاح');
+                return redirect()->route('admin.products.index')->with('success', 'تم حذف المنتج بنجاح');
             });
         } catch (\Exception $e) {
-            return redirect()->route('admin.products.index')->with('error', 'خطأ في الحذف: تأكد أن المنتج غير مرتبط بطلبات سابقة.');
+            return redirect()->route('admin.products.index')->with('error', 'خطأ في الحذف: ' . $e->getMessage());
         }
     }
 
+    /**
+     * عرض المنتج في الموقع (Frontend)
+     */
     public function show($slug)
     {
         $product = Product::with('images')->where('slug', $slug)->firstOrFail();
         
         $relatedProducts = Product::with('images')
-            ->where('category', $product->category) // تم تصحيح category_id إلى category بناءً على الـ store
+            ->where('category', $product->category)
             ->where('id', '!=', $product->id)
             ->take(4)
             ->get();
@@ -197,9 +179,11 @@ class ProductController extends Controller
         return view('frontend.shop.show', compact('product', 'relatedProducts'));
     }
 
+    /**
+     * توليد الـ Slug بشكل فريد
+     */
     private function generateSlug(string $name, $ignoreId = null): string
     {
-        // دعم الـ Slug للغة العربية والإنجليزية بشكل صحيح
         $baseSlug = Str::slug($name) ?: str_replace(' ', '-', $name);
         $slug = $baseSlug;
         $counter = 1;
