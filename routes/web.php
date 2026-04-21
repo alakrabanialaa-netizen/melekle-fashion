@@ -70,7 +70,7 @@ Route::get('/products-list', [App\Http\Controllers\Admin\ProductController::clas
 Route::get('/products/create', [App\Http\Controllers\Admin\ProductController::class, 'create'])->name('products.create');
 Route::post('/products/store', [App\Http\Controllers\Admin\ProductController::class, 'store'])->name('products.store'); // هذا هو السطر المفقود الذي يسبب الخطأ
     // 1. الطلبات
-    Route::get('/orders-list', [App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
+Route::get('/orders-list', [App\Http\Controllers\Admin\OrderController::class, 'index'])->name('admin.orders.index');
 
     // 2. المستخدمين / العملاء
     Route::get('/users-list', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
