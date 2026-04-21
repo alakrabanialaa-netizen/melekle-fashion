@@ -24,25 +24,21 @@
     {{-- Cards --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
-        {{-- Sales --}}
         <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
             <h3 class="text-gray-400 text-sm font-bold">إجمالي المبيعات</h3>
             <p class="text-2xl font-black text-gray-800" data-counter-up="{{ $totalSales ?? 0 }}">0</p>
         </div>
 
-        {{-- Orders --}}
         <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
             <h3 class="text-gray-400 text-sm font-bold">طلبات الشهر</h3>
             <p class="text-2xl font-black text-gray-800" data-counter-up="{{ $ordersThisMonth ?? 0 }}">0</p>
         </div>
 
-        {{-- Users --}}
         <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
             <h3 class="text-gray-400 text-sm font-bold">إجمالي العملاء</h3>
             <p class="text-2xl font-black text-gray-800" data-counter-up="{{ $totalCustomers ?? 0 }}">0</p>
         </div>
 
-        {{-- Profit --}}
         <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
             <h3 class="text-gray-400 text-sm font-bold">صافي الربح</h3>
             <p class="text-2xl font-black text-gray-800" data-counter-up="{{ $netProfit ?? 0 }}">0</p>
@@ -50,7 +46,7 @@
 
     </div>
 
-    {{-- Charts + Activities --}}
+    {{-- Content --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         {{-- Chart --}}
@@ -69,7 +65,7 @@
             <div class="divide-y divide-gray-50">
 
                 @php
-                    $activities = isset($recentActivities) ? $recentActivities : collect();
+                    $activities = $recentActivities ?? collect();
                 @endphp
 
                 @forelse($activities as $activity)
@@ -138,19 +134,26 @@ document.addEventListener('DOMContentLoaded', function() {
             toolbar: { show: false },
             fontFamily: 'Cairo, sans-serif'
         },
-       series: [{
-    name: 'المبيعات',
-    data: @json(isset($salesChartData) ? $salesChartData : [0,0,0,0,0,0,0])
-}],
-xaxis: {
-    categories: @json(isset($salesChartLabels) ? $salesChartLabels : [])
-},
+
+        series: [{
+            name: 'المبيعات',
+            data: @json($salesChartData ?? [])
+        }],
+
         xaxis: {
             categories: @json($salesChartLabels ?? [])
         },
-        stroke: { curve: 'smooth', width: 3 },
+
+        stroke: {
+            curve: 'smooth',
+            width: 3
+        },
+
         colors: ['#4f46e5'],
-        dataLabels: { enabled: false }
+
+        dataLabels: {
+            enabled: false
+        }
     };
 
     new ApexCharts(document.querySelector("#sales-chart"), options).render();
