@@ -101,7 +101,11 @@
                 </div>
             </div>
             <div class="divide-y divide-gray-50">
-    @forelse($recentActivities as $activity)
+    @if(isset($recentActivities))
+    @foreach($recentActivities as $activity)
+        {{-- عرض البيانات --}}
+    @endforeach
+@endif
         @if($activity instanceof \App\Models\Order)
             {{-- عرض نشاط "طلب جديد" --}}
             <div class="flex items-center gap-4 p-4 hover:bg-gray-50/80 transition-colors cursor-pointer activity-item">
