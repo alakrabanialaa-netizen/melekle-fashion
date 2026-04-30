@@ -132,6 +132,22 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/accounting', [AccountingController::class, 'index'])->name('accounting.index');
+
+    // مسار عرض صفحة السلة
+Route::get('/cart', function () {
+    return view('cart'); // تأكد أن اسم الملف cart.blade.php
+})->name('cart.index');
+
+// مسار حذف منتج من السلة
+Route::delete('/cart/remove/{id}', function ($id) {
+    $cart = session()->get('cart');
+    if(isset($cart[$id])) {
+        unset($cart[$id]);
+        session()->put('cart', $cart);
+    }
+    return back()->with('success', 'تم إزالة المنتج من السلة');
+})->name('cart.remove');
+    
 });
 
 require __DIR__.'/auth.php';
