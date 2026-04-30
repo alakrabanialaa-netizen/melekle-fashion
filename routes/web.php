@@ -15,52 +15,47 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\AccountingController;
 use Illuminate\Database\Schema\Blueprint;
 
-// 1. المسار الرئيسي مع الإصلاحات التلقائية الشاملة
+// 1. المسار الرئيسي: الإصلاح التلقائي الشامل وعرض الصفحة الرئيسية
 Route::get('/', function () {
     try {
+        // أ. صيانة جدول المنتجات (التأكد من وجود كافة الأعمدة المطلوبة)
         if (Schema::hasTable('products')) {
             Schema::table('products', function (Blueprint $table) {
-                // إصلاح عمود slug
-                if (!Schema::hasColumn('products', 'slug')) {
-                    $table->string('slug')->unique()->nullable();
-                }
-                
-                // إصلاح عمود category (الحل لمشكلتك الأخيرة)
-                if (!Schema::hasColumn('products', 'category')) {
-                    $table->string('category')->nullable();
-                }
-
-                // إصلاح عمود name (لضمان التوافق مع الكنترولر)
-                if (!Schema::hasColumn('products', 'name')) {
-                    $table->string('name')->nullable();
-                }
-
-                // إصلاح عمود price (لضمان التوافق مع الكنترولر)
-                if (!Schema::hasColumn('products', 'price')) {
-                    $table->decimal('price', 10, 2)->default(0);
-                }
-
-                // إصلاح عمود stock
-                if (!Schema::hasColumn('products', 'stock')) {
-                    $table->integer('stock')->default(0);
-                }
+                if (!Schema::hasColumn('products', 'slug')) $table->string('slug')->unique()->nullable();
+                if (!Schema::hasColumn('products', 'category')) $table->string('category')->nullable();
+                if (!Schema::hasColumn('products', 'name')) $table->string('name')->nullable();
+                if (!Schema::hasColumn('products', 'price')) $table->decimal('price', 10, 2)->default(0);
+                if (!Schema::hasColumn('products', 'stock')) $table->integer('stock')->default(0);
+                if (!Schema::hasColumn('products', 'description')) $table->text('description')->nullable();
+                if (!Schema::hasColumn('products', 'video')) $table->string('video')->nullable();
             });
         }
 
-        // التأكد من وجود الجداول الأساسية
-        $tables = ['users', 'products', 'orders', 'categories'];
-        foreach ($tables as $table) {
+        // ب. إنشاء جدول صور المنتجات إذا لم يكن موجوداً (حل مشكلة رفع الصور)
+        if (!Schema::hasTable('product_images')) {
+            Schema::create('product_images', function (Blueprint $table) {
+                $table->id();
+                $table->string('image');
+                $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+                $table->timestamps();
+            });
+        }
+
+        // ج. التأكد من وجود الجداول الأساسية الأخرى (Migrations)
+        $requiredTables = ['users', 'orders', 'categories'];
+        foreach ($requiredTables as $table) {
             if (!Schema::hasTable($table)) {
                 Artisan::call('migrate', ['--force' => true]);
                 break;
             }
         }
 
+        // د. جلب البيانات وعرض الصفحة
         $products = Schema::hasTable('products') ? \App\Models\Product::all() : collect();
         return view('welcome', compact('products'));
 
     } catch (\Exception $e) {
-        return "تمت محاولة الإصلاح، يرجى تحديث الصفحة. إذا استمر الخطأ: " . $e->getMessage();
+        return "جاري تهيئة قاعدة البيانات، يرجى تحديث الصفحة (F5). <br> التفاصيل: " . $e->getMessage();
     }
 })->name('welcome');
 
