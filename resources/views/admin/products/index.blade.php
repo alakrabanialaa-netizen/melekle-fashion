@@ -25,17 +25,17 @@
         <div class="mt-6 flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-white rounded-2xl shadow-sm border">
             <input type="text"
                    placeholder="بحث عن منتج..."
-                   class="bg-gray-50 rounded-xl px-4 py-2 w-full md:w-72">
+                   class="bg-gray-50 rounded-xl px-4 py-2 w-full md:w-72 border-none focus:ring-2 focus:ring-indigo-500">
 
             <div class="flex gap-2 bg-gray-100 p-1 rounded-xl">
                 <button @click="layout='grid'"
-                        :class="layout==='grid' ? 'bg-white text-indigo-600' : 'text-gray-500'"
-                        class="w-10 h-9 rounded-lg">
+                        :class="layout==='grid' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500'"
+                        class="w-10 h-9 rounded-lg transition-all">
                     <i class="fas fa-th-large"></i>
                 </button>
                 <button @click="layout='list'"
-                        :class="layout==='list' ? 'bg-white text-indigo-600' : 'text-gray-500'"
-                        class="w-10 h-9 rounded-lg">
+                        :class="layout==='list' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500'"
+                        class="w-10 h-9 rounded-lg transition-all">
                     <i class="fas fa-list"></i>
                 </button>
             </div>
@@ -43,64 +43,61 @@
     </div>
 
     {{-- ================= GRID VIEW ================= --}}
-    <div x-show="layout === 'grid'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div x-show="layout === 'grid'" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform scale-95"
+         x-transition:enter-end="opacity-100 transform scale-100"
+         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        
         @forelse($products as $product)
-            <div class="bg-white rounded-2xl shadow border overflow-hidden group">
-
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-md transition-all">
                 {{-- الصورة الكبيرة --}}
-                <img src="{{ $product->images->count() ? Storage::url($product->images->first()->image) : 'https://via.placeholder.com/400x300' }}"
-                     class="w-full h-48 object-cover">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="{{ $product->images->count() ? Storage::url($product->images->first()->image) : 'https://via.placeholder.com/400x300' }}"
+                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                </div>
 
                 {{-- تفاصيل المنتج --}}
                 <div class="p-4">
                     <h3 class="font-bold text-gray-800 truncate">{{ $product->name }}</h3>
-                    <p class="mt-2 font-bold text-indigo-600">{{ number_format($product->price, 2) }} $</p>
-                    <p class="mt-1 text-sm">
+                    <p class="mt-2 font-black text-indigo-600 text-lg">{{ number_format($product->price, 2) }} $</p>
+                    
+                    <div class="mt-2">
                         @if($product->stock > 10)
-                            <span class="text-green-600 font-bold">متوفر ({{ $product->stock }})</span>
+                            <span class="text-[10px] bg-green-50 text-green-600 px-2 py-1 rounded-lg font-bold">متوفر ({{ $product->stock }})</span>
                         @elseif($product->stock > 0)
-                            <span class="text-yellow-600 font-bold">مخزون منخفض ({{ $product->stock }})</span>
+                            <span class="text-[10px] bg-yellow-50 text-yellow-600 px-2 py-1 rounded-lg font-bold">مخزون منخفض ({{ $product->stock }})</span>
                         @else
-                            <span class="text-red-600 font-bold">نفد المخزون</span>
+                            <span class="text-[10px] bg-red-50 text-red-600 px-2 py-1 rounded-lg font-bold">نفد المخزون</span>
                         @endif
-                    </p>
-
-                    {{-- الصور الصغيرة --}}
-                    @if($product->images->count() > 1)
-                        <div class="flex gap-2 mt-2 overflow-x-auto">
-                            @foreach($product->images as $img)
-                                <img src="{{ Storage::url($img->image) }}" alt="صورة المنتج"
-                                     class="w-16 h-16 object-cover rounded flex-shrink-0">
-                            @endforeach
-                        </div>
-                    @endif
+                    </div>
                 </div>
 
-                {{-- أزرار تعديل وحذف --}}
-                <div class="p-3 bg-gray-50 border-t flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition">
+                {{-- أزرار التحكم القابلة للظهور عند التحويم --}}
+                <div class="p-3 bg-gray-50 border-t flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <a href="{{ route('admin.products.edit', $product->id) }}"
-                       class="bg-blue-500 text-white px-3 py-1 rounded">تعديل</a>
+                       class="flex-1 bg-white border border-blue-200 text-blue-600 text-center py-2 rounded-xl text-sm font-bold hover:bg-blue-600 hover:text-white transition">تعديل</a>
 
-                    <form method="POST"
-                          action="{{ route('admin.products.destroy', $product) }}"
-                          style="display:inline"
-                          onsubmit="return confirm('هل أنت متأكد من الحذف؟')">
+                    <form method="POST" action="{{ route('admin.products.destroy', $product) }}" class="flex-1">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded">حذف</button>
+                        <button type="submit" 
+                                onclick="return confirm('هل أنت متأكد من الحذف؟')"
+                                class="w-full bg-white border border-red-200 text-red-600 py-2 rounded-xl text-sm font-bold hover:bg-red-600 hover:text-white transition">حذف</button>
                     </form>
                 </div>
-
             </div>
         @empty
-            <div class="col-span-full text-center text-gray-500 py-20">لا يوجد منتجات</div>
+            <div class="col-span-full text-center text-gray-500 py-20 bg-white rounded-3xl border border-dashed">لا يوجد منتجات حالياً</div>
         @endforelse
     </div>
 
     {{-- ================= LIST VIEW ================= --}}
-    <div x-show="layout === 'list'" class="bg-white rounded-2xl shadow border overflow-hidden">
+    <div x-show="layout === 'list'" 
+         x-transition:enter="transition ease-out duration-300"
+         class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <table class="w-full text-right">
-            <thead class="bg-gray-50 text-xs uppercase font-bold text-gray-500">
+            <thead class="bg-gray-50 text-xs uppercase font-bold text-gray-500 border-b">
                 <tr>
                     <th class="px-6 py-4">المنتج</th>
                     <th class="px-6 py-4">السعر</th>
@@ -108,48 +105,46 @@
                     <th class="px-6 py-4 text-center">الإجراءات</th>
                 </tr>
             </thead>
-            <tbody class="divide-y">
-            @forelse($products as $product)
-                <tr class="hover:bg-gray-50">
+            <tbody class="divide-y divide-gray-100">
+            @foreach($products as $product)
+                <tr class="hover:bg-indigo-50/30 transition">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
                             <img src="{{ $product->images->count() ? Storage::url($product->images->first()->image) : 'https://via.placeholder.com/60' }}"
-                                 class="w-12 h-12 rounded object-cover">
-                            <span class="font-bold">{{ $product->name }}</span>
+                                 class="w-12 h-12 rounded-xl object-cover shadow-sm">
+                            <span class="font-bold text-gray-700">{{ $product->name }}</span>
                         </div>
                     </td>
-                    <td class="px-6 py-4 font-bold text-indigo-600">{{ number_format($product->price, 2) }} $</td>
+                    <td class="px-6 py-4 font-black text-indigo-600">{{ number_format($product->price, 2) }} $</td>
                     <td class="px-6 py-4">
                         @if($product->stock > 10)
-                            <span class="text-green-600 font-bold">متوفر</span>
+                            <span class="text-green-600 text-sm font-bold">متوفر</span>
                         @elseif($product->stock > 0)
-                            <span class="text-yellow-600 font-bold">منخفض</span>
+                            <span class="text-yellow-600 text-sm font-bold">منخفض</span>
                         @else
-                            <span class="text-red-600 font-bold">نفد</span>
+                            <span class="text-red-600 text-sm font-bold">نفد</span>
                         @endif
                     </td>
-                   <td class="px-6 py-4 text-center">
-    <div class="flex justify-center gap-2">
-        <a href="{{ route('admin.products.edit', $product->id) }}"
-           class="bg-blue-500 text-white px-3 py-1 rounded">تعديل</a>
+                    <td class="px-6 py-4 text-center">
+                        <div class="flex justify-center gap-2">
+                            <a href="{{ route('admin.products.edit', $product->id) }}"
+                               class="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition">
+                                <i class="fas fa-edit"></i>
+                            </a>
 
-        <a href="#"
-           onclick="event.preventDefault(); if(confirm('هل أنت متأكد؟')){ document.getElementById('del-{{ $product->id }}').submit(); }"
-           class="bg-red-600 text-white px-3 py-1 rounded">حذف</a>
-
-        <form id="del-{{ $product->id }}"
-      method="POST"
-      action="{{ route('admin.products.destroy', $product) }}">
-            @csrf
-            @method('DELETE')
-        </form>
-    </div>
-</td>
-            @empty
-                <tr>
-                    <td colspan="4" class="text-center py-10 text-gray-500">لا يوجد منتجات</td>
+                            <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" 
+                                        onclick="return confirm('هل أنت متأكد؟')"
+                                        class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
                 </tr>
-            @endforelse
+            @endforeach
             </tbody>
         </table>
     </div>
