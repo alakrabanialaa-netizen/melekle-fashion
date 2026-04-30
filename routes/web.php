@@ -7,11 +7,10 @@ use App\Http\Controllers\Admin\{
     ProductController, OrderController, UserController, ClientController,
     CouponController, ReviewController, SettingController, ReportController, AccountingController
 };
-use Illuminate\Database\Schema\Blueprint;
 
 /*
 |--------------------------------------------------------------------------
-| 1. المسارات العامة (متاحة للجميع: زوار وزبائن)
+| 1. المسارات العامة (متاحة للجميع - الكتالوج، الرئيسية، الفوتر)
 |--------------------------------------------------------------------------
 */
 
@@ -25,65 +24,42 @@ Route::get('/', function () {
     }
 })->name('welcome');
 
-// مسار الإصلاح السريع (متاح للعامة لتتمكن من تشغيله من المتصفح مباشرة)
-Route::get('/fix-my-site', function () {
-    Artisan::call('route:clear');
-    Artisan::call('config:clear');
-    Artisan::call('view:clear');
-    Artisan::call('cache:clear');
-    return "✅ تم تنظيف الكاش بنجاح! جرب الموقع الآن.";
+// --- أهم تعديل: مسارات الأقسام العامة ---
+Route::name('category.')->prefix('category')->group(function () {
+    Route::get('/boys', function() { return "قسم الأولاد"; })->name('boys');
+    Route::get('/girls', function() { return "قسم البنات"; })->name('girls');
+    Route::get('/babies', function() { return "قسم المواليد"; })->name('babies');
+    Route::get('/mothers', function() { return "قسم الأمهات"; })->name('mothers'); // سيصلح خطأ الكتالوج
 });
-
-// صفحات السلة
-Route::get('/cart', function () { return view('cart'); })->name('cart.index');
-Route::delete('/cart/remove/{id}', function ($id) {
-    $cart = session()->get('cart');
-    if(isset($cart[$id])) {
-        unset($cart[$id]);
-        session()->put('cart', $cart);
-    }
-    return back()->with('success', 'تم إزالة المنتج من السلة');
-})->name('cart.remove');
-
-Route::post('/cart/add/{id}', function ($id) {
-    return back()->with('success', 'تم إضافة المنتج للسلة!');
-})->name('cart.add');
 
 // الصفحات القانونية والمعلومات
 Route::get('/refund-policy', function () { return view('pages.refund'); })->name('refund.policy');
 Route::get('/contact', function() { return "اتصل بنا"; })->name('contact');
 Route::get('/about', function() { return "من نحن"; })->name('about');
-Route::get('/checkout', function() { return "الدفع"; })->name('checkout');
 
-// عرض المنتجات والأقسام (مهم جداً أن تكون خارج الـ Admin)
+// السلة وعرض المنتجات
+Route::get('/cart', function () { return view('cart'); })->name('cart.index');
 Route::get('/product/{slug}', function ($slug) {
     $product = \App\Models\Product::where('slug', $slug)->with('images')->firstOrFail();
     return "صفحة المنتج: " . $product->name; 
 })->name('product.show');
 
-Route::name('category.')->prefix('category')->group(function () {
-    Route::get('/boys', function() { return "قسم الأولاد"; })->name('boys');
-    Route::get('/girls', function() { return "قسم البنات"; })->name('girls');
-    Route::get('/babies', function() { return "قسم المواليد"; })->name('babies');
-    Route::get('/mothers', function() { return "قسم الأمهات (ملابس نساء)"; })->name('mothers'); // الآن سيعمل في الـ Footer
+// مسار الإصلاح السريع (شغله من المتصفح بعد الرفع)
+Route::get('/fix-my-site', function () {
+    Artisan::call('optimize:clear');
+    return "✅ تم تنظيف الكاش بنجاح! جرب الكتالوج الآن.";
 });
 
 /*
 |--------------------------------------------------------------------------
-| 2. لوحة تحكم المسؤول (تحتاج تسجيل دخول Admin)
+| 2. لوحة تحكم المسؤول (محمية بكلمة مرور)
 |--------------------------------------------------------------------------
 */
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
-
-    // الإدارات الكاملة
+    Route::get('/dashboard', function () { return view('admin.dashboard'); })->name('dashboard');
     Route::resource('products', ProductController::class);
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
 });
 
