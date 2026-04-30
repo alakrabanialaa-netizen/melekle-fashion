@@ -693,8 +693,7 @@ h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
                 <h5 class="font-bold text-white mb-5 text-lg">خدمة العملاء</h5>
                 <ul class="space-y-3 text-gray-400">
                     <li><a href="{{ route('contact') }}" class="hover:text-white transition">اتصل بنا</a></li>
-                    <li><a href="{{ <a href="/refund-policy"> }}" class="hover:text-white transition">سياسة الإرجاع</a></li>
-                    <li><a href="{{ route('privacy.policy') }}" class="hover:text-white transition">سياسة الخصوصية</a></li>
+<li><a href="{{ route('refund.policy') }}" class="hover:text-white transition">سياسة الإرجاع</a></li>                    <li><a href="{{ route('privacy.policy') }}" class="hover:text-white transition">سياسة الخصوصية</a></li>
                 </ul>
             </div>
             <div>
