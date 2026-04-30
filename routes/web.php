@@ -78,7 +78,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
-    // ... باقي المسارات
+    // ..باقي المسارات
+
+    Route::get('/fix-my-site', function () {
+    Artisan::call('route:clear');
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    return "تم تنظيف كل شيء! جرب تفتح صفحة سياسة الاسترجاع الآن.";
+});
 });
 
 require __DIR__.'/auth.php';
