@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
     /**
-     * عرض المنتجات في لوحة التحكم (Admin)
+     * عرض المنتجات في لوحة التحكم
      */
     public function index(Request $request)
     {
@@ -39,20 +39,21 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. التحقق من البيانات
+        // 1. التحقق من البيانات (تأكد أنها تطابق الـ names في الـ Blade)
         $validatedData = $request->validate([
-            'product_name' => 'required|string|max:255',
-            'product_price' => 'required|numeric|min:0',
-            'product_stock' => 'nullable|integer|min:0',
-            'product_category' => 'required|string',
+            'product_name'        => 'required|string|max:255',
+            'product_price'       => 'required|numeric|min:0',
+            'product_stock'       => 'nullable|integer|min:0',
+            'product_category'    => 'required|string',
             'product_description' => 'nullable|string',
-            'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,webp,gif|max:4096',
-            'video' => 'nullable|file|mimes:mp4,mov,ogg,qt|max:20480',
+            'images'              => 'nullable|array',
+            'images.*'            => 'image|mimes:jpeg,png,webp,gif|max:4096',
+            'video'               => 'nullable|file|mimes:mp4,mov,ogg,qt|max:20480',
         ]);
 
         try {
-            return DB::transaction(function () use ($request, $validatedData) {
+            // استخدام الترانزكشن لضمان سلامة البيانات
+            DB::transaction(function () use ($request, $validatedData) {
                 // 2. إنشاء المنتج
                 $product = Product::create([
                     'name'        => $validatedData['product_name'],
@@ -73,14 +74,17 @@ class ProductController extends Controller
 
                 // 4. معالجة الفيديو
                 if ($request->hasFile('video')) {
-                    $videoPath = $request->file('video')->store('products/videos', 'public');
+                    $videoPath = $image->store('products/videos', 'public'); // تم تصحيح المتغير هنا
                     $product->update(['video' => $videoPath]);
                 }
-
-                return redirect()->route('admin.products.index')->with('success', 'تم إضافة المنتج بنجاح');
             });
+
+            // 5. التوجيه بعد النجاح (خارج الترانزكشن لضمان التنفيذ)
+            return redirect()->route('admin.products.index')->with('success', 'تم إضافة المنتج بنجاح');
+
         } catch (\Exception $e) {
-            return back()->with('error', 'حدث خطأ أثناء إضافة المنتج: ' . $e->getMessage());
+            // في حال حدوث خطأ، سيظهر لك السبب بوضوح
+            return back()->withInput()->with('error', 'حدث خطأ أثناء إضافة المنتج: ' . $e->getMessage());
         }
     }
 
@@ -132,15 +136,6 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('admin.products.index')->with('error', 'خطأ في الحذف');
         }
-    }
-
-    /**
-     * عرض المنتج في الموقع
-     */
-    public function show($slug)
-    {
-        $product = Product::with('images')->where('slug', $slug)->firstOrFail();
-        return view('frontend.shop.show', compact('product'));
     }
 
     /**
