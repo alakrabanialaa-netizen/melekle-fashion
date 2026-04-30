@@ -59,12 +59,22 @@ Route::get('/products', function() { return redirect('/'); })->name('products.in
 */
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    // جعل رابط /admin يفتح الداشبورد مباشرة
+    // الداشبورد
     Route::get('/', function () { return view('admin.dashboard'); })->name('dashboard');
     Route::get('/dashboard', function () { return view('admin.dashboard'); });
-    
+
+    // المسارات التي يطلبها التصميم (المنتجات، الطلبات، المستخدمين، إلخ)
     Route::resource('products', ProductController::class);
+    Route::resource('orders', OrderController::class); // هذا هو السطر الذي كان ينقصك!
+    Route::resource('users', UserController::class);
+    Route::resource('clients', ClientController::class);
+    Route::resource('coupons', CouponController::class);
+    Route::resource('reviews', ReviewController::class);
+    
+    // الإعدادات والتقارير
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/accounting', [AccountingController::class, 'index'])->name('accounting.index');
 });
 
 require __DIR__.'/auth.php';
