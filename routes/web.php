@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\{
 
 /*
 |--------------------------------------------------------------------------
-| 1. المسارات العامة (متاحة للجميع - الكتالوج، الرئيسية، الفوتر)
+| 1. المسارات العامة (واجهة المتجر)
 |--------------------------------------------------------------------------
 */
 
@@ -24,42 +24,49 @@ Route::get('/', function () {
     }
 })->name('welcome');
 
-// --- أهم تعديل: مسارات الأقسام العامة ---
+// مسار عرض المنتج (مهم جداً لزر "عرض")
+Route::get('/product/{id}', function ($id) {
+    $product = \App\Models\Product::with('images')->findOrFail($id);
+    return "صفحة المنتج: " . $product->name;
+})->name('product.show');
+
+// مسارات الأقسام (التي تظهر في الفوتر والكتالوج)
 Route::name('category.')->prefix('category')->group(function () {
     Route::get('/boys', function() { return "قسم الأولاد"; })->name('boys');
     Route::get('/girls', function() { return "قسم البنات"; })->name('girls');
     Route::get('/babies', function() { return "قسم المواليد"; })->name('babies');
-    Route::get('/mothers', function() { return "قسم الأمهات"; })->name('mothers'); // سيصلح خطأ الكتالوج
+    Route::get('/mothers', function() { return "قسم الأمهات (نساء)"; })->name('mothers');
 });
 
-// الصفحات القانونية والمعلومات
-Route::get('/refund-policy', function () { return view('pages.refund'); })->name('refund.policy');
-Route::get('/contact', function() { return "اتصل بنا"; })->name('contact');
-Route::get('/about', function() { return "من نحن"; })->name('about');
-
-// السلة وعرض المنتجات
+// مسارات السلة
 Route::get('/cart', function () { return view('cart'); })->name('cart.index');
-Route::get('/product/{slug}', function ($slug) {
-    $product = \App\Models\Product::where('slug', $slug)->with('images')->firstOrFail();
-    return "صفحة المنتج: " . $product->name; 
-})->name('product.show');
+Route::post('/cart/add/{id}', function ($id) {
+    return back()->with('success', 'تمت الإضافة للسلة');
+})->name('cart.add');
+Route::delete('/cart/remove/{id}', function ($id) {
+    return back();
+})->name('cart.remove');
 
-// مسار الإصلاح السريع (شغله من المتصفح بعد الرفع)
+// الصفحات القانونية
+Route::get('/refund-policy', function () { return view('pages.refund'); })->name('refund.policy');
+Route::get('/privacy-policy', function () { return "سياسة الخصوصية"; })->name('privacy.policy');
+Route::get('/contact', function() { return "اتصل بنا"; })->name('contact');
+
+// مسار الإصلاح السريع
 Route::get('/fix-my-site', function () {
     Artisan::call('optimize:clear');
-    return "✅ تم تنظيف الكاش بنجاح! جرب الكتالوج الآن.";
+    return "✅ تم تنظيف الكاش بنجاح!";
 });
 
 /*
 |--------------------------------------------------------------------------
-| 2. لوحة تحكم المسؤول (محمية بكلمة مرور)
+| 2. لوحة تحكم المسؤول (الأدمن)
 |--------------------------------------------------------------------------
 */
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', function () { return view('admin.dashboard'); })->name('dashboard');
     Route::resource('products', ProductController::class);
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
 });
 
