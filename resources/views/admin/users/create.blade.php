@@ -8,6 +8,20 @@
     <form method="POST" action="{{ route('admin.users.store') }}">
         @csrf
 
+        <!-- عرض رسالة نجاح -->
+@if (session('success'))
+    <div style="background-color: #d1fae5; border-right: 4px solid #10b981; color: #065f46; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; text-align: right;">
+        {{ session('success') }}
+    </div>
+@endif
+
+<!-- عرض رسالة خطأ النظام -->
+@if (session('error'))
+    <div style="background-color: #fee2e2; border-right: 4px solid #ef4444; color: #991b1b; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; text-align: right;">
+        {{ session('error') }}
+    </div>
+@endif
+        
         {{-- الاسم --}}
         <div class="mb-4">
             <label class="block mb-1 font-bold">الاسم</label>
