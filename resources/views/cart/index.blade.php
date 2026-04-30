@@ -17,7 +17,7 @@
                         @foreach(session('cart') as $id => $item)
                             <div class="group flex flex-col sm:flex-row items-center bg-gray-50 hover:bg-white hover:shadow-xl transition-all duration-300 rounded-3xl p-5 gap-6 border border-transparent hover:border-pink-100">
                                 <div class="relative">
-                                    <img src="{{ $item['image'] ? asset('storage/'.$item['image']) : 'https://via.placeholder.com/150' }}"
+                                    <img src="{{ (isset($item['image']) && $item['image']) ? asset('storage/'.$item['image']) : 'https://via.placeholder.com/150' }}"
                                          class="w-28 h-28 object-cover rounded-2xl shadow-md group-hover:scale-105 transition-transform duration-300">
                                     <span class="absolute -top-2 -right-2 bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded-lg shadow-lg">
                                         {{ $item['quantity'] }}x
@@ -36,8 +36,10 @@
                                 </div>
 
                                 <div class="flex items-center gap-4">
+                                    {{-- مسار الحذف --}}
                                     <form action="{{ route('cart.remove', $id) }}" method="POST">
                                         @csrf
+                                        @method('DELETE')
                                         <button type="submit" class="p-3 bg-white text-red-400 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all duration-300 shadow-sm border border-gray-100">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         </button>
@@ -56,7 +58,7 @@
             </div>
         </div>
 
-        {{-- قسم إتمام الطلب (الجهة اليسرى) --}}
+        {{-- قسم إتمام الطلب --}}
         @if(session('cart') && count(session('cart')) > 0)
         <div class="lg:w-1/3">
             <div class="bg-white rounded-3xl shadow-xl p-8 sticky top-8 border border-pink-50">
@@ -131,7 +133,7 @@ function sendToWhatsApp() {
     }
 
     let cartItems = @json(session('cart'));
-    let total = {{ $total }};
+    let total = {{ $total ?? 0 }};
     
     let message = `*📦 طلب شراء جديد من المتجر* \n`;
     message += `━━━━━━━━━━━━━━━━━━\n\n`;
@@ -158,10 +160,9 @@ function sendToWhatsApp() {
     message += `━━━━━━━━━━━━━━━━━━\n`;
     message += `_شكراً لتسوقكم معنا!_ ✨`;
 
-    const whatsappNumber = "905550651100"; // ⚠️ ضع رقمك هنا بدون + أو أصفار في البداية
-    
+    const whatsappNumber = "905550651100"; 
     const encodedMessage = encodeURIComponent(message);
-    window.open(`https://wa.me/${905550651100}?text=${encodedMessage}`, '_blank');
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
 }
 </script>
 
