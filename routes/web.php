@@ -15,17 +15,39 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\AccountingController;
 use Illuminate\Database\Schema\Blueprint;
 
-// 1. المسار الرئيسي (شامل للإصلاحات التلقائية وعرض المنتجات)
+// 1. المسار الرئيسي مع الإصلاحات التلقائية الشاملة
 Route::get('/', function () {
     try {
-        // أ: فحص وإضافة عمود slug إذا كان مفقوداً (حل مشكلة قاعدة البيانات)
-        if (Schema::hasTable('products') && !Schema::hasColumn('products', 'slug')) {
+        if (Schema::hasTable('products')) {
             Schema::table('products', function (Blueprint $table) {
-                $table->string('slug')->unique()->nullable();
+                // إصلاح عمود slug
+                if (!Schema::hasColumn('products', 'slug')) {
+                    $table->string('slug')->unique()->nullable();
+                }
+                
+                // إصلاح عمود category (الحل لمشكلتك الأخيرة)
+                if (!Schema::hasColumn('products', 'category')) {
+                    $table->string('category')->nullable();
+                }
+
+                // إصلاح عمود name (لضمان التوافق مع الكنترولر)
+                if (!Schema::hasColumn('products', 'name')) {
+                    $table->string('name')->nullable();
+                }
+
+                // إصلاح عمود price (لضمان التوافق مع الكنترولر)
+                if (!Schema::hasColumn('products', 'price')) {
+                    $table->decimal('price', 10, 2)->default(0);
+                }
+
+                // إصلاح عمود stock
+                if (!Schema::hasColumn('products', 'stock')) {
+                    $table->integer('stock')->default(0);
+                }
             });
         }
 
-        // ب: فحص الجداول الأساسية وإنشاؤها إذا كانت مفقودة (حل أولي لـ Render)
+        // التأكد من وجود الجداول الأساسية
         $tables = ['users', 'products', 'orders', 'categories'];
         foreach ($tables as $table) {
             if (!Schema::hasTable($table)) {
@@ -34,13 +56,11 @@ Route::get('/', function () {
             }
         }
 
-        // ج: جلب المنتجات وعرضها
         $products = Schema::hasTable('products') ? \App\Models\Product::all() : collect();
         return view('welcome', compact('products'));
 
     } catch (\Exception $e) {
-        // في حالة الخطأ، نعرض الصفحة فارغة بدلاً من تعطل الموقع بالكامل
-        return view('welcome', ['products' => collect()]);
+        return "تمت محاولة الإصلاح، يرجى تحديث الصفحة. إذا استمر الخطأ: " . $e->getMessage();
     }
 })->name('welcome');
 
@@ -70,7 +90,6 @@ Route::get('/shipping-policy', function() { return "سياسة الشحن"; })->
 // 3. لوحة تحكم المسؤول (الأدمن)
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     
-    // التوجيه التلقائي عند دخول /admin
     Route::get('/', function () { return redirect()->route('admin.dashboard'); });
 
     Route::get('/dashboard', function () {
@@ -82,7 +101,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         return view('admin.dashboard', compact('productsCount', 'categoriesCount', 'ordersCount', 'usersCount'));
     })->name('dashboard');
 
-    // --- مسارات المنتجات ---
+    // مسارات المنتجات
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
