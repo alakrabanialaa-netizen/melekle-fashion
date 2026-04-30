@@ -69,5 +69,5 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('products', ProductController::class);
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
 });
-
+Route::get('/products', function() { return redirect('/'); })->name('products.index');
 require __DIR__.'/auth.php';
