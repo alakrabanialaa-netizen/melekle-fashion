@@ -15,13 +15,20 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\AccountingController;
 use Illuminate\Database\Schema\Blueprint;
 
-// 1. المسار الرئيسي: الإصلاح التلقائي الشامل وعرض الصفحة الرئيسية
+/*
+|--------------------------------------------------------------------------
+| المسارات العامة وإصلاحات النظام التلقائية
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/', function () {
     try {
+        // 1. إصلاح رابط التخزين للصور
         if (!file_exists(public_path('storage'))) {
             Artisan::call('storage:link');
         }
 
+        // 2. صيانة جدول المنتجات (إضافة الأعمدة المفقودة)
         if (Schema::hasTable('products')) {
             Schema::table('products', function (Blueprint $table) {
                 if (!Schema::hasColumn('products', 'slug')) $table->string('slug')->unique()->nullable();
@@ -34,6 +41,7 @@ Route::get('/', function () {
             });
         }
 
+        // 3. إنشاء جدول الصور إذا لم يكن موجوداً
         if (!Schema::hasTable('product_images')) {
             Schema::create('product_images', function (Blueprint $table) {
                 $table->id();
@@ -43,23 +51,44 @@ Route::get('/', function () {
             });
         }
 
+        // 4. عرض الصفحة الرئيسية مع المنتجات وصورها
         $products = Schema::hasTable('products') ? \App\Models\Product::with('images')->get() : collect();
         return view('welcome', compact('products'));
 
     } catch (\Exception $e) {
-        return "جاري تهيئة النظام، يرجى التحديث. الخطأ: " . $e->getMessage();
+        return "جاري تهيئة النظام، يرجى التحديث (F5). الخطأ: " . $e->getMessage();
     }
 })->name('welcome');
 
-// --- إضافه مسار عرض المنتج لحل مشكلة Route [product.show] ---
+/*
+|--------------------------------------------------------------------------
+| مسارات معالجة أخطاء الـ Route Not Found (المسارات المفقودة)
+|--------------------------------------------------------------------------
+*/
+
+// مسار عرض المنتج
 Route::get('/product/{slug}', function ($slug) {
-    $product = \App\Models\Product::where('slug', $slug)->firstOrFail();
+    $product = \App\Models\Product::where('slug', $slug)->with('images')->firstOrFail();
     return "صفحة المنتج: " . $product->name; 
-    // ملاحظة: يفضل إنشاء ملف show.blade.php لاحقاً وعرض البيانات فيه
 })->name('product.show');
 
+// مسار إضافة المنتج للسلة
+Route::post('/cart/add/{id}', function ($id) {
+    return back()->with('success', 'تم إضافة المنتج رقم ' . $id . ' إلى السلة!');
+})->name('cart.add');
 
-// 2. مسارات الأقسام والصفحات العامة
+// مسار قائمة الرغبات (احتياطاً)
+Route::post('/wishlist/add/{id}', function ($id) {
+    return back();
+})->name('wishlist.add');
+
+
+/*
+|--------------------------------------------------------------------------
+| الأقسام والصفحات العامة
+|--------------------------------------------------------------------------
+*/
+
 Route::name('category.')->prefix('category')->group(function () {
     Route::get('/boys', function() { return "قسم الأولاد"; })->name('boys');
     Route::get('/girls', function() { return "قسم البنات"; })->name('girls');
@@ -68,5 +97,41 @@ Route::name('category.')->prefix('category')->group(function () {
     Route::get('/accessories', function() { return "قسم الإكسسوارات"; })->name('accessories');
 });
 
-// باقي المسارات (offers, contact, admin, إلخ...) بنفس الترتيب السابق
-// ...
+Route::get('/offers', function() { return "العروض"; })->name('offers');
+Route::get('/search', function() { return "البحث"; })->name('search');
+Route::get('/contact', function() { return "اتصل بنا"; })->name('contact');
+Route::get('/about', function() { return "من نحن"; })->name('about');
+Route::get('/cart', function() { return "السلة"; })->name('cart.index');
+Route::get('/checkout', function() { return "الدفع"; })->name('checkout');
+
+/*
+|--------------------------------------------------------------------------
+| لوحة تحكم المسؤول (الأدمن)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    
+    Route::get('/dashboard', function () {
+        $productsCount = Schema::hasTable('products') ? DB::table('products')->count() : 0;
+        $categoriesCount = Schema::hasTable('categories') ? DB::table('categories')->count() : 0;
+        $ordersCount = Schema::hasTable('orders') ? DB::table('orders')->count() : 0;
+        $usersCount = Schema::hasTable('users') ? DB::table('users')->count() : 0;
+        return view('admin.dashboard', compact('productsCount', 'categoriesCount', 'ordersCount', 'usersCount'));
+    })->name('dashboard');
+
+    // إدارة المنتجات
+    Route::resource('products', ProductController::class);
+    
+    // باقي الإدارات
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
+    Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');
+    Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/accounting', [AccountingController::class, 'index'])->name('accounting.index');
+});
+
+require __DIR__.'/auth.php';
