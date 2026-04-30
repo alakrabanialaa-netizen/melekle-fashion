@@ -65,9 +65,15 @@ Route::get('/fix-my-site', function () {
 */
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function () { return view('admin.dashboard'); })->name('dashboard');
+    // هذا السطر سيجعل رابط /admin يعمل
+    Route::get('/', function () { return view('admin.dashboard'); })->name('dashboard');
+    
+    // إذا كنت تريد الرابطين يعملان (/admin و /admin/dashboard)
+    Route::get('/dashboard', function () { return view('admin.dashboard'); });
+
     Route::resource('products', ProductController::class);
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+});
 });
 Route::get('/products', function() { return redirect('/'); })->name('products.index');
 require __DIR__.'/auth.php';
