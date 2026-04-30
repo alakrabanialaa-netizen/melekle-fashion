@@ -13,16 +13,33 @@ use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\AccountingController;
+use Illuminate\Database\Schema\Blueprint;
 
-// 1. المسار الرئيسي مع فحص الجداول (محسن)
+// 1. المسار الرئيسي (شامل للإصلاحات التلقائية وعرض المنتجات)
 Route::get('/', function () {
     try {
-        if (!Schema::hasTable('products')) {
-            Artisan::call('migrate', ['--force' => true]);
+        // أ: فحص وإضافة عمود slug إذا كان مفقوداً (حل مشكلة قاعدة البيانات)
+        if (Schema::hasTable('products') && !Schema::hasColumn('products', 'slug')) {
+            Schema::table('products', function (Blueprint $table) {
+                $table->string('slug')->unique()->nullable();
+            });
         }
-        $products = \App\Models\Product::all();
+
+        // ب: فحص الجداول الأساسية وإنشاؤها إذا كانت مفقودة (حل أولي لـ Render)
+        $tables = ['users', 'products', 'orders', 'categories'];
+        foreach ($tables as $table) {
+            if (!Schema::hasTable($table)) {
+                Artisan::call('migrate', ['--force' => true]);
+                break;
+            }
+        }
+
+        // ج: جلب المنتجات وعرضها
+        $products = Schema::hasTable('products') ? \App\Models\Product::all() : collect();
         return view('welcome', compact('products'));
+
     } catch (\Exception $e) {
+        // في حالة الخطأ، نعرض الصفحة فارغة بدلاً من تعطل الموقع بالكامل
         return view('welcome', ['products' => collect()]);
     }
 })->name('welcome');
@@ -43,7 +60,6 @@ Route::get('/about', function() { return "من نحن"; })->name('about');
 Route::get('/cart', function() { return "السلة"; })->name('cart.index');
 Route::get('/checkout', function() { return "الدفع"; })->name('checkout');
 Route::get('/orders/history', function() { return "سجل الطلبات"; })->name('orders.history');
-Route::get('/products', function() { return "المنتجات"; })->name('products.index');
 
 // سياسات الموقع
 Route::get('/refund-policy', function() { return "سياسة الاسترجاع"; })->name('refund.policy');
@@ -54,7 +70,7 @@ Route::get('/shipping-policy', function() { return "سياسة الشحن"; })->
 // 3. لوحة تحكم المسؤول (الأدمن)
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     
-    // التوجيه التلقائي
+    // التوجيه التلقائي عند دخول /admin
     Route::get('/', function () { return redirect()->route('admin.dashboard'); });
 
     Route::get('/dashboard', function () {
@@ -62,13 +78,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         $categoriesCount = Schema::hasTable('categories') ? DB::table('categories')->count() : 0;
         $ordersCount = Schema::hasTable('orders') ? DB::table('orders')->count() : 0;
         $usersCount = Schema::hasTable('users') ? DB::table('users')->count() : 0;
+        
         return view('admin.dashboard', compact('productsCount', 'categoriesCount', 'ordersCount', 'usersCount'));
     })->name('dashboard');
 
-    // --- مسارات المنتجات (تم تصحيحها هنا) ---
+    // --- مسارات المنتجات ---
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-    Route::post('/products', [ProductController::class, 'store'])->name('products.store'); // الرابط POST admin/products
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
