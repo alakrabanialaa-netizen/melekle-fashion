@@ -18,6 +18,12 @@ use Illuminate\Database\Schema\Blueprint;
 // 1. المسار الرئيسي: الإصلاح التلقائي الشامل وعرض الصفحة الرئيسية
 Route::get('/', function () {
     try {
+        // --- [إصلاح مشكلة ظهور الصور] ---
+        // هذا السطر يربط مجلد الصور المخفي بمجلد الموقع العام ليراها الزوار
+        if (!file_exists(public_path('storage'))) {
+            Artisan::call('storage:link');
+        }
+
         // أ. صيانة جدول المنتجات (التأكد من وجود كافة الأعمدة المطلوبة)
         if (Schema::hasTable('products')) {
             Schema::table('products', function (Blueprint $table) {
@@ -31,7 +37,7 @@ Route::get('/', function () {
             });
         }
 
-        // ب. إنشاء جدول صور المنتجات إذا لم يكن موجوداً (حل مشكلة رفع الصور)
+        // ب. إنشاء جدول صور المنتجات إذا لم يكن موجوداً
         if (!Schema::hasTable('product_images')) {
             Schema::create('product_images', function (Blueprint $table) {
                 $table->id();
@@ -41,7 +47,7 @@ Route::get('/', function () {
             });
         }
 
-        // ج. التأكد من وجود الجداول الأساسية الأخرى (Migrations)
+        // ج. التأكد من وجود الجداول الأساسية الأخرى
         $requiredTables = ['users', 'orders', 'categories'];
         foreach ($requiredTables as $table) {
             if (!Schema::hasTable($table)) {
@@ -55,7 +61,7 @@ Route::get('/', function () {
         return view('welcome', compact('products'));
 
     } catch (\Exception $e) {
-        return "جاري تهيئة قاعدة البيانات، يرجى تحديث الصفحة (F5). <br> التفاصيل: " . $e->getMessage();
+        return "جاري تهيئة الملفات وقاعدة البيانات، يرجى تحديث الصفحة (F5). <br> التفاصيل: " . $e->getMessage();
     }
 })->name('welcome');
 
