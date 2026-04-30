@@ -24,11 +24,13 @@ Route::get('/', function () {
     }
 })->name('welcome');
 
+// مسار عرض المنتج (تم تحديثه ليعرض التصميم)
 Route::get('/product/{id}', function ($id) {
     $product = \App\Models\Product::with('images')->findOrFail($id);
-    return "صفحة المنتج: " . $product->name;
+    return view('products.show', compact('product')); 
 })->name('product.show');
 
+// مسارات الأقسام
 Route::name('category.')->prefix('category')->group(function () {
     Route::get('/boys', function() { return "قسم الأولاد"; })->name('boys');
     Route::get('/girls', function() { return "قسم البنات"; })->name('girls');
@@ -36,20 +38,19 @@ Route::name('category.')->prefix('category')->group(function () {
     Route::get('/mothers', function() { return "قسم الأمهات"; })->name('mothers');
 });
 
+// مسارات السلة والقوانين
 Route::get('/cart', function () { return view('cart'); })->name('cart.index');
 Route::post('/cart/add/{id}', function ($id) { return back(); })->name('cart.add');
 Route::delete('/cart/remove/{id}', function ($id) { return back(); })->name('cart.remove');
-
 Route::get('/refund-policy', function () { return view('pages.refund'); })->name('refund.policy');
 Route::get('/privacy-policy', function () { return "سياسة الخصوصية"; })->name('privacy.policy');
 Route::get('/contact', function() { return "اتصل بنا"; })->name('contact');
 
+// مسار الإصلاح وسد ثغرة products.index
 Route::get('/fix-my-site', function () {
     Artisan::call('optimize:clear');
     return "✅ تم تنظيف الكاش بنجاح!";
 });
-
-// هذا المسار لحل مشكلة الخطأ في صفحة welcome
 Route::get('/products', function() { return redirect('/'); })->name('products.index');
 
 /*
@@ -59,19 +60,16 @@ Route::get('/products', function() { return redirect('/'); })->name('products.in
 */
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    // الداشبورد
     Route::get('/', function () { return view('admin.dashboard'); })->name('dashboard');
     Route::get('/dashboard', function () { return view('admin.dashboard'); });
 
-    // المسارات التي يطلبها التصميم (المنتجات، الطلبات، المستخدمين، إلخ)
     Route::resource('products', ProductController::class);
-    Route::resource('orders', OrderController::class); // هذا هو السطر الذي كان ينقصك!
+    Route::resource('orders', OrderController::class);
     Route::resource('users', UserController::class);
     Route::resource('clients', ClientController::class);
     Route::resource('coupons', CouponController::class);
     Route::resource('reviews', ReviewController::class);
     
-    // الإعدادات والتقارير
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/accounting', [AccountingController::class, 'index'])->name('accounting.index');
