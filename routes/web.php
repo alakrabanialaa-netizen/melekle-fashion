@@ -24,10 +24,11 @@ Route::get('/', function () {
     }
 })->name('welcome');
 
-// مسار عرض المنتج (تم تحديثه ليعرض التصميم)
+// تم تحديث المسار بناءً على صورة المجلدات التي أرسلتها
 Route::get('/product/{id}', function ($id) {
     $product = \App\Models\Product::with('images')->findOrFail($id);
-    return view('products.show', compact('product')); 
+    // المسار الصحيح هو المجلدات التي ظهرت في الصورة: frontend ثم shop ثم show
+    return view('frontend.shop.show', compact('product')); 
 })->name('product.show');
 
 // مسارات الأقسام
@@ -46,7 +47,7 @@ Route::get('/refund-policy', function () { return view('pages.refund'); })->name
 Route::get('/privacy-policy', function () { return "سياسة الخصوصية"; })->name('privacy.policy');
 Route::get('/contact', function() { return "اتصل بنا"; })->name('contact');
 
-// مسار الإصلاح وسد ثغرة products.index
+// مسار الإصلاح وتوجيه المنتجات
 Route::get('/fix-my-site', function () {
     Artisan::call('optimize:clear');
     return "✅ تم تنظيف الكاش بنجاح!";
