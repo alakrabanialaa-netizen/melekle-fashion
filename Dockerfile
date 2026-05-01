@@ -44,10 +44,9 @@ RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/ht
     chown -R www-data:www-data /var/www/html
 
 # --- الأمر النهائي (تم دمج كل شيء في أمر واحد لضمان التنفيذ) ---
-CMD php artisan key:generate --force && \
+    CMD rm -rf bootstrap/cache/*.php && \
+    php artisan key:generate --force && \
     php artisan config:clear && \
     php artisan cache:clear && \
-    php artisan view:clear && \
-    php artisan route:clear && \
     php artisan migrate --force && \
     apache2-foreground
