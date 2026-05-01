@@ -11,33 +11,25 @@ PRODUCT IMAGES
 ===================== --}}
 <div>
     <div class="relative bg-white rounded-xl shadow overflow-hidden">
-        @if($product->images->isNotEmpty())
-            @php 
-                $firstImage = $product->images->first()->image;
-                // التحقق إذا كان المسار يحتوي على http (رابط خارجي) أو يحتاج لإضافة storage
-                $imagePath = Str::contains($firstImage, 'http') ? $firstImage : asset('storage/'.$firstImage);
-            @endphp
-            
+        @if($product->images && $product->images->count() > 0)
             <img
                 id="mainImage"
-                src="{{ $imagePath }}"
+                src="{{ asset('storage/' . $product->images->first()->image) }}"
                 class="w-full object-cover transition duration-500 cursor-zoom-in"
                 onmousemove="zoom(event)"
                 onmouseleave="resetZoom()">
         @else
-            {{-- صورة افتراضية في حال عدم وجود صور للمنتج --}}
-            <img src="{{ asset('images/no-image.png') }}" class="w-full object-cover">
+            <div class="bg-gray-200 w-full h-64 flex items-center justify-center">
+                <span class="text-gray-400">لا توجد صورة للمنتج</span>
+            </div>
         @endif
     </div>
 
     {{-- thumbnails slider --}}
     <div class="flex gap-3 mt-4 overflow-x-auto">
         @foreach($product->images as $image)
-            @php 
-                $thumbPath = Str::contains($image->image, 'http') ? $image->image : asset('storage/'.$image->image);
-            @endphp
             <img
-                src="{{ $thumbPath }}"
+                src="{{ asset('storage/' . $image->image) }}"
                 class="w-20 h-20 rounded-lg border cursor-pointer hover:border-orange-500"
                 onclick="changeImage(this)">
         @endforeach
