@@ -44,7 +44,7 @@ RUN composer update --no-dev --optimize-autoloader --no-interaction --ignore-pla
 # 3. ضبط الصلاحيات للمجلدات الحساسة وقاعدة البيانات
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database && \
     chown -R www-data:www-data /var/www/html
-
+CMD php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan route:clear && php artisan migrate --force && apache2-foreground
 # --- تشغيل السيرفر ---
 
 # تشغيل الأوامر الضرورية عند بدء التشغيل
