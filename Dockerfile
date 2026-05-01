@@ -28,16 +28,28 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.
 # نسخ ملفات المشروع
 COPY . /var/www/html
 
-# إنشاء ملف .env فارغ لتجنب خطأ KeyGenerate
-RUN touch /var/www/html/.env
-
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# تثبيت المكتبات
-RUN composer update --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs --no-scripts
-RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chown -R www-data:www-data /var/www/html
+# --- إضافات لإصلاح قاعدة البيانات والصلاحيات ---
 
-# تشغيل السيرفر وإجبار Laravel على استخدام الملفات للجلسات
-CMD php artisan config:clear && php artisan cache:clear && export SESSION_DRIVER=file && php artisan migrate --force && apache2-foreground
+# 1. إنشاء ملف .env وتوليد ملف قاعدة بيانات SQLite فارغ
+RUN touch /var/www/html/.env && \
+    mkdir -p /var/www/html/database && \
+    touch /var/www/html/database/database.sqlite
+
+# 2. تثبيت المكتبات (باستخدام update لضمان تحديث Cloudinary)
+RUN composer update --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs --no-scripts
+
+# 3. ضبط الصلاحيات للمجلدات الحساسة وقاعدة البيانات
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database && \
+    chown -R www-data:www-data /var/www/html
+
+# --- تشغيل السيرفر ---
+
+# تشغيل الأوامر الضرورية عند بدء التشغيل
+CMD php artisan key:generate --force && \
+    php artisan config:clear && \
+    php artisan cache:clear && \
+    php artisan migrate --force && \
+    apache2-foreground
