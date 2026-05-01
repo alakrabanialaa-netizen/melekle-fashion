@@ -31,25 +31,23 @@ COPY . /var/www/html
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# --- إضافات لإصلاح قاعدة البيانات والصلاحيات ---
-
-# 1. إنشاء ملف .env وتوليد ملف قاعدة بيانات SQLite فارغ
+# 1. إعداد الملفات الأساسية وقاعدة البيانات
 RUN touch /var/www/html/.env && \
     mkdir -p /var/www/html/database && \
     touch /var/www/html/database/database.sqlite
 
-# 2. تثبيت المكتبات (باستخدام update لضمان تحديث Cloudinary)
+# 2. تثبيت المكتبات
 RUN composer update --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs --no-scripts
 
-# 3. ضبط الصلاحيات للمجلدات الحساسة وقاعدة البيانات
+# 3. ضبط الصلاحيات بشكل نهائي
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database && \
     chown -R www-data:www-data /var/www/html
-CMD php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan route:clear && php artisan migrate --force && apache2-foreground
-# --- تشغيل السيرفر ---
 
-# تشغيل الأوامر الضرورية عند بدء التشغيل
+# --- الأمر النهائي (تم دمج كل شيء في أمر واحد لضمان التنفيذ) ---
 CMD php artisan key:generate --force && \
     php artisan config:clear && \
     php artisan cache:clear && \
+    php artisan view:clear && \
+    php artisan route:clear && \
     php artisan migrate --force && \
     apache2-foreground
