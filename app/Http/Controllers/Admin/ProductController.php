@@ -35,7 +35,7 @@ class ProductController extends Controller
     }
 
     /**
-     * حفظ المنتج - نسخة مصلحة وشاملة
+     * حفظ المنتج - نسخة مصلحة وشاملة مع Cloudinary
      */
     public function store(Request $request)
     {
@@ -80,18 +80,19 @@ class ProductController extends Controller
                     'slug'        => $this->generateSlug($validatedData['product_name']),
                 ]);
 
-                // 5. معالجة الصور
+                // 5. معالجة الصور - الرفع إلى Cloudinary
                 if ($request->hasFile('images')) {
                     foreach ($request->file('images') as $image) {
-                        $path = $image->store('products', 'public');
-                        $product->images()->create(['image' => $path]);
+                        // تعديل: الرفع إلى Cloudinary بدلاً من المجلد المحلي
+                        $uploadedFileUrl = $image->storeOnCloudinary('products')->getSecurePath();
+                        $product->images()->create(['image' => $uploadedFileUrl]);
                     }
                 }
 
-                // 6. معالجة الفيديو
+                // 6. معالجة الفيديو - الرفع إلى Cloudinary (اختياري)
                 if ($request->hasFile('video')) {
-                    $videoPath = $request->file('video')->store('products/videos', 'public'); 
-                    $product->update(['video' => $videoPath]);
+                    $videoUrl = $request->file('video')->storeOnCloudinary('products/videos')->getSecurePath(); 
+                    $product->update(['video' => $videoUrl]);
                 }
 
                 return redirect()->route('admin.products.index')->with('success', 'تم إضافة المنتج بنجاح');
