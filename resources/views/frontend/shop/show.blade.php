@@ -11,21 +11,33 @@ PRODUCT IMAGES
 ===================== --}}
 <div>
     <div class="relative bg-white rounded-xl shadow overflow-hidden">
-        @if($product->images->count())
+        @if($product->images->isNotEmpty())
+            @php 
+                $firstImage = $product->images->first()->image;
+                // التحقق إذا كان المسار يحتوي على http (رابط خارجي) أو يحتاج لإضافة storage
+                $imagePath = Str::contains($firstImage, 'http') ? $firstImage : asset('storage/'.$firstImage);
+            @endphp
+            
             <img
                 id="mainImage"
-                src="{{ asset('storage/'.$product->images->first()->image) }}" {{-- تم حذف النقطة الزائدة هنا --}}
+                src="{{ $imagePath }}"
                 class="w-full object-cover transition duration-500 cursor-zoom-in"
                 onmousemove="zoom(event)"
                 onmouseleave="resetZoom()">
+        @else
+            {{-- صورة افتراضية في حال عدم وجود صور للمنتج --}}
+            <img src="{{ asset('images/no-image.png') }}" class="w-full object-cover">
         @endif
     </div>
 
     {{-- thumbnails slider --}}
     <div class="flex gap-3 mt-4 overflow-x-auto">
         @foreach($product->images as $image)
+            @php 
+                $thumbPath = Str::contains($image->image, 'http') ? $image->image : asset('storage/'.$image->image);
+            @endphp
             <img
-                src="{{ asset('storage/'.$image->image) }}" {{-- تم تصحيح المتغير وحذف النقطة الزائدة هنا --}}
+                src="{{ $thumbPath }}"
                 class="w-20 h-20 rounded-lg border cursor-pointer hover:border-orange-500"
                 onclick="changeImage(this)">
         @endforeach
