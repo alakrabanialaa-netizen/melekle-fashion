@@ -1,5 +1,4 @@
 <?php
-
 return [
-    'cloudinary_url' => 'cloudinary://251326666311568:BP7sMBs-wWEZKHTP3mAmbZkePfQ@doajfaz15',
+    'cloudinary_url' => env('CLOUDINARY_URL'),
 ];
