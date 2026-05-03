@@ -27,15 +27,14 @@ return [
     ],
 
     /*
-    | سنقوم هنا بجلب الـ Providers الافتراضية للنظام لضمان عمل Blade وغيره
-    | مع التأكد من عدم إضافة Cloudinary يدوياً
+    | هنا نقوم بدمج الـ Providers الافتراضية للنظام لضمان عمل Blade
+    | مع استبعاد Cloudinary يدوياً لمنع خطأ الـ Null
     */
     'providers' => ServiceProvider::defaultProviders()->merge([
         App\Providers\AppServiceProvider::class,
-        // أضف هنا أي Providers خاصة بمشروعك موجودة في مجلد app/Providers
     ])->toArray(),
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
+        // يمكنك إضافة الـ Aliases الخاصة بك هنا
     ])->toArray(),
 ];
