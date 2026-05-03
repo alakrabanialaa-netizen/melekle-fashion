@@ -80,17 +80,45 @@ class ProductController extends Controller
                     'slug'        => $this->generateSlug($validatedData['product_name']),
                 ]);
 
-               // 5. معالجة الصور - الرفع اليدوي المباشر لتجاوز خطأ الـ Engine
+              // معالجة الصور - رفع مباشر بدون مكتبات معقدة
 if ($request->hasFile('images')) {
     foreach ($request->file('images') as $image) {
-        // نستخدم الفاçاد ونمرر الإعدادات يدوياً لضمان عدم وجود null
-        $uploadedFile = \CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::upload(
-            $image->getRealPath(), 
-            ['folder' => 'products']
-        );
+        $file = $image->getRealPath();
         
-        $uploadedFileUrl = $uploadedFile->getSecurePath();
-        $product->images()->create(['image' => $uploadedFileUrl]);
+        // البيانات التي ظهرت في لقطات الشاشة الخاصة بك
+        $cloudName = "doajfaz15";
+        $api_key = "251326666311568";
+        $api_secret = "BP7sMBs-wWEZKHTP3mAmbZkePfQ";
+        $timestamp = time();
+        
+        // بناء التوقيع الأمني يدوياً
+        $params = [
+            "folder" => "products",
+            "timestamp" => $timestamp
+        ];
+        ksort($params);
+        $signString = http_build_query($params) . $api_secret;
+        $signString = str_replace(['&', '='] , ['' , ''] , $signString); // تنظيف الرابط للتوقيع
+        $signature = sha1($signString);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://api.cloudinary.com/v1_1/$cloudName/image/upload");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, [
+            "file" => new \CURLFile($file),
+            "api_key" => $api_key,
+            "timestamp" => $timestamp,
+            "signature" => $signature,
+            "folder" => "products"
+        ]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
+        $result = json_decode(curl_exec($ch), true);
+        curl_close($ch);
+
+        if (isset($result['secure_url'])) {
+            $product->images()->create(['image' => $result['secure_url']]);
+        }
     }
 }
 
