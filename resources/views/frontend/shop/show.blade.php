@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="container mx-auto px-6 py-12">
+<div class="container mx-auto px-6 py-12" dir="rtl">
     <div class="grid lg:grid-cols-2 gap-16">
 
         {{-- =====================
@@ -13,6 +13,7 @@
                 @if($product->images && $product->images->count() > 0)
                     @php 
                         $firstImg = $product->images->first()->image;
+                        // تصحيح عرض الصورة: إذا كان الرابط كاملاً (Cloudinary) يعرض مباشرة، وإلا يستخدم asset
                         $firstPath = Str::contains($firstImg, ['http', 'https']) ? $firstImg : asset('storage/' . $firstImg);
                     @endphp
                     <img
@@ -24,7 +25,7 @@
                         onmouseleave="resetZoom()">
                 @else
                     <div class="w-full h-[500px] bg-gray-100 flex items-center justify-center">
-                        <span class="text-gray-400">No image available</span>
+                        <span class="text-gray-400">لا توجد صور متاحة</span>
                     </div>
                 @endif
             </div>
@@ -38,7 +39,7 @@
                     @endphp
                     <img
                         src="{{ $thumbPath }}"
-                        class="w-24 h-24 rounded-xl border-2 border-transparent cursor-pointer hover:border-orange-500 transition-all object-cover bg-white"
+                        class="thumbnail-img w-24 h-24 rounded-xl border-2 {{ $loop->first ? 'border-orange-500' : 'border-transparent' }} cursor-pointer hover:border-orange-500 transition-all object-cover bg-white"
                         onclick="changeImage(this)">
                 @endforeach
             </div>
@@ -48,9 +49,9 @@
         {{-- =====================
              PRODUCT DETAILS
         ===================== --}}
-        <div class="sticky top-24 h-fit">
-            <nav class="flex text-sm text-gray-500 mb-4">
-                <a href="/" class="hover:text-orange-600">Home</a>
+        <div class="sticky top-24 h-fit text-right">
+            <nav class="flex text-sm text-gray-500 mb-4 justify-start">
+                <a href="/" class="hover:text-orange-600">الرئيسية</a>
                 <span class="mx-2">/</span>
                 <span class="text-gray-800 font-medium truncate">{{ $product->name }}</span>
             </nav>
@@ -59,14 +60,34 @@
                 {{ $product->name }}
             </h1>
 
-            <div class="flex items-center gap-4 mb-6">
+            {{-- Stock Status Badge (إضافة جديدة) --}}
+            <div class="mb-4">
+                @if($product->stock <= 0)
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                        <span class="w-2 h-2 ml-2 rounded-full bg-red-600"></span>
+                        نفدت الكمية
+                    </span>
+                @elseif($product->stock <= 5)
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-orange-100 text-orange-800 animate-pulse">
+                        <span class="w-2 h-2 ml-2 rounded-full bg-orange-600"></span>
+                        كمية محدودة جداً: متبقي {{ $product->stock }} فقط!
+                    </span>
+                @else
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                        <span class="w-2 h-2 ml-2 rounded-full bg-green-600"></span>
+                        متوفر في المخزون
+                    </span>
+                @endif
+            </div>
+
+            <div class="flex items-center gap-4 mb-6 justify-start">
                 <div class="flex items-center bg-orange-50 px-3 py-1 rounded-full">
-                    <span class="text-orange-600 font-bold text-2xl">{{ $product->price }} ₺</span>
+                    <span class="text-orange-600 font-bold text-2xl">{{ number_format($product->price, 2) }} ₺</span>
                 </div>
-                @if($product->original_price)
-                    <span class="line-through text-gray-400 text-lg">{{ $product->original_price }} ₺</span>
+                @if($product->original_price && $product->original_price > $product->price)
+                    <span class="line-through text-gray-400 text-lg">{{ number_format($product->original_price, 2) }} ₺</span>
                     <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded">
-                        SALE
+                        خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%
                     </span>
                 @endif
             </div>
@@ -75,59 +96,50 @@
                 <p class="leading-relaxed">{{ $product->description }}</p>
             </div>
 
-            {{-- Size & Age Selector --}}
-@if(($product->sizes && count(json_decode($product->sizes, true) ?? [])) || ($product->ages && count(json_decode($product->ages, true) ?? [])))
-<div class="mb-8 space-y-6">
-    
-    {{-- عرض المقاسات (S, M, L...) --}}
-    @if($product->sizes)
-        @php $sizesArray = is_array($product->sizes) ? $product->sizes : json_decode($product->sizes, true); @endphp
-        @if($sizesArray)
-        <div>
-            <h3 class="text-sm font-bold uppercase tracking-wider text-gray-900 mb-3">المقاس المتوفر:</h3>
-            <div class="flex flex-wrap gap-3">
-                @foreach($sizesArray as $size)
-                    <button
-                        onclick="selectSize(this)"
-                        class="sizeBtn border-2 border-gray-200 px-6 py-2 rounded-xl font-medium hover:border-orange-500 transition-all">
-                        {{ $size }}
-                    </button>
-                @endforeach
-            </div>
-        </div>
-        @endif
-    @endif
+            {{-- Size & Age Selector (تم دمج الإصلاحات هنا) --}}
+            @if(($product->sizes && count(json_decode($product->sizes, true) ?? [])) || ($product->ages && count(json_decode($product->ages, true) ?? [])))
+            <div class="mb-8 space-y-6">
+                @if($product->sizes)
+                    @php $sizesArray = is_array($product->sizes) ? $product->sizes : json_decode($product->sizes, true); @endphp
+                    @if($sizesArray)
+                    <div>
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-900 mb-3">المقاسات المتاحة:</h3>
+                        <div class="flex flex-wrap gap-3">
+                            @foreach($sizesArray as $size)
+                                <button onclick="selectSize(this)" class="sizeBtn border-2 border-gray-200 px-6 py-2 rounded-xl font-medium hover:border-orange-500 transition-all">
+                                    {{ $size }}
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+                @endif
 
-    {{-- عرض الأعمار (1-2y, 3-4y...) --}}
-    @if($product->ages)
-        @php $agesArray = is_array($product->ages) ? $product->ages : json_decode($product->ages, true); @endphp
-        @if($agesArray)
-        <div>
-            <h3 class="text-sm font-bold uppercase tracking-wider text-gray-900 mb-3">العمر المتوفر:</h3>
-            <div class="flex flex-wrap gap-3">
-                @foreach($agesArray as $age)
-                    <button
-                        onclick="selectSize(this)"
-                        class="sizeBtn border-2 border-gray-200 px-4 py-2 rounded-xl font-medium hover:border-orange-500 transition-all bg-gray-50">
-                        {{-- تحويل الرموز لأسماء مفهومة --}}
-                        @php
-                            $ageLabels = [
-                                'newborn' => 'حديث ولادة', '0-3m' => '0-3 أشهر', '3-6m' => '3-6 أشهر',
-                                '6-12m' => '6-12 شهر', '1-2y' => '1-2 سنة', '2-3y' => '2-3 سنوات',
-                                '3-4y' => '3-4 سنوات', '4-5y' => '4-5 سنوات', '6-7y' => '6-7 سنوات',
-                                '8-9y' => '8-9 سنوات', '10-12y' => '10-12 سنة'
-                            ];
-                        @endphp
-                        {{ $ageLabels[$age] ?? $age }}
-                    </button>
-                @endforeach
+                @if($product->ages)
+                    @php $agesArray = is_array($product->ages) ? $product->ages : json_decode($product->ages, true); @endphp
+                    @if($agesArray)
+                    <div>
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-900 mb-3">الأعمار المتاحة:</h3>
+                        <div class="flex flex-wrap gap-3">
+                            @foreach($agesArray as $age)
+                                <button onclick="selectSize(this)" class="sizeBtn border-2 border-gray-200 px-4 py-2 rounded-xl font-medium hover:border-orange-500 transition-all bg-gray-50">
+                                    @php
+                                        $ageLabels = [
+                                            'newborn' => 'حديث ولادة', '0-3m' => '0-3 أشهر', '3-6m' => '3-6 أشهر',
+                                            '6-12m' => '6-12 شهر', '1-2y' => '1-2 سنة', '2-3y' => '2-3 سنوات',
+                                            '3-4y' => '3-4 سنوات', '4-5y' => '4-5 سنوات', '6-7y' => '6-7 سنوات',
+                                            '8-9y' => '8-9 سنوات', '10-12y' => '10-12 سنة'
+                                        ];
+                                    @endphp
+                                    {{ $ageLabels[$age] ?? $age }}
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+                @endif
             </div>
-        </div>
-        @endif
-    @endif
-
-</div>
-@endif
+            @endif
 
             {{-- Actions --}}
             <div class="flex flex-col sm:flex-row items-center gap-4 mb-10">
@@ -137,61 +149,44 @@
                     <button onclick="plus()" class="px-5 py-3 hover:bg-gray-50 transition">+</button>
                 </div>
 
-                <button class="w-full sm:flex-1 bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-orange-200 transition-all transform active:scale-95">
-                    🛒 Add To Cart
-                </button>
+                <form action="{{ route('cart.add', $product->id) }}" method="POST" class="w-full sm:flex-1">
+                    @csrf
+                    <input type="hidden" name="quantity" id="form-qty" value="1">
+                    <button type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-orange-200 transition-all transform active:scale-95">
+                        🛒 أضف إلى السلة
+                    </button>
+                </form>
 
                 <button class="p-4 rounded-xl border-2 border-gray-200 hover:bg-red-50 hover:border-red-200 transition-all group">
-                    <span class="text-2xl group-hover:scale-110 inline-block transition">❤️</span>
+                    <span class="text-2xl group-hover:scale-110 inline-block transition text-red-500">♥</span>
                 </button>
             </div>
 
-            {{-- Product Info --}}
-            <div class="grid grid-cols-2 gap-4 bg-gray-50 p-6 rounded-2xl border border-gray-100">
-                <div>
-                    <p class="text-xs text-gray-500 uppercase font-bold">Category</p>
-                    <p class="font-semibold text-gray-800">{{ $product->category }}</p>
-                </div>
-                <div>
-                    <p class="text-xs text-gray-500 uppercase font-bold">Shipping</p>
-                    <p class="font-semibold text-gray-800">2-4 Days</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- =====================
-         RELATED PRODUCTS
-    ===================== --}}
-    @if(isset($relatedProducts) && $relatedProducts->count() > 0)
-    <div class="mt-24">
-        <div class="flex items-center justify-between mb-10">
-            <h2 class="text-3xl font-bold text-gray-900">Similar Products</h2>
-            <div class="flex gap-2">
-                <button onclick="slideLeft()" class="p-3 bg-white border rounded-full shadow-sm hover:bg-gray-50">‹</button>
-                <button onclick="slideRight()" class="p-3 bg-white border rounded-full shadow-sm hover:bg-gray-50">›</button>
-            </div>
-        </div>
-
-        <div id="relatedSlider" class="flex gap-6 overflow-x-auto scroll-smooth no-scrollbar pb-4">
-            @foreach($relatedProducts as $item)
-                <a href="{{ route('product.show', $item->id) }}" class="min-w-[280px] group">
-                    <div class="bg-white rounded-2xl border border-gray-100 p-4 transition-all group-hover:shadow-xl group-hover:-translate-y-1">
-                        <div class="relative rounded-xl overflow-hidden mb-4 h-64">
-                            @php 
-                                $rImg = $item->images->first() ? $item->images->first()->image : null;
-                                $rPath = Str::contains($rImg, ['http', 'https']) ? $rImg : asset('storage/' . $rImg);
-                            @endphp
-                            <img src="{{ $rPath }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-                        </div>
-                        <h3 class="font-bold text-gray-900 group-hover:text-orange-600 transition mb-1">{{ $item->name }}</h3>
-                        <p class="text-orange-600 font-extrabold">{{ $item->price }} ₺</p>
+            {{-- Product Info & Share --}}
+            <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase font-bold">القسم</p>
+                        <p class="font-semibold text-gray-800">{{ $product->category }}</p>
                     </div>
-                </a>
-            @endforeach
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase font-bold">الشحن</p>
+                        <p class="font-semibold text-gray-800">2-4 أيام عمل</p>
+                    </div>
+                </div>
+                
+                {{-- Social Share (إضافة جديدة) --}}
+                <div class="pt-4 border-t border-gray-200">
+                    <p class="text-xs font-bold text-gray-500 mb-3">مشاركة المنتج:</p>
+                    <div class="flex gap-3">
+                        <a href="https://wa.me/?text={{ urlencode($product->name . ' ' . url()->current()) }}" target="_blank" class="w-9 h-9 flex items-center justify-center rounded-full bg-green-500 text-white hover:opacity-80 transition"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ url()->current() }}" target="_blank" class="w-9 h-9 flex items-center justify-center rounded-full bg-blue-600 text-white hover:opacity-80 transition"><i class="fab fa-facebook-f"></i></a>
+                        <button onclick="copyLink()" class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-300 text-gray-700 hover:bg-gray-400 transition"><i class="fas fa-link"></i></button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    @endif
 </div>
 
 <style>
@@ -202,27 +197,47 @@
 </style>
 
 <script>
-    function changeImage(img) {
+    function changeImage(imgElement) {
         const main = document.getElementById("mainImage");
-        main.src = img.src;
-        // إضافة تأثير وميض عند تغيير الصورة
+        main.src = imgElement.src;
+        
+        // تحسين بصري: تمييز الصورة المصغرة النشطة
+        document.querySelectorAll('.thumbnail-img').forEach(el => {
+            el.classList.remove('border-orange-500');
+            el.classList.add('border-transparent');
+        });
+        imgElement.classList.remove('border-transparent');
+        imgElement.classList.add('border-orange-500');
+
         main.classList.add('opacity-50');
         setTimeout(() => main.classList.remove('opacity-50'), 100);
     }
 
     function plus() {
         let qty = document.getElementById("qty");
-        qty.innerText = parseInt(qty.innerText) + 1;
+        let val = parseInt(qty.innerText) + 1;
+        qty.innerText = val;
+        document.getElementById("form-qty").value = val;
     }
 
     function minus() {
         let qty = document.getElementById("qty");
-        if(parseInt(qty.innerText) > 1) qty.innerText = parseInt(qty.innerText) - 1;
+        let val = parseInt(qty.innerText);
+        if(val > 1) {
+            val--;
+            qty.innerText = val;
+            document.getElementById("form-qty").value = val;
+        }
     }
 
     function selectSize(btn) {
         document.querySelectorAll(".sizeBtn").forEach(el => el.classList.remove("border-orange-500", "text-orange-600", "bg-orange-50"));
         btn.classList.add("border-orange-500", "text-orange-600", "bg-orange-50");
+    }
+
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href);
+        alert('تم نسخ الرابط بنجاح!');
     }
 
     function zoom(e) {
@@ -236,9 +251,6 @@
     function resetZoom() {
         document.getElementById("mainImage").style.transform = "scale(1)";
     }
-
-    function slideLeft() { document.getElementById("relatedSlider").scrollBy({ left: -300, behavior: 'smooth' }); }
-    function slideRight() { document.getElementById("relatedSlider").scrollBy({ left: 300, behavior: 'smooth' }); }
 </script>
 
 @endsection
