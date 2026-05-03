@@ -80,14 +80,19 @@ class ProductController extends Controller
                     'slug'        => $this->generateSlug($validatedData['product_name']),
                 ]);
 
-                // 5. معالجة الصور - الرفع إلى Cloudinary
-                if ($request->hasFile('images')) {
-                    foreach ($request->file('images') as $image) {
-                        // الرفع باستخدام الميثود المباشرة المدعومة من المكتبة
-                        $uploadedFileUrl = $image->storeOnCloudinary('products')->getSecurePath();
-                        $product->images()->create(['image' => $uploadedFileUrl]);
-                    }
-                }
+               // 5. معالجة الصور - الرفع اليدوي المباشر لتجاوز خطأ الـ Engine
+if ($request->hasFile('images')) {
+    foreach ($request->file('images') as $image) {
+        // نستخدم الفاçاد ونمرر الإعدادات يدوياً لضمان عدم وجود null
+        $uploadedFile = \CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::upload(
+            $image->getRealPath(), 
+            ['folder' => 'products']
+        );
+        
+        $uploadedFileUrl = $uploadedFile->getSecurePath();
+        $product->images()->create(['image' => $uploadedFileUrl]);
+    }
+}
 
                 // 6. معالجة الفيديو - الرفع إلى Cloudinary
                 if ($request->hasFile('video')) {
