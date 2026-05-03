@@ -21,6 +21,14 @@ class ProductController extends Controller
         $products->appends($request->all());
         return view('admin.products.index', compact('products'));
     }
+    public function index() {
+    $products = Product::with('images')->get();
+    
+    // هذا السطر سيوقف الصفحة ويعرض لك بيانات أول صورة فقط
+    dd($products->first()->images->first()->image); 
+    
+    return view('admin.products.index', compact('products'));
+}
 
     public function create()
     {
