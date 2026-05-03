@@ -53,7 +53,8 @@
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-md transition-all">
                 {{-- الصورة الكبيرة --}}
                 <div class="relative h-48 overflow-hidden">
-                    <img src="{{ $product->images->count() ? Storage::url($product->images->first()->image) : 'https://via.placeholder.com/400x300' }}"
+                    {{-- تم التعديل هنا: نستخدم الرابط مباشرة بدلاً من Storage::url --}}
+                    <img src="{{ $product->images->count() ? $product->images->first()->image : 'https://via.placeholder.com/400x300' }}"
                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 </div>
 
@@ -110,7 +111,8 @@
                 <tr class="hover:bg-indigo-50/30 transition">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
-                            <img src="{{ $product->images->count() ? Storage::url($product->images->first()->image) : 'https://via.placeholder.com/60' }}"
+                            {{-- تم التعديل هنا أيضاً: نستخدم الرابط مباشرة --}}
+                            <img src="{{ $product->images->count() ? $product->images->first()->image : 'https://via.placeholder.com/60' }}"
                                  class="w-12 h-12 rounded-xl object-cover shadow-sm">
                             <span class="font-bold text-gray-700">{{ $product->name }}</span>
                         </div>
