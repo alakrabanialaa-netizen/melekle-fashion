@@ -43,10 +43,8 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-pl
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database && \
     chown -R www-data:www-data /var/www/html
 
-# --- السطر الذهبي للتشغيل: يمسح الكاش بقوة، يتجاوز خطأ المفتاح، ويشغل السيرفر ---
+# استبدل آخر سطر CMD بهذا السطر
 CMD rm -f bootstrap/cache/config.php && \
-    rm -f bootstrap/cache/services.php && \
-    (php artisan key:generate --force || true) && \
     php artisan config:clear && \
     php artisan cache:clear && \
     php artisan migrate --force && \
