@@ -118,6 +118,61 @@
                 </div>
             </div>
 
+
+            {{-- 4. المقاسات والأعمار --}}
+<div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
+    <h2 class="text-xl font-bold text-indigo-800 mb-6 flex items-center gap-2">
+        <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm">4</span>
+        المقاسات والأعمار المتاحة
+    </h2>
+    
+    <div class="space-y-6">
+        {{-- مقاسات الملابس العالمية --}}
+        <div>
+            <label class="block text-sm font-bold text-gray-700 mb-3">المقاسات (للأمهات أو المقاسات العامة)</label>
+            <div class="flex flex-wrap gap-4">
+                @foreach(['XS', 'S', 'M', 'L', 'XL', 'XXL'] as $size)
+                    <label class="inline-flex items-center p-3 bg-white border rounded-xl cursor-pointer hover:border-indigo-500 transition-all shadow-sm">
+                        <input type="checkbox" name="sizes[]" value="{{ $size }}" class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        <span class="mr-3 font-bold text-gray-700">{{ $size }}</span>
+                    </label>
+                @endforeach
+            </div>
+        </div>
+
+        <hr class="border-gray-200">
+
+        {{-- مقاسات الأطفال بالأعمار --}}
+        <div>
+            <label class="block text-sm font-bold text-gray-700 mb-3">الأعمار المتاحة (للأطفال والمواليد)</label>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                @php
+                    $ages = [
+                        'newborn' => 'حديث ولادة',
+                        '0-3m' => '0-3 أشهر',
+                        '3-6m' => '3-6 أشهر',
+                        '6-12m' => '6-12 شهر',
+                        '1-2y' => '1-2 سنة',
+                        '2-3y' => '2-3 سنوات',
+                        '3-4y' => '3-4 سنوات',
+                        '4-5y' => '4-5 سنوات',
+                        '6-7y' => '6-7 سنوات',
+                        '8-9y' => '8-9 سنوات',
+                        '10-12y' => '10-12 سنة'
+                    ];
+                @endphp
+
+                @foreach($ages as $value => $label)
+                    <label class="inline-flex items-center p-3 bg-white border rounded-xl cursor-pointer hover:border-indigo-500 transition-all shadow-sm">
+                        <input type="checkbox" name="ages[]" value="{{ $value }}" class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        <span class="mr-3 text-sm font-bold text-gray-700">{{ $label }}</span>
+                    </label>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</div>
+
             {{-- 4. الأزرار --}}
             <div class="flex items-center justify-center gap-6 pt-6">
                 <button type="submit" class="bg-indigo-600 text-white px-12 py-4 rounded-xl font-bold text-lg hover:bg-indigo-700 transform hover:scale-105 transition-all shadow-lg active:scale-95">
