@@ -96,36 +96,28 @@
                 <p class="leading-relaxed">{{ $product->description }}</p>
             </div>
 
-       {{-- Size & Age Selector --}}
+      {{-- الشامل لعرض المقاسات والأعمار --}}
 <div class="mb-8 space-y-6">
     
-    {{-- عرض المقاسات --}}
     @php
-        $sizes = $product->sizes;
-        if (is_string($sizes)) {
-            $sizes = json_decode($sizes, true);
-        }
-    @endphp
+        // دالة مساعدة لتحويل أي مدخل إلى مصفوفة نظيفة
+        $processData = function($data) {
+            if (empty($data)) return [];
+            if (is_array($data)) return $data;
+            if (is_string($data)) {
+                $decoded = json_decode($data, true);
+                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                    return $decoded;
+                }
+                // إذا كان نصاً عادياً مفصولاً بفواصل مثل "S,M,L"
+                return explode(',', str_replace(['[', ']', '"'], '', $data));
+            }
+            return [];
+        };
 
-    @if(is_array($sizes) && count($sizes) > 0)
-        <div>
-            <h3 class="text-sm font-bold uppercase tracking-wider text-gray-900 mb-3">المقاسات المتاحة:</h3>
-            <div class="flex flex-wrap gap-3">
-                @foreach($sizes as $size)
-                    <button type="button" onclick="selectSize(this)" class="sizeBtn border-2 border-gray-200 px-6 py-2 rounded-xl font-medium hover:border-orange-500 transition-all">
-                        {{ $size }}
-                    </button>
-                @endforeach
-            </div>
-        </div>
-    @endif
-
-    {{-- عرض الأعمار --}}
-    @php
-        $ages = $product->ages;
-        if (is_string($ages)) {
-            $ages = json_decode($ages, true);
-        }
+        $finalSizes = $processData($product->sizes);
+        $finalAges = $processData($product->ages);
+        
         $ageLabels = [
             'newborn' => 'حديث ولادة', '0-3m' => '0-3 أشهر', '3-6m' => '3-6 أشهر',
             '6-12m' => '6-12 شهر', '1-2y' => '1-2 سنة', '2-3y' => '2-3 سنوات',
@@ -134,14 +126,34 @@
         ];
     @endphp
 
-    @if(is_array($ages) && count($ages) > 0)
+    {{-- عرض المقاسات --}}
+    @if(count($finalSizes) > 0)
+        <div>
+            <h3 class="text-sm font-bold uppercase tracking-wider text-gray-900 mb-3">المقاسات المتاحة:</h3>
+            <div class="flex flex-wrap gap-3">
+                @foreach($finalSizes as $size)
+                    @if(!empty(trim($size)))
+                        <button type="button" onclick="selectSize(this)" class="sizeBtn border-2 border-gray-200 px-6 py-2 rounded-xl font-medium hover:border-orange-500 transition-all">
+                            {{ trim($size, '" ') }}
+                        </button>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+    @endif
+
+    {{-- عرض الأعمار --}}
+    @if(count($finalAges) > 0)
         <div>
             <h3 class="text-sm font-bold uppercase tracking-wider text-gray-900 mb-3">الأعمار المتاحة:</h3>
             <div class="flex flex-wrap gap-3">
-                @foreach($ages as $age)
-                    <button type="button" onclick="selectSize(this)" class="sizeBtn border-2 border-gray-200 px-4 py-2 rounded-xl font-medium hover:border-orange-500 transition-all bg-gray-50">
-                        {{ $ageLabels[$age] ?? $age }}
-                    </button>
+                @foreach($finalAges as $age)
+                    @php $cleanAge = trim($age, '" '); @endphp
+                    @if(!empty($cleanAge))
+                        <button type="button" onclick="selectSize(this)" class="sizeBtn border-2 border-gray-200 px-4 py-2 rounded-xl font-medium hover:border-orange-500 transition-all bg-gray-50">
+                            {{ $ageLabels[$cleanAge] ?? $cleanAge }}
+                        </button>
+                    @endif
                 @endforeach
             </div>
         </div>
