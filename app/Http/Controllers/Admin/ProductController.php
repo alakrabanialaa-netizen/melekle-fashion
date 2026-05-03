@@ -7,8 +7,8 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProductController extends Controller
 {
@@ -83,13 +83,13 @@ class ProductController extends Controller
                 // 5. معالجة الصور - الرفع إلى Cloudinary
                 if ($request->hasFile('images')) {
                     foreach ($request->file('images') as $image) {
-                        // تعديل: الرفع إلى Cloudinary بدلاً من المجلد المحلي
+                        // الرفع باستخدام الميثود المباشرة المدعومة من المكتبة
                         $uploadedFileUrl = $image->storeOnCloudinary('products')->getSecurePath();
                         $product->images()->create(['image' => $uploadedFileUrl]);
                     }
                 }
 
-                // 6. معالجة الفيديو - الرفع إلى Cloudinary (اختياري)
+                // 6. معالجة الفيديو - الرفع إلى Cloudinary
                 if ($request->hasFile('video')) {
                     $videoUrl = $request->file('video')->storeOnCloudinary('products/videos')->getSecurePath(); 
                     $product->update(['video' => $videoUrl]);
@@ -99,7 +99,7 @@ class ProductController extends Controller
             });
 
         } catch (\Exception $e) {
-            return back()->withInput()->with('error', 'حدث خطأ: ' . $e->getMessage());
+            return back()->withInput()->with('error', 'حدث خطأ أثناء الحفظ: ' . $e->getMessage());
         }
     }
 
