@@ -43,9 +43,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-pl
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database && \
     chown -R www-data:www-data /var/www/html
 
-CMD rm -rf bootstrap/cache/* && \
-    (php artisan key:generate --force || true) && \
-    php artisan config:clear && \
+CMD php artisan config:clear && \
     php artisan cache:clear && \
-    php artisan migrate --force && \
+    rm -rf bootstrap/cache/*.php && \
     apache2-foreground
