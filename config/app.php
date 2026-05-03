@@ -23,10 +23,11 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    // سنترك المصفوفة فارغة أو نضع فيها الضروري فقط
-    // إذا كان إصدار Laravel لديك حديثاً، فهو لا يحتاج لذكر الـ Providers هنا
+    /*
+    | سنترك هذه المصفوفة فارغة تماماً.
+    | في Laravel الحديث، يتم التسجيل عبر bootstrap/providers.php تلقائياً.
+    */
     'providers' => [
-        App\Providers\AppServiceProvider::class,
-        // CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
+        // لا تضع شيئاً هنا حالياً لتجنب خطأ "Class not found"
     ],
 ];
