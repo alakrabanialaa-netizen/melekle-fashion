@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\ServiceProvider;
+
 return [
     'name' => env('APP_NAME', 'Laravel'),
     'env' => env('APP_ENV', 'production'),
@@ -24,10 +27,15 @@ return [
     ],
 
     /*
-    | سنترك هذه المصفوفة فارغة تماماً.
-    | في Laravel الحديث، يتم التسجيل عبر bootstrap/providers.php تلقائياً.
+    | سنقوم هنا بجلب الـ Providers الافتراضية للنظام لضمان عمل Blade وغيره
+    | مع التأكد من عدم إضافة Cloudinary يدوياً
     */
-    'providers' => [
-        // لا تضع شيئاً هنا حالياً لتجنب خطأ "Class not found"
-    ],
+    'providers' => ServiceProvider::defaultProviders()->merge([
+        App\Providers\AppServiceProvider::class,
+        // أضف هنا أي Providers خاصة بمشروعك موجودة في مجلد app/Providers
+    ])->toArray(),
+
+    'aliases' => Facade::defaultAliases()->merge([
+        // 'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
+    ])->toArray(),
 ];
