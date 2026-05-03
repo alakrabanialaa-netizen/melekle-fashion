@@ -60,9 +60,9 @@ return [
             'report' => false,
         ],
 'cloudinary' => [
-    'driver' => 'local', // سنخدعه ونقول له أنه قرص محلي لكي لا ينهار
-'root'   => storage_path('app'), // أضف هذا السطر ليرتاح النظام
-    ],
+    'driver' => 'local',
+    'root'   => storage_path('app/public'), // أضف هذا السطر تحديداً
+],
     ],
 
     /*
