@@ -44,10 +44,13 @@ RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/ht
     chown -R www-data:www-data /var/www/html
 
 # الطريقة الأفضل: تشغيل الأوامر حتى لو وجد المفتاح، مع مسح الكاش بقوة
-CMD php artisan key:generate --force && \
-    php artisan config:clear && \
-    php artisan cache:clear && \
-    php artisan view:clear && \
-    php artisan route:clear && \
+# تنظيف يدوي جذري وتشغيل الإعدادات
+CMD rm -f bootstrap/cache/*.php && \
+    php artisan key:generate --force && \
+    php artisan config:cache && \
+    php artisan view:cache && \
+    php artisan route:cache && \
+    php artisan migrate --force && \
+    apache2-foreground
     php artisan migrate --force && \
     apache2-foreground
