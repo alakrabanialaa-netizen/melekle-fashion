@@ -538,8 +538,10 @@ h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
                                     @endif
                                 </div>
                             @endif
-                            <img loading="lazy" src="{{ $product->images->first() ? asset('storage/'.$product->images->first()->image) : 'https://via.placeholder.com/300' }}" class="ty-main-image" alt="{{ $product->name }}">
-                        </div>
+<img loading="lazy" 
+     src="{{ $product->images->first() ? $product->images->first()->image : 'https://via.placeholder.com/300' }}" 
+     class="ty-main-image" 
+     alt="{{ $product->name }}">                        </div>
                     </a>
                     <button class="ty-wishlist-btn" title="أضف للمفضلة">
                         <i class="far fa-heart"></i>
