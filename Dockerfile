@@ -43,8 +43,9 @@ RUN composer update --no-dev --optimize-autoloader --no-interaction --ignore-pla
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database && \
     chown -R www-data:www-data /var/www/html
 
-# إضافة رمز || true يضمن أن النظام سيكمل تنفيذ الأوامر حتى لو فشل توليد المفتاح
-CMD rm -f bootstrap/cache/*.php && \
+# مسح ملفات الكاش يدوياً من المجلدات ثم التشغيل
+CMD rm -f bootstrap/cache/config.php && \
+    rm -f bootstrap/cache/services.php && \
     (php artisan key:generate --force || true) && \
     php artisan config:cache && \
     php artisan view:cache && \
