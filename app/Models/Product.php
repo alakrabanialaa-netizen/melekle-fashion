@@ -28,6 +28,8 @@ class Product extends Model
     protected $casts = [
         'sizes' => 'array',
         'colors' => 'array',
+        'ages' => 'array',
+];
     ];
 
     // علاقة صور المنتج
