@@ -59,7 +59,9 @@ return [
             'throw' => false,
             'report' => false,
         ],
-
+'cloudinary' => [
+    'driver' => 'local', // سنخدعه ونقول له أنه قرص محلي لكي لا ينهار
+],
     ],
 
     /*
