@@ -36,19 +36,18 @@ RUN touch /var/www/html/.env && \
     mkdir -p /var/www/html/database && \
     touch /var/www/html/database/database.sqlite
 
-# 2. تثبيت المكتبات
-RUN composer update --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs --no-scripts
+# 2. تثبيت المكتبات (استخدام install أسرع في الـ Deploy)
+RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs --no-scripts
 
 # 3. ضبط الصلاحيات بشكل نهائي
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database && \
     chown -R www-data:www-data /var/www/html
 
-# مسح ملفات الكاش يدوياً من المجلدات ثم التشغيل
+# --- السطر الذهبي للتشغيل: يمسح الكاش بقوة، يتجاوز خطأ المفتاح، ويشغل السيرفر ---
 CMD rm -f bootstrap/cache/config.php && \
     rm -f bootstrap/cache/services.php && \
     (php artisan key:generate --force || true) && \
-    php artisan config:cache && \
-    php artisan view:cache && \
-    php artisan route:cache && \
+    php artisan config:clear && \
+    php artisan cache:clear && \
     php artisan migrate --force && \
     apache2-foreground
