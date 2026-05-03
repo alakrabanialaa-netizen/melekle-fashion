@@ -8,13 +8,9 @@ use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProductController extends Controller
 {
-    /**
-     * عرض المنتجات
-     */
     public function index(Request $request)
     {
         $query = Product::with('images');
@@ -26,20 +22,13 @@ class ProductController extends Controller
         return view('admin.products.index', compact('products'));
     }
 
-    /**
-     * صفحة الإضافة
-     */
     public function create()
     {
         return view('admin.products.create');
     }
 
-    /**
-     * حفظ المنتج - نسخة مصلحة وشاملة مع Cloudinary
-     */
     public function store(Request $request)
     {
-        // 1. وظيفة داخلية لتحويل الأرقام العربية/الفارسية إلى إنجليزية
         $convertDigits = function($string) {
             $arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
             $persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
@@ -48,7 +37,6 @@ class ProductController extends Controller
             return str_replace($persian, $english, $string);
         };
 
-        // 2. معالجة الأرقام قبل التحقق (Validation)
         if($request->has('product_price')) {
             $request->merge(['product_price' => $convertDigits($request->product_price)]);
         }
@@ -56,7 +44,6 @@ class ProductController extends Controller
             $request->merge(['product_stock' => $convertDigits($request->product_stock)]);
         }
 
-        // 3. التحقق من البيانات
         $validatedData = $request->validate([
             'product_name'        => 'required|string|max:255',
             'product_price'       => 'required|numeric|min:0',
@@ -70,7 +57,6 @@ class ProductController extends Controller
 
         try {
             return DB::transaction(function () use ($request, $validatedData) {
-                // 4. إنشاء المنتج
                 $product = Product::create([
                     'name'        => $validatedData['product_name'],
                     'price'       => $validatedData['product_price'],
@@ -80,57 +66,60 @@ class ProductController extends Controller
                     'slug'        => $this->generateSlug($validatedData['product_name']),
                 ]);
 
-              // معالجة الصور - رفع مباشر بدون مكتبات معقدة
-if ($request->hasFile('images')) {
-    foreach ($request->file('images') as $image) {
-        $file = $image->getRealPath();
-        
-        // البيانات التي ظهرت في لقطات الشاشة الخاصة بك
-        $cloudName = "doajfaz15";
-        $api_key = "251326666311568";
-        $api_secret = "BP7sMBs-wWEZKHTP3mAmbZkePfQ";
-        $timestamp = time();
-        
-        // بناء التوقيع الأمني يدوياً
-        $params = [
-            "folder" => "products",
-            "timestamp" => $timestamp
-        ];
-        ksort($params);
-        $signString = http_build_query($params) . $api_secret;
-        $signString = str_replace(['&', '='] , ['' , ''] , $signString); // تنظيف الرابط للتوقيع
-        $signature = sha1($signString);
+                $cloudName = "doajfaz15";
+                $api_key = "251326666311568";
+                $api_secret = "BP7sMBs-wWEZKHTP3mAmbZkePfQ";
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://api.cloudinary.com/v1_1/$cloudName/image/upload");
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, [
-            "file" => new \CURLFile($file),
-            "api_key" => $api_key,
-            "timestamp" => $timestamp,
-            "signature" => $signature,
-            "folder" => "products"
-        ]);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        
-        $result = json_decode(curl_exec($ch), true);
-        curl_close($ch);
+                // رفع الصور
+                if ($request->hasFile('images')) {
+                    foreach ($request->file('images') as $image) {
+                        $timestamp = time();
+                        $signature = sha1("folder=products&timestamp=$timestamp$api_secret");
 
-        if (isset($result['secure_url'])) {
-            $product->images()->create(['image' => $result['secure_url']]);
-        }
-    }
-}
+                        $ch = curl_init("https://api.cloudinary.com/v1_1/$cloudName/image/upload");
+                        curl_setopt($ch, CURLOPT_POST, true);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, [
+                            "file" => new \CURLFile($image->getRealPath()),
+                            "api_key" => $api_key,
+                            "timestamp" => $timestamp,
+                            "signature" => $signature,
+                            "folder" => "products"
+                        ]);
+                        $result = json_decode(curl_exec($ch), true);
+                        curl_close($ch);
 
-                // 6. معالجة الفيديو - الرفع إلى Cloudinary
+                        if (isset($result['secure_url'])) {
+                            $product->images()->create(['image' => $result['secure_url']]);
+                        }
+                    }
+                }
+
+                // رفع الفيديو
                 if ($request->hasFile('video')) {
-                    $videoUrl = $request->file('video')->storeOnCloudinary('products/videos')->getSecurePath(); 
-                    $product->update(['video' => $videoUrl]);
+                    $timestamp = time();
+                    $signature = sha1("folder=products/videos&timestamp=$timestamp$api_secret");
+
+                    $ch = curl_init("https://api.cloudinary.com/v1_1/$cloudName/video/upload");
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, [
+                        "file" => new \CURLFile($request->file('video')->getRealPath()),
+                        "api_key" => $api_key,
+                        "timestamp" => $timestamp,
+                        "signature" => $signature,
+                        "folder" => "products/videos"
+                    ]);
+                    $result = json_decode(curl_exec($ch), true);
+                    curl_close($ch);
+
+                    if (isset($result['secure_url'])) {
+                        $product->update(['video' => $result['secure_url']]);
+                    }
                 }
 
                 return redirect()->route('admin.products.index')->with('success', 'تم إضافة المنتج بنجاح');
             });
-
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'حدث خطأ أثناء الحفظ: ' . $e->getMessage());
         }
