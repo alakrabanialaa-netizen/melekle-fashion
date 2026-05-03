@@ -30,7 +30,7 @@ class Product extends Model
         'colors' => 'array',
         'ages' => 'array',
 ];
-    ];
+  
 
     // علاقة صور المنتج
     public function images()
