@@ -11,24 +11,24 @@ use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
+    // دالة واحدة متكاملة للعرض والبحث والترقيم
     public function index(Request $request)
     {
         $query = Product::with('images');
+
+        // البحث إذا كان موجوداً
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
+
+        // جلب البيانات مع الترقيم (10 منتجات في الصفحة)
         $products = $query->latest()->paginate(10);
+        
+        // الحفاظ على بارامترات البحث عند التنقل بين الصفحات
         $products->appends($request->all());
+
         return view('admin.products.index', compact('products'));
     }
-    public function index() {
-    $products = Product::with('images')->get();
-    
-    // هذا السطر سيوقف الصفحة ويعرض لك بيانات أول صورة فقط
-    dd($products->first()->images->first()->image); 
-    
-    return view('admin.products.index', compact('products'));
-}
 
     public function create()
     {
@@ -37,6 +37,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        // فنكشن تحويل الأرقام العربية/الفارسية إلى إنجليزية لضمان الحفظ في قاعدة البيانات
         $convertDigits = function($string) {
             $arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
             $persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
@@ -78,7 +79,7 @@ class ProductController extends Controller
                 $api_key = "251326666311568";
                 $api_secret = "BP7sMBs-wWEZKHTP3mAmbZkePfQ";
 
-                // رفع الصور
+                // رفع الصور إلى Cloudinary
                 if ($request->hasFile('images')) {
                     foreach ($request->file('images') as $image) {
                         $timestamp = time();
@@ -98,12 +99,13 @@ class ProductController extends Controller
                         curl_close($ch);
 
                         if (isset($result['secure_url'])) {
+                            // يتم حفظ الرابط الكامل المباشر
                             $product->images()->create(['image' => $result['secure_url']]);
                         }
                     }
                 }
 
-                // رفع الفيديو
+                // رفع الفيديو إلى Cloudinary
                 if ($request->hasFile('video')) {
                     $timestamp = time();
                     $signature = sha1("folder=products/videos&timestamp=$timestamp$api_secret");
