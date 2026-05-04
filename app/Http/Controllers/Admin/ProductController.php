@@ -59,6 +59,8 @@ class ProductController extends Controller
             'product_stock'       => 'nullable', 
             'product_category'    => 'required|string',
             'product_description' => 'nullable|string',
+            'sizes'               => 'nullable|array', // تم الإصلاح هنا
+            'ages'                => 'nullable|array',  // تم الإصلاح هنا
             'images'              => 'nullable|array',
             'images.*'            => 'image|mimes:jpeg,png,webp,gif|max:5120',
             'video'               => 'nullable|file|mimes:mp4,mov,ogg,qt|max:30720',
@@ -72,6 +74,8 @@ class ProductController extends Controller
                     'description' => $validatedData['product_description'] ?? null,
                     'category'    => $validatedData['product_category'],
                     'stock'       => (int)($request->product_stock ?? 0),
+                    'sizes'       => $request->input('sizes', []), // تم الإصلاح هنا
+                    'ages'        => $request->input('ages', []),  // تم الإصلاح هنا
                     'slug'        => $this->generateSlug($validatedData['product_name']),
                 ]);
 
@@ -99,7 +103,6 @@ class ProductController extends Controller
                         curl_close($ch);
 
                         if (isset($result['secure_url'])) {
-                            // يتم حفظ الرابط الكامل المباشر
                             $product->images()->create(['image' => $result['secure_url']]);
                         }
                     }
@@ -148,6 +151,8 @@ class ProductController extends Controller
             'product_category' => 'required|string',
             'product_description' => 'nullable|string',
             'product_stock' => 'nullable',
+            'sizes' => 'nullable|array', // تم الإصلاح هنا
+            'ages' => 'nullable|array',  // تم الإصلاح هنا
         ]);
 
         try {
@@ -157,6 +162,8 @@ class ProductController extends Controller
                 'category'    => $validatedData['product_category'],
                 'description' => $validatedData['product_description'] ?? null,
                 'stock'       => (int)($request->product_stock ?? 0),
+                'sizes'       => $request->input('sizes', []), // تم الإصلاح هنا
+                'ages'        => $request->input('ages', []),  // تم الإصلاح هنا
                 'slug'        => $this->generateSlug($validatedData['product_name'], $product->id),
             ]);
 
