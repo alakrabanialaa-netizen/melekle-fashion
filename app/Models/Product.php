@@ -16,6 +16,7 @@ class Product extends Model
         'description',
         'sizes',
         'colors',
+        'ages',          // تأكد من إضافة هذا السطر هنا
         'slug',
         'cost_price',
         'original_price',
@@ -28,8 +29,8 @@ class Product extends Model
     protected $casts = [
         'sizes' => 'array',
         'colors' => 'array',
-        'ages' => 'array',
-];
+        'ages' => 'array', // هذا السطر صحيح وممتاز
+    ];
   
 
     // علاقة صور المنتج
