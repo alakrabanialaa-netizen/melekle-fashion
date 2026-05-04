@@ -14,6 +14,16 @@ use App\Http\Controllers\Admin\{
 |--------------------------------------------------------------------------
 */
 
+// رابط تشغيل الـ Migration لحل مشكلة الـ NULL والـ Missing Columns في النسخة المجانية
+Route::get('/run-migrate', function () {
+    try {
+        Artisan::call('migrate --force');
+        return "تم تحديث قاعدة البيانات بنجاح: <br><pre>" . Artisan::output() . "</pre>";
+    } catch (\Exception $e) {
+        return "حدث خطأ أثناء التحديث: " . $e->getMessage();
+    }
+});
+
 Route::get('/', function () {
     try {
         if (!file_exists(public_path('storage'))) Artisan::call('storage:link');
@@ -24,10 +34,9 @@ Route::get('/', function () {
     }
 })->name('welcome');
 
-// تم تحديث المسار بناءً على صورة المجلدات التي أرسلتها
+// عرض المنتج الفردي
 Route::get('/product/{id}', function ($id) {
     $product = \App\Models\Product::with('images')->findOrFail($id);
-    // المسار الصحيح هو المجلدات التي ظهرت في الصورة: frontend ثم shop ثم show
     return view('frontend.shop.show', compact('product')); 
 })->name('product.show');
 
