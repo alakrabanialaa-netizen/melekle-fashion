@@ -4,7 +4,6 @@
 
 <div class="container mx-auto px-6 py-12" dir="rtl">
     <div class="grid lg:grid-cols-2 gap-16">
-<pre class="bg-gray-100 p-4 text-xs">{{ var_dump($product->sizes) }}</pre>
         {{-- =====================
              PRODUCT IMAGES
         ===================== --}}
