@@ -9,11 +9,26 @@ Route::get('/', function () {
 
 Route::get('/run-migrate', function () {
     try {
-        // هذا الأمر يمسح كل شيء ويبدأ من جديد بالترتيب الصحيح
-        Artisan::call('migrate:fresh', ['--force' => true]);
-        return "تم مسح قاعدة البيانات وإنشاء الجداول بالترتيب الصحيح بنجاح:   
-<pre>" . Artisan::output() . "</pre>";
+        // 1. مسح الكاش لضمان قراءة إعدادات السيرفر الجديدة
+        Artisan::call('config:clear');
+        Artisan::call('cache:clear');
+
+        // 2. تصفير القاعدة وبناء الجداول بالترتيب الصحيح
+        // ملاحظة: تم استخدام migrate:fresh لضمان حذف أي جداول قديمة مسببة للمشاكل
+        Artisan::call('migrate:fresh', [
+            '--force' => true,
+            '--seed'  => true // سيقوم بتعبئة البيانات الأساسية إذا كان لديك Seeders
+        ]);
+        
+        return "تم تصفير قاعدة البيانات وبناء الجداول بنجاح! <pre>" . Artisan::output() . "</pre>";
+        
     } catch (\Exception $e) {
-        return "حدث خطأ أثناء إنشاء الجداول: " . $e->getMessage();
+        // في حال فشل migrate:fresh، سنحاول التشغيل العادي كخيار احتياطي
+        try {
+            Artisan::call('migrate', ['--force' => true]);
+            return "تم تنفيذ الميجريشن العادي بنجاح بعد فشل Fresh: <pre>" . Artisan::output() . "</pre>";
+        } catch (\Exception $secondError) {
+            return "حدث خطأ حرج: " . $e->getMessage();
+        }
     }
 });
