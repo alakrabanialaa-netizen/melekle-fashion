@@ -9,10 +9,10 @@ use App\Models\Category;
 
 class IndexController extends Controller
 {
-    public function Index()
-    {
-        // هاد الكود بيعرض الصفحة الرئيسية، تأكد إنك مسمي ملف الـ view صح
-        return view('frontend.index'); 
+  public function Index()
+{
+    return view('welcome');
+
     }
 
     public function ProductDetails($id, $slug)
