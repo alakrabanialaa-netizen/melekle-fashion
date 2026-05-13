@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Artisan;
 |--------------------------------------------------------------------------
 */
 
+// الصفحة الرئيسية - تأكد أن IndexController يرجع view('welcome')
 Route::get('/', [IndexController::class, 'Index']);
 
 Route::middleware(['auth'])->group(function() {
@@ -37,7 +38,7 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/user/profile/store', [UserController::class, 'UserProfileStore'])->name('user.profile.store');
     Route::get('/user/logout', [UserController::class, 'UserLogout'])->name('user.logout');
     Route::post('/user/update/password', [UserController::class, 'UserUpdatePassword'])->name('user.update.password');
-}); // Group Milldewre End
+}); 
 
 require __DIR__.'/auth.php';
 
@@ -70,64 +71,43 @@ Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.a
 Route::get('/product/category/{id}/{slug}', [IndexController::class, 'CatWiseProduct']);
 Route::get('/product/subcategory/{id}/{slug}', [IndexController::class, 'SubCatWiseProduct']);
 
-// Product View Modal With Ajax
 Route::get('/product/view/modal/{id}', [IndexController::class, 'ProductViewAjax']);
-// Add to Cart Data
 Route::post('/cart/data/store/{id}', [CartController::class, 'AddToCart']);
-// Get Data from mini cart
 Route::get('/product/mini/cart', [CartController::class, 'AddMiniCart']);
 Route::get('/minicart/product/remove/{rowId}', [CartController::class, 'RemoveMiniCart']);
-
-// Add to Cart Details Page Data
 Route::post('/dcart/data/store/{id}', [CartController::class, 'AddToCartDetails']);
-
-// Wishlist 
 Route::post('/add-to-wishlist/{product_id}', [WishlistController::class, 'AddToWishlist']);
-
-// Compare 
 Route::post('/add-to-compare/{product_id}', [CompareController::class, 'AddToCompare']);
 
-// Frontend Coupon System
 Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
 Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
 Route::get('/coupon-remove', [CartController::class, 'CouponRemove']);
 
-// Checkout Page Route 
 Route::get('/checkout', [CheckoutController::class, 'CheckoutCreate'])->name('checkout');
-
-// Cart All Route 
 Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
 Route::get('/get-cart-product', [CartController::class, 'GetCartProduct']);
 Route::get('/cart-remove/{rowId}', [CartController::class, 'CartRemove']);
 Route::get('/cart-increment/{rowId}', [CartController::class, 'CartIncrement']);
 Route::get('/cart-decrement/{rowId}', [CartController::class, 'CartDecrement']);
 
-// Frontend Blog Post All Route 
 Route::get('/blog', [IndexController::class, 'AllBlog'])->name('home.blog');
 Route::get('/post/details/{id}/{slug}', [IndexController::class, 'BlogDetails']);
 Route::get('/post/category/{id}/{slug}', [IndexController::class, 'BlogPostCategory']);
 
-// Frontend Review All Route 
 Route::post('/store/review', [ReviewController::class, 'StoreReview'])->name('store.review');
-
-// Search Route 
 Route::post('/search', [IndexController::class, 'ProductSearch'])->name('product.search');
 Route::post('/search-product', [IndexController::class, 'SearchProduct']);
 
-// Shop Page Route 
 Route::get('/shop', [IndexController::class, 'ShopPage'])->name('shop.page');
 Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.filter');
 
-Route::get('/run-migrate', function () {
+// رابط تنظيف الكاش وبناء قاعدة البيانات - مهم جداً لـ Render
+Route::get('/setup-project', function () {
     try {
-        // تنظيف الكاش ليقرأ الملفات الجديدة
-        Artisan::call('optimize:clear');
-        
-        // مسح كل شيء وبناء الجداول بالترتيب الجديد
-        Artisan::call('migrate:fresh', ['--force' => true]);
-        
-        return "تم بناء كل شيء بنجاح! جرب الدخول الآن. <pre>" . Artisan::output() . "</pre>";
+        Artisan::call('optimize:clear'); // مسح الكاش
+        Artisan::call('migrate', ['--force' => true]); // تنفيذ التهجير لقاعدة بيانات Supabase
+        return "✅ الكاش تم تنظيفه وقاعدة البيانات جاهزة! جرب الآن الدخول للصفحة الرئيسية.";
     } catch (\Exception $e) {
-        return "لا يزال هناك ملف مفقود أو تعارض: " . $e->getMessage();
+        return "❌ حدث خطأ: " . $e->getMessage();
     }
 });
