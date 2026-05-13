@@ -13,9 +13,14 @@ public function Index()
 {
     return view('welcome'); 
 }
-
-    public function ProductDetails($id, $slug)
+public function Index()
     {
-        return view('frontend.product.product_details');
+        // جلب آخر 8 منتجات من قاعدة البيانات
+        $products = Product::latest()->limit(8)->get();
+        
+        // جلب التصنيفات لعرضها في القائمة
+        $categories = Category::orderBy('category_name', 'ASC')->get();
+
+        // إرسال المتغيرات إلى الصفحة
+        return view('welcome', compact('products', 'categories')); 
     }
-}
