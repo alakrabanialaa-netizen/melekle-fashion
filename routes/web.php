@@ -118,13 +118,16 @@ Route::post('/search-product', [IndexController::class, 'SearchProduct']);
 Route::get('/shop', [IndexController::class, 'ShopPage'])->name('shop.page');
 Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.filter');
 
-// رابط مؤقت لتشغيل الـ Migrations
 Route::get('/run-migrate', function () {
     try {
-        Artisan::call('migrate', ['--force' => true]);
-        return "تم إنشاء الجداول بنجاح:   
-<pre>" . Artisan::output() . "</pre>";
+        // تنظيف الكاش ليقرأ الملفات الجديدة
+        Artisan::call('optimize:clear');
+        
+        // مسح كل شيء وبناء الجداول بالترتيب الجديد
+        Artisan::call('migrate:fresh', ['--force' => true]);
+        
+        return "تم بناء كل شيء بنجاح! جرب الدخول الآن. <pre>" . Artisan::output() . "</pre>";
     } catch (\Exception $e) {
-        return "حدث خطأ أثناء إنشاء الجداول: " . $e->getMessage();
+        return "لا يزال هناك ملف مفقود أو تعارض: " . $e->getMessage();
     }
 });
