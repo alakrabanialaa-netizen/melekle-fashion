@@ -9,11 +9,10 @@ use App\Models\Category;
 
 class IndexController extends Controller
 {
-  public function Index()
+public function Index()
 {
-    return view('welcome');
-
-    }
+    return view('welcome'); 
+}
 
     public function ProductDetails($id, $slug)
     {
