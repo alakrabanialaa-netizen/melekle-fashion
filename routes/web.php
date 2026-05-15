@@ -92,38 +92,3 @@ Route::post('/add-to-wishlist/{product_id}', [WishlistController::class, 'AddToW
 Route::post('/add-to-compare/{product_id}', [CompareController::class, 'AddToCompare']);
 
 Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
-Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
-Route::get('/coupon-remove', [CartController::class, 'CouponRemove']);
-Route::get('/checkout', [CheckoutController::class, 'CheckoutCreate'])->name('checkout');
-Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
-Route::get('/get-cart-product', [CartController::class, 'GetCartProduct']);
-Route::get('/cart-remove/{rowId}', [CartController::class, 'CartRemove']);
-Route::get('/cart-increment/{rowId}', [CartController::class, 'CartIncrement']);
-Route::get('/cart-decrement/{rowId}', [CartController::class, 'CartDecrement']);
-
-Route::get('/blog', [IndexController::class, 'AllBlog'])->name('home.blog');
-Route::get('/post/details/{id}/{slug}', [IndexController::class, 'BlogDetails']);
-Route::get('/post/category/{id}/{slug}', [IndexController::class, 'BlogPostCategory']);
-Route::post('/store/review', [ReviewController::class, 'StoreReview'])->name('store.review');
-Route::post('/search', [IndexController::class, 'ProductSearch'])->name('product.search');
-Route::post('/search-product', [IndexController::class, 'SearchProduct']);
-Route::get('/shop', [IndexController::class, 'ShopPage'])->name('shop.page');
-Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.filter');
-// مسارات إدارة المنتجات (Admin Products Dashboard) لمتجر Melekler Fashion
-Route::get('/admin/products', [IndexController::class, 'Index'])->name('products.index');
-Route::get('/admin/products/create', [IndexController::class, 'Index'])->name('products.create');
-Route::post('/admin/products/store', [IndexController::class, 'Index'])->name('products.store');
-// تحويل أي مستخدم يدخل على رابط /home تلقائياً إلى لوحة تحكم الآدمن
-Route::redirect('/home', '/admin/dashboard');
-// رابط تنظيف الكاش وبناء قاعدة البيانات
-Route::get('/setup-project', function () {
-    try {
-        Artisan::call('optimize:clear');
-        DB::statement("SET session_replication_role = 'replica';");
-        Artisan::call('migrate:fresh', ['--force' => true]);
-        DB::statement("SET session_replication_role = 'origin';");
-        return "✅ مبروك يا بطل! تم مسح الجداول القديمة وإعادة بناء كل شيء بنجاح ونظافة لمتجر Melekler Fashion. ادخل للموقع الآن!";
-    } catch (\Exception $e) {
-        return "❌ حدث خطأ أثناء البناء: " . $e->getMessage();
-    }
-});
