@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function() {
 
 require __DIR__.'/auth.php';
 
+// مجموعة مسارات الآدمن المحمية
 Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])->name('admin.dashboard');
     Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('admin.logout');
@@ -49,6 +50,11 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::post('/admin/profile/store', [AdminController::class, 'AdminProfileStore'])->name('admin.profile.store');
     Route::get('/admin/change/password', [AdminController::class, 'AdminChangePassword'])->name('admin.change.password');
     Route::post('/admin/update/password', [AdminController::class, 'AdminUpdatePassword'])->name('admin.update.password');
+    
+    // نقل مسارات إدارة المنتجات إلى داخل المجموعة لحمايتها والتعرف عليها فوراً
+    Route::get('/admin/products', [IndexController::class, 'Index'])->name('products.index');
+    Route::get('/admin/products/create', [IndexController::class, 'Index'])->name('products.create');
+    Route::post('/admin/products/store', [IndexController::class, 'Index'])->name('products.store');
 });
 
 Route::middleware(['auth', 'role:vendor'])->group(function() {
@@ -77,11 +83,11 @@ Route::get('/category/girls', [IndexController::class, 'CatWiseProduct'])->name(
 Route::get('/category/babies', [IndexController::class, 'CatWiseProduct'])->name('category.babies');
 Route::get('/category/mothers', [IndexController::class, 'CatWiseProduct'])->name('category.mothers');
 
-// مسارات الصفحات التعريفية وسياسات الموقع المكتشفة في المجلد
+// مسارات الصفحات التعريفية وسياسات الموقع
 Route::get('/contact', function() { return view('contact'); })->name('contact');
 Route::get('/privacy-policy', function() { return view('privacy-policy'); })->name('privacy-policy');
 Route::get('/refund-policy', function() { return view('refund-policy'); })->name('refund-policy');
-Route::get('/about', [IndexController::class, 'Index'])->name('about'); // مسار احتياطي لـ عن الموقع
+Route::get('/about', [IndexController::class, 'Index'])->name('about');
 
 Route::get('/product/view/modal/{id}', [IndexController::class, 'ProductViewAjax']);
 Route::post('/cart/data/store/{id}', [CartController::class, 'AddToCart']);
@@ -92,3 +98,42 @@ Route::post('/add-to-wishlist/{product_id}', [WishlistController::class, 'AddToW
 Route::post('/add-to-compare/{product_id}', [CompareController::class, 'AddToCompare']);
 
 Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
+Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
+Route::get('/coupon-remove', [CartController::class, 'CouponRemove']);
+Route::get('/checkout', [CheckoutController::class, 'CheckoutCreate'])->name('checkout');
+Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
+Route::get('/get-cart-product', [CartController::class, 'GetCartProduct']);
+Route::get('/cart-remove/{rowId}', [CartController::class, 'CartRemove']);
+Route::get('/cart-increment/{rowId}', [CartController::class, 'CartIncrement']);
+Route::get('/cart-decrement/{rowId}', [CartController::class, 'CartDecrement']);
+
+Route::get('/blog', [IndexController::class, 'AllBlog'])->name('home.blog');
+Route::get('/post/details/{id}/{slug}', [IndexController::class, 'BlogDetails']);
+Route::get('/post/category/{id}/{slug}', [IndexController::class, 'BlogPostCategory']);
+Route::post('/store/review', [ReviewController::class, 'StoreReview'])->name('store.review');
+Route::post('/search', [IndexController::class, 'ProductSearch'])->name('product.search');
+Route::post('/search-product', [IndexController::class, 'SearchProduct']);
+Route::get('/shop', [IndexController::class, 'ShopPage'])->name('shop.page');
+Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.filter');
+
+// تحويلات الروابط التلقائية الذكية لمنع الـ 404 بعد تسجيل الدخول
+Route::redirect('/home', '/admin/dashboard');
+Route::redirect('/admin', '/admin/dashboard');
+
+// رابط تنظيف الكاش (بدون عمل migrate:fresh لكي لا يتم مسح الحساب الحين)
+Route::get('/clear-cache', function () {
+    Artisan::call('optimize:clear');
+    return "✅ تم تنظيف كاش الـ Routes بنجاح! ارجع للوحة التحكم الآن.";
+});
+
+Route::get('/setup-project', function () {
+    try {
+        Artisan::call('optimize:clear');
+        DB::statement("SET session_replication_role = 'replica';");
+        Artisan::call('migrate:fresh', ['--force' => true]);
+        DB::statement("SET session_replication_role = 'origin';");
+        return "✅ مبروك يا بطل! تم مسح الجداول القديمة وإعادة بناء كل شيء بنجاح ونظافة لمتجر Melekler Fashion. ادخل للموقع الآن!";
+    } catch (\Exception $e) {
+        return "❌ حدث خطأ أثناء البناء: " . $e->getMessage();
+    }
+});
