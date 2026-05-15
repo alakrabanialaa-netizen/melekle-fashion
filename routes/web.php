@@ -23,7 +23,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB; // تم إضافة هذا السطر لضمان عمل قاعدة البيانات بدون مشاكل
+use Illuminate\Support\Facades\DB; 
 
 /*
 |--------------------------------------------------------------------------
@@ -102,22 +102,22 @@ Route::post('/search-product', [IndexController::class, 'SearchProduct']);
 Route::get('/shop', [IndexController::class, 'ShopPage'])->name('shop.page');
 Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.filter');
 
-// الكود المطور والذكي لتجاوز خطأ تعارض جداول PostgreSQL في Supabase
+// رابط تنظيف الكاش وبناء قاعدة البيانات النهائي لـ Supabase بدون قيود مكررة
 Route::get('/setup-project', function () {
     try {
         // 1. تنظيف كاش الإعدادات والواجهات القديمة
         Artisan::call('optimize:clear');
         
-        // 2. أمر سحري لـ PostgreSQL يعطل فحص العلاقات مؤقتاً أثناء بناء الجداول
+        // 2. أمر تعطيل فحص العلاقات مؤقتاً لتفادي خطأ PostgreSQL الصارم
         DB::statement("SET session_replication_role = 'replica';");
 
-        // 3. مسح الجداول وبنائها من الصفر دفعة واحدة بالترتيب المطلوب لـ Melekler Fashion
+        // 3. مسح الجداول وبنائها بالكامل ونظافة رغماً عن أي جداول مكررة
         Artisan::call('migrate:fresh', ['--force' => true]);
         
         // 4. إعادة تشغيل فحص العلاقات للحفاظ على أمان قاعدة البيانات
         DB::statement("SET session_replication_role = 'origin';");
         
-        return "✅ عبقري! تم تجاوز تعارض العلاقات، وبناء الجداول بنجاح في Supabase وتنظيف الكاش. توجه الآن إلى الصفحة الرئيسية للموقع.";
+        return "✅ مبروك يا بطل! تم مسح الجداول القديمة وإعادة بناء كل شيء بنجاح ونظافة لمتجر Melekler Fashion. ادخل للموقع الآن!";
     } catch (\Exception $e) {
         return "❌ حدث خطأ أثناء البناء: " . $e->getMessage();
     }
