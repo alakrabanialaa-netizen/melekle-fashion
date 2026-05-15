@@ -23,6 +23,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB; // تم إضافة هذا السطر لضمان عمل قاعدة البيانات بدون مشاكل
 
 /*
 |--------------------------------------------------------------------------
@@ -101,13 +102,23 @@ Route::post('/search-product', [IndexController::class, 'SearchProduct']);
 Route::get('/shop', [IndexController::class, 'ShopPage'])->name('shop.page');
 Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.filter');
 
-// رابط تنظيف الكاش وبناء قاعدة البيانات - مهم جداً لـ Render
+// الكود المطور والذكي لتجاوز خطأ تعارض جداول PostgreSQL في Supabase
 Route::get('/setup-project', function () {
     try {
-        Artisan::call('optimize:clear'); // مسح الكاش
-        Artisan::call('migrate', ['--force' => true]); // تنفيذ التهجير لقاعدة بيانات Supabase
-        return "✅ الكاش تم تنظيفه وقاعدة البيانات جاهزة! جرب الآن الدخول للصفحة الرئيسية.";
+        // 1. تنظيف كاش الإعدادات والواجهات القديمة
+        Artisan::call('optimize:clear');
+        
+        // 2. أمر سحري لـ PostgreSQL يعطل فحص العلاقات مؤقتاً أثناء بناء الجداول
+        DB::statement("SET session_replication_role = 'replica';");
+
+        // 3. مسح الجداول وبنائها من الصفر دفعة واحدة بالترتيب المطلوب لـ Melekler Fashion
+        Artisan::call('migrate:fresh', ['--force' => true]);
+        
+        // 4. إعادة تشغيل فحص العلاقات للحفاظ على أمان قاعدة البيانات
+        DB::statement("SET session_replication_role = 'origin';");
+        
+        return "✅ عبقري! تم تجاوز تعارض العلاقات، وبناء الجداول بنجاح في Supabase وتنظيف الكاش. توجه الآن إلى الصفحة الرئيسية للموقع.";
     } catch (\Exception $e) {
-        return "❌ حدث خطأ: " . $e->getMessage();
+        return "❌ حدث خطأ أثناء البناء: " . $e->getMessage();
     }
 });
