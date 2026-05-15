@@ -32,8 +32,7 @@ use Illuminate\Support\Facades\DB;
 */
 
 // الصفحة الرئيسية
-Route::get('/', [IndexController::class, 'Index']);
-
+Route::get('/', [IndexController::class, 'Index'])->name('welcome');
 Route::middleware(['auth'])->group(function() {
     Route::get('/dashboard', [UserController::class, 'UserDashboard'])->name('dashboard');
     Route::post('/user/profile/store', [UserController::class, 'UserProfileStore'])->name('user.profile.store');
