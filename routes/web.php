@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\DB;
 |--------------------------------------------------------------------------
 */
 
-// الصفحة الرئيسية - تأكد أن IndexController يرجع view('welcome')
+// الصفحة الرئيسية
 Route::get('/', [IndexController::class, 'Index']);
 
 Route::middleware(['auth'])->group(function() {
@@ -72,11 +72,17 @@ Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.a
 Route::get('/product/category/{id}/{slug}', [IndexController::class, 'CatWiseProduct']);
 Route::get('/product/subcategory/{id}/{slug}', [IndexController::class, 'SubCatWiseProduct']);
 
-// مسارات أقسام متجر Melekler Fashion المفقودة لتجنب خطأ التوجيه
+// مسارات أقسام المتجر
 Route::get('/category/boys', [IndexController::class, 'CatWiseProduct'])->name('category.boys');
 Route::get('/category/girls', [IndexController::class, 'CatWiseProduct'])->name('category.girls');
 Route::get('/category/babies', [IndexController::class, 'CatWiseProduct'])->name('category.babies');
 Route::get('/category/mothers', [IndexController::class, 'CatWiseProduct'])->name('category.mothers');
+
+// مسارات الصفحات التعريفية وسياسات الموقع المكتشفة في المجلد
+Route::get('/contact', function() { return view('contact'); })->name('contact');
+Route::get('/privacy-policy', function() { return view('privacy-policy'); })->name('privacy-policy');
+Route::get('/refund-policy', function() { return view('refund-policy'); })->name('refund-policy');
+Route::get('/about', [IndexController::class, 'Index'])->name('about'); // مسار احتياطي لـ عن الموقع
 
 Route::get('/product/view/modal/{id}', [IndexController::class, 'ProductViewAjax']);
 Route::post('/cart/data/store/{id}', [CartController::class, 'AddToCart']);
@@ -86,7 +92,6 @@ Route::post('/dcart/data/store/{id}', [CartController::class, 'AddToCartDetails'
 Route::post('/add-to-wishlist/{product_id}', [WishlistController::class, 'AddToWishlist']);
 Route::post('/add-to-compare/{product_id}', [CompareController::class, 'AddToCompare']);
 
-// الكوبونات والسلات والشراء
 Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
 Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
 Route::get('/coupon-remove', [CartController::class, 'CouponRemove']);
@@ -97,7 +102,6 @@ Route::get('/cart-remove/{rowId}', [CartController::class, 'CartRemove']);
 Route::get('/cart-increment/{rowId}', [CartController::class, 'CartIncrement']);
 Route::get('/cart-decrement/{rowId}', [CartController::class, 'CartDecrement']);
 
-// المدونة والمراجعات والبحث
 Route::get('/blog', [IndexController::class, 'AllBlog'])->name('home.blog');
 Route::get('/post/details/{id}/{slug}', [IndexController::class, 'BlogDetails']);
 Route::get('/post/category/{id}/{slug}', [IndexController::class, 'BlogPostCategory']);
@@ -107,21 +111,13 @@ Route::post('/search-product', [IndexController::class, 'SearchProduct']);
 Route::get('/shop', [IndexController::class, 'ShopPage'])->name('shop.page');
 Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.filter');
 
-// رابط تنظيف الكاش وبناء قاعدة البيانات النهائي لـ Supabase بدون قيود مكررة
+// رابط تنظيف الكاش وبناء قاعدة البيانات
 Route::get('/setup-project', function () {
     try {
-        // 1. تنظيف كاش الإعدادات والواجهات القديمة
         Artisan::call('optimize:clear');
-        
-        // 2. أمر تعطيل فحص العلاقات مؤقتاً لتفادي خطأ PostgreSQL الصارم
         DB::statement("SET session_replication_role = 'replica';");
-
-        // 3. مسح الجداول وبنائها بالكامل ونظافة رغماً عن أي جداول مكررة
         Artisan::call('migrate:fresh', ['--force' => true]);
-        
-        // 4. إعادة تشغيل فحص العلاقات للحفاظ على أمان قاعدة البيانات
         DB::statement("SET session_replication_role = 'origin';");
-        
         return "✅ مبروك يا بطل! تم مسح الجداول القديمة وإعادة بناء كل شيء بنجاح ونظافة لمتجر Melekler Fashion. ادخل للموقع الآن!";
     } catch (\Exception $e) {
         return "❌ حدث خطأ أثناء البناء: " . $e->getMessage();
