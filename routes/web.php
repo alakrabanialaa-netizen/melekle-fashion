@@ -72,6 +72,12 @@ Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.a
 Route::get('/product/category/{id}/{slug}', [IndexController::class, 'CatWiseProduct']);
 Route::get('/product/subcategory/{id}/{slug}', [IndexController::class, 'SubCatWiseProduct']);
 
+// مسارات أقسام متجر Melekler Fashion المفقودة لتجنب خطأ التوجيه
+Route::get('/category/boys', [IndexController::class, 'CatWiseProduct'])->name('category.boys');
+Route::get('/category/girls', [IndexController::class, 'CatWiseProduct'])->name('category.girls');
+Route::get('/category/babies', [IndexController::class, 'CatWiseProduct'])->name('category.babies');
+Route::get('/category/mothers', [IndexController::class, 'CatWiseProduct'])->name('category.mothers');
+
 Route::get('/product/view/modal/{id}', [IndexController::class, 'ProductViewAjax']);
 Route::post('/cart/data/store/{id}', [CartController::class, 'AddToCart']);
 Route::get('/product/mini/cart', [CartController::class, 'AddMiniCart']);
@@ -80,10 +86,10 @@ Route::post('/dcart/data/store/{id}', [CartController::class, 'AddToCartDetails'
 Route::post('/add-to-wishlist/{product_id}', [WishlistController::class, 'AddToWishlist']);
 Route::post('/add-to-compare/{product_id}', [CompareController::class, 'AddToCompare']);
 
+// الكوبونات والسلات والشراء
 Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
 Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
 Route::get('/coupon-remove', [CartController::class, 'CouponRemove']);
-
 Route::get('/checkout', [CheckoutController::class, 'CheckoutCreate'])->name('checkout');
 Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
 Route::get('/get-cart-product', [CartController::class, 'GetCartProduct']);
@@ -91,14 +97,13 @@ Route::get('/cart-remove/{rowId}', [CartController::class, 'CartRemove']);
 Route::get('/cart-increment/{rowId}', [CartController::class, 'CartIncrement']);
 Route::get('/cart-decrement/{rowId}', [CartController::class, 'CartDecrement']);
 
+// المدونة والمراجعات والبحث
 Route::get('/blog', [IndexController::class, 'AllBlog'])->name('home.blog');
 Route::get('/post/details/{id}/{slug}', [IndexController::class, 'BlogDetails']);
 Route::get('/post/category/{id}/{slug}', [IndexController::class, 'BlogPostCategory']);
-
 Route::post('/store/review', [ReviewController::class, 'StoreReview'])->name('store.review');
 Route::post('/search', [IndexController::class, 'ProductSearch'])->name('product.search');
 Route::post('/search-product', [IndexController::class, 'SearchProduct']);
-
 Route::get('/shop', [IndexController::class, 'ShopPage'])->name('shop.page');
 Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.filter');
 
