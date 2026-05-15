@@ -109,6 +109,10 @@ Route::post('/search', [IndexController::class, 'ProductSearch'])->name('product
 Route::post('/search-product', [IndexController::class, 'SearchProduct']);
 Route::get('/shop', [IndexController::class, 'ShopPage'])->name('shop.page');
 Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.filter');
+// مسارات إدارة المنتجات (Admin Products Dashboard) لمتجر Melekler Fashion
+Route::get('/admin/products', [IndexController::class, 'Index'])->name('products.index');
+Route::get('/admin/products/create', [IndexController::class, 'Index'])->name('products.create');
+Route::post('/admin/products/store', [IndexController::class, 'Index'])->name('products.store');
 
 // رابط تنظيف الكاش وبناء قاعدة البيانات
 Route::get('/setup-project', function () {
