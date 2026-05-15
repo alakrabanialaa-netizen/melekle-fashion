@@ -113,7 +113,8 @@ Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.
 Route::get('/admin/products', [IndexController::class, 'Index'])->name('products.index');
 Route::get('/admin/products/create', [IndexController::class, 'Index'])->name('products.create');
 Route::post('/admin/products/store', [IndexController::class, 'Index'])->name('products.store');
-
+// تحويل أي مستخدم يدخل على رابط /home تلقائياً إلى لوحة تحكم الآدمن
+Route::redirect('/home', '/admin/dashboard');
 // رابط تنظيف الكاش وبناء قاعدة البيانات
 Route::get('/setup-project', function () {
     try {
