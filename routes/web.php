@@ -19,7 +19,7 @@ use App\Http\Controllers\User\StripeController;
 use App\Http\Controllers\User\CashController;
 use App\Http\Controllers\Backend\ActiveUserController;
 use App\Http\Middleware\RedirectIfAuthenticated;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
