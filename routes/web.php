@@ -23,7 +23,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
