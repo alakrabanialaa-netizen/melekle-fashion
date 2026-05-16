@@ -126,14 +126,21 @@ Route::get('/clear-cache', function () {
     return "✅ تم تنظيف كاش الـ Routes بنجاح! ارجع للوحة التحكم الآن.";
 });
 
-Route::get('/setup-project', function () {
-    try {
-        Artisan::call('optimize:clear');
-        DB::statement("SET session_replication_role = 'replica';");
-        Artisan::call('migrate:fresh', ['--force' => true]);
-        DB::statement("SET session_replication_role = 'origin';");
-        return "✅ مبروك يا بطل! تم مسح الجداول القديمة وإعادة بناء كل شيء بنجاح ونظافة لمتجر Melekler Fashion. ادخل للموقع الآن!";
-    } catch (\Exception $e) {
-        return "❌ حدث خطأ أثناء البناء: " . $e->getMessage();
-    }
+Route::get('/clear-cache', function () {
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+    
+    // مسح أي مستخدم قديم بالإيميل هذا لضمان عدم التكرار
+    \Illuminate\Support\Facades\DB::table('users')->where('email', 'admin@gmail.com')->delete();
+    
+    // إنشاء الحساب وتشفير كلمة السر بأمر لارافيل الرسمي الحتمي
+    \Illuminate\Support\Facades\DB::table('users')->insert([
+        'name' => 'Admin',
+        'email' => 'admin@gmail.com',
+        'password' => \Illuminate\Support\Facades\Hash::make('password'), // هنا لارافيل يشفرها بطريقته الخاصة 100%
+        'is_admin' => true,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    return "✅ تم تنظيف الكاش وزرع حساب الآدمن الرسمي بتشفير النظام الصحيح! ارجع وسجل دخولك الآن.";
 });
