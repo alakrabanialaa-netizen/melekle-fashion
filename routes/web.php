@@ -22,8 +22,10 @@ use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController; // تأكد من استدعاء الكنترولر هنا إذا كان موجوداً
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +35,7 @@ use Illuminate\Support\Facades\DB;
 
 // الصفحة الرئيسية
 Route::get('/', [IndexController::class, 'Index'])->name('welcome');
+
 Route::middleware(['auth'])->group(function() {
     Route::get('/dashboard', [UserController::class, 'UserDashboard'])->name('dashboard');
     Route::post('/user/profile/store', [UserController::class, 'UserProfileStore'])->name('user.profile.store');
@@ -42,7 +45,7 @@ Route::middleware(['auth'])->group(function() {
 
 require __DIR__.'/auth.php';
 
-// مجموعة مسارات الآدمن المحمية
+// ✅ مجموعة مسارات الآدمن المحمية (تم تنظيف التكرار والأقواس الزائدة)
 Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('admin.logout');
@@ -51,12 +54,13 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/change/password', [AdminController::class, 'AdminChangePassword'])->name('admin.change.password');
     Route::post('/admin/update/password', [AdminController::class, 'AdminUpdatePassword'])->name('admin.update.password');
     
-    // نقل مسارات إدارة المنتجات إلى داخل المجموعة لحمايتها والتعرف عليها فوراً
-    Route::get('/admin/products', [IndexController::class, 'Index'])->name('products.index');
-    Route::get('/admin/products/create', [IndexController::class, 'Index'])->name('products.create');
-    Route::post('/admin/products/store', [IndexController::class, 'Index'])->name('products.store');
+    // مسارات إدارة المنتجات بالأسماء الصحيحة المتوافقة مع الـ Blade
+    Route::get('/admin/products', [IndexController::class, 'Index'])->name('admin.products.index');
+    Route::get('/admin/products/create', [IndexController::class, 'Index'])->name('admin.products.create');
+    Route::post('/admin/products/store', [IndexController::class, 'Index'])->name('admin.products.store');
 });
 
+// مجموعة مسارات الـ Vendor
 Route::middleware(['auth', 'role:vendor'])->group(function() {
     Route::get('/vendor/dashboard', [VendorController::class, 'VendorDashboard'])->name('vendor.dashboard');
     Route::get('/vendor/logout', [VendorController::class, 'VendorDestroy'])->name('vendor.logout');
@@ -120,24 +124,19 @@ Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.
 Route::redirect('/home', '/admin/dashboard');
 Route::redirect('/admin', '/admin/dashboard');
 
-// رابط تنظيف الكاش (بدون عمل migrate:fresh لكي لا يتم مسح الحساب الحين)
+// ✅ دمج وتصفية الرابط السحري في دالة واحدة صحيحة بدون تكرار
 Route::get('/clear-cache', function () {
     Artisan::call('optimize:clear');
-    return "✅ تم تنظيف كاش الـ Routes بنجاح! ارجع للوحة التحكم الآن.";
-});
-
-Route::get('/clear-cache', function () {
-    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
     
     // مسح أي مستخدم قديم بالإيميل هذا لضمان عدم التكرار
-    \Illuminate\Support\Facades\DB::table('users')->where('email', 'admin@gmail.com')->delete();
+    DB::table('users')->where('email', 'admin@gmail.com')->delete();
     
     // إنشاء الحساب وتشفير كلمة السر بأمر لارافيل الرسمي الحتمي
-    \Illuminate\Support\Facades\DB::table('users')->insert([
+    DB::table('users')->insert([
         'name' => 'Admin',
         'email' => 'admin@gmail.com',
-        'password' => \Illuminate\Support\Facades\Hash::make('password'), // هنا لارافيل يشفرها بطريقته الخاصة 100%
-        'is_admin' => true,
+        'password' => Hash::make('password'), 
+        'role' => 'admin', // تأكدت من كتابتها role لتطابق الكود فوق
         'created_at' => now(),
         'updated_at' => now(),
     ]);
