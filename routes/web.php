@@ -45,7 +45,7 @@ Route::middleware(['auth'])->group(function() {
 
 require __DIR__.'/auth.php';
 
-// ✅ مجموعة مسارات الآدمن المحمية
+// ✅ مجموعة مسارات الآدمن المحمية (تم تنظيف التكرار بالكامل)
 Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('admin.logout');
@@ -58,6 +58,11 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/products', [IndexController::class, 'Index'])->name('admin.products.index');
     Route::get('/admin/products/create', [IndexController::class, 'Index'])->name('admin.products.create');
     Route::post('/admin/products/store', [IndexController::class, 'Index'])->name('admin.products.store');
+
+    // مسارات إدارة الطلبات (Orders) لمنع ظهور خطأ admin.orders.index
+    Route::get('/admin/orders', [IndexController::class, 'Index'])->name('admin.orders.index');
+    Route::get('/admin/orders/pending', [IndexController::class, 'Index'])->name('admin.orders.pending');
+    Route::get('/admin/orders/delivered', [IndexController::class, 'Index'])->name('admin.orders.delivered');
 
     // مسارات إضافية تدعم المسمى القديم (products) لحل خطأ الـ Blade فوراً دون تعديل الملفات
     Route::get('/admin/products-fix', [IndexController::class, 'Index'])->name('products.index');
@@ -130,7 +135,7 @@ Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.
 Route::redirect('/home', '/admin/dashboard');
 Route::redirect('/admin', '/admin/dashboard');
 
-// ✅ الرابط السحري الموحد والمطور لتنظيف الكاش وزرع الحساب بجميع الصلاحيات المتوقعة
+// ✅ الرابط السحري النظيف والمطور
 Route::get('/clear-cache', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
     
@@ -148,5 +153,5 @@ Route::get('/clear-cache', function () {
         'updated_at' => now(),
     ]);
 
-    return "✅ تم تنظيف الكاش وإعادة زرع حساب الآدمن الخارق (admin@gmail.com / password) بنجاح! جرب الآن.";
+    return "✅ تم تنظيف الكاش وإعادة زرع حساب الآدمن الخارق بنجاح! ارجع وجرب الدخول الآن.";
 });
