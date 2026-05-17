@@ -1,17 +1,10 @@
-<?php
-
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-
-return new class extends Migration
-{
-    public function up(): void
+public function up(): void
     {
         Schema::create('products', function (Blueprint $box) {
             $box->id();
             $box->string('product_name');
             $box->string('product_slug');
+            $box->string('slug')->nullable(); // 🌟 أضف هذا السطر هنا فوراً لحل المشكلة نهائياً
             $box->string('product_code')->nullable();
             $box->string('product_qty')->nullable();
             $box->string('product_tags')->nullable();
@@ -30,9 +23,3 @@ return new class extends Migration
             $box->timestamps();
         });
     }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('products');
-    }
-};
