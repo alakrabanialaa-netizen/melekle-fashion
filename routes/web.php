@@ -22,7 +22,7 @@ use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AdminController; // تأكد من استدعاء الكنترولر هنا إذا كان موجوداً
+use App\Http\Controllers\AdminController; 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -45,7 +45,7 @@ Route::middleware(['auth'])->group(function() {
 
 require __DIR__.'/auth.php';
 
-// ✅ مجموعة مسارات الآدمن المحمية (تم تنظيف التكرار والأقواس الزائدة)
+// ✅ مجموعة مسارات الآدمن المحمية - تم إصلاح القوس وبداية المجموعة
 Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('admin.logout');
@@ -54,10 +54,15 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/change/password', [AdminController::class, 'AdminChangePassword'])->name('admin.change.password');
     Route::post('/admin/update/password', [AdminController::class, 'AdminUpdatePassword'])->name('admin.update.password');
     
-    // مسارات إدارة المنتجات بالأسماء الصحيحة المتوافقة مع الـ Blade
+    // مسارات إدارة المنتجات بالأسماء الأساسية (admin.products)
     Route::get('/admin/products', [IndexController::class, 'Index'])->name('admin.products.index');
     Route::get('/admin/products/create', [IndexController::class, 'Index'])->name('admin.products.create');
     Route::post('/admin/products/store', [IndexController::class, 'Index'])->name('admin.products.store');
+
+    // مسارات إضافية تدعم المسمى القديم (products) لحل خطأ الـ Blade فوراً دون تعديل الملفات
+    Route::get('/admin/products-fix', [IndexController::class, 'Index'])->name('products.index');
+    Route::get('/admin/products/create-fix', [IndexController::class, 'Index'])->name('products.create');
+    Route::post('/admin/products/store-fix', [IndexController::class, 'Index'])->name('products.store');
 });
 
 // مجموعة مسارات الـ Vendor
@@ -136,7 +141,7 @@ Route::get('/clear-cache', function () {
         'name' => 'Admin',
         'email' => 'admin@gmail.com',
         'password' => Hash::make('password'), 
-        'role' => 'admin', // تأكدت من كتابتها role لتطابق الكود فوق
+        'role' => 'admin', 
         'created_at' => now(),
         'updated_at' => now(),
     ]);
