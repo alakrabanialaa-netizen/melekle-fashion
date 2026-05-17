@@ -58,10 +58,14 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/change/password', [AdminController::class, 'AdminChangePassword'])->name('admin.change.password');
     Route::post('/admin/update/password', [AdminController::class, 'AdminUpdatePassword'])->name('admin.update.password');
     
-    // 🛍️ 1️⃣ قسم المنتجات (products) - مربوط بالكنترولر الحقيقي الحين
+    // 🛍️ 1️⃣ قسم المنتجات (products) - مربوط بالكنترولر الحقيقي
     Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products.index');
     Route::get('/admin/products/create', [ProductController::class, 'create'])->name('admin.products.create');
     Route::post('/admin/products/store', [ProductController::class, 'store'])->name('admin.products.store');
+    
+    // 🌟 مسار GET احتياطي لمنع خطأ الـ MethodNotAllowed بعد إنهاء عملية الحفظ
+    Route::get('/admin/products/store', [ProductController::class, 'index']);
+    
     Route::get('/admin/products-fix', [ProductController::class, 'index'])->name('products.index'); 
     Route::get('/admin/products/create-fix', [ProductController::class, 'create'])->name('products.create');
     Route::post('/admin/products/store-fix', [ProductController::class, 'store'])->name('products.store');
@@ -163,9 +167,8 @@ Route::redirect('/home', '/admin/dashboard');
 Route::redirect('/admin', '/admin/dashboard');
 
 // ==================== 10. الرابط السحري المطور ====================
-// ✅ الرابط السحري الخارق لإعادة بناء الجداول وتنظيف الكاش بدون Terminal
+// ✅ الرابط السحري الخارق لتنظيف الكاش والآدمن بدون تدمير الجداول اليدوية
 Route::get('/clear-cache', function () {
-
     
     // 2. تنظيف الكاش والروابط
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
@@ -182,5 +185,5 @@ Route::get('/clear-cache', function () {
         'updated_at' => now(),
     ]);
 
-    return "✅ تم تحديث جداول Supabase بالعمود الجديد، وتنظيف الكاش، وزرع حساب الآدمن بنجاح بدون ترمينال!";
+    return "✅ تم تنظيف كاش الموقع بنجاح، وتأمين حساب الآدمن دون مسح تعديلات قاعدة البيانات في Supabase!";
 });
