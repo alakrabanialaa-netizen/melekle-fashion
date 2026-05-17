@@ -63,7 +63,10 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/products/create', [ProductController::class, 'create'])->name('admin.products.create');
     Route::post('/admin/products/store', [ProductController::class, 'store'])->name('admin.products.store');
     
-    // 🌟 مسار GET احتياطي لمنع خطأ الـ MethodNotAllowed بعد إنهاء عملية الحفظ
+    // 🌟 روت حذف المنتج الذي يبحث عنه جدول المنتجات حالياً لإنهاء المشكلة!
+    Route::delete('/admin/products/destroy/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+    
+    // مسار GET احتياطي لمنع خطأ الـ MethodNotAllowed بعد إنهاء عملية الحفظ
     Route::get('/admin/products/store', [ProductController::class, 'index']);
     
     Route::get('/admin/products-fix', [ProductController::class, 'index'])->name('products.index'); 
@@ -117,7 +120,6 @@ Route::get('/become/vendor', [VendorController::class, 'BecomeVendor'])->name('b
 Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->name('vendor.register');
 
 // ==================== 6. تفاصيل المنتجات والتنقل والأقسام ====================
-// 🌟 تم جعل الـ slug اختيارياً لتفادي أي مشاكل في التوجيه من لوحة الإدارة
 Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
@@ -135,7 +137,6 @@ Route::get('/refund-policy', function() { return view('refund-policy'); })->name
 Route::get('/about', [IndexController::class, 'Index'])->name('about');
 
 // ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات ====================
-// 🌟 تم ترتيب السطر وإعطائه الاسم السليم وفصله تماماً لمنع مشاكل الـ Deploy
 Route::post('/cart/data/store/{id}', [CartController::class, 'AddToCart'])->name('cart.add');
 Route::get('/product/mini/cart', [CartController::class, 'AddMiniCart']);
 Route::get('/minicart/product/remove/{rowId}', [CartController::class, 'RemoveMiniCart']);
@@ -171,13 +172,8 @@ Route::redirect('/home', '/admin/dashboard');
 Route::redirect('/admin', '/admin/dashboard');
 
 // ==================== 10. الرابط السحري المطور ====================
-// ✅ الرابط السحري الخارق لتنظيف الكاش والآدمن بدون تدمير الجداول اليدوية
 Route::get('/clear-cache', function () {
-    
-    // 2. تنظيف الكاش والروابط
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-    
-    // 3. إعادة زرع حساب الآدمن الخارق الشامل
     \Illuminate\Support\Facades\DB::table('users')->where('email', 'admin@gmail.com')->delete();
     \Illuminate\Support\Facades\DB::table('users')->insert([
         'name' => 'Admin',
@@ -188,6 +184,5 @@ Route::get('/clear-cache', function () {
         'created_at' => now(),
         'updated_at' => now(),
     ]);
-
     return "✅ تم تنظيف كاش الموقع بنجاح، وتأمين حساب الآدمن دون مسح تعديلات قاعدة البيانات في Supabase!";
 });
