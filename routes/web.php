@@ -59,10 +59,17 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/products/create', [IndexController::class, 'Index'])->name('admin.products.create');
     Route::post('/admin/products/store', [IndexController::class, 'Index'])->name('admin.products.store');
 
-    // مسارات إدارة الطلبات (Orders) لمنع ظهور خطأ admin.orders.index
+// مسارات إدارة الطلبات (Orders)
     Route::get('/admin/orders', [IndexController::class, 'Index'])->name('admin.orders.index');
     Route::get('/admin/orders/pending', [IndexController::class, 'Index'])->name('admin.orders.pending');
     Route::get('/admin/orders/delivered', [IndexController::class, 'Index'])->name('admin.orders.delivered');
+
+    // 🌟 أضف هذه الأسطر هنا فوراً لحل مشكلة العملاء (Clients) منعاً للخطأ الحالي
+    Route::get('/admin/clients', [IndexController::class, 'Index'])->name('admin.clients.index');
+    Route::get('/admin/clients/create', [IndexController::class, 'Index'])->name('admin.clients.create');
+    
+    // مسارات إضافية تدعم المسمى القديم بدون كلمة admin احتياطاً
+    Route::get('/admin/clients-fix', [IndexController::class, 'Index'])->name('clients.index');
 
     // مسارات إضافية تدعم المسمى القديم (products) لحل خطأ الـ Blade فوراً دون تعديل الملفات
     Route::get('/admin/products-fix', [IndexController::class, 'Index'])->name('products.index');
