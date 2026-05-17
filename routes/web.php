@@ -163,11 +163,16 @@ Route::redirect('/home', '/admin/dashboard');
 Route::redirect('/admin', '/admin/dashboard');
 
 // ==================== 10. الرابط السحري المطور ====================
+// ✅ الرابط السحري الخارق لإعادة بناء الجداول وتنظيف الكاش بدون Terminal
 Route::get('/clear-cache', function () {
+    // 1. تشغيل الهجرة الفريش لإعادة بناء الجداول بالعمود الجديد (slug) في Supabase
+    \Illuminate\Support\Facades\Artisan::call('migrate:fresh');
+    
+    // 2. تنظيف الكاش والروابط
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
     
+    // 3. إعادة زرع حساب الآدمن الخارق الشامل
     \Illuminate\Support\Facades\DB::table('users')->where('email', 'admin@gmail.com')->delete();
-    
     \Illuminate\Support\Facades\DB::table('users')->insert([
         'name' => 'Admin',
         'email' => 'admin@gmail.com',
@@ -178,5 +183,5 @@ Route::get('/clear-cache', function () {
         'updated_at' => now(),
     ]);
 
-    return "✅ تم تنظيف الكاش وربط الكنترولرات الجديدة بنجاح!";
+    return "✅ تم تحديث جداول Supabase بالعمود الجديد، وتنظيف الكاش، وزرع حساب الآدمن بنجاح بدون ترمينال!";
 });
