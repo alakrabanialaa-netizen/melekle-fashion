@@ -45,7 +45,7 @@ Route::middleware(['auth'])->group(function() {
 
 require __DIR__.'/auth.php';
 
-// ✅ مجموعة مسارات الآدمن المحمية - تم إصلاح القوس وبداية المجموعة
+// ✅ مجموعة مسارات الآدمن المحمية
 Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('admin.logout');
@@ -106,6 +106,7 @@ Route::post('/dcart/data/store/{id}', [CartController::class, 'AddToCartDetails'
 Route::post('/add-to-wishlist/{product_id}', [WishlistController::class, 'AddToWishlist']);
 Route::post('/add-to-compare/{product_id}', [CompareController::class, 'AddToCompare']);
 
+// مسارات الكوبونات والسلة والـ Checkout
 Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
 Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
 Route::get('/coupon-remove', [CartController::class, 'CouponRemove']);
@@ -129,22 +130,23 @@ Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.
 Route::redirect('/home', '/admin/dashboard');
 Route::redirect('/admin', '/admin/dashboard');
 
-// ✅ دمج وتصفية الرابط السحري في دالة واحدة صحيحة بدون تكرار
+// ✅ الرابط السحري الموحد والمطور لتنظيف الكاش وزرع الحساب بجميع الصلاحيات المتوقعة
 Route::get('/clear-cache', function () {
-    Artisan::call('optimize:clear');
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
     
-    // مسح أي مستخدم قديم بالإيميل هذا لضمان عدم التكرار
-    DB::table('users')->where('email', 'admin@gmail.com')->delete();
+    // 1. مسح أي مستخدم قديم بنفس الإيميل لمنع التكرار والتضارب
+    \Illuminate\Support\Facades\DB::table('users')->where('email', 'admin@gmail.com')->delete();
     
-    // إنشاء الحساب وتشفير كلمة السر بأمر لارافيل الرسمي الحتمي
-    DB::table('users')->insert([
+    // 2. إنشاء حساب الآدمن بجميع الصلاحيات الممكنة لضمان تخطي الـ Middleware
+    \Illuminate\Support\Facades\DB::table('users')->insert([
         'name' => 'Admin',
         'email' => 'admin@gmail.com',
-        'password' => Hash::make('password'), 
-        'role' => 'admin', 
+        'password' => \Illuminate\Support\Facades\Hash::make('password'), 
+        'role' => 'admin',       // لشرط 'role:admin'
+        'is_admin' => 1,         // لشرط 'is_admin' الاحتياطي
         'created_at' => now(),
         'updated_at' => now(),
     ]);
 
-    return "✅ تم تنظيف الكاش وزرع حساب الآدمن الرسمي بتشفير النظام الصحيح! ارجع وسجل دخولك الآن.";
+    return "✅ تم تنظيف الكاش وإعادة زرع حساب الآدمن الخارق (admin@gmail.com / password) بنجاح! جرب الآن.";
 });
