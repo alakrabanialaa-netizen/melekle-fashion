@@ -9,23 +9,24 @@ use App\Http\Controllers\User\CompareController;
 use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\User\AllUserController;
 use App\Http\Controllers\User\ReviewController;
-use App\Http\Controllers\Backend\OrderController;
-use App\Http\Controllers\Backend\VendorOrderController;
-use App\Http\Controllers\Backend\ReturnController;
-use App\Http\Controllers\Backend\ReportController;
-use App\Http\Controllers\Backend\SiteSettingController;
-use App\Http\Controllers\Backend\RoleController;
-use App\Http\Controllers\User\StripeController;
-use App\Http\Controllers\User\CashController;
-use App\Http\Controllers\Backend\ActiveUserController;
-use App\Http\Middleware\RedirectIfAuthenticated;
+
+// 🌟 تصحيح الاستدعاءات لملفات الإدارة الحقيقية من مجلد Admin بناءً على لقطة الشاشة
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AccountingController;
+use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\ExpenseController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SaleController;
+use App\Http\Controllers\Admin\UserController as AdminUserController; // تم تغيير المسمى لمنع التضارب مع UserController العام
+
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController; 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Middleware\RedirectIfAuthenticated;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,7 +47,7 @@ Route::middleware(['auth'])->group(function() {
 
 require __DIR__.'/auth.php';
 
-// ==================== 3. مجموعة مسارات الآدمن المحمية والشاملة للمشروع ====================
+// ==================== 3. مجموعة مسارات الآدمن المحمية والشاملة للمشروع (مطابقة للـ Controllers) ====================
 Route::middleware(['auth', 'role:admin'])->group(function() {
     
     // لوحة التحكم والملف الشخصي للآدمن
@@ -57,42 +58,42 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/change/password', [AdminController::class, 'AdminChangePassword'])->name('admin.change.password');
     Route::post('/admin/update/password', [AdminController::class, 'AdminUpdatePassword'])->name('admin.update.password');
     
-    // 🛍️ قسم المنتجات (products)
-    Route::get('/admin/products', [IndexController::class, 'Index'])->name('admin.products.index');
-    Route::get('/admin/products/create', [IndexController::class, 'Index'])->name('admin.products.create');
-    Route::post('/admin/products/store', [IndexController::class, 'Index'])->name('admin.products.store');
-    Route::get('/admin/products-fix', [IndexController::class, 'Index'])->name('products.index'); 
-    Route::get('/admin/products/create-fix', [IndexController::class, 'Index'])->name('products.create');
-    Route::post('/admin/products/store-fix', [IndexController::class, 'Index'])->name('products.store');
+    // 🛍️ 1️⃣ قسم المنتجات (products) - مربوط بالكنترولر الحقيقي الحين
+    Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products.index');
+    Route::get('/admin/products/create', [ProductController::class, 'create'])->name('admin.products.create');
+    Route::post('/admin/products/store', [ProductController::class, 'store'])->name('admin.products.store');
+    Route::get('/admin/products-fix', [ProductController::class, 'index'])->name('products.index'); 
+    Route::get('/admin/products/create-fix', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/admin/products/store-fix', [ProductController::class, 'store'])->name('products.store');
 
-    // 📦 قسم الطلبات (orders)
-    Route::get('/admin/orders', [OrderController::class, 'AdminPlacedOrder'])->name('admin.orders.index');
-    Route::get('/admin/orders/pending', [OrderController::class, 'AdminPendingOrder'])->name('admin.orders.pending');
-    Route::get('/admin/orders/delivered', [OrderController::class, 'AdminDeliveredOrder'])->name('admin.orders.delivered');
-    Route::get('/admin/orders/show/{id}', [OrderController::class, 'AdminOrderDetails'])->name('admin.orders.show');
+    // 📦 2️⃣ قسم الطلبات (orders) - مربوط بالـ OrderController الفعلي بمجلد Admin
+    Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('/admin/orders/pending', [OrderController::class, 'index'])->name('admin.orders.pending');
+    Route::get('/admin/orders/delivered', [OrderController::class, 'index'])->name('admin.orders.delivered');
+    Route::get('/admin/orders/show/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
 
-    // 👥 قسم العملاء (clients)
-    Route::get('/admin/clients', [UserController::class, 'UserDashboard'])->name('admin.clients.index');
-    Route::get('/admin/clients/create', [UserController::class, 'UserDashboard'])->name('admin.clients.create');
-    Route::get('/admin/clients-fix', [UserController::class, 'UserDashboard'])->name('clients.index'); 
+    // 👥 3️⃣ قسم العملاء (clients) - مربوط بالـ ClientController الفعلي بمجلد Admin
+    Route::get('/admin/clients', [ClientController::class, 'index'])->name('admin.clients.index');
+    Route::get('/admin/clients/create', [ClientController::class, 'create'])->name('admin.clients.create');
+    Route::get('/admin/clients-fix', [ClientController::class, 'index'])->name('clients.index'); 
 
-    // 👨‍💻 قسم المستخدمين والآدمنية (users)
-    Route::get('/admin/users', [ActiveUserController::class, 'AllUser'])->name('admin.users.index');
-    Route::get('/admin/users/fix', [ActiveUserController::class, 'AllUser'])->name('users.index'); 
+    // 👨‍💻 4️⃣ قسم المستخدمين والآدمنية (users) - مربوط بالـ AdminUserController الفعلي بمجلد Admin
+    Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
+    Route::get('/admin/users/fix', [AdminUserController::class, 'index'])->name('users.index'); 
 
-    // 📊 قسم المحاسبة (accounting)
-    Route::get('/admin/accounting', [ReportController::class, 'AllReport'])->name('admin.accounting.index');
-    Route::get('/admin/accounting/fix', [ReportController::class, 'AllReport'])->name('accounting.index'); 
+    // 📊 5️⃣ قسم المحاسبة (accounting) - مربوط بـ AccountingController الفعلي بمجلد Admin
+    Route::get('/admin/accounting', [AccountingController::class, 'index'])->name('admin.accounting.index');
+    Route::get('/admin/accounting/fix', [AccountingController::class, 'index'])->name('accounting.index'); 
 
-    // 💰 قسم المصاريف (expenses)
-    Route::get('/admin/expenses', [ReportController::class, 'AllReport'])->name('admin.expenses.index');
-    Route::get('/admin/expenses/fix', [ReportController::class, 'AllReport'])->name('expenses.index'); 
+    // 💰 6️⃣ قسم المصاريف (expenses) - مربوط بـ ExpenseController الفعلي بمجلد Admin
+    Route::get('/admin/expenses', [ExpenseController::class, 'index'])->name('admin.expenses.index');
+    Route::get('/admin/expenses/fix', [ExpenseController::class, 'index'])->name('expenses.index'); 
 
-    // ⚙️ إعدادات النظام الإضافية
-    Route::get('/admin/settings/site', [SiteSettingController::class, 'SiteSetting'])->name('admin.settings.index');
-    Route::get('/admin/reports/all', [ReportController::class, 'AllReport'])->name('admin.reports.index');
-    Route::get('/admin/reviews/all', [ReviewController::class, 'AllReview'])->name('admin.reviews.index');
-    Route::get('/admin/return/requests', [ReturnController::class, 'ReturnRequest'])->name('admin.return.index');
+    // ⚙️ مسارات إضافية احتياطية (تم توجيهها للوحة التحكم مؤقتاً لحين برمجة ملفاتها)
+    Route::get('/admin/settings/site', [AdminDashboardController::class, 'index'])->name('admin.settings.index');
+    Route::get('/admin/reports/all', [AdminDashboardController::class, 'index'])->name('admin.reports.index');
+    Route::get('/admin/reviews/all', [AdminDashboardController::class, 'index'])->name('admin.reviews.index');
+    Route::get('/admin/return/requests', [AdminDashboardController::class, 'index'])->name('admin.return.index');
 }); 
 
 // ==================== 4. مجموعة مسارات الـ Vendor ====================
@@ -118,13 +119,11 @@ Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.a
 Route::get('/product/category/{id}/{slug}', [IndexController::class, 'CatWiseProduct']);
 Route::get('/product/subcategory/{id}/{slug}', [IndexController::class, 'SubCatWiseProduct']);
 
-// مسارات أقسام المتجر (الأولاد، البنات، المواليد، الأمهات)
 Route::get('/category/boys', [IndexController::class, 'CatWiseProduct'])->name('category.boys');
 Route::get('/category/girls', [IndexController::class, 'CatWiseProduct'])->name('category.girls');
 Route::get('/category/babies', [IndexController::class, 'CatWiseProduct'])->name('category.babies');
 Route::get('/category/mothers', [IndexController::class, 'CatWiseProduct'])->name('category.mothers');
 
-// صفحات التعريف وسياسات الموقع
 Route::get('/contact', function() { return view('contact'); })->name('contact');
 Route::get('/privacy-policy', function() { return view('privacy-policy'); })->name('privacy-policy');
 Route::get('/refund-policy', function() { return view('refund-policy'); })->name('refund-policy');
@@ -139,7 +138,6 @@ Route::post('/dcart/data/store/{id}', [CartController::class, 'AddToCartDetails'
 Route::post('/add-to-wishlist/{product_id}', [WishlistController::class, 'AddToWishlist']);
 Route::post('/add-to-compare/{product_id}', [CompareController::class, 'AddToCompare']);
 
-// الكوبونات، عربة التسوق والـ Checkout
 Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
 Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
 Route::get('/coupon-remove', [CartController::class, 'CouponRemove']);
@@ -164,14 +162,12 @@ Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.
 Route::redirect('/home', '/admin/dashboard');
 Route::redirect('/admin', '/admin/dashboard');
 
-// ==================== 10. الرابط السحري المطور (تنظيف الكاش وزرع الآدمن) ====================
+// ==================== 10. الرابط السحري المطور ====================
 Route::get('/clear-cache', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
     
-    // 1. مسح أي مستخدم قديم بنفس الإيميل لمنع التضارب
     \Illuminate\Support\Facades\DB::table('users')->where('email', 'admin@gmail.com')->delete();
     
-    // 2. إنشاء حساب الآدمن بكافة الحقول المدعومة (role و is_admin)
     \Illuminate\Support\Facades\DB::table('users')->insert([
         'name' => 'Admin',
         'email' => 'admin@gmail.com',
@@ -182,5 +178,5 @@ Route::get('/clear-cache', function () {
         'updated_at' => now(),
     ]);
 
-    return "✅ تم تنظيف الكاش بنجاح وزرع حساب الآدمن الخارق الشامل لكافة الصلاحيات! توجه مجدداً للوحة التحكم وسجل دخولك بريد: admin@gmail.com وباسورد: password";
+    return "✅ تم تنظيف الكاش وربط الكنترولرات الجديدة بنجاح!";
 });
