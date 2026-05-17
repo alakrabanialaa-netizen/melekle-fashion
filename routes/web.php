@@ -165,8 +165,7 @@ Route::redirect('/admin', '/admin/dashboard');
 // ==================== 10. الرابط السحري المطور ====================
 // ✅ الرابط السحري الخارق لإعادة بناء الجداول وتنظيف الكاش بدون Terminal
 Route::get('/clear-cache', function () {
-    // 1. تشغيل الهجرة الفريش لإعادة بناء الجداول بالعمود الجديد (slug) في Supabase
-    \Illuminate\Support\Facades\Artisan::call('migrate:fresh');
+
     
     // 2. تنظيف الكاش والروابط
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
