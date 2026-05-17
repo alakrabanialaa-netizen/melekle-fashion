@@ -117,7 +117,7 @@ Route::get('/become/vendor', [VendorController::class, 'BecomeVendor'])->name('b
 Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->name('vendor.register');
 
 // ==================== 6. تفاصيل المنتجات والتنقل والأقسام ====================
-// 🌟 تم تعديل هذا السطر وإضافة اسم الروت المفقود لإنهاء المشكلة كلياً!
+// 🌟 تم جعل الـ slug اختيارياً لتفادي أي مشاكل في التوجيه من لوحة الإدارة
 Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
@@ -135,8 +135,8 @@ Route::get('/refund-policy', function() { return view('refund-policy'); })->name
 Route::get('/about', [IndexController::class, 'Index'])->name('about');
 
 // ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات ====================
-Route::get('/product/view/modal/{id}', [IndexController::class, 'ProductViewAjax']);
-Route::post('/cart/data/store/{id}', [CartController::class, 'AddToCart']);
+// 🌟 تم ترتيب السطر وإعطائه الاسم السليم وفصله تماماً لمنع مشاكل الـ Deploy
+Route::post('/cart/data/store/{id}', [CartController::class, 'AddToCart'])->name('cart.add');
 Route::get('/product/mini/cart', [CartController::class, 'AddMiniCart']);
 Route::get('/minicart/product/remove/{rowId}', [CartController::class, 'RemoveMiniCart']);
 Route::post('/dcart/data/store/{id}', [CartController::class, 'AddToCartDetails']);
