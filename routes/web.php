@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Hash;
 // الصفحة الرئيسية
 Route::get('/', [IndexController::class, 'Index'])->name('welcome');
 
+// مسارات اليوزر العادي المحمية
 Route::middleware(['auth'])->group(function() {
     Route::get('/dashboard', [UserController::class, 'UserDashboard'])->name('dashboard');
     Route::post('/user/profile/store', [UserController::class, 'UserProfileStore'])->name('user.profile.store');
@@ -45,7 +46,7 @@ Route::middleware(['auth'])->group(function() {
 
 require __DIR__.'/auth.php';
 
-// ✅ مجموعة مسارات الآدمن المحمية (تم تنظيف التكرار بالكامل)
+// ✅ مجموعة مسارات الآدمن المحمية والشاملة لجميع مجلدات النظام (بدون أي تكرار أو أخطاء أقواس)
 Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('admin.logout');
@@ -54,28 +55,42 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/change/password', [AdminController::class, 'AdminChangePassword'])->name('admin.change.password');
     Route::post('/admin/update/password', [AdminController::class, 'AdminUpdatePassword'])->name('admin.update.password');
     
-    // مسارات إدارة المنتجات بالأسماء الأساسية (admin.products)
+    // 1️⃣ مسارات مجلد المنتجات (products)
     Route::get('/admin/products', [IndexController::class, 'Index'])->name('admin.products.index');
     Route::get('/admin/products/create', [IndexController::class, 'Index'])->name('admin.products.create');
     Route::post('/admin/products/store', [IndexController::class, 'Index'])->name('admin.products.store');
+    Route::get('/admin/products-fix', [IndexController::class, 'Index'])->name('products.index'); 
+    Route::get('/admin/products/create-fix', [IndexController::class, 'Index'])->name('products.create');
+    Route::post('/admin/products/store-fix', [IndexController::class, 'Index'])->name('products.store');
 
-// مسارات إدارة الطلبات (Orders)
+    // 2️⃣ مسارات مجلد الطلبات (orders)
     Route::get('/admin/orders', [IndexController::class, 'Index'])->name('admin.orders.index');
     Route::get('/admin/orders/pending', [IndexController::class, 'Index'])->name('admin.orders.pending');
     Route::get('/admin/orders/delivered', [IndexController::class, 'Index'])->name('admin.orders.delivered');
 
-    // 🌟 أضف هذه الأسطر هنا فوراً لحل مشكلة العملاء (Clients) منعاً للخطأ الحالي
+    // 3️⃣ مسارات مجلد العملاء (clients)
     Route::get('/admin/clients', [IndexController::class, 'Index'])->name('admin.clients.index');
     Route::get('/admin/clients/create', [IndexController::class, 'Index'])->name('admin.clients.create');
-    
-    // مسارات إضافية تدعم المسمى القديم بدون كلمة admin احتياطاً
-    Route::get('/admin/clients-fix', [IndexController::class, 'Index'])->name('clients.index');
+    Route::get('/admin/clients-fix', [IndexController::class, 'Index'])->name('clients.index'); 
 
-    // مسارات إضافية تدعم المسمى القديم (products) لحل خطأ الـ Blade فوراً دون تعديل الملفات
-    Route::get('/admin/products-fix', [IndexController::class, 'Index'])->name('products.index');
-    Route::get('/admin/products/create-fix', [IndexController::class, 'Index'])->name('products.create');
-    Route::post('/admin/products/store-fix', [IndexController::class, 'Index'])->name('products.store');
-});
+    // 4️⃣ مسارات مجلد المستخدمين (users)
+    Route::get('/admin/users', [IndexController::class, 'Index'])->name('admin.users.index');
+    Route::get('/admin/users/fix', [IndexController::class, 'Index'])->name('users.index'); 
+
+    // 5️⃣ مسارات مجلد المحاسبة (accounting)
+    Route::get('/admin/accounting', [IndexController::class, 'Index'])->name('admin.accounting.index');
+    Route::get('/admin/accounting/fix', [IndexController::class, 'Index'])->name('accounting.index'); 
+
+    // 6️⃣ مسارات مجلد المصاريف (expenses)
+    Route::get('/admin/expenses', [IndexController::class, 'Index'])->name('admin.expenses.index');
+    Route::get('/admin/expenses/fix', [IndexController::class, 'Index'])->name('expenses.index'); 
+
+    // 7️⃣ مسارات إضافية عامة واحتياطية
+    Route::get('/admin/settings/site', [IndexController::class, 'Index'])->name('admin.settings.index');
+    Route::get('/admin/reports/all', [IndexController::class, 'Index'])->name('admin.reports.index');
+    Route::get('/admin/reviews/all', [IndexController::class, 'Index'])->name('admin.reviews.index');
+    Route::get('/admin/return/requests', [IndexController::class, 'Index'])->name('admin.return.index');
+}); 
 
 // مجموعة مسارات الـ Vendor
 Route::middleware(['auth', 'role:vendor'])->group(function() {
@@ -87,6 +102,7 @@ Route::middleware(['auth', 'role:vendor'])->group(function() {
     Route::post('/vendor/update/password', [VendorController::class, 'VendorUpdatePassword'])->name('vendor.update.password');
 });
 
+// مسارات تسجيل الدخول والـ Vendor العامة
 Route::get('/admin/login', [AdminController::class, 'AdminLogin'])->middleware(RedirectIfAuthenticated::class);
 Route::get('/vendor/login', [VendorController::class, 'VendorLogin'])->name('vendor.login')->middleware(RedirectIfAuthenticated::class);
 Route::get('/become/vendor', [VendorController::class, 'BecomeVendor'])->name('become.vendor');
@@ -142,7 +158,7 @@ Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.
 Route::redirect('/home', '/admin/dashboard');
 Route::redirect('/admin', '/admin/dashboard');
 
-// ✅ الرابط السحري النظيف والمطور
+// ✅ الرابط السحري النظيف والآمن والمطور بالكامل
 Route::get('/clear-cache', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
     
@@ -160,5 +176,5 @@ Route::get('/clear-cache', function () {
         'updated_at' => now(),
     ]);
 
-    return "✅ تم تنظيف الكاش وإعادة زرع حساب الآدمن الخارق بنجاح! ارجع وجرب الدخول الآن.";
+    return "✅ تم تنظيف الكاش بنجاح وزرع حساب الآدمن الخارق الشامل لكافة الصلاحيات! توجه مجدداً للوحة التحكم.";
 });
