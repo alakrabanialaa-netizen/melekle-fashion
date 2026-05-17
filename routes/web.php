@@ -118,8 +118,7 @@ Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->na
 
 // ==================== 6. تفاصيل المنتجات والتنقل والأقسام ====================
 // 🌟 تم تعديل هذا السطر وإضافة اسم الروت المفقود لإنهاء المشكلة كلياً!
-Route::get('/product/details/{id}/{slug}', [IndexController::class, 'ProductDetails'])->name('product.show');
-
+Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
 Route::get('/product/category/{id}/{slug}', [IndexController::class, 'CatWiseProduct']);
