@@ -117,7 +117,9 @@ Route::get('/become/vendor', [VendorController::class, 'BecomeVendor'])->name('b
 Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->name('vendor.register');
 
 // ==================== 6. تفاصيل المنتجات والتنقل والأقسام ====================
-Route::get('/product/details/{id}/{slug}', [IndexController::class, 'ProductDetails']);
+// 🌟 تم تعديل هذا السطر وإضافة اسم الروت المفقود لإنهاء المشكلة كلياً!
+Route::get('/product/details/{id}/{slug}', [IndexController::class, 'ProductDetails'])->name('product.show');
+
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
 Route::get('/product/category/{id}/{slug}', [IndexController::class, 'CatWiseProduct']);
@@ -161,6 +163,7 @@ Route::post('/search', [IndexController::class, 'ProductSearch'])->name('product
 Route::post('/search-product', [IndexController::class, 'SearchProduct']);
 Route::get('/shop', [IndexController::class, 'ShopPage'])->name('shop.page');
 Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.filter');
+
 // 🌟 الروت المفقود الذي يبحث عنه النظام بعد عملية الحفظ والتوجيه
 Route::get('/admin/products/edit/{id}', [ProductController::class, 'index'])->name('admin.products.edit');
 
