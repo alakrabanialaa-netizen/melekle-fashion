@@ -161,6 +161,8 @@ Route::post('/search', [IndexController::class, 'ProductSearch'])->name('product
 Route::post('/search-product', [IndexController::class, 'SearchProduct']);
 Route::get('/shop', [IndexController::class, 'ShopPage'])->name('shop.page');
 Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.filter');
+// 🌟 الروت المفقود الذي يبحث عنه النظام بعد عملية الحفظ والتوجيه
+Route::get('/admin/products/edit/{id}', [ProductController::class, 'index'])->name('admin.products.edit');
 
 // ==================== 9. تحويلات تلقائية ذكية لمنع الـ 404 ====================
 Route::redirect('/home', '/admin/dashboard');
