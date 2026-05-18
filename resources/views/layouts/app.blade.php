@@ -365,11 +365,11 @@
                         @endif
                         <div class="flex justify-between items-center mt-1">
                             <p class="text-sm text-gray-600">الكمية: {{ $item['quantity'] }}</p>
-                            <p class="font-bold text-indigo-600">{{ number_format($item['price'], 2) }} ₺</p>
+                            <p class="font-bold text-pink-600">{{ number_format($item['price'], 2) }} ₺</p>
                         </div>
                     </div>
                     
-                    {{-- زر اختياري لحذف المنتج --}}
+                    {{-- زر حذف المنتج من السلة الجانبية --}}
                     <button onclick="removeFromCart('{{ $id }}')" class="text-gray-300 hover:text-red-500 transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </button>
@@ -382,6 +382,19 @@
             </div>
         @endif
     </div>
+
+    @if(count($cart) > 0)
+        <div class="p-6 border-t bg-gray-50">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-gray-600 font-medium">المجموع الكلي:</span>
+                <span class="text-xl font-bold text-pink-600">{{ number_format($total, 2) }} ₺</span>
+            </div>
+            {{-- التعديل هنا: تم توجيه الأزرار لروت mycart الفعلي المتاح بمشروعك وتغيير الثيم للوردي --}}
+            <a href="{{ route('mycart') }}" class="block w-full bg-pink-600 text-white text-center py-3 rounded-xl hover:bg-pink-700 transition font-bold shadow-md">عرض السلة وتثبيت الطلب</a>
+            <a href="{{ route('mycart') }}" class="block w-full mt-3 bg-black text-white text-center py-3 rounded-xl hover:bg-gray-800 transition font-semibold shadow-md">الدفع الآن عبر واتساب</a>
+        </div>
+    @endif
+</div>
 
     @if(count($cart) > 0)
         <div class="p-6 border-t bg-gray-50">
