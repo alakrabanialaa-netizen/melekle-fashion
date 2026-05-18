@@ -11,7 +11,7 @@ class CartController extends Controller
     public function MyCart()
     {
         $cart = session()->get('cart', []);
-        return view('frontend.cart', compact('cart')); 
+return view('cart.index', compact('cart'));
         // ⚠️ تنبيه: تأكد أن ملف السلة الكاملة موجود داخل فولدر resources/views/frontend/cart.blade.php
     }
 
