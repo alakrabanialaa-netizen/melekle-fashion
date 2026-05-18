@@ -557,11 +557,13 @@ h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
                     </div>
                    <form action="{{ route('cart.add', $product->id) }}" method="POST">
     @csrf
-    <button type="submit" class="ty-add-to-cart">
-        أضف إلى السلة
-    </button>
-</form>
-
+{{-- التعديل الجديد: تحويل الزر ليعمل بالـ Ajax السريع ويفتح السلة الجانبية --}}
+<button type="button" 
+        onclick="addToCart({{ $product->id }}, '{{ $product->sizes[0] ?? 'Free Size' }}')" 
+        class="ty-add-to-cart w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-md flex items-center justify-center gap-2">
+    <span>🛒</span>
+    <span>أضف إلى السلة</span>
+</button>
                 </div>
             @empty
                 <div class="col-span-full text-center py-20">
