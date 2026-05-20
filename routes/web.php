@@ -36,8 +36,14 @@ use App\Http\Controllers\CartController;
 |--------------------------------------------------------------------------
 */
 
-// ==================== 1. الصفحة الرئيسية والـ Guest ====================
+// ==================== 1. الصفحة الرئيسية والـ Guest والروابط العامة ====================
 Route::get('/', [IndexController::class, 'Index'])->name('welcome');
+
+// 🛠️ تم إعادة إضافة روابط الصفحات الثابتة هنا لحل مشكلة الـ RouteNotFoundException نهائياً
+Route::get('/contact', function() { return view('contact'); })->name('contact');
+Route::get('/privacy-policy', function() { return view('privacy-policy'); })->name('privacy-policy');
+Route::get('/refund-policy', function() { return view('refund-policy'); })->name('refund-policy');
+Route::get('/about', [IndexController::class, 'Index'])->name('about');
 
 // ==================== 2. مسارات المستخدم العادي (User Dashboard) ====================
 Route::middleware(['auth'])->group(function() {
@@ -122,9 +128,8 @@ Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDet
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
 
-// 👦 قسم ملابس الأولاد (يبحث في قاعدة البيانات عن الاسم المكتوب في لوحة التحكم)
+// 👦 قسم ملابس الأولاد
 Route::get('/category/boys', function() { 
-    // ملاحظة: استبدل كلمة 'اولاد' أو 'boys' بالاسم الحقيقي للقسم عندك في لوحة التحكم
     $category = \App\Models\Category::where('category_name', 'like', '%ولد%')
                                     ->orWhere('category_slug', 'like', '%boy%')
                                     ->first();
@@ -133,9 +138,8 @@ Route::get('/category/boys', function() {
     return view('categories.boys', compact('products', 'category')); 
 })->name('category.boys');
 
-// 👧 قسم ملابس البنات
+// 👧 قسم ملابس البنات (تم تصحيح الاسم البرمجي هنا)
 Route::get('/category/girls', function() { 
-    // ملاحظة: استبدل كلمة 'بنات' أو 'girls' بالاسم الحقيقي للقسم عندك في لوحة التحكم
     $category = \App\Models\Category::where('category_name', 'like', '%بنات%')
                                     ->orWhere('category_slug', 'like', '%girl%')
                                     ->first();
@@ -146,7 +150,6 @@ Route::get('/category/girls', function() {
 
 // 👶 قسم ملابس الرضع
 Route::get('/category/babies', function() { 
-    // ملاحظة: استبدل كلمة 'رضع' أو 'أطفال' بالاسم الحقيقي للقسم عندك في لوحة التحكم
     $category = \App\Models\Category::where('category_name', 'like', '%رضع%')
                                     ->orWhere('category_name', 'like', '%طفل%')
                                     ->orWhere('category_slug', 'like', '%bab%')
@@ -158,7 +161,6 @@ Route::get('/category/babies', function() {
 
 // 👩 قسم ملابس الأمهات
 Route::get('/category/mothers', function() { 
-    // ملاحظة: استبدل كلمة 'أمهات' أو 'نساء' بالاسم الحقيقي للقسم عندك في لوحة التحكم
     $category = \App\Models\Category::where('category_name', 'like', '%أمهات%')
                                     ->orWhere('category_name', 'like', '%نساء%')
                                     ->orWhere('category_slug', 'like', '%moth%')
