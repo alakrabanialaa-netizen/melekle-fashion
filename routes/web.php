@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Middleware\RedirectIfAuthenticated;
 
-// 🛒 استدعاء الكنترولر الصحيح للسلة المفتوح عندك في لقطة الشاشة (خارج مجلد Frontend)
+// 🛒 استدعاء الكنترولر الصحيح للسلة
 use App\Http\Controllers\CartController;
 
 /*
@@ -117,27 +117,45 @@ Route::get('/vendor/login', [VendorController::class, 'VendorLogin'])->name('ven
 Route::get('/become/vendor', [VendorController::class, 'BecomeVendor'])->name('become.vendor');
 Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->name('vendor.register');
 
-// ==================== 6. تفاصيل المنتجات والتنقل والأقسام ====================
-
-
+// ==================== 6. تفاصيل المنتجات والتنقل والأقسام الديناميكية الذكية ====================
 Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
-Route::get('/product/category/{id}/{slug}', [IndexController::class, 'CatWiseProduct']);
-Route::get('/product/subcategory/{id}/{slug}', [IndexController::class, 'SubCatWiseProduct']);
 
-// روابط الأقسام الثابتة التي تفتح الفيو الخاص بكل قسم مباشرة وبدون تعقيد دالات الكنترولر المفقودة
-Route::get('/category/boys', function() { return view('categories.boys'); })->name('category.boys');
-Route::get('/category/girls', function() { return view('categories.girls'); })->name('category.girls');
-Route::get('/category/babies', function() { return view('categories.babies'); })->name('category.babies');
-Route::get('/category/mothers', function() { return view('categories.mothers'); })->name('category.mothers');
+// 👦 قسم ملابس الأولاد ديناميكي حسب الـ Slug المربوط بقاعدة بياناتك
+Route::get('/category/boys', function() { 
+    $category = \App\Models\Category::where('category_slug', 'boys')->orWhere('category_name', 'like', '%ولد%')->first();
+    $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
+    return view('categories.boys', compact('products')); 
+})->name('category.boys');
+
+// 👧 قسم ملابس البنات ديناميكي حسب الـ Slug المربوط بقاعدة بياناتك
+Route::get('/category/girls', function() { 
+    $category = \App\Models\Category::where('category_slug', 'girls')->orWhere('category_name', 'like', '%بنات%')->first();
+    $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
+    return view('categories.girls', compact('products')); 
+})->name('category.girls');
+
+// 👶 قسم ملابس الرضع ديناميكي حسب الـ Slug المربوط بقاعدة بياناتك
+Route::get('/category/babies', function() { 
+    $category = \App\Models\Category::where('category_slug', 'babies')->orWhere('category_name', 'like', '%رضع%')->first();
+    $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
+    return view('categories.babies', compact('products')); 
+})->name('category.babies');
+
+// 👩 قسم ملابس الأمهات ديناميكي حسب الـ Slug المربوط بقاعدة بياناتك
+Route::get('/category/mothers', function() { 
+    $category = \App\Models\Category::where('category_slug', 'mothers')->orWhere('category_name', 'like', '%أمهات%')->first();
+    $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
+    return view('categories.mothers', compact('products')); 
+})->name('category.mothers');
 
 Route::get('/contact', function() { return view('contact'); })->name('contact');
 Route::get('/privacy-policy', function() { return view('privacy-policy'); })->name('privacy-policy');
 Route::get('/refund-policy', function() { return view('refund-policy'); })->name('refund-policy');
 Route::get('/about', [IndexController::class, 'Index'])->name('about');
 
-// ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات (تم التنظيف والتصحيح) ====================
+// ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات ====================
 Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
 Route::post('/cart/data/store/{id}', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart-remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
