@@ -118,16 +118,19 @@ Route::get('/become/vendor', [VendorController::class, 'BecomeVendor'])->name('b
 Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->name('vendor.register');
 
 // ==================== 6. تفاصيل المنتجات والتنقل والأقسام ====================
+
+
 Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
 Route::get('/product/category/{id}/{slug}', [IndexController::class, 'CatWiseProduct']);
 Route::get('/product/subcategory/{id}/{slug}', [IndexController::class, 'SubCatWiseProduct']);
 
-Route::get('/category/boys', [IndexController::class, 'CatWiseProduct'])->name('category.boys');
-Route::get('/category/girls', [IndexController::class, 'CatWiseProduct'])->name('category.girls');
-Route::get('/category/babies', [IndexController::class, 'CatWiseProduct'])->name('category.babies');
-Route::get('/category/mothers', [IndexController::class, 'CatWiseProduct'])->name('category.mothers');
+// روابط الأقسام الثابتة التي تفتح الفيو الخاص بكل قسم مباشرة وبدون تعقيد دالات الكنترولر المفقودة
+Route::get('/category/boys', function() { return view('categories.boys'); })->name('category.boys');
+Route::get('/category/girls', function() { return view('categories.girls'); })->name('category.girls');
+Route::get('/category/babies', function() { return view('categories.babies'); })->name('category.babies');
+Route::get('/category/mothers', function() { return view('categories.mothers'); })->name('category.mothers');
 
 Route::get('/contact', function() { return view('contact'); })->name('contact');
 Route::get('/privacy-policy', function() { return view('privacy-policy'); })->name('privacy-policy');
