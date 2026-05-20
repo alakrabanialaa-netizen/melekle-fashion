@@ -122,38 +122,33 @@ Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDet
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
 
-// 👦 قسم ملابس الأولاد ديناميكي حسب الـ Slug المربوط بقاعدة بياناتك
+// 👦 قسم ملابس الأولاد (يأخذ أول قسم مضاف في قاعدة البيانات عندك)
 Route::get('/category/boys', function() { 
-    $category = \App\Models\Category::where('category_slug', 'boys')->orWhere('category_name', 'like', '%ولد%')->first();
+    $category = \App\Models\Category::skip(0)->first();
     $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
     return view('categories.boys', compact('products')); 
 })->name('category.boys');
 
-// 👧 قسم ملابس البنات ديناميكي حسب الـ Slug المربوط بقاعدة بياناتك
+// 👧 قسم ملابس البنات (يأخذ ثاني قسم مضاف في قاعدة البيانات عندك)
 Route::get('/category/girls', function() { 
-    $category = \App\Models\Category::where('category_slug', 'girls')->orWhere('category_name', 'like', '%بنات%')->first();
+    $category = \App\Models\Category::skip(1)->first();
     $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
     return view('categories.girls', compact('products')); 
-})->name('category.girls');
+})->name('categories.girls');
 
-// 👶 قسم ملابس الرضع ديناميكي حسب الـ Slug المربوط بقاعدة بياناتك
+// 👶 قسم ملابس الرضع (يأخذ ثالث قسم مضاف في قاعدة البيانات عندك)
 Route::get('/category/babies', function() { 
-    $category = \App\Models\Category::where('category_slug', 'babies')->orWhere('category_name', 'like', '%رضع%')->first();
+    $category = \App\Models\Category::skip(2)->first();
     $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
     return view('categories.babies', compact('products')); 
 })->name('category.babies');
 
-// 👩 قسم ملابس الأمهات ديناميكي حسب الـ Slug المربوط بقاعدة بياناتك
+// 👩 قسم ملابس الأمهات (يأخذ رابع قسم مضاف في قاعدة البيانات عندك)
 Route::get('/category/mothers', function() { 
-    $category = \App\Models\Category::where('category_slug', 'mothers')->orWhere('category_name', 'like', '%أمهات%')->first();
+    $category = \App\Models\Category::skip(3)->first();
     $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
     return view('categories.mothers', compact('products')); 
 })->name('category.mothers');
-
-Route::get('/contact', function() { return view('contact'); })->name('contact');
-Route::get('/privacy-policy', function() { return view('privacy-policy'); })->name('privacy-policy');
-Route::get('/refund-policy', function() { return view('refund-policy'); })->name('refund-policy');
-Route::get('/about', [IndexController::class, 'Index'])->name('about');
 
 // ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات ====================
 Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
