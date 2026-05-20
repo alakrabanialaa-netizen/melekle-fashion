@@ -122,38 +122,52 @@ Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDet
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
 
-// 👦 قسم ملابس الأولاد
+// 👦 قسم ملابس الأولاد (يبحث في قاعدة البيانات عن الاسم المكتوب في لوحة التحكم)
 Route::get('/category/boys', function() { 
-    $category = \App\Models\Category::skip(0)->first();
+    // ملاحظة: استبدل كلمة 'اولاد' أو 'boys' بالاسم الحقيقي للقسم عندك في لوحة التحكم
+    $category = \App\Models\Category::where('category_name', 'like', '%ولد%')
+                                    ->orWhere('category_slug', 'like', '%boy%')
+                                    ->first();
+                                    
     $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
-    return view('categories.boys', compact('products')); 
+    return view('categories.boys', compact('products', 'category')); 
 })->name('category.boys');
 
 // 👧 قسم ملابس البنات
 Route::get('/category/girls', function() { 
-    $category = \App\Models\Category::skip(1)->first();
+    // ملاحظة: استبدل كلمة 'بنات' أو 'girls' بالاسم الحقيقي للقسم عندك في لوحة التحكم
+    $category = \App\Models\Category::where('category_name', 'like', '%بنات%')
+                                    ->orWhere('category_slug', 'like', '%girl%')
+                                    ->first();
+                                    
     $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
-    return view('categories.girls', compact('products')); 
+    return view('categories.girls', compact('products', 'category')); 
 })->name('category.girls');
 
 // 👶 قسم ملابس الرضع
 Route::get('/category/babies', function() { 
-    $category = \App\Models\Category::skip(2)->first();
+    // ملاحظة: استبدل كلمة 'رضع' أو 'أطفال' بالاسم الحقيقي للقسم عندك في لوحة التحكم
+    $category = \App\Models\Category::where('category_name', 'like', '%رضع%')
+                                    ->orWhere('category_name', 'like', '%طفل%')
+                                    ->orWhere('category_slug', 'like', '%bab%')
+                                    ->first();
+                                    
     $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
-    return view('categories.babies', compact('products')); 
+    return view('categories.babies', compact('products', 'category')); 
 })->name('category.babies');
 
-// 👩 قسم ملابس الأمهات (تم تعديل الاسم هنا ليصبح متناسقاً ومفرداً)
+// 👩 قسم ملابس الأمهات
 Route::get('/category/mothers', function() { 
-    $category = \App\Models\Category::skip(3)->first();
+    // ملاحظة: استبدل كلمة 'أمهات' أو 'نساء' بالاسم الحقيقي للقسم عندك في لوحة التحكم
+    $category = \App\Models\Category::where('category_name', 'like', '%أمهات%')
+                                    ->orWhere('category_name', 'like', '%نساء%')
+                                    ->orWhere('category_slug', 'like', '%moth%')
+                                    ->orWhere('category_slug', 'like', '%wom%')
+                                    ->first();
+                                    
     $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
-    return view('categories.mothers', compact('products')); 
+    return view('categories.mothers', compact('products', 'category')); 
 })->name('category.mothers');
-
-Route::get('/contact', function() { return view('contact'); })->name('contact');
-Route::get('/privacy-policy', function() { return view('privacy-policy'); })->name('privacy-policy');
-Route::get('/refund-policy', function() { return view('refund-policy'); })->name('refund-policy');
-Route::get('/about', [IndexController::class, 'Index'])->name('about');
 
 // ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات ====================
 Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
