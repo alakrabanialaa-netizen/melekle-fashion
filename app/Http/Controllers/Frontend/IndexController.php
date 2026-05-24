@@ -34,6 +34,6 @@ class IndexController extends Controller
                               ->get();
 
     // 3. تمرير المنتج والمنتجات ذات الصلة لصفحة التفاصيل بسلام
-    return view('frontend.product.product_details', compact('product', 'relatedProducts'));
-}
+// التعديل الصحيح ليطابق مجلدات مشروعك الحالية
+return view('frontend.shop.show', compact('product', 'relatedProducts'));}
 }
