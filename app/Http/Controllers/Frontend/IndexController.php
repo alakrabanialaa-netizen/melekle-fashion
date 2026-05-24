@@ -21,19 +21,19 @@ class IndexController extends Controller
         return view('welcome', compact('products', 'categories')); 
     }
 
-    public function ProductDetails($id, $slug = null) 
-    {
-        // 1. جلب تفاصيل المنتج الأساسي باستخدام الـ id مع الصور الخاصة به
-        $product = Product::findOrFail($id);
-        
-        // 2. جلب منتجات ذات صلة من نفس القسم (ما عدا المنتج الحالي) لعرضها في الأسفل
-        $relatedProducts = Product::where('category_id', $product->category_id)
-                                  ->where('id', '!=', $id)
-                                  ->where('status', 1)
-                                  ->limit(4)
-                                  ->get();
+  public function ProductDetails($id, $slug = null) 
+{
+    // 1. جلب تفاصيل المنتج الأساسي باستخدام الـ id
+    $product = Product::findOrFail($id);
+    
+    // 2. جلب منتجات ذات صلة (تم تعديل حقل البحث من category_id إلى category ليطابق الـ Supabase عندك)
+    $relatedProducts = Product::where('category', $product->category) // تعديل هنا وعلاوة على السطر التالي
+                              ->where('id', '!=', $id)
+                              ->where('status', 1)
+                              ->limit(4)
+                              ->get();
 
-        // 3. تمرير المنتج والمنتجات ذات الصلة لصفحة التفاصيل بسلام
-        return view('frontend.product.product_details', compact('product', 'relatedProducts'));
-    }
+    // 3. تمرير المنتج والمنتجات ذات الصلة لصفحة التفاصيل بسلام
+    return view('frontend.product.product_details', compact('product', 'relatedProducts'));
+}
 }
