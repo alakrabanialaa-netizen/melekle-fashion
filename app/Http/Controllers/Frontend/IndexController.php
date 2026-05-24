@@ -21,8 +21,8 @@ class IndexController extends Controller
         return view('welcome', compact('products', 'categories')); 
     }
 
-    public function ProductDetails($id, $slug)
-    {
+public function ProductDetails($id, $slug = null) 
+    
         return view('frontend.product.product_details');
     }
 }
