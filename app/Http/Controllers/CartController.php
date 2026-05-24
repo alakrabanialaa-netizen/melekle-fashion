@@ -7,15 +7,14 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    // 1. دالة عرض صفحة السلة الكاملة (تم تعديل اسمها ليتوافق مع روت mycart)
+    // 1. دالة عرض صفحة السلة الكاملة
     public function MyCart()
     {
         $cart = session()->get('cart', []);
-return view('cart.index', compact('cart'));
-        // ⚠️ تنبيه: تأكد أن ملف السلة الكاملة موجود داخل فولدر resources/views/frontend/cart.blade.php
+        return view('cart.index', compact('cart'));
     }
 
-    // 2. دالة إضافة المنتج للسلة عبر Ajax (تم تحديثها لدعم المقاسات والرد الذكي بدون ريفريش)
+    // 2. دالة إضافة المنتج للسلة (تم تعديل الرد ليدعم الـ Form العادي والـ Ajax معاً)
     public function add(Request $request, $id)
     {
         $product = Product::findOrFail($id);
@@ -33,18 +32,24 @@ return view('cart.index', compact('cart'));
                 "price" => $product->price,
                 "size" => $size,
                 // جلب الصورة الأولى للمنتج بشكل صحيح
-                "image" => $product->images->first() ? $product->images->first()->image : ''
+                "image" => $product->images && $product->images->first() ? $product->images->first()->image : ''
             ];
         }
 
         session()->put('cart', $cart);
 
-        // الرد بصيغة JSON لكي يفهمها كود الـ Ajax في الصفحة الرئيسية ولا ينقلك لصفحة خطأ
-        return response()->json([
-            'status' => 'success',
-            'message' => 'تم إضافة المنتج للسلة بنجاح!',
-            'cart' => $cart
-        ]);
+        // 🔥 هنا التعديل السحري:
+        // إذا كان الطلب Ajax يرسل JSON، وإذا كان طلباً عادياً يعود للخلف فوراً لمنع الشاشة البيضاء
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'تم إضافة المنتج للسلة بنجاح!',
+                'cart' => $cart
+            ]);
+        }
+
+        // للطلبات العادية: يرجع العميل لنفس الصفحة مع إشعار نجاح
+        return redirect()->back()->with('success', 'تم إضافة المنتج للسلة بنجاح!');
     }
 
     // 3. دالة حذف المنتج من السلة
