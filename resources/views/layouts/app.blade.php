@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 <head>
+ 
     <meta charset="UTF-8">
-    <title>Melekler Fashion</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <title>Melekler Group | @yield('title', 'Premium Fashion')</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
@@ -15,6 +19,7 @@
             background-color: #f9fafb;
             padding-top: 1rem;
             padding-left: 1.5rem;
+            padding-right: 1.5rem;
             padding-right: 1.5rem;
         }
         .font-black { font-weight: 900; }
@@ -44,10 +49,10 @@
             padding-bottom: 0.6rem;
         }
 
-        /* Logo Center Logic */
+        /* Logo Filter Logic (لجعل اللوغو واضحاً في الحالتين البيضاء والشفافة) */
         .logo-container { transition: all 0.4s ease; }
-        .header-transparent .logo-text { color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .header-scrolled .logo-text { color: #333; }
+        .header-transparent .logo-img { filter: drop-shadow(0 2px 10px rgba(0,0,0,0.3)); }
+        .header-scrolled .logo-img { filter: none; }
 
         /* Nav Links */
         .nav-link { transition: all 0.3s ease; font-weight: 700; position: relative; }
@@ -124,14 +129,11 @@
             </a>
         </div>
 
-        {{-- 2. Center Side: Logo --}}
-        <div class="logo-container text-center">
-            <a href="{{ route('welcome') }}" class="logo-text text-3xl font-black tracking-tighter inline-block">
-                MELEKLER
+        {{-- 2. Center Side: Logo Image (تم استبدال النص بصورة اللوغو الجاهز الخاص بك هنا) --}}
+        <div class="logo-container text-center flex justify-center items-center">
+            <a href="{{ route('welcome') }}" class="inline-block">
+                <img src="{{ asset('favicon.png') }}" alt="Melekler Logo" class="logo-img h-14 md:h-20 w-auto object-contain transition-all duration-300">
             </a>
-            <div class="text-[9px] font-bold tracking-[0.4em] uppercase opacity-60 logo-subtext hidden md:block">
-                Luxury Kids Store
-            </div>
         </div>
 
         {{-- 3. Right Side: Navigation & Cart --}}
@@ -188,7 +190,7 @@
     @yield('content')
 </main>
 
-{{-- 🛒 Mini Cart (تم دمج التعديلات الجديدة والألوان الوردية وحذف التكرار) --}}
+{{-- 🛒 Mini Cart --}}
 <div id="mini-cart" class="fixed top-0 right-[-420px] w-[400px] h-screen bg-white shadow-2xl transition-all duration-300 z-50 flex flex-col">
     <div class="p-6 border-b flex justify-between items-center">
         <h2 class="text-xl font-bold">🛒 سلة المشتريات</h2>
@@ -285,7 +287,6 @@ document.addEventListener('DOMContentLoaded', function () {
     closeMobileMenuButton.addEventListener('click', () => mobileMenu.classList.remove('open'));
 });
 
-// 🌟 دالة الأجاكس السحرية لإضافة المنتج بدون ريفريش وفتح السلة تلقائياً
 function addToCart(productId) {
     $.ajax({
         type: "POST",
@@ -296,10 +297,7 @@ function addToCart(productId) {
         },
         success: function(response) {
             if(response.status == 'success') {
-                // فتح السلة الجانبية فوراً أمام الزبون ليرى النتيجة
                 document.getElementById('mini-cart').style.right = "0";
-                
-                // تحديث الصفحة بالخلفية بشكل سريع لكي يتم تحميل المنتجات المضافة داخل السلة
                 location.reload();
             }
         },
