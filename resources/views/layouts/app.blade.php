@@ -127,13 +127,13 @@
                 <i class="far fa-user-circle"></i>
             </a>
         </div>
-
-        {{-- 2. Center Side: Logo Image (تم استبدال النص برابط اللوغو المباشر من سوبابيز) --}}
-        <div class="logo-container text-center flex justify-center items-center">
-            <a href="{{ route('welcome') }}" class="inline-block">
-                <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/favicon.png" alt="Melekler Logo" class="logo-img h-14 md:h-20 w-auto object-contain transition-all duration-300">
-            </a>
-        </div>
+        
+{{-- 2. Center Side: Logo Image --}}
+<div class="logo-container text-center flex justify-center items-center">
+    <a href="{{ route('welcome') }}" class="inline-block">
+        <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/favicon.png" alt="Melekler Logo" class="logo-img h-14 md:h-20 w-auto object-contain transition-all duration-300">
+    </a>
+</div>
 
         {{-- 3. Right Side: Navigation & Cart --}}
         <div class="flex items-center gap-6 justify-end">
