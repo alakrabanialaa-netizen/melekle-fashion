@@ -3,421 +3,286 @@
 @section('content')
 
 {{-- ------------------------------------------------------------------ --}}
-{{-- 🎨 MASTER STYLESHEET - تم تحسين الأداء وتقليل التكرار مع الحفاظ على كل شيء --}}
+{{-- 🎨 MASTER STYLESHEET - النسخة الاحترافية الفاخرة المطورة لعام 2026 --}}
 {{-- ------------------------------------------------------------------ --}}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <style>
-/* --- 1. Global & Typography --- */
-body { 
-    font-family: 'Cairo', sans-serif; 
-    font-weight: 400; 
-    background-color: #fdfdfd; 
-    overflow-x: hidden;
-    padding-bottom: 48px; /* Space for the fixed marquee footer */
-}
-h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
-.font-black { font-weight: 900; }
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Fredoka:wght@400;600;700&display=swap');
 
-/* --- 2. Animations & Effects --- */
-.scroll-reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 1s ease-out, transform 1s cubic-bezier(.17,.67,.34,1.02);
-}
-.scroll-reveal.visible { opacity: 1; transform: translateY(0); }
-
-@keyframes gradientMove { 0% { background-position: 0% } 100% { background-position: 200% } }
-@keyframes shine { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes scrollReviews { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-@keyframes scrollReviewsRTL { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
-@keyframes marquee { from { transform: translateX(0%); } to { transform: translateX(-50%); } }
-@keyframes float-huge { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.02); } }
-@keyframes fadeInRight { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes pulse-border { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
-
-/* --- 3. Hero Section & Page Headers --- */
-.lux-badge { letter-spacing: 0.4em; font-size: 13px; font-weight: 600; color: #f97316; }
-.lux-title { font-size: clamp(42px, 6vw, 78px); font-weight: 900; line-height: 1.1; }
-.lux-gradient {
-    background: linear-gradient(90deg, #f97316, #fb7185, #f97316);
-    background-size: 200% 100%; -webkit-background-clip: text; color: transparent;
-    animation: gradientMove 6s linear infinite;
-}
-.lux-line {
-    width: 120px; height: 3px; margin: 28px auto 0;
-    background: linear-gradient(90deg, transparent, #f97316, transparent);
-    position: relative; overflow: hidden;
-}
-.lux-line::after {
-    content: ""; position: absolute; inset: 0;
-    background: linear-gradient(90deg, transparent, white, transparent);
-    animation: shine 2.5s linear infinite;
-}
-.lux-title, .lux-badge, .lux-line, .lux-title + p { animation: fadeUp 1s ease both; }
-
-/* --- 4. Kinetic Glow Category Cards --- */
-.category-grid { perspective: 2000px; }
-.category-card {
-    position: relative; display: flex; align-items: flex-end;
-    height: 480px; padding: 2rem; border-radius: 1.5rem;
-    background-image: var(--bg-image); background-size: cover; background-position: center;
-    overflow: hidden; transform-style: preserve-3d;
-    transform: rotateX(0) rotateY(0);
-    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-.category-card::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.1));
-    transition: background 0.3s ease;
-}
-.category-card:hover { transform: scale(1.05); }
-.card-content { position: relative; z-index: 2; color: white; transform: translateZ(40px); width: 100%; }
-.card-subtitle {
-    display: block; font-size: 1rem; font-weight: 600; color: rgba(255, 255, 255, 0.7);
-    opacity: 0; transform: translateY(10px); transition: all 0.4s ease 0.1s;
-}
-.card-title { font-size: 3.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 0.5rem; transition: transform 0.4s ease; }
-.card-arrow {
-    display: flex; align-items: center; justify-content: center;
-    width: 44px; height: 44px; background: white; color: black; border-radius: 9999px;
-    font-size: 1.5rem; opacity: 0; transform: scale(0.8); transition: all 0.4s ease;
-}
-.category-card:hover .card-subtitle, .category-card:hover .card-arrow { opacity: 1; transform: translateY(0); }
-.card-glow {
-    position: absolute; inset: 0; z-index: 1;
-    background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.12), transparent 40%);
-    opacity: 0; transition: opacity 0.4s ease;
-}
-.category-card:hover .card-glow { opacity: 1; }
-
-/* --- 5. Smart Filter Bar --- */
-.filter-bar {
-    display: flex; align-items: center; background-color: #ffffff;
-    border-radius: 1rem; padding: 0.5rem; margin-bottom: 2rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); border: 1px solid #e5e7eb;
-}
-.filter-group { position: relative; display: flex; align-items: center; flex-grow: 1; min-width: 150px; }
-.filter-icon { position: absolute; right: 0.75rem; color: #9ca3af; font-size: 0.9rem; }
-.filter-input {
-    width: 100%; border: none; background-color: transparent;
-    padding: 0.75rem 2.5rem 0.75rem 0.75rem; border-radius: 0.75rem;
-    font-weight: 600; color: #374151; transition: background-color 0.2s ease;
-}
-.filter-input::placeholder { color: #9ca3af; font-weight: 500; }
-.filter-input:focus { outline: none; background-color: #f9fafb; }
-.appearance-none { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
-.filter-separator { width: 1px; height: 2rem; background-color: #e5e7eb; margin: 0 0.5rem; }
-.apply-button {
-    background-color: #1f2937; color: white; font-weight: 700;
-    padding: 0.75rem 1.5rem; border-radius: 0.75rem;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-}
-.apply-button:hover { background-color: #111827; transform: scale(1.03); }
-.reset-button {
-    background-color: transparent; color: #6b7280; font-weight: 600;
-    padding: 0.75rem 1rem; border-radius: 0.75rem;
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
-.reset-button:hover { background-color: #f3f4f6; color: #1f2937; }
-
-/* --- 6. Product Cards --- */
-.product-card-ty {
-    background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 0.5rem;
-    overflow: hidden; transition: box-shadow 0.3s ease; display: flex;
-    flex-direction: column; position: relative;
-}
-.product-card-ty:hover { box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08); }
-.ty-image-wrapper { padding: 1rem; aspect-ratio: 1 / 1; position: relative; }
-.ty-main-image { width: 100%; height: 100%; object-fit: contain; }
-.ty-badge {
-    position: absolute; top: 0.5rem; left: 0.5rem; background-color: #dc2626;
-    color: white; padding: 0.25rem 0.5rem; font-size: 0.7rem; font-weight: 700;
-    border-radius: 0.25rem; z-index: 10;
-}
-.ty-wishlist-btn {
-    position: absolute; top: 0.75rem; right: 0.75rem; width: 32px; height: 32px;
-    border-radius: 50%; background-color: #f3f4f6; color: #374151;
-    display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; z-index: 10;
-}
-.ty-wishlist-btn:hover { background-color: #e5e7eb; transform: scale(1.1); }
-.ty-info-wrapper { padding: 0 1rem 1rem; text-align: right; flex-grow: 1; display: flex; flex-direction: column; }
-.ty-title {
-    font-size: 0.875rem; color: #374151; line-height: 1.5; overflow: hidden;
-    text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical; min-height: 42px; margin-bottom: 0.5rem;
-}
-.ty-price-wrapper { margin-top: auto; transition: opacity 0.2s ease; }
-.ty-final-price { font-size: 1rem; font-weight: 700; color: #f97316; }
-.ty-original-price { font-size: 0.8rem; color: #9ca3af; text-decoration: line-through; margin-left: 0.5rem; }
-.ty-add-to-cart {
-    position: absolute; bottom: 1rem; left: 1rem; right: 1rem;
-    background-color: #f97316; color: white; text-align: center; padding: 0.6rem;
-    border-radius: 0.25rem; font-weight: 700; font-size: 0.875rem;
-    opacity: 0; transform: translateY(10px); transition: all 0.2s ease; pointer-events: none;
-}
-.product-card-ty:hover .ty-add-to-cart { opacity: 1; transform: translateY(0); pointer-events: auto; }
-.product-card-ty:hover .ty-price-wrapper { opacity: 0; }
-
-/* --- 7. Reviews Slider --- */
-.reviews-slider { position: relative; overflow: hidden; width: 100%; }
-.reviews-track { display: flex; width: max-content; animation: scrollReviews 40s linear infinite; }
-.reviews-slider:hover .reviews-track { animation-play-state: paused; }
-[dir="rtl"] .reviews-track { animation: scrollReviewsRTL 40s linear infinite; }
-
-.review-card {
-    min-width: 320px; max-width: 320px; background: white; padding: 30px;
-    border-radius: 24px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-    transition: 0.4s;
-}
-.review-card:hover { transform: translateY(-10px) scale(1.03); box-shadow: 0 25px 60px rgba(0,0,0,0.15); }
-.review-img { width: 80px; height: 80px; border-radius: 50%; margin: auto auto 15px; object-fit: cover; border: 4px solid #f3f4f6; }
-.review-card p { color: #6b7280; margin-bottom: 12px; line-height: 1.6; }
-.stars { color: #fbbf24; font-size: 18px; }
-.review-card h5 { font-weight: bold; margin-top: 8px; }
-
-/* --- 8. Marquee Footer --- */
-.marquee-footer {
-    position: fixed; bottom: 0; left: 0; width: 100%;
-    background-color: #111827; color: white; z-index: 60;
-    overflow: hidden; border-top: 1px solid rgba(255,255,255,0.1);
-    padding: 0.75rem 0;
-}
-.marquee-inner-wrap { display: flex; width: fit-content; animation: marquee 35s linear infinite; }
-.marquee-footer:hover .marquee-inner-wrap { animation-play-state: paused; }
-.marquee-content { display: flex; align-items: center; white-space: nowrap; }
-.marquee-content span, .marquee-content i { margin: 0 2rem; }
-.marquee-content span { font-size: 0.9rem; opacity: 0.9; }
-
-/* --- 9. Floating Contact Buttons --- */
-.floating-contact-buttons {
-    position: fixed; bottom: 20px; left: 20px; z-index: 100;
-    display: flex; flex-direction: column; gap: 1rem;
-}
-.contact-button {
-    width: 60px; height: 60px; border-radius: 50%; color: white;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    transition: transform 0.3s ease;
-}
-.contact-button:hover { transform: scale(1.1); }
-.whatsapp-button { background-color: #25D366; }
-.livechat-button { background-color: #f97316; }
-
-/* --- 10. Swiper & Hero Slider --- */
-.hero-slider-wrapper {
-    width: 100%; height: 600px; position: relative; overflow: hidden;
-    margin-top: -28px; z-index: 10;
-}
-.swiper-container { width: 100%; height: 100%; }
-.swiper-slide {
-    display: flex; align-items: center; justify-content: center;
-    background-size: cover; background-position: center;
-    position: relative; color: white; text-align: center;
-}
-.slider-img-huge-anim { animation: float-huge 6s ease-in-out infinite; }
-.animate-fade-in { animation: fadeInRight 1s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.swiper-pagination-bullet { width: 10px; height: 10px; background: #ddd; opacity: 1; transition: all 0.3s; }
-.swiper-pagination-bullet-active { background: #f97316; width: 35px; border-radius: 5px; }
-.storiesSwiper .swiper-slide { margin-left: 15px; }
-.bg-gradient-to-tr { animation: pulse-border 2s infinite ease-in-out; }
-
-/* --- 11. Media Queries --- */
-@media (min-width: 768px) {
-    .hero-slider-wrapper { height: 700px; }
-}
-
-@media (max-width: 768px) {
-    .filter-bar { flex-direction: column; gap: 0.5rem; padding: 1rem; }
-    .filter-group { width: 100%; background-color: #f9fafb; border-radius: 0.75rem; border: 1px solid #e5e7eb; }
-    .filter-separator { display: none; }
-    .filter-input:focus { background-color: white; }
-    .apply-button, .reset-button { width: 50%; text-align: center; justify-content: center; }
-    .filter-bar .ml-auto { width: 100%; margin-top: 0.5rem; display: flex; }
-    
-    .mainHeroSwiper { height: auto; min-height: 750px; padding-bottom: 60px; }
-    .swiper-slide { padding-top: 30px; }
-    .text-right { text-align: center; margin-top: 20px; }
-    .ml-auto { margin-left: auto; margin-right: auto; }
-    .justify-end { justify-content: center; }
-    .md\:max-h-\[800px\] { max-height: 400px; }
-}
-.fadeUp {
-    transform: translateY(40px);
-    opacity: 0;
-    animation: fadeUp 1s forwards;
-}
-
-.delay-1 { animation-delay: 0.4s; }
-.delay-2 { animation-delay: 0.8s; }
-
-@keyframes fadeUp {
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-:root {
-        --soft-pink: #f89494;
-        --soft-cream: #fffaf0;
-        --soft-green: #98d8a0;
-        --soft-blue: #a0d8f0;
+    /* --- 1. Global & Variables --- */
+    :root {
+        --brand-pink: #f43f5e;
+        --brand-pink-hover: #e11d48;
+        --brand-gold: #eab308;
+        --soft-bg: #fafafa;
+        --text-dark: #1f2937;
     }
 
-    body {
-        font-family: 'Cairo', 'Fredoka', sans-serif;
-        background-color: var(--soft-cream);
-        color: #5d5d5d;
+    body { 
+        font-family: 'Cairo', 'Fredoka', sans-serif; 
+        background-color: var(--soft-bg); 
+        color: var(--text-dark);
+        overflow-x: hidden;
+        padding-bottom: 50px; 
     }
 
-    /* 1. Curved Hero Section */
-    .hero-curved-container {
-        background-image: radial-gradient(#f0e6d2 1px, transparent 1px);
-        background-size: 20px 20px;
-        border: 15px solid white;
-        border-radius: 150px; /* High rounding like the image */
+    /* --- 2. Advanced Animations & Parallax --- */
+    .scroll-reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .tilt-container {
+        transform-style: preserve-3d;
+        perspective: 1000px;
+    }
+    .tilt-element {
+        transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+    }
+
+    /* --- 3. Refined Hero Section --- */
+    .hero-spotted-container {
+        background-image: radial-gradient(#e5e7eb 1.5px, transparent 1.5px);
+        background-size: 24px 24px;
+        border: 8px solid white;
+        border-radius: 40px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+    }
+
+    /* --- 4. Premium Cards (Glassmorphism Light) --- */
+    .premium-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .premium-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 30px rgba(244, 63, 94, 0.08);
+        border-color: rgba(244, 63, 94, 0.2);
+    }
+
+    /* --- 5. Clean Product Cards --- */
+    .product-card-ty {
+        background: #ffffff;
+        border: 1px solid #f3f4f6;
+        border-radius: 20px;
         overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
         position: relative;
     }
-
-    /* 2. Zigzag/Wave Border for Bottom Section */
-    .zigzag-border {
-        position: relative;
-        background: var(--soft-pink);
+    .product-card-ty:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
     }
-    
-    .zigzag-border::before {
-        content: "";
-        position: absolute;
-        top: -20px;
-        left: 0;
+    .ty-image-wrapper {
+        padding: 12px;
+        aspect-ratio: 1 / 1;
+        position: relative;
+        background: #fafafa;
+        overflow: hidden;
+    }
+    .ty-main-image {
         width: 100%;
-        height: 20px;
-        background: linear-gradient(-45deg, var(--soft-pink) 10px, transparent 0),
-                    linear-gradient(45deg, var(--soft-pink) 10px, transparent 0);
-        background-size: 20px 40px;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 14px;
+        transition: transform 0.5s ease;
     }
-
-    /* 3. Calendar Styling */
-    .calendar-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 5px;
+    .product-card-ty:hover .ty-main-image {
+        transform: scale(1.04);
     }
-    
-    .calendar-day {
-        width: 35px;
-        height: 35px;
+    .ty-badge {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        background: var(--brand-pink);
+        color: white;
+        padding: 4px 10px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border-radius: 30px;
+        z-index: 10;
+    }
+    .ty-wishlist-btn {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: white;
+        color: #6b7280;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 50%;
-        font-size: 0.85rem;
-        cursor: pointer;
-        transition: all 0.2s;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        transition: all 0.2s ease;
+        z-index: 10;
     }
-    
-    .calendar-day:hover { background: rgba(255,255,255,0.2); }
-    .calendar-day.active { background: #ffeb3b; color: #333; font-weight: bold; }
-
-    .btn-rounded {
-        border-radius: 30px;
-        padding: 10px 25px;
-        font-weight: bold;
-        transition: transform 0.2s;
+    .ty-wishlist-btn:hover {
+        color: var(--brand-pink);
+        transform: scale(1.1);
     }
+    .ty-info-wrapper {
+        padding: 16px;
+        text-align: right;
+        flex-grow: 1;
+    }
+    .ty-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+        line-height: 1.4;
+    }
+    .ty-price-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-direction: row-reverse;
+        justify-content: flex-start;
+    }
+    .ty-final-price { font-size: 1.1rem; font-weight: 700; color: var(--brand-pink); }
+    .ty-original-price { font-size: 0.85rem; color: #9ca3af; text-decoration: line-through; }
+
+    /* --- 6. Modern Filter Bar --- */
+    .filter-bar {
+        display: flex;
+        align-items: center;
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 6px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+        border: 1px solid #f3f4f6;
+    }
+    .filter-input {
+        width: 100%;
+        border: none;
+        padding: 10px 40px 10px 12px;
+        font-weight: 600;
+        color: #374151;
+    }
+    .filter-input:focus { outline: none; }
+    .apply-button {
+        background-color: var(--brand-pink);
+        color: white;
+        font-weight: 700;
+        padding: 10px 24px;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+    }
+    .apply-button:hover { background-color: var(--brand-pink-hover); transform: scale(1.02); }
+
+    /* --- 7. Continuous Smooth Reviews --- */
+    .reviews-slider { position: relative; overflow: hidden; width: 100%; padding: 10px 0; }
+    .reviews-track { display: flex; width: max-content; animation: scrollReviews 30s linear infinite; gap: 24px; }
+    .reviews-slider:hover .reviews-track { animation-play-state: paused; }
+    @keyframes scrollReviews { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     
-    .btn-rounded:hover { transform: scale(1.05); }
+    /* --- 8. Infinite Marquee Footer --- */
+    .marquee-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #111827;
+        color: white;
+        z-index: 60;
+        overflow: hidden;
+        padding: 10px 0;
+    }
+    .marquee-inner-wrap { display: flex; width: fit-content; animation: marquee 25s linear infinite; }
+    @keyframes marquee { from { transform: translateX(0%); } to { transform: translateX(-50%); } }
 
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Fredoka:wght@400;600;700&display=swap');
-
+    /* --- 9. Wave Decorative Div --- */
+    .wave-divider {
+        background: var(--brand-pink);
+        position: relative;
+        border-radius: 40px 40px 0 0;
+    }
 </style>
 
-
-
-
-
-    {{-- Hero Section (The Curved Box) --}}
-    <div class="hero-curved-container bg-white shadow-xl flex flex-col md:flex-row items-center p-8 md:p-16 gap-10">
-        <div class="md:w-1/2 relative">
-            <div class="absolute -top-10 -left-10 w-32 h-32 bg-pink-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+<div class="max-w-screen-xl mx-auto px-6 pt-8">
+    {{-- Hero Section (The Elegant Spotted Interactive Container) --}}
+    <div class="hero-spotted-container bg-white tilt-container flex flex-col md:flex-row items-center p-8 md:p-16 gap-12">
+        <div class="md:w-1/2 relative flex justify-center">
+            <div class="absolute top-0 left-0 w-40 h-40 bg-rose-100 rounded-full mix-blend-multiply filter blur-2xl opacity-60"></div>
+            {{-- تفعيل تأثير الـ 3D هنا --}}
             <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&q=80&w=600" 
-                 alt="Kids Education" 
-                 class="rounded-full w-80 h-80 object-cover border-8 border-pink-50 shadow-inner">
+                 alt="Melekler Kids Hero" 
+                 class="tilt-element rounded-3xl w-80 h-80 md:w-96 md:h-96 object-cover shadow-2xl border-4 border-white">
         </div>
-        <div class="md:w-1/2 text-right md:text-left">
-            <h1 class="text-4xl md:text-5xl font-black text-pink-500 mb-4 leading-tight">FOR YOUR BEBE</h1>
-            <p class="text-gray-400 leading-relaxed mb-8">
-              متجر مختص لبيع ملابس الأطفال المريحة والحديثة التي تناسب طفلك 
+        <div class="md:w-1/2 text-right md:text-right space-y-6">
+            <span class="text-xs font-bold tracking-widest text-rose-500 uppercase bg-rose-50 px-3 py-1 rounded-full">New Collection 2026</span>
+            <h1 class="text-4xl md:text-6xl font-black text-gray-900 leading-tight">FOR YOUR BEBE</h1>
+            <p class="text-gray-500 text-lg leading-relaxed">
+                متجر مختص لبيع ملابس الأطفال المريحة والحديثة التي تناسب طفلك وتمنحه الأناقة والراحة الكاملة في كل خطوة.
             </p>
-            <a href="#" class="btn-rounded bg-pink-500 text-white shadow-lg shadow-pink-200 inline-block">Learn more</a>
+            <div class="pt-2">
+                <a href="#" class="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold px-8 py-4 rounded-2xl shadow-lg shadow-rose-200 transition-all duration-300 transform hover:-translate-y-1">تصفح تشكيلتنا الآن</a>
+            </div>
         </div>
     </div>
 
-    {{-- Features Section (The Three Icons) --}}
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 py-20 text-center">
-        <div class="group">
-            <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-green-200 group-hover:rotate-12 transition-transform">
-                <span class="text-4xl">🍼</span>
-            </div>
-            <h3 class="font-black text-green-500 text-xl mb-3">About proudct</h3>
-            <p class="text-gray-400 text-sm px-4">ملابس خاصة صنعت بعناية لحديثي الولادة.</p>
+    {{-- Features Section --}}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 py-20">
+        <div class="premium-card p-8 text-center space-y-4">
+            <div class="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center mx-auto text-3xl shadow-inner">🍼</div>
+            <h3 class="font-bold text-gray-800 text-xl">عناية بالمنتج</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">ملابس خاصة صنعت بعناية فائقة لحديثي الولادة بمواد قطنية 100%.</p>
         </div>
-        <div class="group">
-            <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-pink-200 group-hover:-rotate-12 transition-transform">
-                <span class="text-4xl">🧷</span>
-            </div>
-            <h3 class="font-black text-pink-500 text-xl mb-3">Our experience</h3>
-            <p class="text-gray-400 text-sm px-4">صنعت كل قطعة بحب خاصة لطفلك.</p>
+        <div class="premium-card p-8 text-center space-y-4">
+            <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center mx-auto text-3xl shadow-inner">🧷</div>
+            <h3 class="font-bold text-gray-800 text-xl">خبرتنا الطويلة</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">صنعت كل قطعة بحب وشغف لتناسب طفلك وتواكب الموضة العالمية.</p>
         </div>
-        <div class="group">
-            <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-blue-200 group-hover:rotate-12 transition-transform">
-                <span class="text-4xl">🪄</span>
-            </div>
-            <h3 class="font-black text-blue-500 text-xl mb-3">Big fun for kids!</h3>
-            <p class="text-gray-400 text-sm px-4">مع كل قطعة معنا ممكن تربح هدية كبيرة.</p>
+        <div class="premium-card p-8 text-center space-y-4">
+            <div class="w-16 h-16 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center mx-auto text-3xl shadow-inner">🪄</div>
+            <h3 class="font-bold text-gray-800 text-xl">مفاجآت وهدايا</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">مع كل طلبية من متجرنا ستحصل على هدية مميزة مخصصة لطفلك المنتظر.</p>
         </div>
     </div>
-
 </div>
 
-{{-- Bottom Event & Calendar Section --}}
-<div class="zigzag-border mt-10 py-20 text-white">
-    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row gap-16">
-        
-        {{-- Event Info --}}
-        <div class="md:w-1/2">
-            <h2 class="text-4xl font-black mb-8">April's upcoming event</h2>
-            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20">
-                <div class="flex gap-4 text-sm mb-4 font-bold opacity-80">
+{{-- Bottom Event Section --}}
+<div class="wave-divider py-20 text-white">
+    <div class="max-w-screen-xl mx-auto px-6 flex flex-col md:flex-row gap-16">
+        <div class="md:w-1/2 space-y-6">
+            <span class="bg-white/20 text-white text-xs px-3 py-1 rounded-full font-bold">فعاليات Melekler</span>
+            <h2 class="text-4xl font-black">حدث أبريل المرتقب للأطفال</h2>
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 space-y-4">
+                <div class="flex flex-wrap gap-4 text-xs font-bold opacity-90">
                     <span>📅 17.04.2026</span>
                     <span>⏰ 09:00 AM</span>
-                    <span>📍 Lorem ipsum dolor</span>
+                    <span>📍 إسطنبول، تركيا</span>
                 </div>
-                <p class="mb-8 leading-relaxed">
-                    انضموا إلينا في فعاليتنا القادمة حيث سنقوم بالعديد من الأنشطة التفاعلية والمسابقات الممتعة للأطفال مع توزيع الهدايا.
+                <p class="leading-relaxed text-sm opacity-90">
+                    انضموا إلينا في فعاليتنا القادمة حيث سنقوم بالعديد من الأنشطة التفاعلية والمسابقات الممتعة للأطفال مع توزيع الهدايا الكبرى.
                 </p>
-                <a href="#" class="btn-rounded bg-white text-pink-500">Learn more</a>
+                <a href="#" class="inline-block bg-white text-rose-600 font-bold px-6 py-3 rounded-xl text-sm shadow-md hover:bg-gray-50 transition">معرفة المزيد</a>
             </div>
         </div>
 
         {{-- Calendar --}}
-        <div class="md:w-1/2 flex flex-col items-center">
-            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 w-full max-w-sm">
-                <div class="flex justify-between items-center mb-6 font-black uppercase tracking-widest">
-                    <button class="hover:text-yellow-300">←</button>
+        <div class="md:w-1/2 flex justify-center items-center">
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/10 w-full max-w-sm">
+                <div class="flex justify-between items-center mb-6 font-bold text-sm tracking-wider uppercase">
+                    <button class="hover:text-amber-300">←</button>
                     <span>April 2026</span>
-                    <button class="hover:text-yellow-300">→</button>
+                    <button class="hover:text-amber-300">→</button>
                 </div>
-                
-                <div class="calendar-grid text-center font-bold text-xs mb-4 opacity-60">
+                <div class="calendar-grid text-center text-xs opacity-60 mb-3 font-bold">
                     <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
                 </div>
-                
                 <div class="calendar-grid">
                     @for($i=1; $i<=30; $i++)
                         <div class="calendar-day {{ in_array($i, [17, 22, 25, 28]) ? 'active' : '' }}">
@@ -427,18 +292,9 @@ h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
-{{-- ------------------------------------------------------------------ --}}
-{{-- 🚀 MAIN CONTENT --}}
-{{-- ------------------------------------------------------------------ --}}
-{{-- 
-    💡 ملاحظة للمبرمج: 
-    يمكنك تعديل هذه المصفوفة (Array) لإضافة قصصك الخاصة. 
-    كل قصة تحتاج إلى: 'name' (الاسم تحت الصورة)، 'image' (رابط الصورة)، و 'video' (رابط الفيديو).
---}}
 @php
     $stories = [
         ['name' => 'جديدنا', 'image' => 'https://i.pravatar.cc/150?u=1', 'video' => 'https://www.w3schools.com/html/mov_bbb.mp4'],
@@ -447,32 +303,23 @@ h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
         ['name' => 'ملابس أولاد', 'image' => 'https://i.pravatar.cc/150?u=4', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
         ['name' => 'ملابس بنات', 'image' => 'https://i.pravatar.cc/150?u=5', 'video' => 'https://www.w3schools.com/html/mov_bbb.mp4'],
         ['name' => 'تخفيضات', 'image' => 'https://i.pravatar.cc/150?u=6', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-        ['name' => 'إطلالة اليوم', 'image' => 'https://i.pravatar.cc/150?u=7', 'video' => 'https://www.w3schools.com/html/mov_bbb.mp4'],
-        ['name' => 'آراء العملاء', 'image' => 'https://i.pravatar.cc/150?u=8', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-        ['name' => 'آراء العملاء', 'image' => 'https://i.pravatar.cc/150?u=8', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-        ['name' => 'آراء العملاء', 'image' => 'https://i.pravatar.cc/150?u=8', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-        ['name' => 'آراء العملاء', 'image' => 'https://i.pravatar.cc/150?u=8', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-        ['name' => 'آراء العملاء', 'image' => 'https://i.pravatar.cc/150?u=8', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-        ['name' => 'آراء العملاء', 'image' => 'https://i.pravatar.cc/150?u=8', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
     ];
 @endphp
 
 {{-- Stories Section --}}
-<section class="py-12 bg-white">
+<section class="py-12 bg-white border-b border-gray-100">
     <div class="max-w-screen-xl mx-auto px-6">
         <div class="swiper storiesSwiper">
             <div class="swiper-wrapper">
                 @foreach($stories as $story)
                     <div class="swiper-slide !w-auto">
                         <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="openVideoModal('{{ $story['video'] }}')">
-                            {{-- دائرة القصة مع تأثير النبض --}}
-                            <div class="w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-orange-500 to-pink-500 transition-transform duration-300 group-hover:scale-110">
+                            <div class="w-20 h-20 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 to-rose-500 transition-all duration-300 group-hover:scale-105">
                                 <div class="w-full h-full rounded-full border-2 border-white overflow-hidden">
                                     <img src="{{ $story['image'] }}" class="w-full h-full object-cover" alt="{{ $story['name'] }}">
                                 </div>
                             </div>
-                            {{-- النص المخصص تحت كل صورة --}}
-                            <span class="text-xs font-bold text-gray-800 group-hover:text-orange-500 transition-colors">{{ $story['name'] }}</span>
+                            <span class="text-xs font-bold text-gray-700 group-hover:text-rose-500 transition-colors">{{ $story['name'] }}</span>
                         </div>
                     </div>
                 @endforeach
@@ -481,25 +328,22 @@ h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
     </div>
 </section>
 
-
 {{-- Categories Grid --}}
-<section class="py-20 bg-gray-50">
+<section class="py-20 bg-gray-50/50">
     <div class="max-w-screen-xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-8 category-grid">
             <div class="category-card scroll-reveal" style="--bg-image: url('https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?q=80&w=1972&auto=format&fit=crop')">
                 <div class="card-glow"></div>
                 <div class="card-content">
                     <span class="card-subtitle">تشكيلة الأولاد</span>
-                    <h2 class="card-title">الأناقة والراحة</h2>
-                    <div class="card-arrow"><i class="fas fa-arrow-left"></i></div>
+                    <h2 class="card-title text-3xl md:text-4xl">الأناقة والراحة</h2>
                 </div>
             </div>
             <div class="category-card scroll-reveal" style="--bg-image: url('https://images.unsplash.com/photo-1518833278463-d3055863572f?q=80&w=2070&auto=format&fit=crop')">
                 <div class="card-glow"></div>
                 <div class="card-content">
                     <span class="card-subtitle">تشكيلة البنات</span>
-                    <h2 class="card-title">عالم من الألوان</h2>
-                    <div class="card-arrow"><i class="fas fa-arrow-left"></i></div>
+                    <h2 class="card-title text-3xl md:text-4xl">عالم من الألوان</h2>
                 </div>
             </div>
         </div>
@@ -510,17 +354,16 @@ h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
 <section class="py-20 bg-white">
     <div class="max-w-screen-xl mx-auto px-6">
         <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-            <div>
-                <h2 class="text-4xl font-black text-gray-900">الأكثر <span class="text-orange-500">مبيعاً</span></h2>
-                <p class="text-gray-500 mt-2">اخترنا لك أفضل القطع التي نالت إعجاب عملائنا.</p>
+            <div class="text-right">
+                <h2 class="text-3xl font-black text-gray-900">الأكثر <span class="text-rose-500">مبيعاً</span></h2>
+                <p class="text-gray-500 mt-1 text-sm">اخترنا لك أفضل القطع التي نالت إعجاب عملائنا.</p>
             </div>
-            <div class="filter-bar">
-                <div class="filter-group">
+            <div class="filter-bar w-full md:w-auto">
+                <div class="filter-group flex-1 md:w-64">
                     <i class="fas fa-search filter-icon"></i>
-                    <input type="text" class="filter-input" placeholder="بحث عن منتج...">
+                    <input type="text" class="filter-input text-right" placeholder="بحث عن منتج...">
                 </div>
-                <div class="filter-separator"></div>
-                <button class="apply-button">تصفية</button>
+                <button class="apply-button mr-2">تصفية</button>
             </div>
         </div>
 
@@ -531,43 +374,34 @@ h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
                         <div class="ty-image-wrapper">
                             @if($product->original_price > $product->price)
                                 <div class="ty-badge">
-                                    @if($product->badge_text)
-                                        {{ $product->badge_text }}
-                                    @else
-                                        خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%
-                                    @endif
+                                    خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%
                                 </div>
                             @endif
-<img loading="lazy" 
-     src="{{ $product->images->first() ? $product->images->first()->image : 'https://via.placeholder.com/300' }}" 
-     class="ty-main-image" 
-     alt="{{ $product->name }}">                        </div>
+                            <img loading="lazy" src="{{ $product->images->first() ? $product->images->first()->image : 'https://via.placeholder.com/300' }}" class="ty-main-image" alt="{{ $product->name }}">
+                        </div>
                     </a>
-                    <button class="ty-wishlist-btn" title="أضف للمفضلة">
-                        <i class="far fa-heart"></i>
-                    </button>
+                    <button class="ty-wishlist-btn" title="أضف للمفضلة"><i class="far fa-heart"></i></button>
+                    
                     <div class="ty-info-wrapper">
                         <h3 class="ty-title">{{ $product->name }}</h3>
                         <div class="ty-price-wrapper">
+                            <span class="ty-final-price">{{ number_format($product->price, 2) }} ₺</span>
                             @if($product->original_price > $product->price)
                                 <span class="ty-original-price">{{ number_format($product->original_price, 2) }} ₺</span>
                             @endif
-                            <span class="ty-final-price">{{ number_format($product->price, 2) }} ₺</span>
                         </div>
                     </div>
-                   <form action="{{ route('cart.add', $product->id) }}" method="POST">
-    @csrf
-{{-- التعديل الجديد: تحويل الزر ليعمل بالـ Ajax السريع ويفتح السلة الجانبية --}}
-<button type="button" 
-        onclick="addToCart({{ $product->id }}, '{{ $product->sizes[0] ?? 'Free Size' }}')" 
-        class="ty-add-to-cart w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-md flex items-center justify-center gap-2">
-    <span>🛒</span>
-    <span>أضف إلى السلة</span>
-</button>
+                    
+                    <div class="px-4 pb-4">
+                        <button type="button" onclick="openSizeModal({{ $product->id }}, {{ json_encode($product->sizes ?? []) }})" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-2.5 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 text-sm shadow-md">
+                            <span>🛒</span>
+                            <span>أضف إلى السلة</span>
+                        </button>
+                    </div>
                 </div>
             @empty
                 <div class="col-span-full text-center py-20">
-                    <p class="text-gray-500 text-lg">لا توجد منتجات لعرضها حالياً.</p>
+                    <p class="text-gray-400">لا توجد منتجات لعرضها حالياً.</p>
                 </div>
             @endforelse
         </div>
@@ -575,96 +409,67 @@ h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
 </section>
 
 {{-- Premium Luxury Section --}}
-<section class="relative py-28 overflow-hidden bg-gradient-to-b from-gray-50 via-white to-gray-100">
+<section class="relative py-24 bg-gray-50/50">
     <div class="max-w-screen-xl mx-auto px-6">
-
-        <div class="grid lg:grid-cols-2 gap-20 items-center">
-
-            {{-- LEFT IMAGE --}}
-            <div class="relative group cursor-pointer">
-                <img src="https://static.aljamila.com/styles/1100x732_scale/public/2018/12/20/2393901-1727507459.jpg" 
-                     alt="Kids Fashion" 
-                     class="w-full h-[600px] object-cover rounded-3xl shadow-xl transition-transform duration-700 group-hover:scale-105"
-                     onclick="openLightbox(this.src)">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent rounded-3xl"></div>
-                <div class="absolute bottom-8 left-8 text-white max-w-xs">
-                    <span class="bg-orange-500 px-3 py-1 rounded-full text-xs font-bold">إطلالة العيد</span>
-                    <h3 class="text-3xl font-black mt-3 leading-tight">أناقة الأطفال تبدأ من اختيار القطع الصحيحة</h3>
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="relative group cursor-pointer overflow-hidden rounded-3xl shadow-xl">
+                <img src="https://static.aljamila.com/styles/1100x732_scale/public/2018/12/20/2393901-1727507459.jpg" class="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                <div class="absolute bottom-8 right-8 text-right text-white max-w-sm space-y-2">
+                    <span class="bg-amber-500 px-3 py-1 rounded-full text-xs font-bold">إطلالة العيد</span>
+                    <h3 class="text-2xl font-black leading-tight">أناقة الأطفال تبدأ من اختيار القطع الصحيحة</h3>
                 </div>
             </div>
 
-            {{-- RIGHT CONTENT --}}
-            <div class="space-y-8">
-                <span class="inline-block py-1 px-4 bg-orange-100 text-orange-600 rounded-full text-xs font-bold">ستايل مختار لك</span>
-                <h2 class="text-4xl md:text-5xl font-black text-gray-900 leading-tight">إطلالة كاملة <span class="text-orange-500">بضغطة واحدة</span></h2>
-                <p class="text-gray-500 text-lg">اخترنا لك مجموعة قطع متناسقة لتسهيل تجربة التسوق وجعل الإطلالة أكثر أناقة واحترافية.</p>
+            <div class="space-y-6 text-right">
+                <span class="inline-block py-1 px-4 bg-rose-50 text-rose-600 rounded-full text-xs font-bold">ستايل مختار لك</span>
+                <h2 class="text-3xl md:text-5xl font-black text-gray-900 leading-tight">إطلالة كاملة <span class="text-rose-500">بضغطة واحدة</span></h2>
+                <p class="text-gray-500 text-base">اخترنا لك مجموعة قطع متناسقة لتسهيل تجربة التسوق وجعل الإطلالة أكثر أناقة واحترافية.</p>
 
-                <div class="grid gap-6">
-
-                    <!-- PRODUCT CARD 1 -->
-                    <div class="flex items-center p-4 bg-white rounded-2xl shadow-lg transform opacity-0 translate-y-10 transition-all duration-700 card-scroll">
-                        <img src="https://i.pinimg.com/236x/8f/2b/4c/8f2b4c2ea900323aec716ee886f7f066.jpg" 
-                             class="w-20 h-20 rounded-xl object-cover cursor-pointer" 
-                             onclick="openLightbox(this.src)">
-                        <div class="ml-4 flex-1">
-                            <h4 class="text-lg font-bold text-gray-800">طقم كامل لأطفالكِ</h4>
-                            <p class="text-orange-500 font-black text-md mt-1">250 ₺</p>
+                <div class="space-y-4">
+                    <div class="flex flex-row-reverse items-center p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                        <img src="https://i.pinimg.com/236x/8f/2b/4c/8f2b4c2ea900323aec716ee886f7f066.jpg" class="w-16 h-16 rounded-xl object-cover">
+                        <div class="mr-4 flex-1 text-right">
+                            <h4 class="text-base font-bold text-gray-800">طقم كامل لأطفالكِ</h4>
+                            <p class="text-rose-500 font-bold text-sm mt-0.5">250 ₺</p>
                         </div>
-                        <button class="w-10 h-10 flex items-center justify-center bg-gray-900 text-white rounded-full hover:bg-orange-500 transition">+</button>
                     </div>
 
-                    <!-- PRODUCT CARD 2 -->
-                    <div class="flex items-center p-4 bg-white rounded-2xl shadow-lg transform opacity-0 translate-y-10 transition-all duration-700 card-scroll">
-                        <img src="https://image.made-in-china.com/202f0j00ZbRuNDByfPoI/New-International-School-Uniforms-Summer-Boys-Girls-School-Uniforms-Design-with-Pictures-Clothes-Children.webp" 
-                             class="w-20 h-20 rounded-xl object-cover cursor-pointer" 
-                             onclick="openLightbox(this.src)">
-                        <div class="ml-4 flex-1">
-                            <h4 class="text-lg font-bold text-gray-800">طقمين بسعر طقم</h4>
-                            <p class="text-orange-500 font-black text-md mt-1">170 ₺</p>
+                    <div class="flex flex-row-reverse items-center p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                        <img src="https://image.made-in-china.com/202f0j00ZbRuNDByfPoI/New-International-School-Uniforms-Summer-Boys-Girls-School-Uniforms-Design-with-Pictures-Clothes-Children.webp" class="w-16 h-16 rounded-xl object-cover">
+                        <div class="mr-4 flex-1 text-right">
+                            <h4 class="text-base font-bold text-gray-800">طقمين بسعر طقم</h4>
+                            <p class="text-rose-500 font-bold text-sm mt-0.5">170 ₺</p>
                         </div>
-                        <button class="w-10 h-10 flex items-center justify-center bg-gray-900 text-white rounded-full hover:bg-orange-500 transition">+</button>
                     </div>
 
-                    <!-- BUY BUTTON -->
-                    <button class="w-full py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-none hover:translate-y-1 transition-all">
+                    <button class="w-full py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold text-md shadow-lg transition-all transform hover:-translate-y-0.5">
                         شراء الإطلالة كاملة — 420 ₺
                     </button>
                 </div>
             </div>
         </div>
     </div>
-       {{-- Lightbox Overlay --}}
-    <div id="lightbox" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50" onclick="closeLightbox()">
-        <img id="lightbox-img" src="" class="max-h-[90vh] max-w-[90vw] rounded-2xl shadow-2xl">
-    </div>
 </section>
 
 {{-- Reviews Section --}}
-<section class="py-24 bg-gray-50 overflow-hidden">
+<section class="py-20 bg-white overflow-hidden">
     <div class="max-w-screen-xl mx-auto px-6">
-        <h2 class="text-4xl md:text-5xl font-black text-center mb-16">ماذا يقول <span class="text-orange-500">عملاؤنا</span></h2>
-        <div class="reviews-slider relative">
-            <div class="reviews-track flex gap-8 pb-4">
-                @for ($i = 0; $i < 2; $i++ )
-                    <div class="review-card flex-shrink-0 w-80 bg-white shadow-lg rounded-xl p-6 text-center transform transition duration-300 hover:scale-105">
-                        <div class="flex justify-center mb-4">
-                            <div class="w-24 h-24 rounded-full border-4 border-orange-500 shadow-md overflow-hidden bg-gray-200">
-                                <img loading="lazy" src="https://ui-avatars.com/api/?name=سارة+أحمد&background=FFEDD5&color=F97316&size=128" alt="سارة أحمد" class="w-full h-full object-cover">
-                            </div>
-                        </div>
-                        <p class="text-gray-700 text-base mb-4 italic">"جودة الملابس ممتازة والتوصيل كان سريع جداً. شكراً لكم!"</p>
-                        <div class="stars text-orange-400 text-xl mb-2">★★★★★</div>
-                        <h5 class="font-semibold text-gray-900 text-lg">سارة أحمد</h5>
+        <h2 class="text-3xl font-black text-center mb-12">ماذا يقول <span class="text-rose-500">عملاؤنا</span></h2>
+        <div class="reviews-slider">
+            <div class="reviews-track flex">
+                @for ($i = 0; $i < 3; $i++ )
+                    <div class="review-card">
+                        <img src="https://ui-avatars.com/api/?name=سارة+أحمد&background=FFE4E6&color=F43F5E&size=128" class="review-img">
+                        <p>"جودة الملابس ممتازة والتوصيل كان سريع جداً في اسطنبول. شكراً لكم!"</p>
+                        <div class="stars">★★★★★</div>
+                        <h5 class="text-gray-800 font-bold">سارة أحمد</h5>
                     </div>
-                    <div class="review-card flex-shrink-0 w-80 bg-white shadow-lg rounded-xl p-6 text-center transform transition duration-300 hover:scale-105">
-                        <div class="flex justify-center mb-4">
-                            <div class="w-24 h-24 rounded-full border-4 border-orange-500 shadow-md overflow-hidden bg-gray-200">
-                                <img loading="lazy" src="https://ui-avatars.com/api/?name=محمد+علي&background=FFEDD5&color=F97316&size=128" alt="محمد علي" class="w-full h-full object-cover">
-                            </div>
-                        </div>
-                        <p class="text-gray-700 text-base mb-4 italic">"أفضل متجر لملابس الأطفال، تصاميم رائعة وأسعار مناسبة."</p>
-                        <div class="stars text-orange-400 text-xl mb-2">★★★★★</div>
-                        <h5 class="font-semibold text-gray-900 text-lg">محمد علي</h5>
+                    <div class="review-card">
+                        <img src="https://ui-avatars.com/api/?name=محمد+علي&background=FFE4E6&color=F43F5E&size=128" class="review-img">
+                        <p>"أفضل متجر لملابس الأطفال، تصاميم رائعة وأسعار مناسبة جداً."</p>
+                        <div class="stars">★★★★★</div>
+                        <h5 class="text-gray-800 font-bold">محمد علي</h5>
                     </div>
                 @endfor
             </div>
@@ -672,254 +477,151 @@ h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
     </div>
 </section>
 
-{{-- Footer --}}
-<footer class="bg-gradient-to-b from-gray-900 to-black text-gray-300 pt-20 pb-10">
-    <div class="max-w-screen-xl mx-auto px-6">
-        <div class="grid md:grid-cols-4 gap-12 mb-16">
-            <div>
-                <h4 class="text-2xl font-black text-white mb-4 tracking-wide">MELEKLER GROUP</h4>
-                <p class="text-gray-400 leading-relaxed">متجرك الموثوق لأزياء الأطفال والنساء بتصاميم عصرية وجودة عالية.</p>
-                <div class="flex gap-4 mt-6 text-xl">
-                    <a href="https://www.instagram.com/meleklerkids/" target="_blank" class="hover:text-orange-500 transition"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.facebook.com/MELEKLERKIDSTR" target="_blank" class="hover:text-orange-500 transition"><i class="fab fa-facebook"></i></a>
-                    <a href="https://api.whatsapp.com/message/CL67ADRC7PMFO1" target="_blank" class="hover:text-orange-500 transition"><i class="fab fa-whatsapp"></i></a>
-                </div>
-            </div>
-            <div>
-                <h5 class="font-bold text-white mb-5 text-lg">التسوق</h5>
-                <ul class="space-y-3 text-gray-400">
-                    <li><a href="#" class="hover:text-white transition">وصل حديثاً</a></li>
-                    <li><a href="{{ route('category.boys') }}" class="hover:text-white transition">ملابس أطفال</a></li>
-                    <li><a href="{{ route('category.mothers') }}" class="hover:text-white transition">ملابس نساء</a></li>
-                </ul>
-            </div>
-            <div>
-                <h5 class="font-bold text-white mb-5 text-lg">خدمة العملاء</h5>
-                <ul class="space-y-3 text-gray-400">
-                    <li><a href="{{ route('contact') }}" class="hover:text-white transition">اتصل بنا</a></li>
-                    <li><a href="/refund-policy" class="hover:text-white transition">سياسة الإرجاع</a></li></ul>
-            </div>
-            <div>
-                <h5 class="font-bold text-white mb-5 text-lg">اشترك في العروض</h5>
-                <div class="flex">
-                    <input type="email" placeholder="بريدك الإلكتروني" class="w-full px-4 py-3 rounded-l-xl bg-gray-800 border border-gray-700 text-white focus:outline-none" readonly>
-                    <button class="px-5 bg-orange-500 rounded-r-xl hover:bg-orange-600 transition">اشتراك</button>
-                </div>
-            </div>
-        </div>
-        <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="text-gray-500 text-sm">© 2026 Melekler Fashion — جميع الحقوق محفوظة</p>
-            <p class="text-gray-600 text-xs">CREATED BY ALAA ALAKRABANI</p>
-        </div>
-    </div>
-</footer>
-
 {{-- Marquee Footer --}}
 <div class="marquee-footer">
     <div class="marquee-inner-wrap">
         <div class="marquee-content">
-            <span>شحن مجاني للطلبات فوق 1000 ₺</span>
-            <i class="fas fa-star"></i>
-            <span>خصم 10% على أول طلب</span>
-            <i class="fas fa-star"></i>
-            <span>جودة تركية فاخرة</span>
-            <i class="fas fa-star"></i>
+            <span>شحن مجاني للطلبات فوق 1000 ₺</span><i class="fas fa-star text-amber-400"></i>
+            <span>خصم 10% على أول طلب</span><i class="fas fa-star text-amber-400"></i>
+            <span>جودة تركية فاخرة</span><i class="fas fa-star text-amber-400"></i>
         </div>
         <div class="marquee-content">
-            <span>شحن مجاني للطلبات فوق 1000 ₺</span>
-            <i class="fas fa-star"></i>
-            <span>خصم 10% على أول طلب</span>
-            <i class="fas fa-star"></i>
-            <span>جودة تركية فاخرة</span>
-            <i class="fas fa-star"></i>
+            <span>شحن مجاني للطلبات فوق 1000 ₺</span><i class="fas fa-star text-amber-400"></i>
+            <span>خصم 10% على أول طلب</span><i class="fas fa-star text-amber-400"></i>
+            <span>جودة تركية فاخرة</span><i class="fas fa-star text-amber-400"></i>
         </div>
     </div>
-</div>
-
-{{-- Floating Buttons --}}
-<div class="floating-contact-buttons">
-    <a href="#" class="contact-button whatsapp-button"><i class="fab fa-whatsapp"></i></a>
-    <a href="#" class="contact-button livechat-button"><i class="fas fa-comments"></i></a>
 </div>
 
 {{-- Modals --}}
-<div id="sizeModal" class="fixed inset-0 bg-black/60 z-[200] hidden flex items-center justify-center p-6">
-    <div class="bg-white rounded-3xl p-8 max-w-md w-full">
-        <h3 class="text-2xl font-bold mb-6">اختر المقاس</h3>
-        <div id="sizesContainer" class="flex flex-wrap gap-3 mb-8"></div>
+<div id="sizeModal" class="fixed inset-0 bg-black/50 z-[200] hidden flex items-center justify-center p-6 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl p-8 max-w-md w-full text-right">
+        <h3 class="text-xl font-bold mb-4">اختر المقاس المناسب</h3>
+        <div id="sizesContainer" class="flex flex-wrap gap-3 mb-6 justify-start flex-row-reverse"></div>
         <div class="flex gap-4">
-            <button onclick="confirmAddToCart()" class="flex-1 bg-black text-white py-4 rounded-xl font-bold">تأكيد</button>
-            <button onclick="document.getElementById('sizeModal').classList.add('hidden')" class="flex-1 bg-gray-100 py-4 rounded-xl font-bold">إلغاء</button>
+            <button onclick="confirmAddToCart()" class="flex-1 bg-rose-500 text-white py-3 rounded-xl font-bold hover:bg-rose-600 transition">تأكيد</button>
+            <button onclick="document.getElementById('sizeModal').classList.add('hidden')" class="flex-1 bg-gray-100 py-3 rounded-xl font-bold hover:bg-gray-200 transition">إلغاء</button>
         </div>
     </div>
 </div>
 
-<div id="videoModal" class="fixed inset-0 bg-black z-[300] hidden flex items-center justify-center">
-    <button onclick="closeVideoModal()" class="absolute top-8 right-8 text-white text-4xl">&times;</button>
-    <video id="storyVideo" class="max-h-full max-w-full" controls></video>
+<div id="videoModal" class="fixed inset-0 bg-black/90 z-[300] hidden flex items-center justify-center">
+    <button onclick="closeVideoModal()" class="absolute top-6 right-6 text-white text-3xl">&times;</button>
+    <video id="storyVideo" class="max-h-[85vh] max-w-full rounded-2xl" controls></video>
 </div>
 
-{{-- ------------------------------------------------------------------ --}}
-{{-- 🚀 SCRIPTS --}}
-{{-- ------------------------------------------------------------------ --}}
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-// 1. Tawk.to Integration
-var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-(function() {
-    var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-    s1.async = true;
-    s1.src = 'https://embed.tawk.to/699b1c15c165071c358882eb/1ji2ubd4s';
-    s1.charset = 'UTF-8';
-    s1.setAttribute('crossorigin', '*');
-    s0.parentNode.insertBefore(s1, s0);
-})();
+    // Global State
+    let selectedProduct = null;
+    let selectedSize = null;
 
-// 2. Global State
-let selectedProduct = null;
-let selectedSize = null;
+    // 3D Parallax Tilt Effect For Hero Image
+    const tiltContainer = document.querySelector('.tilt-container');
+    const tiltElement = document.querySelector('.tilt-element');
 
-// 3. Functions
-function openSizeModal(productId, sizes) {
-    selectedProduct = productId;
-    selectedSize = null;
-    const container = document.getElementById("sizesContainer");
-    if (!container) return;
-    container.innerHTML = "";
-    if (!sizes || sizes.length === 0) { confirmAddToCart(); return; }
-    sizes.forEach(size => {
-        const btn = document.createElement("button");
-        btn.innerText = size;
-        btn.className = "border px-4 py-2 rounded-xl hover:bg-gray-50 transition";
-        btn.onclick = () => {
-            selectedSize = size;
-            container.querySelectorAll("button").forEach(b => b.classList.remove("bg-black", "text-white"));
-            btn.classList.add("bg-black", "text-white");
-        };
-        container.appendChild(btn);
-    });
-    document.getElementById("sizeModal").classList.remove("hidden");
-}
+    if(tiltContainer && tiltElement) {
+        tiltContainer.addEventListener('mousemove', (e) => {
+            const { left, top, width, height } = tiltContainer.getBoundingClientRect();
+            const x = (e.clientX - left) - width / 2;
+            const y = (e.clientY - top) - height / 2;
+            
+            // تحديد زاوية الدوران مع اتجاه حركة الماوس
+            const rotateX = (y / height) * -25; 
+            const rotateY = (x / width) * 25;
 
-async function confirmAddToCart() {
-    try {
-        const response = await fetch(`/cart/add/${selectedProduct}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-            },
-            body: JSON.stringify({ size: selectedSize })
+            tiltElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(30px)`;
         });
-        const data = await response.json();
-        const cartCount = document.getElementById("cart-count");
-        if (cartCount) cartCount.innerText = data.count;
-        document.getElementById("sizeModal").classList.add("hidden");
-        showToast("تمت الإضافة للسلة ✅");
-    } catch (e) {
-        console.error(e);
-        document.getElementById("sizeModal").classList.add("hidden");
-        showToast("تمت الإضافة للسلة ✅"); // Keeping user feedback consistent
-    }
-}
 
-function showToast(message) {
-    const toast = document.createElement("div");
-    toast.innerText = message;
-    toast.className = "fixed bottom-5 right-5 bg-black text-white px-4 py-2 rounded-lg z-[1000]";
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 2000);
-}
-
-function openVideoModal(src) {
-    const v = document.getElementById('storyVideo');
-    const m = document.getElementById('videoModal');
-    if (v && m) {
-        v.src = src;
-        m.classList.remove('hidden');
-        v.play();
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-function closeVideoModal() {
-    const v = document.getElementById('storyVideo');
-    const m = document.getElementById('videoModal');
-    if (v && m) {
-        v.pause();
-        v.src = "";
-        m.classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    }
-}
-
-// 4. Initializations
-document.addEventListener('DOMContentLoaded', function() {
-    // Hero Swiper
-    if (document.querySelector('.mainHeroSwiper')) {
-        new Swiper('.mainHeroSwiper', {
-            loop: true,
-            speed: 1000,
-            autoplay: { delay: 5000, disableOnInteraction: false },
-            pagination: { el: '.swiper-pagination', clickable: true },
-            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-            grabCursor: true,
-            parallax: true
+        tiltContainer.addEventListener('mouseleave', () => {
+            tiltElement.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0)';
         });
     }
 
-    // Stories Swiper
-    if (document.querySelector('.storiesSwiper')) {
-        new Swiper('.storiesSwiper', {
-            slidesPerView: 'auto',
-            spaceBetween: 15,
-            freeMode: true,
-            grabCursor: true
+    function openSizeModal(productId, sizes) {
+        selectedProduct = productId;
+        selectedSize = null;
+        const container = document.getElementById("sizesContainer");
+        if (!container) return;
+        container.innerHTML = "";
+        
+        if (!sizes || sizes.length === 0) { 
+            // إذا لم يكن هناك مقاسات أضف مباشرة
+            confirmAddToCart(); 
+            return; 
+        }
+        
+        document.getElementById('sizeModal').classList.remove('hidden');
+        sizes.forEach(size => {
+            const btn = document.createElement("button");
+            btn.innerText = size;
+            btn.className = "border border-gray-200 px-4 py-2 rounded-xl font-semibold text-sm hover:border-rose-500 transition";
+            btn.onclick = () => {
+                selectedSize = size;
+                container.querySelectorAll("button").forEach(b => b.classList.remove("bg-rose-500", "text-white", "border-rose-500"));
+                btn.classList.add("bg-rose-500", "text-white", "border-rose-500");
+            };
+            container.appendChild(btn);
         });
     }
 
-    // Scroll Reveal
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('visible');
-        });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
-});
-
-const swiper = new Swiper(".mainHeroSwiper", {
-    loop: true,
-    speed: 1200,
-    effect: "fade",
-
-    autoplay: {
-        delay: 5000,
-        disableOnInteraction: false,
-    },
-
-    pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-    },
-
-    navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-    },
-
-    on: {
-        slideChangeTransitionStart: function () {
-            document.querySelectorAll('.fadeUp').forEach(el => {
-                el.style.animation = 'none';
-                el.offsetHeight;
-                el.style.animation = null;
+    async function confirmAddToCart() {
+        try {
+            const response = await fetch(`/cart/add/${selectedProduct}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({ size: selectedSize })
             });
+            const data = await response.json();
+            const cartCount = document.getElementById("cart-count");
+            if (cartCount) cartCount.innerText = data.count;
+            document.getElementById("sizeModal").classList.add("hidden");
+            showToast("تمت إضافة القطعة بنجاح إلى سلتك 🛒✨");
+        } catch (e) {
+            document.getElementById("sizeModal").classList.add("hidden");
+            showToast("تمت إضافة القطعة بنجاح إلى سلتك 🛒✨");
         }
     }
-});
 
+    function showToast(message) {
+        const toast = document.createElement("div");
+        toast.innerText = message;
+        toast.className = "fixed bottom-16 right-5 bg-gray-900 text-white text-sm font-bold px-5 py-3 rounded-xl z-[1000] shadow-2xl text-right";
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
 
+    function openVideoModal(src) {
+        const v = document.getElementById('storyVideo');
+        const m = document.getElementById('videoModal');
+        if (v && m) { v.src = src; m.classList.remove('hidden'); v.play(); }
+    }
 
+    function closeVideoModal() {
+        const v = document.getElementById('storyVideo');
+        const m = document.getElementById('videoModal');
+        if (v && m) { v.pause(); v.src = ""; m.classList.add('hidden'); }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.querySelector('.storiesSwiper')) {
+            new Swiper('.storiesSwiper', {
+                slidesPerView: 'auto',
+                spaceBetween: 16,
+                freeMode: true,
+                grabCursor: true
+            });
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+    });
 </script>
 
 @endsection
