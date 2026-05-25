@@ -4,8 +4,7 @@
  
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link rel="icon" type="image/png" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/favicon.png">
+    <link rel="icon" type="image/png" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/favicon.png?v=2">
     <title>Melekler Group | @yield('title', 'Premium Fashion')</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -131,8 +130,7 @@
 {{-- 2. Center Side: Logo Image --}}
 <div class="logo-container text-center flex justify-center items-center">
     <a href="{{ route('welcome') }}" class="inline-block">
-        <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/favicon.png" alt="Melekler Logo" class="logo-img h-14 md:h-20 w-auto object-contain transition-all duration-300">
-    </a>
+<img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/favicon.png?v=2" alt="Melekler Logo" class="logo-img h-14 md:h-20 w-auto object-contain transition-all duration-300">    </a>
 </div>
 
         {{-- 3. Right Side: Navigation & Cart --}}
