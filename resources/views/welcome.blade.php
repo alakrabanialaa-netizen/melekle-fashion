@@ -223,8 +223,14 @@
     box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);
     position: relative;
 }
+
 </style>
 
+{{-- 🚀 هنا يبدأ الـ HTML الطبيعي للصفحة بعد إغلاق الـ Style --}}
+{{-- مثال على استخدام حاوية الهيرو بالرابط الجديد الخاص بـ Supabase --}}
+<div class="hero-spotted-container" style="background-image: url('https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/favicon.png');">
+    {{-- محتويات قسم الهيرو الخاص بك هنا --}}
+</div>
 
 {{-- Hero Section (The Curved Box) --}}
 
