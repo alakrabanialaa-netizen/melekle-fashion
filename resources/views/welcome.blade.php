@@ -186,7 +186,6 @@
 </style>
 
 
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Fredoka:wght@400;600;700&display=swap');
 {{-- Hero Section (The Curved Box) --}}
 
     <div class="hero-curved-container bg-white shadow-xl flex flex-col md:flex-row items-center p-8 md:p-16 gap-10">
@@ -221,555 +220,394 @@
 
 
 
-    {{-- Features Section (The Three Icons) --}}
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 py-20 text-center">
-
-        <div class="group">
-
-            <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-green-200 group-hover:rotate-12 transition-transform">
-
-                <span class="text-4xl">🍼</span>
-
-            </div>
-
-            <h3 class="font-black text-green-500 text-xl mb-3">About proudct</h3>
-
-            <p class="text-gray-400 text-sm px-4">ملابس خاصة صنعت بعناية لحديثي الولادة.</p>
-
+   {{-- Features Section (The Three Icons) - نسخة محسنة ومصححة بالكامل --}}
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 py-20 text-center select-none">
+    
+    {{-- البطاقة الأولى: عن المنتج --}}
+    <div class="group cursor-pointer">
+        {{-- إضافة خلفية خضراء ناعمة bg-emerald-50 تتناسب مع الحدود المقطعة --}}
+        <div class="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-emerald-200 group-hover:rotate-12 transition-all duration-300 transform group-hover:scale-105">
+            <span class="text-4xl">🍼</span>
         </div>
-
-        <div class="group">
-
-            <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-pink-200 group-hover:-rotate-12 transition-transform">
-
-                <span class="text-4xl">🧷</span>
-
-            </div>
-
-            <h3 class="font-black text-pink-500 text-xl mb-3">Our experience</h3>
-
-            <p class="text-gray-400 text-sm px-4">صنعت كل قطعة بحب خاصة لطفلك.</p>
-
-        </div>
-
-        <div class="group">
-
-            <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-blue-200 group-hover:rotate-12 transition-transform">
-
-                <span class="text-4xl">🪄</span>
-
-            </div>
-
-            <h3 class="font-black text-blue-500 text-xl mb-3">Big fun for kids!</h3>
-
-            <p class="text-gray-400 text-sm px-4">مع كل قطعة معنا ممكن تربح هدية كبيرة.</p>
-
-        </div>
-
+        <h3 class="font-black text-emerald-500 text-xl mb-3">About Product</h3>
+        <p class="text-gray-400 text-sm px-6 leading-relaxed">ملابس خاصة صنعت بعناية فائقة لحديثي الولادة.</p>
     </div>
 
+    {{-- البطاقة الثانية: خبرتنا --}}
+    <div class="group cursor-pointer">
+        {{-- استخدام لون الـ rose المتناسق مع هوية الموقع الجديدة --}}
+        <div class="w-24 h-24 bg-rose-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-rose-200 group-hover:-rotate-12 transition-all duration-300 transform group-hover:scale-105">
+            <span class="text-4xl">🧷</span>
+        </div>
+        <h3 class="font-black text-rose-500 text-xl mb-3">Our Experience</h3>
+        <p class="text-gray-400 text-sm px-6 leading-relaxed">صنعت كل قطعة بحب وشغف مخصص لطفلكِ.</p>
+    </div>
 
+    {{-- البطاقة الثالثة: المفاجآت والهدايا --}}
+    <div class="group cursor-pointer">
+        {{-- إضافة خلفية زرقاء ناعمة bg-sky-50 --}}
+        <div class="w-24 h-24 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-sky-200 group-hover:rotate-12 transition-all duration-300 transform group-hover:scale-105">
+            <span class="text-4xl">🪄</span>
+        </div>
+        <h3 class="font-black text-sky-500 text-xl mb-3">Big Fun for Kids!</h3>
+        <p class="text-gray-400 text-sm px-6 leading-relaxed">مع كل قطعة من متجرنا ستحصل على هدية مميزة مخصصة.</p>
+    </div>
 
 </div>
 
 
 
-{{-- Bottom Event & Calendar Section --}}
-
-<div class="zigzag-border mt-10 py-20 text-white">
-
-    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row gap-16">
-
+{{-- Bottom Event & Calendar Section - نسخة متناسقة ومصححة بالكامل --}}
+<div class="zigzag-border mt-10 py-20 text-white select-none">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row gap-16 items-center">
         
-
-        {{-- Event Info --}}
-
-        <div class="md:w-1/2">
-
-            <h2 class="text-4xl font-black mb-8">April's upcoming event</h2>
-
-            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20">
-
-                <div class="flex gap-4 text-sm mb-4 font-bold opacity-80">
-
-                    <span>📅 17.04.2026</span>
-
-                    <span>⏰ 09:00 AM</span>
-
-                    <span>📍 Lorem ipsum dolor</span>
-
+        {{-- تفاصيل الفعالية والحدث --}}
+        <div class="md:w-1/2 space-y-6 text-right w-full">
+            <h2 class="text-4xl font-black tracking-wide leading-tight">April's Upcoming Event</h2>
+            
+            {{-- بطاقة تفاصيل الحدث الزجاجية الفاخرة --}}
+            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-xl text-right">
+                <div class="flex gap-4 text-xs md:text-sm mb-4 font-bold opacity-90 flex-row-reverse justify-start">
+                    <span class="flex items-center gap-1">📅 17.04.2026</span>
+                    <span class="flex items-center gap-1">⏰ 09:00 AM</span>
+                    <span class="flex items-center gap-1">📍 اسطنبول، تركيا</span>
                 </div>
-
-                <p class="mb-8 leading-relaxed">
-
-                    انضموا إلينا في فعاليتنا القادمة حيث سنقوم بالعديد من الأنشطة التفاعلية والمسابقات الممتعة للأطفال مع توزيع الهدايا.
-
+                
+                <p class="mb-8 leading-relaxed text-white/90 text-sm md:text-base">
+                    انضموا إلينا في فعاليتنا القادمة لربيع 2026، حيث سنقوم بالعديد من الأنشطة التفاعلية، ورشات الرسم، والمسابقات الممتعة للأطفال مع توزيع هدايا حصرية من تشكيلتنا الجديدة.
                 </p>
-
-                <a href="#" class="btn-rounded bg-white text-pink-500">Learn more</a>
-
+                
+                <div class="text-left">
+                    <a href="#" class="inline-block bg-white text-rose-500 font-bold px-6 py-3 rounded-2xl hover:bg-rose-50 transition-all duration-300 transform hover:-translate-y-0.5 shadow-md">
+                        معرفة المزيد
+                    </a>
+                </div>
             </div>
-
         </div>
 
-
-
-        {{-- Calendar --}}
-
-        <div class="md:w-1/2 flex flex-col items-center">
-
-            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 w-full max-w-sm">
-
-                <div class="flex justify-between items-center mb-6 font-black uppercase tracking-widest">
-
-                    <button class="hover:text-yellow-300">←</button>
-
-                    <span>April 2026</span>
-
-                    <button class="hover:text-yellow-300">→</button>
-
-                </div>
-
+        {{-- التقويم التفاعلي (Calendar) --}}
+        <div class="md:w-1/2 flex flex-col items-center w-full">
+            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 w-full max-w-sm shadow-xl">
                 
-
-                <div class="calendar-grid text-center font-bold text-xs mb-4 opacity-60">
-
+                {{-- رأس التقويم والتنقل --}}
+                <div class="flex justify-between items-center mb-6 font-black uppercase tracking-widest text-sm">
+                    <button class="hover:text-yellow-300 transition-colors text-lg">←</button>
+                    <span class="border-b-2 border-yellow-300 pb-1">April 2026</span>
+                    <button class="hover:text-yellow-300 transition-colors text-lg">→</button>
+                </div>
+                
+                {{-- أيام الأسبوع --}}
+                <div class="calendar-grid text-center font-bold text-xs mb-4 opacity-70">
                     <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
-
                 </div>
-
                 
-
-                <div class="calendar-grid">
-
+                {{-- أيام الشهر وحلقات التكرار --}}
+                <div class="calendar-grid text-center">
                     @for($i=1; $i<=30; $i++)
-
                         <div class="calendar-day {{ in_array($i, [17, 22, 25, 28]) ? 'active' : '' }}">
-
                             {{ $i }}
-
                         </div>
-
                     @endfor
-
                 </div>
 
             </div>
-
         </div>
-
-
 
     </div>
-
 </div>
 
 
-
 {{-- ------------------------------------------------------------------ --}}
-
-{{-- 🚀 MAIN CONTENT --}}
-
+{{-- 🚀 MAIN CONTENT - INSTAGRAM STYLE STORIES --}}
 {{-- ------------------------------------------------------------------ --}}
-
-{{-- 
-
-    💡 ملاحظة للمبرمج: 
-
-    يمكنك تعديل هذه المصفوفة (Array) لإضافة قصصك الخاصة. 
-
-    كل قصة تحتاج إلى: 'name' (الاسم تحت الصورة)، 'image' (رابط الصورة)، و 'video' (رابط الفيديو).
-
---}}
 
 @php
-
+    // مصفوفة الستوريات بأسماء طفولية، تسويقية، وبدون أي تكرار ممل
     $stories = [
-
-        ['name' => 'جديدنا', 'image' => 'https://i.pravatar.cc/150?u=1', 'video' => 'https://www.w3schools.com/html/mov_bbb.mp4'],
-
-        ['name' => 'عروض العيد', 'image' => 'https://i.pravatar.cc/150?u=2', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-
-        ['name' => 'وصل حديثاً', 'image' => 'https://i.pravatar.cc/150?u=3', 'video' => 'https://www.w3schools.com/html/mov_bbb.mp4'],
-
-        ['name' => 'ملابس أولاد', 'image' => 'https://i.pravatar.cc/150?u=4', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-
-        ['name' => 'ملابس بنات', 'image' => 'https://i.pravatar.cc/150?u=5', 'video' => 'https://www.w3schools.com/html/mov_bbb.mp4'],
-
-        ['name' => 'تخفيضات', 'image' => 'https://i.pravatar.cc/150?u=6', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-
-        ['name' => 'إطلالة اليوم', 'image' => 'https://i.pravatar.cc/150?u=7', 'video' => 'https://www.w3schools.com/html/mov_bbb.mp4'],
-
-        ['name' => 'آراء العملاء', 'image' => 'https://i.pravatar.cc/150?u=8', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-
-        ['name' => 'آراء العملاء', 'image' => 'https://i.pravatar.cc/150?u=8', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-
-        ['name' => 'آراء العملاء', 'image' => 'https://i.pravatar.cc/150?u=8', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-
-        ['name' => 'آراء العملاء', 'image' => 'https://i.pravatar.cc/150?u=8', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-
-        ['name' => 'آراء العملاء', 'image' => 'https://i.pravatar.cc/150?u=8', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-
-        ['name' => 'آراء العملاء', 'image' => 'https://i.pravatar.cc/150?u=8', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
-
+        ['name' => '✨ جديدنا اليوم', 'image' => 'https://i.pravatar.cc/150?u=baby1', 'video' => 'https://www.w3schools.com/html/mov_bbb.mp4'],
+        ['name' => '🎈 عروض العيد', 'image' => 'https://i.pravatar.cc/150?u=baby2', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
+        ['name' => '🧸 قطعة مميزة', 'image' => 'https://i.pravatar.cc/150?u=baby3', 'video' => 'https://www.w3schools.com/html/mov_bbb.mp4'],
+        ['name' => '👑 أمير الصغير', 'image' => 'https://i.pravatar.cc/150?u=baby4', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
+        ['name' => '🌸 أميرتي الجميلة', 'image' => 'https://i.pravatar.cc/150?u=baby5', 'video' => 'https://www.w3schools.com/html/mov_bbb.mp4'],
+        ['name' => '🔥 تصفيات كبرى', 'image' => 'https://i.pravatar.cc/150?u=baby6', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
+        ['name' => '📸 كشخة العيد', 'image' => 'https://i.pravatar.cc/150?u=baby7', 'video' => 'https://www.w3schools.com/html/mov_bbb.mp4'],
+        ['name' => '🥰 أصدقاء ميلكلر', 'image' => 'https://i.pravatar.cc/150?u=baby8', 'video' => 'https://www.w3schools.com/html/movie.mp4'],
+        ['name' => '🎁 هدايا وسحوبات', 'image' => 'https://i.pravatar.cc/150?u=baby9', 'video' => 'https://www.w3schools.com/html/mov_bbb.mp4'],
     ];
-
 @endphp
 
-
-
 {{-- Stories Section --}}
-
-<section class="py-12 bg-white">
-
-    <div class="max-w-screen-xl mx-auto px-6">
-
-        <div class="swiper storiesSwiper">
-
+<section class="py-8 bg-transparent select-none overflow-hidden">
+    <div class="max-w-screen-xl mx-auto px-4">
+        <div class="swiper storiesSwiper !overflow-visible">
             <div class="swiper-wrapper">
-
                 @foreach($stories as $story)
-
                     <div class="swiper-slide !w-auto">
-
-                        <div class="flex flex-col items-center gap-2 cursor-pointer group" onclick="openVideoModal('{{ $story['video'] }}')">
-
-                            {{-- دائرة القصة مع تأثير النبض --}}
-
-                            <div class="w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-orange-500 to-pink-500 transition-transform duration-300 group-hover:scale-110">
-
-                                <div class="w-full h-full rounded-full border-2 border-white overflow-hidden">
-
-                                    <img src="{{ $story['image'] }}" class="w-full h-full object-cover" alt="{{ $story['name'] }}">
-
+                        <div class="flex flex-col items-center gap-2 cursor-pointer group relative" onclick="openVideoModal('{{ $story['video'] }}')">
+                            
+                            {{-- حلقة الستوري المتوهجة بنمط إنستغرام (تأثير النبض السائل) --}}
+                            <div class="w-20 h-20 rounded-full p-[3px] bg-gradient-to-tr from-amber-400 via-pink-500 to-rose-600 transition-all duration-300 transform group-hover:scale-105 group-active:scale-95 shadow-md">
+                                {{-- الفاصل الداخلي الأبيض للحلقة --}}
+                                <div class="w-full h-full rounded-full border-[2.5px] border-white overflow-hidden bg-gray-100">
+                                    <img src="{{ $story['image'] }}" class="w-full h-full object-cover transform duration-500 group-hover:scale-110" alt="{{ $story['name'] }}" loading="lazy">
                                 </div>
-
                             </div>
 
-                            {{-- النص المخصص تحت كل صورة --}}
-
-                            <span class="text-xs font-bold text-gray-800 group-hover:text-orange-500 transition-colors">{{ $story['name'] }}</span>
-
+                            {{-- نصوص طفولية تفاعلية منسقة بوضوح خط Fredoka و Cairo --}}
+                            <span class="text-[11px] md:text-xs font-bold text-gray-700 tracking-wide text-center transition-colors group-hover:text-rose-500 truncate max-w-[84px]">
+                                {{ $story['name'] }}
+                            </span>
+                            
                         </div>
-
                     </div>
-
                 @endforeach
-
             </div>
-
         </div>
-
     </div>
-
 </section>
 
 
 
-
-
-{{-- Categories Grid --}}
-
-<section class="py-20 bg-gray-50">
-
+{{-- Trendy Kids Categories Grid - الأقسام الدائرية المبهجة --}}
+<section class="py-16 bg-transparent select-none">
     <div class="max-w-screen-xl mx-auto px-6">
-
-        <div class="grid md:grid-cols-2 gap-8 category-grid">
-
-            <div class="category-card scroll-reveal" style="--bg-image: url('https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?q=80&w=1972&auto=format&fit=crop')">
-
-                <div class="card-glow"></div>
-
-                <div class="card-content">
-
-                    <span class="card-subtitle">تشكيلة الأولاد</span>
-
-                    <h2 class="card-title">الأناقة والراحة</h2>
-
-                    <div class="card-arrow"><i class="fas fa-arrow-left"></i></div>
-
-                </div>
-
-            </div>
-
-            <div class="category-card scroll-reveal" style="--bg-image: url('https://images.unsplash.com/photo-1518833278463-d3055863572f?q=80&w=2070&auto=format&fit=crop')">
-
-                <div class="card-glow"></div>
-
-                <div class="card-content">
-
-                    <span class="card-subtitle">تشكيلة البنات</span>
-
-                    <h2 class="card-title">عالم من الألوان</h2>
-
-                    <div class="card-arrow"><i class="fas fa-arrow-left"></i></div>
-
-                </div>
-
-            </div>
-
+        
+        {{-- عنوان القسم الممهد --}}
+        <div class="text-center mb-12">
+            <span class="lux-badge block mb-2">CHOOSE BY CATEGORY</span>
+            <h2 class="text-3xl font-black text-gray-800 lux-gradient inline-block">تسوقي حسب الأقسام</h2>
         </div>
 
-    </div>
+        {{-- شبكة الأقسام المرنة المتجاوبة --}}
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 justify-center">
+            
+            {{-- 1. قسم المواليد --}}
+            <a href="/categories/newborn" class="group flex flex-col items-center text-center space-y-3 scroll-reveal">
+                <div class="w-28 h-28 rounded-2xl bg-amber-50 border-2 border-dashed border-amber-200 flex items-center justify-center p-2 transition-all duration-300 transform group-hover:scale-105 group-hover:rotate-3 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=150&auto=format&fit=crop" class="w-full h-full object-cover rounded-xl" alt="حديثي الولادة">
+                </div>
+                <h3 class="font-bold text-sm text-gray-700 group-hover:text-amber-500 transition-colors">حديثي الولادة</h3>
+            </a>
 
+            {{-- 2. قسم البنات --}}
+            <a href="/categories/girls" class="group flex flex-col items-center text-center space-y-3 scroll-reveal">
+                <div class="w-28 h-28 rounded-2xl bg-rose-50 border-2 border-dashed border-rose-200 flex items-center justify-center p-2 transition-all duration-300 transform group-hover:scale-105 group-hover:-rotate-3 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?q=80&w=150&auto=format&fit=crop" class="w-full h-full object-cover rounded-xl" alt="أميراتي (البنات)">
+                </div>
+                <h3 class="font-bold text-sm text-gray-700 group-hover:text-rose-500 transition-colors">أميراتي (البنات)</h3>
+            </a>
+
+            {{-- 3. قسم الأولاد --}}
+            <a href="/categories/boys" class="group flex flex-col items-center text-center space-y-3 scroll-reveal">
+                <div class="w-28 h-28 rounded-2xl bg-sky-50 border-2 border-dashed border-sky-200 flex items-center justify-center p-2 transition-all duration-300 transform group-hover:scale-105 group-hover:rotate-3 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1519457431-44ccd64a579b?q=80&w=150&auto=format&fit=crop" class="w-full h-full object-cover rounded-xl" alt="أبطالنا (الأولاد)">
+                </div>
+                <h3 class="font-bold text-sm text-gray-700 group-hover:text-sky-500 transition-colors">أبطالنا (الأولاد)</h3>
+            </a>
+
+            {{-- 4. قسم الفساتين والمناسبات --}}
+            <a href="/categories/dresses" class="group flex flex-col items-center text-center space-y-3 scroll-reveal">
+                <div class="w-28 h-28 rounded-2xl bg-purple-50 border-2 border-dashed border-purple-200 flex items-center justify-center p-2 transition-all duration-300 transform group-hover:scale-105 group-hover:-rotate-3 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1518833278463-d3055863572f?q=80&w=150&auto=format&fit=crop" class="w-full h-full object-cover rounded-xl" alt="فساتين ومناسبات">
+                </div>
+                <h3 class="font-bold text-sm text-gray-700 group-hover:text-purple-500 transition-colors">فساتين ومناسبات</h3>
+            </a>
+
+            {{-- 5. قسم الأطقم الكاملة --}}
+            <a href="/categories/sets" class="group flex flex-col items-center text-center space-y-3 scroll-reveal">
+                <div class="w-28 h-28 rounded-2xl bg-emerald-50 border-2 border-dashed border-emerald-200 flex items-center justify-center p-2 transition-all duration-300 transform group-hover:scale-105 group-hover:rotate-3 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1555009393-f20bdb245c4d?q=80&w=150&auto=format&fit=crop" class="w-full h-full object-cover rounded-xl" alt="أطقم وملابس نوم">
+                </div>
+                <h3 class="font-bold text-sm text-gray-700 group-hover:text-emerald-500 transition-colors">أطقم جاهزة</h3>
+            </a>
+
+            {{-- 6. قسم الإكسسوارات والألعاب --}}
+            <a href="/categories/accessories" class="group flex flex-col items-center text-center space-y-3 scroll-reveal">
+                <div class="w-28 h-28 rounded-2xl bg-fuchsia-50 border-2 border-dashed border-fuchsia-200 flex items-center justify-center p-2 transition-all duration-300 transform group-hover:scale-105 group-hover:-rotate-3 shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1515488042361-404e9250afef?q=80&w=150&auto=format&fit=crop" class="w-full h-full object-cover rounded-xl" alt="إكسسوارات وألعاب">
+                </div>
+                <h3 class="font-bold text-sm text-gray-700 group-hover:text-fuchsia-500 transition-colors">إكسسوارات</h3>
+            </a>
+
+        </div>
+    </div>
 </section>
 
 
 
-{{-- Products Section --}}
-
-<section class="py-20 bg-white">
-
+{{-- Products Section - نسخة خيالية آمنة متوافقة تماماً مع قاعدة البيانات --}}
+<section class="py-20 bg-transparent select-none">
     <div class="max-w-screen-xl mx-auto px-6">
-
-        <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-
-            <div>
-
-                <h2 class="text-4xl font-black text-gray-900">الأكثر <span class="text-orange-500">مبيعاً</span></h2>
-
-                <p class="text-gray-500 mt-2">اخترنا لك أفضل القطع التي نالت إعجاب عملائنا.</p>
-
+        
+        {{-- هيدر القسم مع شريط البحث الذكي المطور --}}
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-16 gap-8">
+            <div class="space-y-2 text-right">
+                <span class="lux-badge block">TRENDING NOW</span>
+                <h2 class="text-3xl md:text-4xl font-black text-gray-900">
+                    الأكثر <span class="text-rose-500">مبيعاً</span> ✨
+                </h2>
+                <p class="text-gray-400 text-sm md:text-base">اخترنا لكِ بعناية أفضل القطع اللطيفة التي نالت إعجاب أصدقائنا الصغار.</p>
             </div>
-
-            <div class="filter-bar">
-
+            
+            {{-- شريط التصفية والبحث الموحد المتناسق مع الـ CSS الرئيسي --}}
+            <div class="filter-bar w-full lg:w-auto min-w-[320px] md:min-w-[420px]">
                 <div class="filter-group">
-
-                    <i class="fas fa-search filter-icon"></i>
-
-                    <input type="text" class="filter-input" placeholder="بحث عن منتج...">
-
+                    <i class="fas fa-search text-gray-400 right-4 absolute"></i>
+                    <input type="text" class="filter-input text-right" placeholder="ابحثي عن كشخة طفلكِ الحالية...">
                 </div>
-
-                <div class="filter-separator"></div>
-
-                <button class="apply-button">تصفية</button>
-
+                <button class="apply-button mr-2">تصفية</button>
             </div>
-
         </div>
 
-
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-
+        {{-- شبكة عرض المنتجات المتجاوبة والسلسة --}}
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
             @forelse($products as $product)
-
+                
+                {{-- كرت المنتج الذكي المعتمد في الـ CSS --}}
                 <div class="product-card-ty scroll-reveal">
+                    
+                    {{-- 1. حاوي الصورة والطبقات الزجاجية التفاعلية --}}
+                    <div class="ty-image-wrapper">
+                        
+                        {{-- حساب وإظهار شارة الخصم تلقائياً وبأمان --}}
+                        @if($product->original_price > $product->price)
+                            <div class="ty-badge shadow-sm">
+                                @if($product->badge_text)
+                                    {{ $product->badge_text }}
+                                @else
+                                    خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%
+                                @endif
+                            </div>
+                        @endif
 
-                    <a href="{{ route('product.show', $product->id) }}">
+                        {{-- زر المفضلة الانسيابي المرتفع --}}
+                        <button class="ty-wishlist-btn group/wish" title="أضف للمفضلة">
+                            <i class="far fa-heart group-hover/wish:fas transition-colors"></i>
+                        </button>
 
-                        <div class="ty-image-wrapper">
+                        {{-- صورة المنتج الآمنة تماماً من الـ Database مع بديل ذكي --}}
+                        <a href="{{ route('product.show', $product->id) }}" class="block w-full h-full">
+                            <img loading="lazy" 
+                                 src="{{ $product->images->first() ? $product->images->first()->image : 'https://images.unsplash.com/photo-1515488042361-404e9250afef?q=80&w=400&auto=format&fit=crop' }}" 
+                                 class="ty-main-image group-hover:scale-105" 
+                                 alt="{{ $product->name }}">
+                        </a>
 
-                            @if($product->original_price > $product->price)
-
-                                <div class="ty-badge">
-
-                                    @if($product->badge_text)
-
-                                        {{ $product->badge_text }}
-
-                                    @else
-
-                                        خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%
-
-                                    @endif
-
-                                </div>
-
-                            @endif
-
-<img loading="lazy" 
-
-     src="{{ $product->images->first() ? $product->images->first()->image : 'https://via.placeholder.com/300' }}" 
-
-     class="ty-main-image" 
-
-     alt="{{ $product->name }}">                        </div>
-
-                    </a>
-
-                    <button class="ty-wishlist-btn" title="أضف للمفضلة">
-
-                        <i class="far fa-heart"></i>
-
-                    </button>
-
-                    <div class="ty-info-wrapper">
-
-                        <h3 class="ty-title">{{ $product->name }}</h3>
-
-                        <div class="ty-price-wrapper">
-
-                            @if($product->original_price > $product->price)
-
-                                <span class="ty-original-price">{{ number_format($product->original_price, 2) }} ₺</span>
-
-                            @endif
-
-                            <span class="ty-final-price">{{ number_format($product->price, 2) }} ₺</span>
-
+                        {{-- الستارة الزجاجية الاحترافية السائلة (تظهر بسلاسة عند الـ Hover) --}}
+                        <div class="ty-glass-overlay">
+                            {{-- تشغيل دالة الـ Ajax مع تمرير أول مقاس متوفر أو المقاس الافتراضي بأمان --}}
+                            <button type="button" 
+                                    onclick="openSizeModal({{ $product->id }}, {{ json_encode($product->sizes ?? []) }})" 
+                                    class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-md flex items-center justify-center gap-2 text-xs md:text-sm">
+                                <span>🛍️</span>
+                                <span>أضف إلى السلة</span>
+                            </button>
                         </div>
-
                     </div>
 
-                   <form action="{{ route('cart.add', $product->id) }}" method="POST">
-
-    @csrf
-
-{{-- التعديل الجديد: تحويل الزر ليعمل بالـ Ajax السريع ويفتح السلة الجانبية --}}
-
-<button type="button" 
-
-        onclick="addToCart({{ $product->id }}, '{{ $product->sizes[0] ?? 'Free Size' }}')" 
-
-        class="ty-add-to-cart w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-md flex items-center justify-center gap-2">
-
-    <span>🛒</span>
-
-    <span>أضف إلى السلة</span>
-
-</button>
+                    {{-- 2. تفاصيل ومعلومات المنتج تحت الصورة --}}
+                    <div class="ty-info-wrapper mt-3">
+                        <a href="{{ route('product.show', $product->id) }}" class="hover:text-rose-500 transition-colors">
+                            <h3 class="ty-title text-gray-800 line-clamp-1 text-right">{{ $product->name }}</h3>
+                        </a>
+                        
+                        <div class="ty-price-wrapper mt-2">
+                            <span class="ty-final-price">{{ number_format($product->price, 2) }} ₺</span>
+                            @if($product->original_price > $product->price)
+                                <span class="ty-original-price">{{ number_format($product->original_price, 2) }} ₺</span>
+                            @endif
+                        </div>
+                    </div>
 
                 </div>
-
+                
             @empty
-
-                <div class="col-span-full text-center py-20">
-
-                    <p class="text-gray-500 text-lg">لا توجد منتجات لعرضها حالياً.</p>
-
+                {{-- في حال عدم وجود منتجات تظهر هذه اللوحة اللطيفة --}}
+                <div class="col-span-full text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200 shadow-sm">
+                    <span class="text-5xl block mb-4">🧸</span>
+                    <p class="text-gray-400 font-bold text-lg">لا توجد قطع معروضة في هذا القسم حالياً، انتظرونا قريباً!</p>
                 </div>
-
             @endforelse
-
         </div>
 
     </div>
-
 </section>
 
 
 
-{{-- Premium Luxury Section --}}
-
-<section class="relative py-28 overflow-hidden bg-gradient-to-b from-gray-50 via-white to-gray-100">
-
+{{-- Premium Luxury Section - Shop the Look المطور والآمن --}}
+<section class="relative py-24 overflow-hidden bg-transparent select-none">
     <div class="max-w-screen-xl mx-auto px-6">
 
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
 
-
-        <div class="grid lg:grid-cols-2 gap-20 items-center">
-
-
-
-            {{-- LEFT IMAGE --}}
-
-            <div class="relative group cursor-pointer">
-
+            {{-- الطرف الأيسر: الصورة الكبيرة للإطلالة الكاملة --}}
+            <div class="relative group cursor-pointer overflow-hidden rounded-3xl shadow-md border-4 border-white">
                 <img src="https://static.aljamila.com/styles/1100x732_scale/public/2018/12/20/2393901-1727507459.jpg" 
-
-                     alt="Kids Fashion" 
-
-                     class="w-full h-[600px] object-cover rounded-3xl shadow-xl transition-transform duration-700 group-hover:scale-105"
-
-                     onclick="openLightbox(this.src)">
-
-                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent rounded-3xl"></div>
-
-                <div class="absolute bottom-8 left-8 text-white max-w-xs">
-
-                    <span class="bg-orange-500 px-3 py-1 rounded-full text-xs font-bold">إطلالة العيد</span>
-
-                    <h3 class="text-3xl font-black mt-3 leading-tight">أناقة الأطفال تبدأ من اختيار القطع الصحيحة</h3>
-
+                     alt="Kids Premium Fashion" 
+                     class="w-full h-[550px] object-cover transition-transform duration-700 group-hover:scale-105"
+                     onclick="openVideoModal('https://www.w3schools.com/html/mov_bbb.mp4')"> {{-- ربطناه بمودال الفيديو الفخم المعتمد لديك --}}
+                
+                {{-- تدرج الظل السفلي لإبراز النص العربي بشكل واضح --}}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent"></div>
+                
+                <div class="absolute bottom-8 right-8 left-8 text-right text-white space-y-2">
+                    <span class="inline-block bg-amber-500 text-white px-3 py-1 rounded-full text-xs font-bold tracking-wider">كشخة العيد ✨</span>
+                    <h3 class="text-2xl md:text-3xl font-black leading-tight">أناقة أطفالكِ تبدأ من التفاصيل الصغيرة</h3>
                 </div>
-
             </div>
 
-
-
-            {{-- RIGHT CONTENT --}}
-
-            <div class="space-y-8">
-
-                <span class="inline-block py-1 px-4 bg-orange-100 text-orange-600 rounded-full text-xs font-bold">ستايل مختار لك</span>
-
-                <h2 class="text-4xl md:text-5xl font-black text-gray-900 leading-tight">إطلالة كاملة <span class="text-orange-500">بضغطة واحدة</span></h2>
-
-                <p class="text-gray-500 text-lg">اخترنا لك مجموعة قطع متناسقة لتسهيل تجربة التسوق وجعل الإطلالة أكثر أناقة واحترافية.</p>
-
-
-
-                <div class="grid gap-6">
-
-
-
-                    <!-- PRODUCT CARD 1 -->
-
-                    <div class="flex items-center p-4 bg-white rounded-2xl shadow-lg transform opacity-0 translate-y-10 transition-all duration-700 card-scroll">
-
-                        <img src="https://i.pinimg.com/236x/8f/2b/4c/8f2b4c2ea900323aec716ee886f7f066.jpg" 
-
-                             class="w-20 h-20 rounded-xl object-cover cursor-pointer" 
-
-                             onclick="openLightbox(this.src)">
-
-                        <div class="ml-4 flex-1">
-
-                            <h4 class="text-lg font-bold text-gray-800">طقم كامل لأطفالكِ</h4>
-
-                            <p class="text-orange-500 font-black text-md mt-1">250 ₺</p>
-
-                        </div>
-
-                        <button class="w-10 h-10 flex items-center justify-center bg-gray-900 text-white rounded-full hover:bg-orange-500 transition">+</button>
-
-                    </div>
-
-
-
-                    <!-- PRODUCT CARD 2 -->
-
-                    <div class="flex items-center p-4 bg-white rounded-2xl shadow-lg transform opacity-0 translate-y-10 transition-all duration-700 card-scroll">
-
-                        <img src="https://image.made-in-china.com/202f0j00ZbRuNDByfPoI/New-International-School-Uniforms-Summer-Boys-Girls-School-Uniforms-Design-with-Pictures-Clothes-Children.webp" 
-
-                             class="w-20 h-20 rounded-xl object-cover cursor-pointer" 
-
-                             onclick="openLightbox(this.src)">
-
-                        <div class="ml-4 flex-1">
-
-                            <h4 class="text-lg font-bold text-gray-800">طقمين بسعر طقم</h4>
-
-                            <p class="text-orange-500 font-black text-md mt-1">170 ₺</p>
-
-                        </div>
-
-                        <button class="w-10 h-10 flex items-center justify-center bg-gray-900 text-white rounded-full hover:bg-orange-500 transition">+</button>
-
-                    </div>
-
-
-
-                    <!-- BUY BUTTON -->
-
-                    <button class="w-full py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-none hover:translate-y-1 transition-all">
-
-                        شراء الإطلالة كاملة — 420 ₺
-
-                    </button>
-
+            {{-- الطرف الأيمن: مكونات الإطلالة الذكية مع الأزرار --}}
+            <div class="space-y-8 text-right">
+                <div>
+                    <span class="lux-badge block mb-2">MATCHING SET</span>
+                    <h2 class="text-3xl md:text-4xl font-black text-gray-900 leading-tight">
+                        إطلالة كاملة <span class="lux-gradient">بضغطة واحدة</span> 🪄
+                    </h2>
+                    <p class="text-gray-400 text-sm md:text-base mt-2">اخترنا لكِ مجموعة قطع متناسقة لتسهيل تجربة التسوق وجعل أميرك أو أميرتك الصغار في كامل أناقتهم الساحرة.</p>
                 </div>
 
+                {{-- قائمة المنتجات المكونة للإطلالة --}}
+                <div class="grid gap-4">
+
+                    <div class="flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md flex-row-reverse">
+                        <div class="flex items-center gap-4 flex-row-reverse">
+                            <img src="https://i.pinimg.com/236x/8f/2b/4c/8f2b4c2ea900323aec716ee886f7f066.jpg" 
+                                 class="w-20 h-20 rounded-xl object-cover border border-gray-50"
+                                 alt="طقم كامل">
+                            <div class="text-right">
+                                <h4 class="text-base font-bold text-gray-800">طقم السعادة الفاخر للأولاد</h4>
+                                <p class="text-rose-500 font-black text-sm mt-1">250.00 ₺</p>
+                            </div>
+                        </div>
+                        {{-- زر إضافة قطعة واحدة للسلة مدمج بالـ Ajax --}}
+                        <button onclick="confirmAddToCart()" class="w-10 h-10 flex items-center justify-center bg-gray-50 text-gray-700 hover:bg-rose-500 hover:text-white rounded-xl transition-all duration-200 shadow-sm font-bold text-lg">+</button>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md flex-row-reverse">
+                        <div class="flex items-center gap-4 flex-row-reverse">
+                            <img src="https://image.made-in-china.com/202f0j00ZbRuNDByfPoI/New-International-School-Uniforms-Summer-Boys-Girls-School-Uniforms-Design-with-Pictures-Clothes-Children.webp" 
+                                 class="w-20 h-20 rounded-xl object-cover border border-gray-50"
+                                 alt="حذاء متناسق">
+                            <div class="text-right">
+                                <h4 class="text-base font-bold text-gray-800">حذاء المهرجان المريح والأنيق</h4>
+                                <p class="text-rose-500 font-black text-sm mt-1">170.00 ₺</p>
+                            </div>
+                        </div>
+                        <button onclick="confirmAddToCart()" class="w-10 h-10 flex items-center justify-center bg-gray-50 text-gray-700 hover:bg-rose-500 hover:text-white rounded-xl transition-all duration-200 shadow-sm font-bold text-lg">+</button>
+                    </div>
+
+                    {{-- الزر الذهبي الكبير لشراء الإطلالة بالكامل --}}
+                    <button onclick="confirmAddToCart()" class="w-full py-4 mt-4 bg-gradient-to-r from-amber-500 to-rose-500 text-white rounded-2xl font-black text-base md:text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300">
+                        شراء الإطلالة كاملة الآن — 420.00 ₺
+                    </button>
+                    
+                </div>
             </div>
 
         </div>
-
     </div>
+</section>
 
        {{-- Lightbox Overlay --}}
 
