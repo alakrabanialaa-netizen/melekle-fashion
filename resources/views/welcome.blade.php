@@ -3,668 +3,186 @@
 
 
 @section('content')
-
-
-
-{{-- ------------------------------------------------------------------ --}}
-
-{{-- 🎨 MASTER STYLESHEET - تم تحسين الأداء وتقليل التكرار مع الحفاظ على كل شيء --}}
-
-{{-- ------------------------------------------------------------------ --}}
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
+{{-- 🎨 MASTER STYLESHEET - الروابط النظيفة بدون تكرار --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 
 <style>
-
-/* --- 1. Global & Typography --- */
-
-body { 
-
-    font-family: 'Cairo', sans-serif; 
-
-    font-weight: 400; 
-
-    background-color: #fdfdfd; 
-
-    overflow-x: hidden;
-
-    padding-bottom: 48px; /* Space for the fixed marquee footer */
-
-}
-
-h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
-
-.font-black { font-weight: 900; }
-
-
-
-/* --- 2. Animations & Effects --- */
-
-.scroll-reveal {
-
-    opacity: 0;
-
-    transform: translateY(40px);
-
-    transition: opacity 1s ease-out, transform 1s cubic-bezier(.17,.67,.34,1.02);
-
-}
-
-.scroll-reveal.visible { opacity: 1; transform: translateY(0); }
-
-
-
-@keyframes gradientMove { 0% { background-position: 0% } 100% { background-position: 200% } }
-
-@keyframes shine { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
-
-@keyframes fadeUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
-
-@keyframes scrollReviews { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-@keyframes scrollReviewsRTL { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
-
-@keyframes marquee { from { transform: translateX(0%); } to { transform: translateX(-50%); } }
-
-@keyframes float-huge { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.02); } }
-
-@keyframes fadeInRight { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
-
-@keyframes pulse-border { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
-
-
-
-/* --- 3. Hero Section & Page Headers --- */
-
-.lux-badge { letter-spacing: 0.4em; font-size: 13px; font-weight: 600; color: #f97316; }
-
-.lux-title { font-size: clamp(42px, 6vw, 78px); font-weight: 900; line-height: 1.1; }
-
-.lux-gradient {
-
-    background: linear-gradient(90deg, #f97316, #fb7185, #f97316);
-
-    background-size: 200% 100%; -webkit-background-clip: text; color: transparent;
-
-    animation: gradientMove 6s linear infinite;
-
-}
-
-.lux-line {
-
-    width: 120px; height: 3px; margin: 28px auto 0;
-
-    background: linear-gradient(90deg, transparent, #f97316, transparent);
-
-    position: relative; overflow: hidden;
-
-}
-
-.lux-line::after {
-
-    content: ""; position: absolute; inset: 0;
-
-    background: linear-gradient(90deg, transparent, white, transparent);
-
-    animation: shine 2.5s linear infinite;
-
-}
-
-.lux-title, .lux-badge, .lux-line, .lux-title + p { animation: fadeUp 1s ease both; }
-
-
-
-/* --- 4. Kinetic Glow Category Cards --- */
-
-.category-grid { perspective: 2000px; }
-
-.category-card {
-
-    position: relative; display: flex; align-items: flex-end;
-
-    height: 480px; padding: 2rem; border-radius: 1.5rem;
-
-    background-image: var(--bg-image); background-size: cover; background-position: center;
-
-    overflow: hidden; transform-style: preserve-3d;
-
-    transform: rotateX(0) rotateY(0);
-
-    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-
-}
-
-.category-card::before {
-
-    content: ''; position: absolute; inset: 0;
-
-    background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.1));
-
-    transition: background 0.3s ease;
-
-}
-
-.category-card:hover { transform: scale(1.05); }
-
-.card-content { position: relative; z-index: 2; color: white; transform: translateZ(40px); width: 100%; }
-
-.card-subtitle {
-
-    display: block; font-size: 1rem; font-weight: 600; color: rgba(255, 255, 255, 0.7);
-
-    opacity: 0; transform: translateY(10px); transition: all 0.4s ease 0.1s;
-
-}
-
-.card-title { font-size: 3.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 0.5rem; transition: transform 0.4s ease; }
-
-.card-arrow {
-
-    display: flex; align-items: center; justify-content: center;
-
-    width: 44px; height: 44px; background: white; color: black; border-radius: 9999px;
-
-    font-size: 1.5rem; opacity: 0; transform: scale(0.8); transition: all 0.4s ease;
-
-}
-
-.category-card:hover .card-subtitle, .category-card:hover .card-arrow { opacity: 1; transform: translateY(0); }
-
-.card-glow {
-
-    position: absolute; inset: 0; z-index: 1;
-
-    background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.12), transparent 40%);
-
-    opacity: 0; transition: opacity 0.4s ease;
-
-}
-
-.category-card:hover .card-glow { opacity: 1; }
-
-
-
-/* --- 5. Smart Filter Bar --- */
-
-.filter-bar {
-
-    display: flex; align-items: center; background-color: #ffffff;
-
-    border-radius: 1rem; padding: 0.5rem; margin-bottom: 2rem;
-
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); border: 1px solid #e5e7eb;
-
-}
-
-.filter-group { position: relative; display: flex; align-items: center; flex-grow: 1; min-width: 150px; }
-
-.filter-icon { position: absolute; right: 0.75rem; color: #9ca3af; font-size: 0.9rem; }
-
-.filter-input {
-
-    width: 100%; border: none; background-color: transparent;
-
-    padding: 0.75rem 2.5rem 0.75rem 0.75rem; border-radius: 0.75rem;
-
-    font-weight: 600; color: #374151; transition: background-color 0.2s ease;
-
-}
-
-.filter-input::placeholder { color: #9ca3af; font-weight: 500; }
-
-.filter-input:focus { outline: none; background-color: #f9fafb; }
-
-.appearance-none { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
-
-.filter-separator { width: 1px; height: 2rem; background-color: #e5e7eb; margin: 0 0.5rem; }
-
-.apply-button {
-
-    background-color: #1f2937; color: white; font-weight: 700;
-
-    padding: 0.75rem 1.5rem; border-radius: 0.75rem;
-
-    transition: background-color 0.2s ease, transform 0.2s ease;
-
-}
-
-.apply-button:hover { background-color: #111827; transform: scale(1.03); }
-
-.reset-button {
-
-    background-color: transparent; color: #6b7280; font-weight: 600;
-
-    padding: 0.75rem 1rem; border-radius: 0.75rem;
-
-    transition: background-color 0.2s ease, color 0.2s ease;
-
-}
-
-.reset-button:hover { background-color: #f3f4f6; color: #1f2937; }
-
-
-
-/* --- 6. Product Cards --- */
-
-.product-card-ty {
-
-    background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 0.5rem;
-
-    overflow: hidden; transition: box-shadow 0.3s ease; display: flex;
-
-    flex-direction: column; position: relative;
-
-}
-
-.product-card-ty:hover { box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08); }
-
-.ty-image-wrapper { padding: 1rem; aspect-ratio: 1 / 1; position: relative; }
-
-.ty-main-image { width: 100%; height: 100%; object-fit: contain; }
-
-.ty-badge {
-
-    position: absolute; top: 0.5rem; left: 0.5rem; background-color: #dc2626;
-
-    color: white; padding: 0.25rem 0.5rem; font-size: 0.7rem; font-weight: 700;
-
-    border-radius: 0.25rem; z-index: 10;
-
-}
-
-.ty-wishlist-btn {
-
-    position: absolute; top: 0.75rem; right: 0.75rem; width: 32px; height: 32px;
-
-    border-radius: 50%; background-color: #f3f4f6; color: #374151;
-
-    display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; z-index: 10;
-
-}
-
-.ty-wishlist-btn:hover { background-color: #e5e7eb; transform: scale(1.1); }
-
-.ty-info-wrapper { padding: 0 1rem 1rem; text-align: right; flex-grow: 1; display: flex; flex-direction: column; }
-
-.ty-title {
-
-    font-size: 0.875rem; color: #374151; line-height: 1.5; overflow: hidden;
-
-    text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2;
-
-    -webkit-box-orient: vertical; min-height: 42px; margin-bottom: 0.5rem;
-
-}
-
-.ty-price-wrapper { margin-top: auto; transition: opacity 0.2s ease; }
-
-.ty-final-price { font-size: 1rem; font-weight: 700; color: #f97316; }
-
-.ty-original-price { font-size: 0.8rem; color: #9ca3af; text-decoration: line-through; margin-left: 0.5rem; }
-
-.ty-add-to-cart {
-
-    position: absolute; bottom: 1rem; left: 1rem; right: 1rem;
-
-    background-color: #f97316; color: white; text-align: center; padding: 0.6rem;
-
-    border-radius: 0.25rem; font-weight: 700; font-size: 0.875rem;
-
-    opacity: 0; transform: translateY(10px); transition: all 0.2s ease; pointer-events: none;
-
-}
-
-.product-card-ty:hover .ty-add-to-cart { opacity: 1; transform: translateY(0); pointer-events: auto; }
-
-.product-card-ty:hover .ty-price-wrapper { opacity: 0; }
-
-
-
-/* --- 7. Reviews Slider --- */
-
-.reviews-slider { position: relative; overflow: hidden; width: 100%; }
-
-.reviews-track { display: flex; width: max-content; animation: scrollReviews 40s linear infinite; }
-
-.reviews-slider:hover .reviews-track { animation-play-state: paused; }
-
-[dir="rtl"] .reviews-track { animation: scrollReviewsRTL 40s linear infinite; }
-
-
-
-.review-card {
-
-    min-width: 320px; max-width: 320px; background: white; padding: 30px;
-
-    border-radius: 24px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-
-    transition: 0.4s;
-
-}
-
-.review-card:hover { transform: translateY(-10px) scale(1.03); box-shadow: 0 25px 60px rgba(0,0,0,0.15); }
-
-.review-img { width: 80px; height: 80px; border-radius: 50%; margin: auto auto 15px; object-fit: cover; border: 4px solid #f3f4f6; }
-
-.review-card p { color: #6b7280; margin-bottom: 12px; line-height: 1.6; }
-
-.stars { color: #fbbf24; font-size: 18px; }
-
-.review-card h5 { font-weight: bold; margin-top: 8px; }
-
-
-
-/* --- 8. Marquee Footer --- */
-
-.marquee-footer {
-
-    position: fixed; bottom: 0; left: 0; width: 100%;
-
-    background-color: #111827; color: white; z-index: 60;
-
-    overflow: hidden; border-top: 1px solid rgba(255,255,255,0.1);
-
-    padding: 0.75rem 0;
-
-}
-
-.marquee-inner-wrap { display: flex; width: fit-content; animation: marquee 35s linear infinite; }
-
-.marquee-footer:hover .marquee-inner-wrap { animation-play-state: paused; }
-
-.marquee-content { display: flex; align-items: center; white-space: nowrap; }
-
-.marquee-content span, .marquee-content i { margin: 0 2rem; }
-
-.marquee-content span { font-size: 0.9rem; opacity: 0.9; }
-
-
-
-/* --- 9. Floating Contact Buttons --- */
-
-.floating-contact-buttons {
-
-    position: fixed; bottom: 20px; left: 20px; z-index: 100;
-
-    display: flex; flex-direction: column; gap: 1rem;
-
-}
-
-.contact-button {
-
-    width: 60px; height: 60px; border-radius: 50%; color: white;
-
-    display: flex; align-items: center; justify-content: center;
-
-    font-size: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-
-    transition: transform 0.3s ease;
-
-}
-
-.contact-button:hover { transform: scale(1.1); }
-
-.whatsapp-button { background-color: #25D366; }
-
-.livechat-button { background-color: #f97316; }
-
-
-
-/* --- 10. Swiper & Hero Slider --- */
-
-.hero-slider-wrapper {
-
-    width: 100%; height: 600px; position: relative; overflow: hidden;
-
-    margin-top: -28px; z-index: 10;
-
-}
-
-.swiper-container { width: 100%; height: 100%; }
-
-.swiper-slide {
-
-    display: flex; align-items: center; justify-content: center;
-
-    background-size: cover; background-position: center;
-
-    position: relative; color: white; text-align: center;
-
-}
-
-.slider-img-huge-anim { animation: float-huge 6s ease-in-out infinite; }
-
-.animate-fade-in { animation: fadeInRight 1s cubic-bezier(0.16, 1, 0.3, 1) both; }
-
-.swiper-pagination-bullet { width: 10px; height: 10px; background: #ddd; opacity: 1; transition: all 0.3s; }
-
-.swiper-pagination-bullet-active { background: #f97316; width: 35px; border-radius: 5px; }
-
-.storiesSwiper .swiper-slide { margin-left: 15px; }
-
-.bg-gradient-to-tr { animation: pulse-border 2s infinite ease-in-out; }
-
-
-
-/* --- 11. Media Queries --- */
-
-@media (min-width: 768px) {
-
-    .hero-slider-wrapper { height: 700px; }
-
-}
-
-
-
-@media (max-width: 768px) {
-
-    .filter-bar { flex-direction: column; gap: 0.5rem; padding: 1rem; }
-
-    .filter-group { width: 100%; background-color: #f9fafb; border-radius: 0.75rem; border: 1px solid #e5e7eb; }
-
-    .filter-separator { display: none; }
-
-    .filter-input:focus { background-color: white; }
-
-    .apply-button, .reset-button { width: 50%; text-align: center; justify-content: center; }
-
-    .filter-bar .ml-auto { width: 100%; margin-top: 0.5rem; display: flex; }
-
-    
-
-    .mainHeroSwiper { height: auto; min-height: 750px; padding-bottom: 60px; }
-
-    .swiper-slide { padding-top: 30px; }
-
-    .text-right { text-align: center; margin-top: 20px; }
-
-    .ml-auto { margin-left: auto; margin-right: auto; }
-
-    .justify-end { justify-content: center; }
-
-    .md\:max-h-\[800px\] { max-height: 400px; }
-
-}
-
-.fadeUp {
-
-    transform: translateY(40px);
-
-    opacity: 0;
-
-    animation: fadeUp 1s forwards;
-
-}
-
-
-
-.delay-1 { animation-delay: 0.4s; }
-
-.delay-2 { animation-delay: 0.8s; }
-
-
-
-@keyframes fadeUp {
-
-    to {
-
-        transform: translateY(0);
-
-        opacity: 1;
-
-    }
-
-}
-
-:root {
-
-        --soft-pink: #f89494;
-
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Fredoka:wght@400;600;700&display=swap');
+
+    /* --- 1. الهوية البصرية والألوان الموحدة (عام 2026) --- */
+    :root {
+        --brand-pink: #f43f5e;
+        --brand-pink-hover: #e11d48;
+        --brand-amber: #f59e0b;
         --soft-cream: #fffaf0;
-
-        --soft-green: #98d8a0;
-
-        --soft-blue: #a0d8f0;
-
+        --text-dark: #1f2937;
     }
 
-
-
-    body {
-
-        font-family: 'Cairo', 'Fredoka', sans-serif;
-
-        background-color: var(--soft-cream);
-
-        color: #5d5d5d;
-
+    body { 
+        font-family: 'Cairo', 'Fredoka', sans-serif; 
+        background-color: var(--soft-cream); 
+        color: var(--text-dark);
+        overflow-x: hidden;
+        padding-bottom: 60px; /* مساحة الفوتر المتحرك */
     }
 
+    h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
+    .font-black { font-weight: 900; }
 
+    /* --- 2. تأثيرات الحركة والأنيميشن النظيفة --- */
+    .scroll-reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* 1. Curved Hero Section */
+    @keyframes gradientMove { 0% { background-position: 0% } 100% { background-position: 200% } }
+    @keyframes shine { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scrollReviews { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    @keyframes marquee { from { transform: translateX(0%); } to { transform: translateX(-50%); } }
+    @keyframes float-huge { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-12px) scale(1.02); } }
+    @keyframes pulse-border { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.03); opacity: 0.9; } }
 
-    .hero-curved-container {
-
-        background-image: radial-gradient(#f0e6d2 1px, transparent 1px);
-
-        background-size: 20px 20px;
-
-        border: 15px solid white;
-
-        border-radius: 150px; /* High rounding like the image */
-
+    /* --- 3. قسم الـ Hero والـ Badges الفاخرة --- */
+    .hero-spotted-container {
+        background-image: radial-gradient(rgba(244, 63, 94, 0.15) 1.5px, transparent 1.5px);
+        background-size: 24px 24px;
+        border: 12px solid white;
+        border-radius: 50px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.04);
+        position: relative;
         overflow: hidden;
+    }
+    .lux-badge { letter-spacing: 0.2em; font-size: 13px; font-weight: 600; color: var(--brand-amber); }
+    .lux-gradient {
+        background: linear-gradient(90deg, var(--brand-amber), var(--brand-pink), var(--brand-amber));
+        background-size: 200% 100%; -webkit-background-clip: text; color: transparent;
+        animation: gradientMove 6s linear infinite;
+    }
+    .slider-img-huge-anim { animation: float-huge 6s ease-in-out infinite; }
+    .bg-gradient-to-tr { animation: pulse-border 2s infinite ease-in-out; }
 
+    /* --- 4. كروت المنتجات الذكية السائلة (Interactive Cards) --- */
+    .product-card-ty {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 24px;
+        padding: 12px;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
-
-    }
-
-
-
-    /* 2. Zigzag/Wave Border for Bottom Section */
-
-    .zigzag-border {
-
-        position: relative;
-
-        background: var(--soft-pink);
-
-    }
-
-    
-
-    .zigzag-border::before {
-
-        content: "";
-
-        position: absolute;
-
-        top: -20px;
-
-        left: 0;
-
-        width: 100%;
-
-        height: 20px;
-
-        background: linear-gradient(-45deg, var(--soft-pink) 10px, transparent 0),
-
-                    linear-gradient(45deg, var(--soft-pink) 10px, transparent 0);
-
-        background-size: 20px 40px;
-
-    }
-
-
-
-    /* 3. Calendar Styling */
-
-    .calendar-grid {
-
-        display: grid;
-
-        grid-template-columns: repeat(7, 1fr);
-
-        gap: 5px;
-
-    }
-
-    
-
-    .calendar-day {
-
-        width: 35px;
-
-        height: 35px;
-
+        overflow: hidden;
         display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        border-radius: 50%;
-
-        font-size: 0.85rem;
-
-        cursor: pointer;
-
-        transition: all 0.2s;
-
+        flex-direction: column;
+    }
+    .product-card-ty:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(244, 63, 94, 0.06);
+        border-color: rgba(244, 63, 94, 0.15);
+    }
+    .ty-image-wrapper {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        position: relative;
+        background: #fdfdfd;
+        overflow: hidden;
+        border-radius: 18px;
+    }
+    .ty-main-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 18px;
+        transition: transform 0.3s ease-out;
     }
 
-    
+    /* الستارة الزجاجية الانسيابية لزر السلة والتفاصيل */
+    .ty-glass-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(255, 255, 255, 0.95) 45%, rgba(255, 255, 255, 0.3));
+        backdrop-filter: blur(4px);
+        opacity: 0;
+        transform: translateY(100%);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 16px;
+    }
+    .product-card-ty:hover .ty-glass-overlay { opacity: 1; transform: translateY(0); }
 
-    .calendar-day:hover { background: rgba(255,255,255,0.2); }
+    .ty-badge {
+        position: absolute; top: 12px; left: 12px; background-color: var(--brand-pink);
+        color: white; padding: 4px 10px; font-size: 0.75rem; font-weight: 700; border-radius: 30px; z-index: 20;
+    }
+    .ty-wishlist-btn {
+        position: absolute; top: 12px; right: 12px; width: 36px; height: 36px;
+        border-radius: 50%; background-color: white; color: #6b7280;
+        display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: all 0.2s ease; z-index: 20;
+    }
+    .ty-wishlist-btn:hover { color: var(--brand-pink); transform: scale(1.15); }
 
-    .calendar-day.active { background: #ffeb3b; color: #333; font-weight: bold; }
+    .ty-info-wrapper { padding: 12px 4px 4px; text-align: right; }
+    .ty-title { font-size: 0.9rem; font-weight: 600; color: #374151; line-height: 1.4; }
+    .ty-price-wrapper { display: flex; align-items: center; gap: 8px; flex-direction: row-reverse; justify-content: flex-start; margin-top: 6px; }
+    .ty-final-price { font-size: 1.1rem; font-weight: 700; color: var(--brand-pink); }
+    .ty-original-price { font-size: 0.85rem; color: #9ca3af; text-decoration: line-through; }
 
+    /* --- 5. شريط التصفية والبحث الذكي (Filter Bar) --- */
+    .filter-bar {
+        display: flex; align-items: center; background-color: #ffffff;
+        border-radius: 16px; padding: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); border: 1px solid #e5e7eb;
+    }
+    .filter-group { position: relative; display: flex; align-items: center; flex-grow: 1; }
+    .filter-input {
+        width: 100%; border: none; padding: 12px 44px 12px 16px;
+        font-weight: 600; color: #374151;
+    }
+    .filter-input:focus { outline: none; }
+    .apply-button {
+        background-color: var(--brand-pink); color: white; font-weight: 700;
+        padding: 12px 24px; border-radius: 12px; transition: all 0.2s ease;
+    }
+    .apply-button:hover { background-color: var(--brand-pink-hover); transform: scale(1.02); }
 
+    /* --- 6. سلايدر التقييمات اللانهائي (Smooth Reviews) --- */
+    .reviews-slider { position: relative; overflow: hidden; width: 100%; padding: 10px 0; }
+    .reviews-track { display: flex; width: max-content; animation: scrollReviews 35s linear infinite; gap: 24px; }
+    .reviews-slider:hover .reviews-track { animation-play-state: paused; }
 
-    .btn-rounded {
+    .review-card {
+        min-width: 310px; max-width: 310px; background: white; padding: 24px;
+        border-radius: 24px; text-align: center; border: 1px solid #f3f4f6;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.02); transition: transform 0.3s;
+    }
+    .review-card:hover { transform: translateY(-6px); }
+    .review-img { width: 75px; height: 75px; border-radius: 50%; margin: 0 auto 12px; object-fit: cover; }
+    .stars { color: #fbbf24; font-size: 16px; }
 
-        border-radius: 30px;
-
-        padding: 10px 25px;
-
-        font-weight: bold;
-
-        transition: transform 0.2s;
-
+    /* --- 7. الشاشات الصغيرة والموبايل (Responsive) --- */
+    @media (max-width: 768px) {
+        .filter-bar { flex-direction: column; gap: 8px; padding: 12px; }
+        .filter-input { padding: 10px 40px 10px 12px; }
+        .apply-button { width: 100%; text-align: center; }
+        .hero-spotted-container { border-radius: 32px; padding: 20px; }
     }
 
-    
-
-    .btn-rounded:hover { transform: scale(1.05); }
+    /* --- 8. الفوتر الإعلاني المتحرك (Marquee Footer) --- */
+    .marquee-footer {
+        position: fixed; bottom: 0; left: 0; width: 100%;
+        background-color: #111827; color: white; z-index: 60;
+        overflow: hidden; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .marquee-inner-wrap { display: flex; width: fit-content; animation: marquee 30s linear infinite; }
+    .marquee-footer:hover .marquee-inner-wrap { animation-play-state: paused; }
+    .marquee-content { display: flex; align-items: center; white-space: nowrap; }
+    .marquee-content span { font-size: 0.85rem; opacity: 0.9; margin: 0 2rem; }
+    .marquee-content i { margin: 0 1rem; }
 </style>
 
 
@@ -1506,329 +1024,146 @@ h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
 
 
 {{-- ------------------------------------------------------------------ --}}
-
-{{-- 🚀 SCRIPTS --}}
-
+{{-- 🚀 SCRIPTS CLEANED & OPTIMIZED --}}
 {{-- ------------------------------------------------------------------ --}}
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
 <script>
+    // 1. Tawk.to Integration
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function() {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/699b1c15c165071c358882eb/1ji2ubd4s';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
 
-// 1. Tawk.to Integration
+    // 2. Global State
+    let selectedProduct = null;
+    let selectedSize = null;
 
-var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-
-(function() {
-
-    var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-
-    s1.async = true;
-
-    s1.src = 'https://embed.tawk.to/699b1c15c165071c358882eb/1ji2ubd4s';
-
-    s1.charset = 'UTF-8';
-
-    s1.setAttribute('crossorigin', '*');
-
-    s0.parentNode.insertBefore(s1, s0);
-
-})();
-
-
-
-// 2. Global State
-
-let selectedProduct = null;
-
-let selectedSize = null;
-
-
-
-// 3. Functions
-
-function openSizeModal(productId, sizes) {
-
-    selectedProduct = productId;
-
-    selectedSize = null;
-
-    const container = document.getElementById("sizesContainer");
-
-    if (!container) return;
-
-    container.innerHTML = "";
-
-    if (!sizes || sizes.length === 0) { confirmAddToCart(); return; }
-
-    sizes.forEach(size => {
-
-        const btn = document.createElement("button");
-
-        btn.innerText = size;
-
-        btn.className = "border px-4 py-2 rounded-xl hover:bg-gray-50 transition";
-
-        btn.onclick = () => {
-
-            selectedSize = size;
-
-            container.querySelectorAll("button").forEach(b => b.classList.remove("bg-black", "text-white"));
-
-            btn.classList.add("bg-black", "text-white");
-
-        };
-
-        container.appendChild(btn);
-
-    });
-
-    document.getElementById("sizeModal").classList.remove("hidden");
-
-}
-
-
-
-async function confirmAddToCart() {
-
-    try {
-
-        const response = await fetch(`/cart/add/${selectedProduct}`, {
-
-            method: "POST",
-
-            headers: {
-
-                "Content-Type": "application/json",
-
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-
-            },
-
-            body: JSON.stringify({ size: selectedSize })
-
+    // 3. Functions
+    function openSizeModal(productId, sizes) {
+        selectedProduct = productId;
+        selectedSize = null;
+        const container = document.getElementById("sizesContainer");
+        if (!container) return;
+        container.innerHTML = "";
+        
+        if (!sizes || sizes.length === 0) { confirmAddToCart(); return; }
+        
+        sizes.forEach(size => {
+            const btn = document.createElement("button");
+            btn.innerText = size;
+            btn.className = "border px-4 py-2 rounded-xl hover:bg-gray-50 transition";
+            btn.onclick = () => {
+                selectedSize = size;
+                container.querySelectorAll("button").forEach(b => b.classList.remove("bg-black", "text-white"));
+                btn.classList.add("bg-black", "text-white");
+            };
+            container.appendChild(btn);
         });
-
-        const data = await response.json();
-
-        const cartCount = document.getElementById("cart-count");
-
-        if (cartCount) cartCount.innerText = data.count;
-
-        document.getElementById("sizeModal").classList.add("hidden");
-
-        showToast("تمت الإضافة للسلة ✅");
-
-    } catch (e) {
-
-        console.error(e);
-
-        document.getElementById("sizeModal").classList.add("hidden");
-
-        showToast("تمت الإضافة للسلة ✅"); // Keeping user feedback consistent
-
+        document.getElementById("sizeModal").classList.remove("hidden");
     }
 
-}
-
-
-
-function showToast(message) {
-
-    const toast = document.createElement("div");
-
-    toast.innerText = message;
-
-    toast.className = "fixed bottom-5 right-5 bg-black text-white px-4 py-2 rounded-lg z-[1000]";
-
-    document.body.appendChild(toast);
-
-    setTimeout(() => toast.remove(), 2000);
-
-}
-
-
-
-function openVideoModal(src) {
-
-    const v = document.getElementById('storyVideo');
-
-    const m = document.getElementById('videoModal');
-
-    if (v && m) {
-
-        v.src = src;
-
-        m.classList.remove('hidden');
-
-        v.play();
-
-        document.body.style.overflow = 'hidden';
-
-    }
-
-}
-
-
-
-function closeVideoModal() {
-
-    const v = document.getElementById('storyVideo');
-
-    const m = document.getElementById('videoModal');
-
-    if (v && m) {
-
-        v.pause();
-
-        v.src = "";
-
-        m.classList.add('hidden');
-
-        document.body.style.overflow = 'auto';
-
-    }
-
-}
-
-
-
-// 4. Initializations
-
-document.addEventListener('DOMContentLoaded', function() {
-
-    // Hero Swiper
-
-    if (document.querySelector('.mainHeroSwiper')) {
-
-        new Swiper('.mainHeroSwiper', {
-
-            loop: true,
-
-            speed: 1000,
-
-            autoplay: { delay: 5000, disableOnInteraction: false },
-
-            pagination: { el: '.swiper-pagination', clickable: true },
-
-            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-
-            grabCursor: true,
-
-            parallax: true
-
-        });
-
-    }
-
-
-
-    // Stories Swiper
-
-    if (document.querySelector('.storiesSwiper')) {
-
-        new Swiper('.storiesSwiper', {
-
-            slidesPerView: 'auto',
-
-            spaceBetween: 15,
-
-            freeMode: true,
-
-            grabCursor: true
-
-        });
-
-    }
-
-
-
-    // Scroll Reveal
-
-    const observer = new IntersectionObserver((entries) => {
-
-        entries.forEach(entry => {
-
-            if (entry.isIntersecting) entry.target.classList.add('visible');
-
-        });
-
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
-
-});
-
-
-
-const swiper = new Swiper(".mainHeroSwiper", {
-
-    loop: true,
-
-    speed: 1200,
-
-    effect: "fade",
-
-
-
-    autoplay: {
-
-        delay: 5000,
-
-        disableOnInteraction: false,
-
-    },
-
-
-
-    pagination: {
-
-        el: ".swiper-pagination",
-
-        clickable: true,
-
-    },
-
-
-
-    navigation: {
-
-        nextEl: ".swiper-button-next",
-
-        prevEl: ".swiper-button-prev",
-
-    },
-
-
-
-    on: {
-
-        slideChangeTransitionStart: function () {
-
-            document.querySelectorAll('.fadeUp').forEach(el => {
-
-                el.style.animation = 'none';
-
-                el.offsetHeight;
-
-                el.style.animation = null;
-
+    async function confirmAddToCart() {
+        try {
+            const response = await fetch(`/cart/add/${selectedProduct}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({ size: selectedSize })
             });
+            const data = await response.json();
+            const cartCount = document.getElementById("cart-count");
+            if (cartCount) cartCount.innerText = data.count;
+            document.getElementById("sizeModal").classList.add("hidden");
+            showToast("تمت الإضافة للسلة ✅");
+        } catch (e) {
+            console.error(e);
+            document.getElementById("sizeModal").classList.add("hidden");
+            showToast("تمت الإضافة للسلة ✅");
+        }
+    }
 
+    function showToast(message) {
+        const toast = document.createElement("div");
+        toast.innerText = message;
+        toast.className = "fixed bottom-5 right-5 bg-black text-white px-4 py-2 rounded-lg z-[1000]";
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    }
+
+    function openVideoModal(src) {
+        const v = document.getElementById('storyVideo');
+        const m = document.getElementById('videoModal');
+        if (v && m) {
+            v.src = src;
+            m.classList.remove('hidden');
+            v.play();
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeVideoModal() {
+        const v = document.getElementById('storyVideo');
+        const m = document.getElementById('videoModal');
+        if (v && m) {
+            v.pause();
+            v.src = "";
+            m.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // 4. Initializations on DOM Load
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // دمج السلايدر الرئيسي وحل مشكلة تكراره مع إعادة تشغيل أنميشن النص بسلاسة
+        if (document.querySelector('.mainHeroSwiper')) {
+            new Swiper('.mainHeroSwiper', {
+                loop: true,
+                speed: 1200,
+                effect: "fade", // تم الحفاظ على تأثير التلاشي الفاخر
+                autoplay: { delay: 5000, disableOnInteraction: false },
+                pagination: { el: '.swiper-pagination', clickable: true },
+                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                grabCursor: true,
+                on: {
+                    slideChangeTransitionStart: function () {
+                        document.querySelectorAll('.fadeUp').forEach(el => {
+                            el.style.animation = 'none';
+                            el.offsetHeight; /* Trigger reflow */
+                            el.style.animation = null;
+                        });
+                    }
+                }
+            });
         }
 
-    }
+        // Stories Swiper
+        if (document.querySelector('.storiesSwiper')) {
+            new Swiper('.storiesSwiper', {
+                slidesPerView: 'auto',
+                spaceBetween: 15,
+                freeMode: true,
+                grabCursor: true
+            });
+        }
 
-});
-
-
-
-
-
-
-
+        // Scroll Reveal Element Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+    });
 </script>
-
 
 
 @endsection
