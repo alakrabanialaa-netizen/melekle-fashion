@@ -228,21 +228,7 @@
 
 <div class="hero-spotted-container" style="background-image: url('https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/hero-bg.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">   
     
-    {{-- محتويات الهيرو لمتجر الأطفال --}}
-    <div class="relative max-w-screen-xl mx-auto px-6 py-20 md:py-32 flex flex-col items-center text-center z-10">
-        <span class="lux-badge block mb-3">WELCOME TO MELEKLER KIDS</span>
-        <h1 class="text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-4">
-            عالم من الأناقة <span class="lux-gradient">لطفلكِ الصغير</span> ✨
-        </h1>
-        <p class="text-gray-500 text-base md:text-lg max-w-xl mb-8">
-            مختصون في بيع ملابس الأطفال المريحة والحديثة التي تناسب كشخة طفلكِ في كل الأوقات.
-        </p>
-        <a href="#products" class="apply-button shadow-lg">
-            تسوقي الأحدث الآن 🛍️
-        </a>
-    </div>
 
-</div>
 
 {{-- Hero Section (The Curved Box) --}}
 
