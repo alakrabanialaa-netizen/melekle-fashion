@@ -228,7 +228,7 @@
 
 {{-- 🚀 هنا يبدأ الـ HTML الطبيعي للصفحة بعد إغلاق الـ Style --}}
 {{-- مثال على استخدام حاوية الهيرو بالرابط الجديد الخاص بـ Supabase --}}
-<div class="hero-spotted-container" style="background-image: url('https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/favicon.png');">
+<div class="hero-spotted-container" style="background-image: url('https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/hero-bg.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">   
     {{-- محتويات قسم الهيرو الخاص بك هنا --}}
 </div>
 
