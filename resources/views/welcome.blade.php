@@ -3,7 +3,7 @@
 @section('content')
 
 {{-- ------------------------------------------------------------------ --}}
-{{-- 🎨 MASTER STYLESHEET - الهوية البصرية الفاخرة المحدثة لعام 2026 --}}
+{{-- 🎨 ADVANCED INTERACTIVE MASTER STYLESHEET - جيل جديد من واجهات المتاجر --}}
 {{-- ------------------------------------------------------------------ --}}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
@@ -12,112 +12,112 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Fredoka:wght@400;600;700&display=swap');
 
-    /* --- 1. Global & Identity --- */
     :root {
         --brand-pink: #f43f5e;
         --brand-pink-hover: #e11d48;
-        --soft-cream: #fffaf0;
-        --text-dark: #374151;
+        --brand-amber: #f59e0b;
+        --text-dark: #1f2937;
     }
 
     body { 
         font-family: 'Cairo', 'Fredoka', sans-serif; 
-        background-color: #fdfdfd; 
+        background-color: #fafafa; 
         color: var(--text-dark);
         overflow-x: hidden;
-        padding-bottom: 60px; 
+        padding-bottom: 70px; 
     }
 
-    /* --- 2. Micro-Animations --- */
+    /* --- 1. Dynamic Interactive Background (الخلفية المنقطة التفاعلية الذكية) --- */
+    .hero-spotted-container {
+        background-image: radial-gradient(rgba(244, 63, 94, 0.15) 2px, transparent 2px);
+        background-size: 30px 30px;
+        border: 12px solid white;
+        border-radius: 50px;
+        box-shadow: 0 30px 70px rgba(0,0,0,0.05);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* الـ Card ثلاثي الأبعاد الحقيقي */
+    .3d-card-wrapper {
+        perspective: 1000px;
+    }
+    .hero-interactive-img {
+        transition: transform 0.1s ease-out;
+        transform-style: preserve-3d;
+        will-change: transform;
+    }
+
+    /* --- 2. Micro-reveal Scroll --- */
     .scroll-reveal {
         opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        transform: translateY(40px);
+        transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* تأثير الـ 3D لـ قسم الـ Hero */
-    .tilt-container { transform-style: preserve-3d; perspective: 1000px; }
-    .tilt-element { transition: transform 0.15s ease-out; }
-
-    /* --- 3. Curved & Spotted Hero (الخلفية المنقطة الأنيقة) --- */
-    .hero-spotted-container {
-        background-image: radial-gradient(#e5e7eb 1.5px, transparent 1.5px);
-        background-size: 24px 24px;
-        border: 12px solid white;
-        border-radius: 60px;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.04);
-    }
-
-    /* --- 4. Premium Cards (Glassmorphism Light) --- */
-    .premium-card {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        border-radius: 24px;
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .premium-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 20px 40px rgba(244, 63, 94, 0.06);
-    }
-
-    /* --- 5. Fluid Smart Product Cards (الكرت السائل الذكي) --- */
+    /* --- 3. Liquid Elastic Product Cards (تأثير كروت المنتجات السائلة الحركية) --- */
     .product-card-ty {
         background: #ffffff;
         border: 1px solid #f3f4f6;
-        border-radius: 24px;
-        overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        display: flex;
-        flex-direction: column;
-        position: relative;
-    }
-    .product-card-ty:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-        border-color: rgba(244, 63, 94, 0.15);
-    }
-    .ty-image-wrapper {
+        border-radius: 28px;
         padding: 12px;
-        aspect-ratio: 1 / 1;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
-        background: #fafafa;
         overflow: hidden;
-        border-radius: 20px;
-        margin: 8px;
     }
     
-    /* حركة التبديل الانزلاقية الاحترافية للصور */
-    .ty-main-image, .ty-hover-image {
+    .product-card-ty:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 30px 50px rgba(244, 63, 94, 0.08);
+        border-color: rgba(244, 63, 94, 0.2);
+    }
+
+    .ty-image-wrapper {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        position: relative;
+        background: #fdfdfd;
+        overflow: hidden;
+        border-radius: 20px;
+        perspective: 800px;
+    }
+
+    /* تأثير المغناطيس المرن للصورة الشخصية للمنتج */
+    .ty-main-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        border-radius: 16px;
-        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        border-radius: 20px;
+        transition: transform 0.2s ease-out;
+        transform-style: preserve-3d;
+    }
+
+    /* الستارة الزجاجية الذكية التي تظهر من الأسفل بانسيابية وسرعة تنافسية */
+    .ty-glass-overlay {
         position: absolute;
-        top: 12px;
-        left: 12px;
-        width: calc(100% - 24px);
-        height: calc(100% - 24px);
-    }
-    .ty-hover-image {
+        inset: 0;
+        background: linear-gradient(to top, rgba(255, 255, 255, 0.95) 40%, rgba(255, 255, 255, 0.4));
+        backdrop-filter: blur(4px);
         opacity: 0;
-        transform: translateY(100%); /* تبدأ من الأسفل وتصعد بسلاسة */
+        transform: translateY(100%);
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 16px;
     }
-    .product-card-ty:hover .ty-main-image {
-        opacity: 0;
-        transform: translateY(-100%);
-    }
-    .product-card-ty:hover .ty-hover-image {
+
+    .product-card-ty:hover .ty-glass-overlay {
         opacity: 1;
         transform: translateY(0);
     }
 
     .ty-badge {
         position: absolute;
-        top: 20px;
-        left: 20px;
+        top: 16px;
+        left: 16px;
         background: var(--brand-pink);
         color: white;
         padding: 4px 12px;
@@ -126,10 +126,11 @@
         border-radius: 30px;
         z-index: 20;
     }
+
     .ty-wishlist-btn {
         position: absolute;
-        top: 20px;
-        right: 20px;
+        top: 16px;
+        right: 16px;
         width: 38px;
         height: 38px;
         border-radius: 50%;
@@ -144,34 +145,30 @@
     }
     .ty-wishlist-btn:hover {
         color: var(--brand-pink);
-        transform: scale(1.1);
+        transform: scale(1.15);
     }
-    .ty-info-wrapper {
-        padding: 12px 20px 20px;
-        text-align: right;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        flex-grow: 1;
-    }
+
+    /* تنسيقات الخطوط والأسعار الاحترافية */
     .ty-title {
         font-size: 0.95rem;
-        font-weight: 600;
-        color: #374151;
-        line-height: 1.5;
-        margin-bottom: 12px;
+        font-weight: 700;
+        color: #1f2937;
+        line-height: 1.4;
+        text-align: right;
     }
+    
     .ty-price-wrapper {
         display: flex;
         align-items: center;
         gap: 8px;
         flex-direction: row-reverse;
         justify-content: flex-start;
+        margin-top: 6px;
     }
     .ty-final-price { font-size: 1.15rem; font-weight: 700; color: var(--brand-pink); }
-    .ty-original-price { font-size: 0.9rem; color: #9ca3af; text-decoration: line-through; }
+    .ty-original-price { font-size: 0.85rem; color: #9ca3af; text-decoration: line-through; }
 
-    /* --- 6. Smart Filter Bar --- */
+    /* --- 4. Premium Filter Bar --- */
     .filter-bar {
         display: flex;
         align-items: center;
@@ -179,7 +176,7 @@
         border-radius: 20px;
         padding: 6px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-        border: 1px solid #f3f4f6;
+        border: 1px solid #e5e7eb;
     }
     .filter-input {
         width: 100%;
@@ -199,25 +196,22 @@
     }
     .apply-button:hover { background-color: var(--brand-pink-hover); }
 
-    /* --- 7. Continuous Smooth Reviews --- */
+    /* --- 5. Continuous Smooth Reviews --- */
     .reviews-slider { position: relative; overflow: hidden; width: 100%; padding: 15px 0; }
-    .reviews-track { display: flex; width: max-content; animation: scrollReviews 35s linear infinite; gap: 28px; }
+    .reviews-track { display: flex; width: max-content; animation: scrollReviews 30s linear infinite; gap: 28px; }
     .reviews-slider:hover .reviews-track { animation-play-state: paused; }
     @keyframes scrollReviews { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
     .review-card {
         min-width: 320px;
-        max-width: 320px;
         background: white;
         padding: 28px;
         border-radius: 24px;
         text-align: center;
         border: 1px solid #f3f4f6;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
     }
-    .review-img { width: 70px; height: 70px; border-radius: 50%; margin: 0 auto 16px; object-fit: cover; }
     
-    /* --- 8. Infinite Marquee Footer --- */
+    /* --- 6. Infinite Marquee Footer --- */
     .marquee-footer {
         position: fixed;
         bottom: 0;
@@ -229,18 +223,18 @@
         overflow: hidden;
         padding: 12px 0;
     }
-    .marquee-inner-wrap { display: flex; width: fit-content; animation: marquee 28s linear infinite; }
+    .marquee-inner-wrap { display: flex; width: fit-content; animation: marquee 25s linear infinite; }
     @keyframes marquee { from { transform: translateX(0%); } to { transform: translateX(-50%); } }
 </style>
 
 <div class="max-w-screen-xl mx-auto px-6 pt-10">
-    {{-- Hero Section (The Elegant Spotted Interactive Container) --}}
-    <div class="hero-spotted-container bg-white tilt-container flex flex-col md:flex-row items-center p-8 md:p-16 gap-12">
+    {{-- Hero Section --}}
+    <div class="hero-spotted-container bg-white flex flex-col md:flex-row items-center p-8 md:p-16 gap-12 3d-card-wrapper">
         <div class="md:w-1/2 relative flex justify-center">
             <div class="absolute top-0 left-0 w-40 h-40 bg-rose-100 rounded-full mix-blend-multiply filter blur-2xl opacity-60"></div>
             <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&q=80&w=600" 
                  alt="Melekler Kids Hero" 
-                 class="tilt-element rounded-3xl w-85 h-85 md:w-96 md:h-96 object-cover shadow-2xl border-4 border-white">
+                 class="hero-interactive-img rounded-3xl w-85 h-85 md:w-96 md:h-96 object-cover shadow-2xl border-4 border-white">
         </div>
         <div class="md:w-1/2 text-right space-y-6">
             <span class="text-xs font-bold tracking-widest text-rose-500 bg-rose-50 px-3 py-1 rounded-full">New Collection 2026</span>
@@ -256,17 +250,17 @@
 
     {{-- Features Section --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 py-20">
-        <div class="premium-card p-8 text-center space-y-4">
+        <div class="product-card-ty p-8 text-center space-y-4">
             <div class="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center mx-auto text-3xl">🍼</div>
             <h3 class="font-bold text-gray-800 text-xl">عناية بالمنتج</h3>
             <p class="text-gray-400 text-sm leading-relaxed">ملابس خاصة صنعت بعناية فائقة لحديثي الولادة بمواد قطنية 100%.</p>
         </div>
-        <div class="premium-card p-8 text-center space-y-4">
+        <div class="product-card-ty p-8 text-center space-y-4">
             <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center mx-auto text-3xl">🧷</div>
             <h3 class="font-bold text-gray-800 text-xl">خبرتنا الطويلة</h3>
             <p class="text-gray-400 text-sm leading-relaxed">صنعت كل قطعة بحب وشغف لتناسب طفلك وتواكب الموضة العالمية.</p>
         </div>
-        <div class="premium-card p-8 text-center space-y-4">
+        <div class="product-card-ty p-8 text-center space-y-4">
             <div class="w-16 h-16 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center mx-auto text-3xl">🪄</div>
             <h3 class="font-bold text-gray-800 text-xl">مفاجآت وهدايا</h3>
             <p class="text-gray-400 text-sm leading-relaxed">مع كل طلبية من متجرنا ستحصل على هدية مميزة مخصصة لطفلك المنتظر.</p>
@@ -317,7 +311,7 @@
             </div>
             <div class="filter-bar w-full md:w-auto">
                 <div class="filter-group flex-1 md:w-64">
-                    <i class="fas fa-search filter-icon absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
                     <input type="text" class="filter-input text-right" placeholder="بحث عن منتج...">
                 </div>
                 <button class="apply-button mr-2">تصفية</button>
@@ -326,38 +320,35 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             @forelse($products as $product)
-                <div class="product-card-ty scroll-reveal">
-                    <a href="{{ route('product.show', $product->id) }}">
-                        <div class="ty-image-wrapper">
-                            @if($product->original_price > $product->price)
-                                <div class="ty-badge">
-                                    خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%
-                                </div>
-                            @endif
-                            
-                            {{-- الصورة الأساسية --}}
-                            <img loading="lazy" src="{{ $product->images->first() ? $product->images->first()->image : 'https://via.placeholder.com/300' }}" class="ty-main-image" alt="{{ $product->name }}">
-                            
-                            {{-- الصورة الثانية التفاعلية (أو البديلة إذا لم تتوفر ثانية) --}}
-                            <img loading="lazy" src="{{ $product->images->skip(1)->first() ? $product->images->skip(1)->first()->image : ($product->images->first() ? $product->images->first()->image : 'https://via.placeholder.com/300') }}" class="ty-hover-image" alt="{{ $product->name }} Alt">
-                        </div>
-                    </a>
-                    <button class="ty-wishlist-btn" title="أضف للمفضلة"><i class="far fa-heart"></i></button>
-                    
-                    <div class="ty-info-wrapper">
-                        <h3 class="ty-title text-right">{{ $product->name }}</h3>
-                        <div class="flex flex-col gap-4">
-                            <div class="ty-price-wrapper">
-                                <span class="ty-final-price">{{ number_format($product->price, 2) }} ₺</span>
-                                @if($product->original_price > $product->price)
-                                    <span class="ty-original-price">{{ number_format($product->original_price, 2) }} ₺</span>
-                                @endif
+                <div class="product-card-ty scroll-reveal magnetic-card">
+                    <div class="ty-image-wrapper">
+                        @if($product->original_price > $product->price)
+                            <div class="ty-badge">
+                                خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%
                             </div>
-                            
-                            <button type="button" onclick="openSizeModal({{ $product->id }}, {{ json_encode($product->sizes ?? []) }})" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-2.5 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 text-sm shadow-sm">
+                        @endif
+                        
+                        <img loading="lazy" src="{{ $product->images->first() ? $product->images->first()->image : 'https://via.placeholder.com/300' }}" class="ty-main-image" alt="{{ $product->name }}">
+                        
+                        {{-- الستارة الزجاجية الحركية التي تظهر عند التحويم --}}
+                        <div class="ty-glass-overlay">
+                            <button type="button" onclick="openSizeModal({{ $product->id }}, {{ json_encode($product->sizes ?? []) }})" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 text-sm shadow-lg transform translate-y-2">
                                 <span>🛒</span>
                                 <span>أضف إلى السلة</span>
                             </button>
+                            <a href="{{ route('product.show', $product->id) }}" class="text-center text-xs font-bold text-gray-600 hover:text-rose-500 mt-3 block transition underline">عرض التفاصيل</a>
+                        </div>
+                    </div>
+                    
+                    <button class="ty-wishlist-btn" title="أضف للمفضلة"><i class="far fa-heart"></i></button>
+                    
+                    <div class="ty-info-wrapper mt-3">
+                        <h3 class="ty-title">{{ $product->name }}</h3>
+                        <div class="ty-price-wrapper">
+                            <span class="ty-final-price">{{ number_format($product->price, 2) }} ₺</span>
+                            @if($product->original_price > $product->price)
+                                <span class="ty-original-price">{{ number_format($product->original_price, 2) }} ₺</span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -476,22 +467,53 @@
     let selectedProduct = null;
     let selectedSize = null;
 
-    // 3D Interactive Parallax
-    const tiltContainer = document.querySelector('.tilt-container');
-    const tiltElement = document.querySelector('.tilt-element');
+    // 1. Advanced Fluid Magnet Card Tracking (التأثير المغناطيسي المرن للصور داخل الكروت)
+    document.querySelectorAll('.magnetic-card').forEach(card => {
+        const imgWrapper = card.querySelector('.ty-image-wrapper');
+        const img = card.querySelector('.ty-main-image');
 
-    if(tiltContainer && tiltElement) {
-        tiltContainer.addEventListener('mousemove', (e) => {
-            const { left, top, width, height } = tiltContainer.getBoundingClientRect();
+        if(imgWrapper && img) {
+            imgWrapper.addEventListener('mousemove', (e) => {
+                const { left, top, width, height } = imgWrapper.getBoundingClientRect();
+                const x = (e.clientX - left) - width / 2;
+                const y = (e.clientY - top) - height / 2;
+                
+                // تحريك الصورة باتجاه مرن ومغناطيسي يتبع الماوس بدقة
+                img.style.transform = `scale(1.1) translateX(${x * 0.15}deg) translateY(${y * 0.15}px) rotateX(${y * -0.05}deg) rotateY(${x * 0.05}deg)`;
+            });
+
+            imgWrapper.addEventListener('mouseleave', () => {
+                img.style.transform = 'scale(1) translateX(0) translateY(0) rotateX(0) rotateY(0)';
+            });
+        }
+    });
+
+    // 2. Interactive Backdrop Dot Shift Effect (تأثير تفاعلي للنقاط في الهيرو مع الماوس)
+    const heroBg = document.querySelector('.hero-spotted-container');
+    if(heroBg) {
+        heroBg.addEventListener('mousemove', (e) => {
+            const { left, top, width, height } = heroBg.getBoundingClientRect();
+            const xPercent = ((e.clientX - left) / width) * 100;
+            const yPercent = ((e.clientY - top) / height) * 100;
+            heroBg.style.backgroundPosition = `${xPercent * 0.1}% ${yPercent * 0.1}%`;
+        });
+        heroBg.addEventListener('mouseleave', () => {
+            heroBg.style.backgroundPosition = 'center';
+        });
+    }
+
+    // 3. 3D Interactive Parallax on Hero Image
+    const container3d = document.querySelector('.3d-card-wrapper');
+    const img3d = document.querySelector('.hero-interactive-img');
+    if(container3d && img3d) {
+        container3d.addEventListener('mousemove', (e) => {
+            const { left, top, width, height } = container3d.getBoundingClientRect();
             const x = (e.clientX - left) - width / 2;
             const y = (e.clientY - top) - height / 2;
-            const rotateX = (y / height) * -20; 
-            const rotateY = (x / width) * 20;
-            tiltElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
+            img3d.style.transform = `rotateX(${y * -0.06}deg) rotateY(${x * 0.06}deg) translateZ(15px)`;
         });
-
-        tiltContainer.addEventListener('mouseleave', () => {
-            tiltElement.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0)';
+        container3d.addEventListener('mouseleave', () => {
+            img3d.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0)';
         });
     }
 
