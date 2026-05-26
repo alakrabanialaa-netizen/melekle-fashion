@@ -183,6 +183,46 @@
     .marquee-content { display: flex; align-items: center; white-space: nowrap; }
     .marquee-content span { font-size: 0.85rem; opacity: 0.9; margin: 0 2rem; }
     .marquee-content i { margin: 0 1rem; }
+
+    /* --- 9. كلاسات إضافية لقسم التقويم والـ Zigzag --- */
+.zigzag-border {
+    background-color: var(--brand-pink); /* يأخذ لون الهوية الوردي تلقائياً */
+    position: relative;
+}
+/* رسم تأثير الزيجزاج المتعرج اللطيف المناسب للأطفال */
+.zigzag-border::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 15px;
+    background-image: linear-gradient(135deg, var(--soft-cream) 25%, transparent 25%), 
+                      linear-gradient(225deg, var(--soft-cream) 25%, transparent 25%);
+    background-size: 20px 30px;
+}
+
+/* تنسيق شبكة أيام الأسبوع وأيام الشهر في التقويم */
+.calendar-grid {
+    display: grid;
+    grid-template-cols: repeat(7, minmax(0, 1fr));
+    gap: 8px;
+}
+.calendar-day {
+    padding: 8px 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.calendar-day:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+/* اليوم النشط الذي يحتوي على فعاليات ومهرجانات */
+.calendar-day.active {
+    background-color: var(--brand-amber);
+    color: var(--text-dark);
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);
+    position: relative;
+}
 </style>
 
 
