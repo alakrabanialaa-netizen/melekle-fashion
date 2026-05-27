@@ -24,48 +24,60 @@
         /* --- Floating Header Styles --- */
         #main-header {
             position: fixed;
-            top: 0;       
-            left: 0;    
-            right: 0;   
+            top: 1rem;       
+            left: 1.5rem;    
+            right: 1.5rem;   
+            border-radius: 24px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: 'Cairo', sans-serif;
         }
 
+        /* المظهر الشفاف الأساسي الفخم في البداية */
         .header-transparent {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(6px);
-            padding-top: 1.2rem;
-            padding-bottom: 1.2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
         }
 
+        /* المظهر عند النزول بالصفحة */
         .header-scrolled {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(15px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            top: 0.5rem !important;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(244, 63, 94, 0.1);
+            box-shadow: 0 10px 30px rgba(244, 63, 94, 0.05);
             padding-top: 0.6rem;
             padding-bottom: 0.6rem;
         }
 
-        .logo-container { transition: all 0.4s ease; }
-        .nav-link { transition: all 0.3s ease; font-weight: 700; position: relative; color: #374151; }
+        /* Nav Links */
+        .nav-link { transition: all 0.3s ease; font-weight: 700; color: #1f2937; position: relative; }
         .nav-link:hover { color: #f43f5e !important; }
-        .nav-icon { transition: all 0.3s ease; cursor: pointer; color: #374151; }
+        
+        /* Icons */
+        .nav-icon { transition: all 0.3s ease; cursor: pointer; color: #1f2937; }
         .nav-icon:hover { color: #f43f5e !important; transform: translateY(-2px); }
 
+        /* Language Switcher Button */
         .lang-btn {
             display: flex;
             align-items: center;
             gap: 8px;
             padding: 6px 14px;
             border-radius: 999px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
-            background: white;
-            color: #374151;
+            background: rgba(255, 255, 255, 0.8);
+            color: #1f2937;
         }
         .lang-btn:hover { color: #f43f5e !important; border-color: #f43f5e; transform: translateY(-2px); }
 
+        /* Dropdowns */
         .dropdown-menu {
             opacity: 0;
             visibility: hidden;
@@ -83,7 +95,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body>
 
 <header id="main-header" class="z-50 header-transparent">
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-3 items-center">
@@ -116,7 +128,7 @@
         {{-- 2. Center Side: Logo Image --}}
         <div class="logo-container text-center flex justify-center items-center">
             <a href="/" class="inline-block">
-                <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/favicon.png?v=2" alt="Melekler Logo" class="logo-img h-14 md:h-20 w-auto object-contain transition-all duration-300">
+                <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/favicon.png?v=2" alt="Melekler Logo" class="logo-img h-12 md:h-16 w-auto object-contain transition-all duration-300">
             </a>
         </div>
 
@@ -131,6 +143,7 @@
                         <i class="fas fa-chevron-down text-[9px] transition-transform group-hover:rotate-180"></i>
                     </button>
                     <div class="dropdown-menu absolute right-0 mt-4 w-56 bg-white rounded-3xl shadow-2xl py-4 border border-pink-50 overflow-hidden">
+                        {{-- ⚠️ تذكر تفعيل روابط الراوتات هنا بعد التأكد من وجودها في ملف web.php --}}
                         <a href="#" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👦 ملابس أولاد</a>
                         <a href="#" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👧 ملابس بنات</a>
                         <a href="#" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👶 ملابس رضع</a>
@@ -157,20 +170,20 @@
 <div id="mobile-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-50 p-8">
     <button id="close-mobile-menu" class="absolute top-6 left-6 text-2xl text-gray-600">&times;</button>
     <nav class="flex flex-col gap-6 mt-12 font-bold text-gray-800">
-        <a href="/" class="hover:text-orange-500">الرئيسية</a>
+        <a href="/" class="hover:text-pink-500">الرئيسية</a>
         <h3 class="text-gray-400 text-sm mt-4">الأقسام</h3>
-        <a href="#" class="hover:text-orange-500 pr-4">ملابس أولاد</a>
-        <a href="#" class="hover:text-orange-500 pr-4">ملابس بنات</a>
-        <a href="#" class="hover:text-orange-500 pr-4">ملابس رضع</a>
+        <a href="#" class="hover:text-pink-500 pr-4">ملابس أولاد</a>
+        <a href="#" class="hover:text-pink-500 pr-4">ملابس بنات</a>
+        <a href="#" class="hover:text-pink-500 pr-4">ملابس رضع</a>
         <hr>
-        <a href="#" class="hover:text-orange-500">كل المنتجات</a>
+        <a href="#" class="hover:text-pink-500">كل المنتجات</a>
         <a href="#" class="text-red-500">تخفيضات</a>
         <hr>
-        <a href="#" class="hover:text-orange-500">تسجيل الدخول</a>
+        <a href="#" class="hover:text-pink-500">تسجيل الدخول</a>
     </nav>
 </div>
 
-<main class="pt-24 md:pt-32 min-h-screen">
+<main class="pt-28 md:pt-36 min-h-screen">
     @yield('content')
 </main>
 
