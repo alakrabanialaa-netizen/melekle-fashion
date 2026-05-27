@@ -32,7 +32,6 @@
             font-family: 'Cairo', sans-serif;
         }
 
-        /* المظهر الشفاف الأساسي الفخم في البداية */
         .header-transparent {
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(12px);
@@ -43,7 +42,6 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
         }
 
-        /* المظهر عند النزول بالصفحة */
         .header-scrolled {
             top: 0.5rem !important;
             background: rgba(255, 255, 255, 0.92);
@@ -55,15 +53,12 @@
             padding-bottom: 0.6rem;
         }
 
-        /* Nav Links */
         .nav-link { transition: all 0.3s ease; font-weight: 700; color: #1f2937; position: relative; }
         .nav-link:hover { color: #f43f5e !important; }
         
-        /* Icons */
         .nav-icon { transition: all 0.3s ease; cursor: pointer; color: #1f2937; }
         .nav-icon:hover { color: #f43f5e !important; transform: translateY(-2px); }
 
-        /* Language Switcher Button */
         .lang-btn {
             display: flex;
             align-items: center;
@@ -77,7 +72,6 @@
         }
         .lang-btn:hover { color: #f43f5e !important; border-color: #f43f5e; transform: translateY(-2px); }
 
-        /* Dropdowns */
         .dropdown-menu {
             opacity: 0;
             visibility: hidden;
@@ -120,8 +114,8 @@
                 </div>
             </div>
 
-            {{-- تم تعديل الرابط لاستخدام اسم الراوت الصريح للوحة التحكم --}}
-            <a href="{{ route('admin.dashboard') }}" class="nav-icon text-xl hidden md:block" title="لوحة التحكم">
+            {{-- 🛠️ تم التعديل إلى رابط مباشر آمن بدلاً من الـ route لمنع الانهيار --}}
+            <a href="/admin/dashboard" class="nav-icon text-xl hidden md:block" title="لوحة التحكم">
                 <i class="fas fa-user-shield"></i>
             </a>
         </div>
@@ -143,7 +137,6 @@
                         <span>الأقسام</span>
                         <i class="fas fa-chevron-down text-[9px] transition-transform group-hover:rotate-180"></i>
                     </button>
-                    {{-- 🛠️ تم تعديل الروابط هنا لتطابق مسارات ملف web.php تماماً دون أدنى اختلاف --}}
                     <div class="dropdown-menu absolute right-0 mt-4 w-56 bg-white rounded-3xl shadow-2xl py-4 border border-pink-50 overflow-hidden z-[120]">
                         <a href="/category/boys" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👦 ملابس أولاد</a>
                         <a href="/category/girls" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👧 ملابس بنات</a>
@@ -181,8 +174,8 @@
         <a href="/shop" class="hover:text-pink-500">كل المنتجات</a>
         <a href="/blog" class="hover:text-pink-500">المدونة</a>
         <hr class="border-gray-100">
-        {{-- تم تحويل زر تسجيل الدخول ليفتح لوحة التحكم الإدارية مباشرة --}}
-        <a href="{{ route('admin.dashboard') }}" class="hover:text-pink-500 flex items-center gap-2">
+        {{-- 🛠️ رابط مباشر آمن للموبايل أيضاً --}}
+        <a href="/admin/dashboard" class="hover:text-pink-500 flex items-center gap-2">
             <i class="fas fa-user-shield text-sm"></i> لوحة التحكم
         </a>
     </nav>
