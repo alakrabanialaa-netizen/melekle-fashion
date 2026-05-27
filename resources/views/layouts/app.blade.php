@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/favicon.png?v=2">
+    <link rel="icon" type="image/png" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/hero-bg.png">
     <title>Melekler Group | @yield('title', 'Premium Fashion')</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -120,15 +120,15 @@
                 </div>
             </div>
 
-            <a href="#" class="nav-icon text-xl hidden md:block">
+ <a href="#" class="nav-icon text-xl hidden md:block">
                 <i class="far fa-user-circle"></i>
             </a>
         </div>
         
-        {{-- 2. Center Side: Logo Image --}}
+        {{-- 2. Center Side: Logo Image (تم تحديث الرابط إلى الصورة الصحيحة التي أرسلتها) --}}
         <div class="logo-container text-center flex justify-center items-center">
             <a href="/" class="inline-block">
-                <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/favicon.png?v=2" alt="Melekler Logo" class="logo-img h-12 md:h-16 w-auto object-contain transition-all duration-300">
+                <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/hero-bg.png" alt="Melekler Logo" class="logo-img h-12 md:h-16 w-auto object-contain transition-all duration-300">
             </a>
         </div>
 
@@ -142,12 +142,11 @@
                         <span>الأقسام</span>
                         <i class="fas fa-chevron-down text-[9px] transition-transform group-hover:rotate-180"></i>
                     </button>
-                    <div class="dropdown-menu absolute right-0 mt-4 w-56 bg-white rounded-3xl shadow-2xl py-4 border border-pink-50 overflow-hidden">
-                        {{-- ⚠️ تذكر تفعيل روابط الراوتات هنا بعد التأكد من وجودها في ملف web.php --}}
-                        <a href="#" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👦 ملابس أولاد</a>
-                        <a href="#" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👧 ملابس بنات</a>
-                        <a href="#" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👶 ملابس رضع</a>
-                        <a href="#" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👩 ملابس نساء</a>
+                    <div class="dropdown-menu absolute right-0 mt-4 w-56 bg-white rounded-3xl shadow-2xl py-4 border border-pink-50 overflow-hidden z-[120]">
+                        <a href="/boys" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👦 ملابس أولاد</a>
+                        <a href="/girls" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👧 ملابس بنات</a>
+                        <a href="/babies" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👶 ملابس رضع</a>
+                        <a href="/women" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👩 ملابس نساء</a>
                     </div>
                 </div>
             </nav>
@@ -167,19 +166,20 @@
 </header>
 
 {{-- 📱 Mobile Menu --}}
-<div id="mobile-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-50 p-8">
+<div id="mobile-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[150] p-8">
     <button id="close-mobile-menu" class="absolute top-6 left-6 text-2xl text-gray-600">&times;</button>
     <nav class="flex flex-col gap-6 mt-12 font-bold text-gray-800">
         <a href="/" class="hover:text-pink-500">الرئيسية</a>
         <h3 class="text-gray-400 text-sm mt-4">الأقسام</h3>
-        <a href="#" class="hover:text-pink-500 pr-4">ملابس أولاد</a>
-        <a href="#" class="hover:text-pink-500 pr-4">ملابس بنات</a>
-        <a href="#" class="hover:text-pink-500 pr-4">ملابس رضع</a>
-        <hr>
-        <a href="#" class="hover:text-pink-500">كل المنتجات</a>
-        <a href="#" class="text-red-500">تخفيضات</a>
-        <hr>
-        <a href="#" class="hover:text-pink-500">تسجيل الدخول</a>
+        <a href="/boys" class="hover:text-pink-500 pr-4">ملابس أولاد</a>
+        <a href="/girls" class="hover:text-pink-500 pr-4">ملابس بنات</a>
+        <a href="/babies" class="hover:text-pink-500 pr-4">ملابس رضع</a>
+        <a href="/women" class="hover:text-pink-500 pr-4">ملابس نساء</a>
+        <hr class="border-gray-100">
+        <a href="/products" class="hover:text-pink-500">كل المنتجات</a>
+        <a href="/sales" class="text-red-500">تخفيضات</a>
+        <hr class="border-gray-100">
+        <a href="/login" class="hover:text-pink-500">تسجيل الدخول</a>
     </nav>
 </div>
 
@@ -188,7 +188,7 @@
 </main>
 
 {{-- 🛒 Mini Cart --}}
-<div id="mini-cart" class="fixed top-0 right-[-420px] w-[400px] h-screen bg-white shadow-2xl transition-all duration-300 z-50 flex flex-col">
+<div id="mini-cart" class="fixed top-0 right-[-420px] w-[400px] h-screen bg-white shadow-2xl transition-all duration-300 z-[150] flex flex-col">
     <div class="p-6 border-b flex justify-between items-center">
         <h2 class="text-xl font-bold">🛒 سلة المشتريات</h2>
         <button onclick="closeCart()" class="text-2xl hover:text-red-500 transition">&times;</button>
@@ -225,7 +225,6 @@
         @endif
     </div>
 </div>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
