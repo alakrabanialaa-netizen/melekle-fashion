@@ -120,8 +120,8 @@
                 </div>
             </div>
 
-            {{-- تم تعديل الرابط والأيقونة لتوجيهك فوراً إلى لوحة تحكم الإدارة الاستراتيجية للكمبيوتر --}}
-            <a href="/admin/dashboard" class="nav-icon text-xl hidden md:block" title="لوحة التحكم">
+            {{-- تم تعديل الرابط لاستخدام اسم الراوت الصريح للوحة التحكم --}}
+            <a href="{{ route('admin.dashboard') }}" class="nav-icon text-xl hidden md:block" title="لوحة التحكم">
                 <i class="fas fa-user-shield"></i>
             </a>
         </div>
@@ -143,12 +143,12 @@
                         <span>الأقسام</span>
                         <i class="fas fa-chevron-down text-[9px] transition-transform group-hover:rotate-180"></i>
                     </button>
-                    {{-- تم تصحيح مسارات الأقسام لتتوافق تماماً مع مجلد الفيو ومسار الـ Route الصحيح --}}
+                    {{-- 🛠️ تم تعديل الروابط هنا لتطابق مسارات ملف web.php تماماً دون أدنى اختلاف --}}
                     <div class="dropdown-menu absolute right-0 mt-4 w-56 bg-white rounded-3xl shadow-2xl py-4 border border-pink-50 overflow-hidden z-[120]">
-                        <a href="/categories/boys" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👦 ملابس أولاد</a>
-                        <a href="/categories/girls" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👧 ملابس بنات</a>
-                        <a href="/categories/babies" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👶 ملابس رضع</a>
-                        <a href="/categories/mothers" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👩 ملابس نساء</a>
+                        <a href="/category/boys" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👦 ملابس أولاد</a>
+                        <a href="/category/girls" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👧 ملابس بنات</a>
+                        <a href="/category/babies" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👶 ملابس رضع</a>
+                        <a href="/category/mothers" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👩 ملابس نساء</a>
                     </div>
                 </div>
             </nav>
@@ -173,16 +173,16 @@
     <nav class="flex flex-col gap-6 mt-12 font-bold text-gray-800">
         <a href="/" class="hover:text-pink-500">الرئيسية</a>
         <h3 class="text-gray-400 text-sm mt-4">الأقسام</h3>
-        <a href="/categories/boys" class="hover:text-pink-500 pr-4">ملابس أولاد</a>
-        <a href="/categories/girls" class="hover:text-pink-500 pr-4">ملابس بنات</a>
-        <a href="/categories/babies" class="hover:text-pink-500 pr-4">ملابس رضع</a>
-        <a href="/categories/mothers" class="hover:text-pink-500 pr-4">ملابس نساء</a>
+        <a href="/category/boys" class="hover:text-pink-500 pr-4">ملابس أولاد</a>
+        <a href="/category/girls" class="hover:text-pink-500 pr-4">ملابس بنات</a>
+        <a href="/category/babies" class="hover:text-pink-500 pr-4">ملابس رضع</a>
+        <a href="/category/mothers" class="hover:text-pink-500 pr-4">ملابس نساء</a>
         <hr class="border-gray-100">
-        <a href="/products" class="hover:text-pink-500">كل المنتجات</a>
-        <a href="/sales" class="text-red-500">تخفيضات</a>
+        <a href="/shop" class="hover:text-pink-500">كل المنتجات</a>
+        <a href="/blog" class="hover:text-pink-500">المدونة</a>
         <hr class="border-gray-100">
-        {{-- زر تسجيل الدخول للموبايل معدل ليأخذك مباشرة إلى لوحة تحكم الأدمن --}}
-        <a href="/admin/dashboard" class="hover:text-pink-500 flex items-center gap-2">
+        {{-- تم تحويل زر تسجيل الدخول ليفتح لوحة التحكم الإدارية مباشرة --}}
+        <a href="{{ route('admin.dashboard') }}" class="hover:text-pink-500 flex items-center gap-2">
             <i class="fas fa-user-shield text-sm"></i> لوحة التحكم
         </a>
     </nav>
@@ -200,7 +200,7 @@
     </div>
 
     <div class="flex-1 p-6 overflow-y-auto">
-        @php $cart = session('cart', []); $total = 0; @php
+        @php $cart = session('cart', []); $total = 0; @endphp
         
         @if(count($cart) > 0)
             @foreach($cart as $id => $item)
