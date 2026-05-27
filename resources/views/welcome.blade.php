@@ -226,42 +226,6 @@
 
 </style>
 
-<div class="hero-spotted-container" style="background-image: url('https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/hero-bg.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">   
-    
-
-
-{{-- Hero Section (The Curved Box) --}}
-
-    <div class="hero-curved-container bg-white shadow-xl flex flex-col md:flex-row items-center p-8 md:p-16 gap-10">
-
-        <div class="md:w-1/2 relative">
-
-            <div class="absolute -top-10 -left-10 w-32 h-32 bg-pink-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-
-            <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&q=80&w=600" 
-
-                 alt="Kids Education" 
-
-                 class="rounded-full w-80 h-80 object-cover border-8 border-pink-50 shadow-inner">
-
-        </div>
-
-        <div class="md:w-1/2 text-right md:text-left">
-
-            <h1 class="text-4xl md:text-5xl font-black text-pink-500 mb-4 leading-tight">FOR YOUR BEBE</h1>
-
-            <p class="text-gray-400 leading-relaxed mb-8">
-
-              متجر مختص لبيع ملابس الأطفال المريحة والحديثة التي تناسب طفلك 
-
-            </p>
-
-            <a href="#" class="btn-rounded bg-pink-500 text-white shadow-lg shadow-pink-200 inline-block">Learn more</a>
-
-        </div>
-
-    </div>
-
 
 
    {{-- Features Section (The Three Icons) - نسخة محسنة ومصححة بالكامل --}}
