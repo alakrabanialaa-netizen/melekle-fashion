@@ -266,53 +266,62 @@
 
 
 {{-- Bottom Event & Calendar Section - نسخة متناسقة ومصححة بالكامل --}}
-<div class="zigzag-border mt-10 py-20 text-white select-none">
-    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row gap-16 items-center">
+<div class="mt-16 py-20 text-white select-none relative" style="background-color: #f43f5e;">
+    {{-- إضافة تأثير الزيجزاج العلوى والسفلي الجمالي --}}
+    <div class="absolute top-0 left-0 right-0 h-4 bg-[radial-gradient(circle_at_bottom,_transparent_60%,_#fffaf0_65%)] bg-[length:16px_16px]"></div>
+    
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row gap-12 items-center justify-between">
         
-        {{-- تفاصيل الفعالية والحدث --}}
-        <div class="md:w-1/2 space-y-6 text-right w-full">
-            <h2 class="text-4xl font-black tracking-wide leading-tight">April's Upcoming Event</h2>
+        {{-- 1. تفاصيل الفعالية والحدث --}}
+        <div class="md:w-1/2 space-y-6 text-right w-full order-2 md:order-1">
+            <h2 class="text-3xl md:text-4xl font-black tracking-wide leading-tight text-white">April's Upcoming Event</h2>
             
             {{-- بطاقة تفاصيل الحدث الزجاجية الفاخرة --}}
-            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-xl text-right">
-                <div class="flex gap-4 text-xs md:text-sm mb-4 font-bold opacity-90 flex-row-reverse justify-start">
+            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 border border-white/25 shadow-xl text-right">
+                <div class="flex gap-4 text-xs md:text-sm mb-4 font-bold opacity-95 flex-row-reverse justify-start">
                     <span class="flex items-center gap-1">📅 17.04.2026</span>
                     <span class="flex items-center gap-1">⏰ 09:00 AM</span>
                     <span class="flex items-center gap-1">📍 اسطنبول، تركيا</span>
                 </div>
                 
-                <p class="mb-8 leading-relaxed text-white/90 text-sm md:text-base">
+                <p class="mb-6 leading-relaxed text-white/90 text-sm md:text-base">
                     انضموا إلينا في فعاليتنا القادمة لربيع 2026، حيث سنقوم بالعديد من الأنشطة التفاعلية، ورشات الرسم، والمسابقات الممتعة للأطفال مع توزيع هدايا حصرية من تشكيلتنا الجديدة.
                 </p>
                 
                 <div class="text-left">
-                    <a href="#" class="inline-block bg-white text-rose-500 font-bold px-6 py-3 rounded-2xl hover:bg-rose-50 transition-all duration-300 transform hover:-translate-y-0.5 shadow-md">
+                    <a href="#" class="inline-block bg-white text-rose-500 font-bold px-6 py-3 rounded-2xl hover:bg-rose-50 transition-all duration-300 transform hover:-translate-y-0.5 shadow-md text-sm">
                         معرفة المزيد
                     </a>
                 </div>
             </div>
         </div>
 
-        {{-- التقويم التفاعلي (Calendar) --}}
-        <div class="md:w-1/2 flex flex-col items-center w-full">
-            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 w-full max-w-sm shadow-xl">
+        {{-- 2. التقويم التفاعلي (Calendar) --}}
+        <div class="md:w-1/2 flex flex-col items-center w-full order-1 md:order-2">
+            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 border border-white/25 w-full max-w-md shadow-xl">
                 
                 {{-- رأس التقويم والتنقل --}}
-                <div class="flex justify-between items-center mb-6 font-black uppercase tracking-widest text-sm">
+                <div class="flex justify-between items-center mb-6 font-black uppercase tracking-widest text-sm text-white">
                     <button class="hover:text-yellow-300 transition-colors text-lg">←</button>
                     <span class="border-b-2 border-yellow-300 pb-1">April 2026</span>
                     <button class="hover:text-yellow-300 transition-colors text-lg">→</button>
                 </div>
                 
-                {{-- أيام الأسبوع --}}
-                <div class="calendar-grid text-center font-bold text-xs mb-4 opacity-70">
+                {{-- أيام الأسبوع موزعة على 7 أعمدة بالتساوي --}}
+                <div class="grid grid-cols-7 gap-2 text-center font-bold text-xs mb-4 opacity-80 text-white border-b border-white/10 pb-2">
                     <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
                 </div>
                 
-                {{-- أيام الشهر وحلقات التكرار --}}
-                <div class="calendar-grid text-center">
+                {{-- أيام الشهر موزعة على 7 أعمدة --}}
+                <div class="grid grid-cols-7 gap-y-3 gap-x-2 text-center text-sm font-semibold text-white">
                     @for($i=1; $i<=30; $i++)
-                        <div class="calendar-day {{ in_array($i, [17, 22, 25, 28]) ? 'active' : '' }}">
+                        @php
+                            // فحص الأيام المميزة (أيام الأحداث)
+                            $isEventDay = in_array($i, [17, 22, 25, 28]);
+                        @endphp
+                        
+                        <div class="flex items-center justify-center aspect-square rounded-full transition-all duration-300 cursor-pointer
+                            {{ $isEventDay ? 'bg-yellow-300 text-rose-600 font-black shadow-md scale-110 border border-white/50 hover:bg-yellow-400' : 'hover:bg-white/10' }}">
                             {{ $i }}
                         </div>
                     @endfor
@@ -323,7 +332,6 @@
 
     </div>
 </div>
-
 
 {{-- ------------------------------------------------------------------ --}}
 {{-- 🚀 MAIN CONTENT - INSTAGRAM STYLE STORIES --}}
