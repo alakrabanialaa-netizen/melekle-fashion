@@ -128,48 +128,8 @@ Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDet
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
 
-// 👦 قسم ملابس الأولاد
-Route::get('/category/boys', function() { 
-    $category = \App\Models\Category::where('category_name', 'like', '%ولد%')
-                                    ->orWhere('category_slug', 'like', '%boy%')
-                                    ->first();
-                                    
-    $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
-    return view('categories.boys', compact('products', 'category')); 
-})->name('category.boys');
-
-// 👧 قسم ملابس البنات (تم تصحيح الاسم البرمجي هنا)
-Route::get('/category/girls', function() { 
-    $category = \App\Models\Category::where('category_name', 'like', '%بنات%')
-                                    ->orWhere('category_slug', 'like', '%girl%')
-                                    ->first();
-                                    
-    $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
-    return view('categories.girls', compact('products', 'category')); 
-})->name('category.girls');
-
-// 👶 قسم ملابس الرضع
-Route::get('/category/babies', function() { 
-    $category = \App\Models\Category::where('category_name', 'like', '%رضع%')
-                                    ->orWhere('category_name', 'like', '%طفل%')
-                                    ->orWhere('category_slug', 'like', '%bab%')
-                                    ->first();
-                                    
-    $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
-    return view('categories.babies', compact('products', 'category')); 
-})->name('category.babies');
-
-// 👩 قسم ملابس الأمهات
-Route::get('/category/mothers', function() { 
-    $category = \App\Models\Category::where('category_name', 'like', '%أمهات%')
-                                    ->orWhere('category_name', 'like', '%نساء%')
-                                    ->orWhere('category_slug', 'like', '%moth%')
-                                    ->orWhere('category_slug', 'like', '%wom%')
-                                    ->first();
-                                    
-    $products = $category ? \App\Models\Product::where('category_id', $category->id)->where('status', 1)->get() : collect();
-    return view('categories.mothers', compact('products', 'category')); 
-})->name('category.mothers');
+// 🌟 الرابط الموحد المطور البديل لصفحات الأقسام الكاملة ليعرض منتجات كل قسم بالتفصيل
+Route::get('/category/{id}', [IndexController::class, 'CategoryPage'])->name('categories.show');
 
 // ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات ====================
 Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
@@ -182,7 +142,7 @@ Route::post('/dcart/data/store/{id}', [CartController::class, 'AddToCartDetails'
 Route::post('/add-to-wishlist/{product_id}', [WishlistController::class, 'AddToWishlist']);
 Route::post('/add-to-compare/{product_id}', [CompareController::class, 'AddToCompare']);
 
-Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
+Route::couponApply('/coupon-apply', [CartController::class, 'CouponApply']);
 Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
 Route::get('/coupon-remove', [CartController::class, 'CouponRemove']);
 Route::get('/checkout', [CheckoutController::class, 'CheckoutCreate'])->name('checkout');
