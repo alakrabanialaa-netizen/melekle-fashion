@@ -86,19 +86,17 @@
         border-radius: 5px !important;
     }
 
-    /* --- 2. تأثيرات الحركة والأنيميشن النظيفة --- */
+    /* --- Animations & Reveal --- */
     .scroll-reveal {
         opacity: 0;
         transform: translateY(40px);
         transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
-
     @keyframes gradientMove { 0% { background-position: 0% } 100% { background-position: 200% } }
     @keyframes marquee { from { transform: translateX(0%); } to { transform: translateX(-50%); } }
-    @keyframes float-huge { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-12px) scale(1.02); } }
 
-    /* --- 3. الهوية البصرية --- */
+    /* --- Visual Badges --- */
     .lux-badge { letter-spacing: 0.2em; font-size: 13px; font-weight: 600; color: var(--brand-amber); }
     .lux-gradient {
         background: linear-gradient(90deg, var(--brand-amber), var(--brand-pink), var(--brand-amber));
@@ -106,7 +104,7 @@
         animation: gradientMove 6s linear infinite;
     }
 
-    /* --- 4. كروت المنتجات --- */
+    /* --- Product Cards --- */
     .product-card-ty {
         background: #ffffff;
         border: 1px solid #e5e7eb;
@@ -153,7 +151,6 @@
         padding: 16px;
     }
     .product-card-ty:hover .ty-glass-overlay { opacity: 1; transform: translateY(0); }
-
     .ty-badge {
         position: absolute; top: 12px; left: 12px; background-color: var(--brand-pink);
         color: white; padding: 4px 10px; font-size: 0.75rem; font-weight: 700; border-radius: 30px; z-index: 20;
@@ -163,89 +160,39 @@
         border-radius: 50%; background-color: white; color: #6b7280;
         display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: all 0.2s ease; z-index: 20;
     }
-    .ty-wishlist-btn:hover { color: var(--brand-pink); transform: scale(1.15); }
-
     .ty-info-wrapper { padding: 12px 4px 4px; text-align: right; }
     .ty-title { font-size: 0.9rem; font-weight: 600; color: #374151; line-height: 1.4; }
     .ty-price-wrapper { display: flex; align-items: center; gap: 8px; flex-direction: row-reverse; justify-content: flex-start; margin-top: 6px; }
     .ty-final-price { font-size: 1.1rem; font-weight: 700; color: var(--brand-pink); }
     .ty-original-price { font-size: 0.85rem; color: #9ca3af; text-decoration: line-through; }
 
-    /* --- 5. شريط التصفية --- */
+    /* --- Filter Bar --- */
     .filter-bar {
         display: flex; align-items: center; background-color: #ffffff;
         border-radius: 16px; padding: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); border: 1px solid #e5e7eb;
     }
-    .filter-group { position: relative; display: flex; align-items: center; flex-grow: 1; }
-    .filter-input {
-        width: 100%; border: none; padding: 12px 44px 12px 16px;
-        font-weight: 600; color: #374151;
-    }
-    .filter-input:focus { outline: none; }
-    .apply-button {
-        background-color: var(--brand-pink); color: white; font-weight: 700;
-        padding: 12px 24px; border-radius: 12px; transition: all 0.2s ease;
-    }
-    .apply-button:hover { background-color: var(--brand-pink-hover); transform: scale(1.02); }
+    .filter-input { width: 100%; border: none; padding: 12px 16px; font-weight: 600; color: #374151; }
+    .apply-button { background-color: var(--brand-pink); color: white; font-weight: 700; padding: 12px 24px; border-radius: 12px; transition: all 0.2s ease; }
 
-    /* --- 6. التقييمات --- */
+    /* --- Reviews --- */
     .reviews-slider { position: relative; overflow: hidden; width: 100%; padding: 10px 0; }
     .reviews-track { display: flex; width: max-content; animation: scrollReviews 35s linear infinite; gap: 24px; }
-    .reviews-slider:hover .reviews-track { animation-play-state: paused; }
-    .review-card {
-        min-width: 310px; max-width: 310px; background: white; padding: 24px;
-        border-radius: 24px; text-align: center; border: 1px solid #f3f4f6;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.02); transition: transform 0.3s;
-    }
-    .review-card:hover { transform: translateY(-6px); }
+    .review-card { min-width: 310px; background: white; padding: 24px; border-radius: 24px; text-align: center; border: 1px solid #f3f4f6; }
 
-    /* --- 7. الموبايل --- */
-    @media (max-width: 768px) {
-        .filter-bar { flex-direction: column; gap: 8px; padding: 12px; }
-        .hero-swiper { height: 60vh; border-radius: 0 0 30px 30px; }
-    }
+    /* --- Calendar (Fixed Grid) --- */
+    .calendar-grid { display: grid !important; grid-template-cols: repeat(7, 1fr) !important; gap: 8px !important; width: 100% !important; }
+    .calendar-day { aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; border-radius: 50%; transition: all 0.2s ease; cursor: pointer; }
+    .calendar-day.active { background-color: var(--brand-amber); color: var(--text-dark); box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4); }
 
-    /* --- 8. الفوتر --- */
-    .marquee-footer {
-        position: fixed; bottom: 0; left: 0; width: 100%;
-        background-color: #111827; color: white; z-index: 60;
-        overflow: hidden; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1);
-    }
+    /* --- Footer & Marquee --- */
+    .marquee-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #111827; color: white; z-index: 60; overflow: hidden; padding: 12px 0; }
     .marquee-inner-wrap { display: flex; width: fit-content; animation: marquee 30s linear infinite; }
     .marquee-content { display: flex; align-items: center; white-space: nowrap; }
     .marquee-content span { font-size: 0.85rem; opacity: 0.9; margin: 0 2rem; }
 
-    /* --- 9. التقويم (الإصلاح الجذري) --- */
-    .calendar-grid {
-        display: grid !important;
-        grid-template-cols: repeat(7, 1fr) !important;
-        gap: 8px !important;
-        width: 100% !important;
+    @media (max-width: 768px) {
+        .hero-swiper { height: 60vh; border-radius: 0 0 30px 30px; }
     }
-    .calendar-day {
-        aspect-ratio: 1/1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.85rem;
-        font-weight: 700;
-        border-radius: 50%;
-        transition: all 0.2s ease;
-        cursor: pointer;
-    }
-    .calendar-day:hover { background-color: rgba(255, 255, 255, 0.2); }
-    .calendar-day.active {
-        background-color: var(--brand-amber);
-        color: var(--text-dark);
-        box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);
-    }
-    .calendar-header-day {
-        font-size: 0.75rem;
-        font-weight: 900;
-        opacity: 0.6;
-        padding-bottom: 8px;
-    }
-
 </style>
 
 {{-- 🚀 NEW ARTISTIC HERO SLIDER --}}
@@ -277,7 +224,7 @@
     <div class="swiper-pagination"></div>
 </div>
 
-   {{-- Features Section --}}
+{{-- Features Section --}}
 <div class="grid grid-cols-1 md:grid-cols-3 gap-12 py-20 text-center select-none max-w-7xl mx-auto px-6">
     <div class="group cursor-pointer">
         <div class="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-emerald-200 group-hover:rotate-12 transition-all duration-300 transform group-hover:scale-105">
@@ -302,7 +249,7 @@
     </div>
 </div>
 
-{{-- Bottom Event & Calendar Section --}}
+{{-- Event & Calendar --}}
 <div class="mt-16 py-20 text-white select-none relative" style="background-color: #f43f5e;">
     <div class="absolute top-0 left-0 right-0 h-4 bg-[radial-gradient(circle_at_bottom,_transparent_60%,_#fffaf0_65%)] bg-[length:16px_16px]"></div>
     <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row gap-12 items-center justify-between">
@@ -310,102 +257,59 @@
             <h2 class="text-3xl md:text-4xl font-black tracking-wide leading-tight text-white">April's Upcoming Event</h2>
             <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 border border-white/25 shadow-xl text-right">
                 <div class="flex gap-4 text-xs md:text-sm mb-4 font-bold opacity-95 flex-row-reverse justify-start">
-                    <span class="flex items-center gap-1">📅 17.04.2026</span>
-                    <span class="flex items-center gap-1">⏰ 09:00 AM</span>
-                    <span class="flex items-center gap-1">📍 اسطنبول، تركيا</span>
+                    <span>📅 17.04.2026</span><span>⏰ 09:00 AM</span><span>📍 اسطنبول</span>
                 </div>
-                <p class="mb-6 leading-relaxed text-white/90 text-sm md:text-base">
-                    انضموا إلينا في فعاليتنا القادمة لربيع 2026، حيث سنقوم بالعديد من الأنشطة التفاعلية، ورشات الرسم، والمسابقات الممتعة للأطفال.
-                </p>
-                <div class="text-left">
-                    <a href="#" class="inline-block bg-white text-rose-500 font-bold px-6 py-3 rounded-2xl hover:bg-rose-50 transition-all duration-300 transform hover:-translate-y-0.5 shadow-md text-sm">
-                        معرفة المزيد
-                    </a>
-                </div>
+                <p class="mb-6 leading-relaxed text-white/90 text-sm md:text-base">انضموا إلينا في فعاليتنا القادمة لربيع 2026، حيث سنقوم بالعديد من الأنشطة التفاعلية.</p>
+                <div class="text-left"><a href="#" class="inline-block bg-white text-rose-500 font-bold px-6 py-3 rounded-2xl hover:bg-rose-50 transition-all shadow-md text-sm">معرفة المزيد</a></div>
             </div>
         </div>
         <div class="md:w-1/2 flex flex-col items-center w-full order-1 md:order-2">
             <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 border border-white/25 w-full max-w-md shadow-xl">
-                <div class="flex justify-between items-center mb-6 flex-row-reverse">
-                    <h3 class="text-xl font-black">April 2026</h3>
-                    <div class="flex gap-2">
-                        <button class="p-2 hover:bg-white/10 rounded-full transition">❮</button>
-                        <button class="p-2 hover:bg-white/10 rounded-full transition">❯</button>
-                    </div>
-                </div>
+                <div class="flex justify-between items-center mb-6 flex-row-reverse"><h3 class="text-xl font-black">April 2026</h3></div>
                 <div class="calendar-grid text-center">
-                    <span class="calendar-header-day">S</span>
-                    <span class="calendar-header-day">M</span>
-                    <span class="calendar-header-day">T</span>
-                    <span class="calendar-header-day">W</span>
-                    <span class="calendar-header-day">T</span>
-                    <span class="calendar-header-day">F</span>
-                    <span class="calendar-header-day">S</span>
-                    @for ($d = 1; $d <= 30; $d++)
-                        <div class="calendar-day {{ $d == 17 ? 'active' : '' }}">{{ $d }}</div>
-                    @endfor
+                    <span class="opacity-60">S</span><span class="opacity-60">M</span><span class="opacity-60">T</span><span class="opacity-60">W</span><span class="opacity-60">T</span><span class="opacity-60">F</span><span class="opacity-60">S</span>
+                    @for ($d = 1; $d <= 30; $d++)<div class="calendar-day {{ $d == 17 ? 'active' : '' }}">{{ $d }}</div>@endfor
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-{{-- Section: Products Grid --}}
+{{-- Products Grid --}}
 <section class="py-24" id="shop">
     <div class="max-w-screen-xl mx-auto px-6">
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-            <div class="text-right w-full md:w-auto">
-                <span class="lux-badge block mb-2">JUST ARRIVED</span>
-                <h2 class="text-4xl md:text-5xl font-black text-gray-900 leading-tight">قطعنا <span class="lux-gradient">الجديدة</span> الساحرة ✨</h2>
-            </div>
-            <div class="filter-bar w-full md:w-auto">
-                <div class="filter-group">
-                    <input type="text" class="filter-input" placeholder="ابحث عن قطعة...">
-                    <button class="apply-button">بحث</button>
-                </div>
-            </div>
+            <div class="text-right w-full md:w-auto"><span class="lux-badge block mb-2">JUST ARRIVED</span><h2 class="text-4xl md:text-5xl font-black text-gray-900 leading-tight">قطعنا <span class="lux-gradient">الجديدة</span> الساحرة ✨</h2></div>
+            <div class="filter-bar w-full md:w-auto"><div class="filter-group flex w-full"><input type="text" class="filter-input" placeholder="ابحث عن قطعة..."><button class="apply-button">بحث</button></div></div>
         </div>
-
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10">
             @forelse($products as $product)
                 <div class="product-card-ty group">
                     <div class="ty-image-wrapper">
-                        @if($product->original_price > $product->price)
-                            <div class="ty-badge">خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%</div>
-                        @endif
+                        @if($product->original_price > $product->price)<div class="ty-badge">خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%</div>@endif
                         <button class="ty-wishlist-btn"><i class="far fa-heart"></i></button>
                         <a href="{{ route('product.show', $product->id) }}" class="block w-full h-full">
                             <img loading="lazy" src="{{ $product->images->first() ? $product->images->first()->image : 'https://images.unsplash.com/photo-1515488042361-404e9250afef?q=80&w=400&auto=format&fit=crop' }}" class="ty-main-image group-hover:scale-105" alt="{{ $product->name }}">
                         </a>
                         <div class="ty-glass-overlay">
-                            <button type="button" onclick="openSizeModal({{ $product->id }}, {{ json_encode($product->sizes ?? []) }})" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-md flex items-center justify-center gap-2 text-xs md:text-sm">
+                            <button type="button" onclick="openCart();" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs md:text-sm">
                                 <span>🛍️</span><span>أضف إلى السلة</span>
                             </button>
                         </div>
                     </div>
                     <div class="ty-info-wrapper mt-3">
-                        <a href="{{ route('product.show', $product->id) }}" class="hover:text-rose-500 transition-colors">
-                            <h3 class="ty-title text-gray-800 line-clamp-1 text-right">{{ $product->name }}</h3>
-                        </a>
-                        <div class="ty-price-wrapper mt-2">
-                            <span class="ty-final-price">{{ number_format($product->price, 2) }} ₺</span>
-                            @if($product->original_price > $product->price)
-                                <span class="ty-original-price">{{ number_format($product->original_price, 2) }} ₺</span>
-                            @endif
-                        </div>
+                        <a href="{{ route('product.show', $product->id) }}" class="hover:text-rose-500 transition-colors"><h3 class="ty-title text-gray-800 line-clamp-1 text-right">{{ $product->name }}</h3></a>
+                        <div class="ty-price-wrapper mt-2"><span class="ty-final-price">{{ number_format($product->price, 2) }} ₺</span></div>
                     </div>
                 </div>
             @empty
-                <div class="col-span-full text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200 shadow-sm">
-                    <span class="text-5xl block mb-4">🧸</span>
-                    <p class="text-gray-400 font-bold text-lg">لا توجد قطع معروضة في هذا القسم حالياً!</p>
-                </div>
+                <div class="col-span-full text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200 shadow-sm"><p class="text-gray-400 font-bold text-lg">لا توجد قطع معروضة حالياً!</p></div>
             @endforelse
         </div>
     </div>
 </section>
 
-{{-- Premium Luxury Section --}}
+{{-- Premium Section --}}
 <section class="relative py-24 overflow-hidden bg-transparent select-none">
     <div class="max-w-screen-xl mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
@@ -418,22 +322,16 @@
                 </div>
             </div>
             <div class="space-y-8 text-right">
-                <div>
-                    <span class="lux-badge block mb-2">MATCHING SET</span>
-                    <h2 class="text-3xl md:text-4xl font-black text-gray-900 leading-tight">إطلالة كاملة <span class="lux-gradient">بضغطة واحدة</span> 🪄</h2>
-                    <p class="text-gray-400 text-sm md:text-base mt-2">اخترنا لكِ مجموعة قطع متناسقة لتسهيل تجربة التسوق.</p>
-                </div>
-                <button onclick="confirmAddToCart()" class="w-full py-4 mt-4 bg-gradient-to-r from-amber-500 to-rose-500 text-white rounded-2xl font-black text-base md:text-lg shadow-lg hover:shadow-xl transition-all duration-300">شراء الإطلالة كاملة الآن — 420.00 ₺</button>
+                <div><span class="lux-badge block mb-2">MATCHING SET</span><h2 class="text-3xl md:text-4xl font-black text-gray-900 leading-tight">إطلالة كاملة <span class="lux-gradient">بضغطة واحدة</span> 🪄</h2></div>
+                <button onclick="openCart();" class="w-full py-4 mt-4 bg-gradient-to-r from-amber-500 to-rose-500 text-white rounded-2xl font-black text-base md:text-lg shadow-lg hover:shadow-xl transition-all duration-300">شراء الإطلالة كاملة الآن — 420.00 ₺</button>
             </div>
         </div>
     </div>
 </section>
 
-{{-- Footer & Marquee --}}
+{{-- Footer --}}
 <footer class="bg-gradient-to-b from-gray-900 to-black text-gray-300 pt-20 pb-10">
-    <div class="max-w-screen-xl mx-auto px-6 text-center">
-        <p class="text-gray-500 text-sm">© 2026 Melekler Fashion — جميع الحقوق محفوظة</p>
-    </div>
+    <div class="max-w-screen-xl mx-auto px-6 text-center"><p class="text-gray-500 text-sm">© 2026 Melekler Fashion — جميع الحقوق محفوظة</p></div>
 </footer>
 
 <div class="marquee-footer">
@@ -449,6 +347,7 @@
 {{-- Scripts --}}
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
+    // Hero Slider
     const heroSwiper = new Swiper('.hero-swiper', {
         loop: true,
         effect: 'fade',
@@ -456,6 +355,27 @@
         autoplay: { delay: 5000, disableOnInteraction: false },
         pagination: { el: '.swiper-pagination', clickable: true },
     });
+
+    // Reveal Logic
+    function reveal() {
+        var reveals = document.querySelectorAll(".scroll-reveal");
+        for (var i = 0; i < reveals.length; i++) {
+            var windowHeight = window.innerHeight;
+            var elementTop = reveals[i].getBoundingClientRect().top;
+            if (elementTop < windowHeight - 150) reveals[i].classList.add("visible");
+        }
+    }
+    window.addEventListener("scroll", reveal);
+    reveal();
+
+    // Cart Integration (Using functions from Layout)
+    function openCart() {
+        if (typeof window.parent.openCart === 'function') {
+            window.parent.openCart();
+        } else if (document.getElementById('mini-cart')) {
+            document.getElementById('mini-cart').style.right = "0";
+        }
+    }
 </script>
 
 @endsection
