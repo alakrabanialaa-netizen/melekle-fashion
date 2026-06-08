@@ -10,16 +10,15 @@ use App\Models\Category;
 class IndexController extends Controller
 {
     public function Index()
-    {
-        // جلب آخر 8 منتجات من قاعدة البيانات لمتجر Melekler Fashion
-        $products = Product::where('status', 1)->latest()->limit(8)->get();
-        
-        // جلب التصنيفات المرتبطة
-        $categories = Category::orderBy('category_name', 'ASC')->get();
+{
+    // جلب الأقسام المرتبة، وداخل كل قسم نطلب من قاعدة البيانات جلب 3 منتجات فقط مع صورها
+    $categories = Category::orderBy('category_name', 'ASC')->with(['products' => function($query) {
+        $query->where('status', 1)->with('images')->latest()->take(3);
+    }])->get();
 
-        // إرسال المتغيرات إلى صفحة welcome الحالية
-        return view('welcome', compact('products', 'categories')); 
-    }
+    // نرسل الأقسام بمنتجاتها المحملة مسبقاً إلى صفحة welcome
+    return view('welcome', compact('categories')); 
+}
 
   public function ProductDetails($id, $slug = null) 
 {
