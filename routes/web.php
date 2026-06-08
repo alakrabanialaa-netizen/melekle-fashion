@@ -128,8 +128,33 @@ Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDet
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
 
-// 🌟 الروت الذكي الجديد: يقبل النص أو الرقم ليتوافق مع أزرار الهيدر القديمة والجديدة بدون خطأ 404 أو 500
-Route::get('/category/{slug_or_id}', [IndexController::class, 'CategoryPage'])->name('categories.show');
+// 👦 قسم ملابس الأولاد
+Route::get('/category/boys', function() { 
+    $category = \App\Models\Category::where('category_name', 'like', '%ولد%')->orWhere('category_slug', 'like', '%boy%')->first();
+    $products = \App\Models\Product::where('category', 'like', '%ولد%')->where('status', 1)->get();
+    return view('categories.boys', compact('products', 'category')); 
+})->name('category.boys');
+
+// 👧 قسم ملابس البنات
+Route::get('/category/girls', function() { 
+    $category = \App\Models\Category::where('category_name', 'like', '%بنات%')->orWhere('category_slug', 'like', '%girl%')->first();
+    $products = \App\Models\Product::where('category', 'like', '%بنات%')->where('status', 1)->get();
+    return view('categories.girls', compact('products', 'category')); 
+})->name('category.girls');
+
+// 👶 قسم ملابس الرضع
+Route::get('/category/babies', function() { 
+    $category = \App\Models\Category::where('category_name', 'like', '%رضع%')->orWhere('category_name', 'like', '%طفل%')->orWhere('category_slug', 'like', '%bab%')->first();
+    $products = \App\Models\Product::where('category', 'like', '%رضع%')->orWhere('category', 'like', '%طفل%')->where('status', 1)->get();
+    return view('categories.babies', compact('products', 'category')); 
+})->name('category.babies');
+
+// 👩 قسم ملابس الأمهات
+Route::get('/category/mothers', function() { 
+    $category = \App\Models\Category::where('category_name', 'like', '%أمهات%')->orWhere('category_name', 'like', '%نساء%')->orWhere('category_slug', 'like', '%moth%')->first();
+    $products = \App\Models\Product::where('category', 'like', '%أمهات%')->orWhere('category', 'like', '%نساء%')->where('status', 1)->get();
+    return view('categories.mothers', compact('products', 'category')); 
+})->name('category.mothers');
 
 // ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات ====================
 Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
