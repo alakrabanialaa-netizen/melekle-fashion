@@ -272,13 +272,24 @@
             </div>
         </div>
         <div class="md:w-1/2 flex flex-col items-center w-full order-1 md:order-2">
-            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 border border-white/25 w-full max-w-md shadow-xl">
-                <div class="flex justify-between items-center mb-6 flex-row-reverse"><h3 class="text-xl font-black">April 2026</h3></div>
-                <div class="calendar-grid text-center">
-                    <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
-                    @for ($d = 1; $d <= 30; $d++)
-                        <div class="calendar-day {{ $d == 17 ? 'active' : '' }}">{{ $d }}</div>
-                    @endfor
+            {{-- تم تعديل الحاوية هنا لضمان خلفية كرتونية بيضاء شفافة بحدود واضحة --}}
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20 w-full max-w-sm shadow-xl">
+                <h3 class="text-xl font-black mb-6 text-center text-white">April 2026</h3>
+                
+                {{-- هيكل التقويم المقاوم لأي تداخل --}}
+                <div style="direction: ltr; w-full">
+                    <div style="display: flex; justify-content: space-between; text-align: center; font-weight: bold; margin-bottom: 12px; opacity: 0.9; color: white;">
+                        <span style="width: 14%;">S</span><span style="width: 14%;">M</span><span style="width: 14%;">T</span><span style="width: 14%;">W</span><span style="width: 14%;">T</span><span style="width: 14%;">F</span><span style="width: 14%;">S</span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px 0;">
+                        @for ($d = 1; $d <= 30; $d++)
+                            <div style="width: 14%; display: flex; justify-content: center; align-items: center; margin-bottom: 4px;">
+                                <div class="{{ $d == 17 ? 'active' : '' }}" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 0.85rem; {{ $d == 17 ? 'background-color: #f59e0b; color: #1f2937; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);' : 'color: white;' }}">
+                                    {{ $d }}
+                                </div>
+                            </div>
+                        @endfor
+                    </div>
                 </div>
             </div>
         </div>
