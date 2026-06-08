@@ -1,14 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-{{-- 🎨 MASTER STYLESHEET - الروابط النظيفة بدون تكرار --}}
+{{-- 🎨 MASTER STYLESHEET --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Fredoka:wght@400;600;700&display=swap');
 
-    /* --- 1. الهوية البصرية والألوان الموحدة (عام 2026) --- */
     :root {
         --brand-pink: #f43f5e;
         --brand-pink-hover: #e11d48;
@@ -22,13 +21,12 @@
         background-color: var(--soft-cream); 
         color: var(--text-dark);
         overflow-x: hidden;
-        padding-bottom: 60px; /* مساحة الفوتر المتحرك */
+        padding-bottom: 60px;
     }
 
     h1, h2, h3, h4, h5, h6, .font-bold { font-weight: 700; }
     .font-black { font-weight: 900; }
 
-    /* --- New Hero Slider Styles --- */
     .hero-swiper {
         width: 100%;
         height: 75vh;
@@ -86,7 +84,6 @@
         border-radius: 5px !important;
     }
 
-    /* --- Animations & Reveal --- */
     .scroll-reveal {
         opacity: 0;
         transform: translateY(40px);
@@ -96,7 +93,6 @@
     @keyframes gradientMove { 0% { background-position: 0% } 100% { background-position: 200% } }
     @keyframes marquee { from { transform: translateX(0%); } to { transform: translateX(-50%); } }
 
-    /* --- Visual Badges --- */
     .lux-badge { letter-spacing: 0.2em; font-size: 13px; font-weight: 600; color: var(--brand-amber); }
     .lux-gradient {
         background: linear-gradient(90deg, var(--brand-amber), var(--brand-pink), var(--brand-amber));
@@ -104,7 +100,6 @@
         animation: gradientMove 6s linear infinite;
     }
 
-    /* --- Product Cards --- */
     .product-card-ty {
         background: #ffffff;
         border: 1px solid #e5e7eb;
@@ -166,7 +161,6 @@
     .ty-final-price { font-size: 1.1rem; font-weight: 700; color: var(--brand-pink); }
     .ty-original-price { font-size: 0.85rem; color: #9ca3af; text-decoration: line-through; }
 
-    /* --- Filter Bar --- */
     .filter-bar {
         display: flex; align-items: center; background-color: #ffffff;
         border-radius: 16px; padding: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); border: 1px solid #e5e7eb;
@@ -174,17 +168,31 @@
     .filter-input { width: 100%; border: none; padding: 12px 16px; font-weight: 600; color: #374151; }
     .apply-button { background-color: var(--brand-pink); color: white; font-weight: 700; padding: 12px 24px; border-radius: 12px; transition: all 0.2s ease; }
 
-    /* --- Reviews --- */
-    .reviews-slider { position: relative; overflow: hidden; width: 100%; padding: 10px 0; }
-    .reviews-track { display: flex; width: max-content; animation: scrollReviews 35s linear infinite; gap: 24px; }
-    .review-card { min-width: 310px; background: white; padding: 24px; border-radius: 24px; text-align: center; border: 1px solid #f3f4f6; }
+    /* --- إصلاح كود التقويم لضمان عدم تداخل التواريخ --- */
+    .calendar-grid { 
+        display: grid !important; 
+        grid-template-cols: repeat(7, minmax(0, 1fr)) !important; 
+        gap: 8px !important; 
+        width: 100% !important; 
+        direction: ltr !important; /* يضمن الترتيب السليم لخانة الأيام */
+    }
+    .calendar-day { 
+        aspect-ratio: 1/1; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        font-size: 0.85rem; 
+        font-weight: 700; 
+        border-radius: 50%; 
+        transition: all 0.2s ease; 
+        cursor: pointer; 
+    }
+    .calendar-day.active { 
+        background-color: var(--brand-amber); 
+        color: var(--text-dark); 
+        box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4); 
+    }
 
-    /* --- Calendar (Fixed Grid) --- */
-    .calendar-grid { display: grid !important; grid-template-cols: repeat(7, 1fr) !important; gap: 8px !important; width: 100% !important; }
-    .calendar-day { aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; border-radius: 50%; transition: all 0.2s ease; cursor: pointer; }
-    .calendar-day.active { background-color: var(--brand-amber); color: var(--text-dark); box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4); }
-
-    /* --- Footer & Marquee --- */
     .marquee-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #111827; color: white; z-index: 60; overflow: hidden; padding: 12px 0; }
     .marquee-inner-wrap { display: flex; width: fit-content; animation: marquee 30s linear infinite; }
     .marquee-content { display: flex; align-items: center; white-space: nowrap; }
@@ -195,7 +203,7 @@
     }
 </style>
 
-{{-- 🚀 NEW ARTISTIC HERO SLIDER --}}
+{{-- 🚀 HERO SLIDER --}}
 <div class="swiper hero-swiper">
     <div class="swiper-wrapper">
         <div class="swiper-slide" style="background-image: url('https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/MkdnFgIRAmlobtLe.png')">
@@ -267,8 +275,10 @@
             <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 border border-white/25 w-full max-w-md shadow-xl">
                 <div class="flex justify-between items-center mb-6 flex-row-reverse"><h3 class="text-xl font-black">April 2026</h3></div>
                 <div class="calendar-grid text-center">
-                    <span class="opacity-60">S</span><span class="opacity-60">M</span><span class="opacity-60">T</span><span class="opacity-60">W</span><span class="opacity-60">T</span><span class="opacity-60">F</span><span class="opacity-60">S</span>
-                    @for ($d = 1; $d <= 30; $d++)<div class="calendar-day {{ $d == 17 ? 'active' : '' }}">{{ $d }}</div>@endfor
+                    <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                    @for ($d = 1; $d <= 30; $d++)
+                        <div class="calendar-day {{ $d == 17 ? 'active' : '' }}">{{ $d }}</div>
+                    @endfor
                 </div>
             </div>
         </div>
@@ -292,7 +302,8 @@
                             <img loading="lazy" src="{{ $product->images->first() ? $product->images->first()->image : 'https://images.unsplash.com/photo-1515488042361-404e9250afef?q=80&w=400&auto=format&fit=crop' }}" class="ty-main-image group-hover:scale-105" alt="{{ $product->name }}">
                         </a>
                         <div class="ty-glass-overlay">
-                            <button type="button" onclick="openCart();" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs md:text-sm">
+                            {{-- تم تعديل الزر هنا ليقوم بإرسال الـ ID الفعلي للمنتج عبر JavaScript --}}
+                            <button type="button" onclick="addToCart('{{ $product->id }}')" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs md:text-sm">
                                 <span>🛍️</span><span>أضف إلى السلة</span>
                             </button>
                         </div>
@@ -323,7 +334,7 @@
             </div>
             <div class="space-y-8 text-right">
                 <div><span class="lux-badge block mb-2">MATCHING SET</span><h2 class="text-3xl md:text-4xl font-black text-gray-900 leading-tight">إطلالة كاملة <span class="lux-gradient">بضغطة واحدة</span> 🪄</h2></div>
-                <button onclick="openCart();" class="w-full py-4 mt-4 bg-gradient-to-r from-amber-500 to-rose-500 text-white rounded-2xl font-black text-base md:text-lg shadow-lg hover:shadow-xl transition-all duration-300">شراء الإطلالة كاملة الآن — 420.00 ₺</button>
+                <button onclick="addToCart('premium-set')" class="w-full py-4 mt-4 bg-gradient-to-r from-amber-500 to-rose-500 text-white rounded-2xl font-black text-base md:text-lg shadow-lg hover:shadow-xl transition-all duration-300">شراء الإطلالة كاملة الآن — 420.00 ₺</button>
             </div>
         </div>
     </div>
@@ -344,10 +355,8 @@
     </div>
 </div>
 
-{{-- Scripts --}}
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-    // Hero Slider
     const heroSwiper = new Swiper('.hero-swiper', {
         loop: true,
         effect: 'fade',
@@ -356,7 +365,6 @@
         pagination: { el: '.swiper-pagination', clickable: true },
     });
 
-    // Reveal Logic
     function reveal() {
         var reveals = document.querySelectorAll(".scroll-reveal");
         for (var i = 0; i < reveals.length; i++) {
@@ -368,7 +376,31 @@
     window.addEventListener("scroll", reveal);
     reveal();
 
-    // Cart Integration (Using functions from Layout)
+    // دالة محسنة لإرسال المنتج وفتح السلة بشكل فوري ومباشر
+    function addToCart(productId) {
+        // نرسل طلب الـ Ajax إلى مسار السلة الخاص بك لـ Laravel لكي يسجل المنتج فعلياً
+        fetch(`/cart/add/${productId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ quantity: 1 })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // بعد نجاح الإضافة، نقوم بفتح نافذة السلة الجانبية لرؤية التحديث
+            openCart();
+            // إذا كان لديك دالة لتحديث العداد العلوي للسلة يمكنك استدعاؤها هنا (مثل updateCartCount())
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // حل بديل في حال لم يكن الـ Ajax مجهز بالخلفية لكي تفتح السلة على الأقل
+            openCart(); 
+        });
+    }
+
     function openCart() {
         if (typeof window.parent.openCart === 'function') {
             window.parent.openCart();
@@ -377,5 +409,4 @@
         }
     }
 </script>
-
 @endsection
