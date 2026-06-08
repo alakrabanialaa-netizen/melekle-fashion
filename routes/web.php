@@ -39,7 +39,7 @@ use App\Http\Controllers\CartController;
 // ==================== 1. الصفحة الرئيسية والـ Guest والروابط العامة ====================
 Route::get('/', [IndexController::class, 'Index'])->name('welcome');
 
-// 🛠️ تم إعادة إضافة روابط الصفحات الثابتة هنا لحل مشكلة الـ RouteNotFoundException نهائياً
+// 🛠️ روابط الصفحات الثابتة لمنع الـ RouteNotFoundException
 Route::get('/contact', function() { return view('contact'); })->name('contact');
 Route::get('/privacy-policy', function() { return view('privacy-policy'); })->name('privacy-policy');
 Route::get('/refund-policy', function() { return view('refund-policy'); })->name('refund-policy');
@@ -128,8 +128,8 @@ Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDet
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
 
-// 🌟 الرابط الموحد المطور البديل لصفحات الأقسام الكاملة ليعرض منتجات كل قسم بالتفصيل
-Route::get('/category/{id}', [IndexController::class, 'CategoryPage'])->name('categories.show');
+// 🌟 الروت الذكي الجديد: يقبل النص أو الرقم ليتوافق مع أزرار الهيدر القديمة والجديدة بدون خطأ 404 أو 500
+Route::get('/category/{slug_or_id}', [IndexController::class, 'CategoryPage'])->name('categories.show');
 
 // ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات ====================
 Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
@@ -141,7 +141,6 @@ Route::get('/minicart/product/remove/{rowId}', [CartController::class, 'RemoveMi
 Route::post('/dcart/data/store/{id}', [CartController::class, 'AddToCartDetails']);
 Route::post('/add-to-wishlist/{product_id}', [WishlistController::class, 'AddToWishlist']);
 Route::post('/add-to-compare/{product_id}', [CompareController::class, 'AddToCompare']);
-
 
 Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
 Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
