@@ -19,6 +19,20 @@ class IndexController extends Controller
     // نرسل الأقسام بمنتجاتها المحملة مسبقاً إلى صفحة welcome
     return view('welcome', compact('categories')); 
 }
+    public function CategoryPage($id)
+{
+    // جلب بيانات القسم المحدد
+    $category = Category::findOrFail($id);
+    
+    // جلب كافة المنتجات التي تنتمي لهذا القسم حصراً مع ترقيم الصفحات (مثلاً 12 منتج في الصفحة)
+    $products = Product::where('category', $category->category_name)
+                       ->where('status', 1)
+                       ->with('images')
+                       ->latest()
+                       ->paginate(12);
+
+    return view('frontend.shop.category', compact('category', 'products'));
+}
 
   public function ProductDetails($id, $slug = null) 
 {
