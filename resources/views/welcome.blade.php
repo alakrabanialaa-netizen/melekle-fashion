@@ -296,38 +296,83 @@
     </div>
 </div>
 
-{{-- Products Grid --}}
+{{-- Products Grid Organized by Categories --}}
 <section class="py-24" id="shop">
     <div class="max-w-screen-xl mx-auto px-6">
+        
+        {{-- شريط البحث الرئيسي في أعلى المتجر --}}
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-            <div class="text-right w-full md:w-auto"><span class="lux-badge block mb-2">JUST ARRIVED</span><h2 class="text-4xl md:text-5xl font-black text-gray-900 leading-tight">قطعنا <span class="lux-gradient">الجديدة</span> الساحرة ✨</h2></div>
-            <div class="filter-bar w-full md:w-auto"><div class="filter-group flex w-full"><input type="text" class="filter-input" placeholder="ابحث عن قطعة..."><button class="apply-button">بحث</button></div></div>
+            <div class="text-right w-full md:w-auto">
+                <span class="lux-badge block mb-2">COLLECTIONS</span>
+                <h2 class="text-4xl md:text-5xl font-black text-gray-900 leading-tight">تشكيلاتنا <span class="lux-gradient">الساحرة</span> ✨</h2>
+            </div>
+            <div class="filter-bar w-full md:w-auto">
+                <div class="filter-group flex w-full">
+                    <input type="text" class="filter-input" placeholder="ابحث عن قطعة...">
+                    <button class="apply-button">بحث</button>
+                </div>
+            </div>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10">
-            @forelse($products as $product)
-                <div class="product-card-ty group">
-                    <div class="ty-image-wrapper">
-                        @if($product->original_price > $product->price)<div class="ty-badge">خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%</div>@endif
-                        <button class="ty-wishlist-btn"><i class="far fa-heart"></i></button>
-                        <a href="{{ route('product.show', $product->id) }}" class="block w-full h-full">
-                            <img loading="lazy" src="{{ $product->images->first() ? $product->images->first()->image : 'https://images.unsplash.com/photo-1515488042361-404e9250afef?q=80&w=400&auto=format&fit=crop' }}" class="ty-main-image group-hover:scale-105" alt="{{ $product->name }}">
-                        </a>
-                        <div class="ty-glass-overlay">
-                            {{-- تم تعديل الزر هنا ليقوم بإرسال الـ ID الفعلي للمنتج عبر JavaScript --}}
-                            <button type="button" onclick="addToCart('{{ $product->id }}')" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs md:text-sm">
-                                <span>🛍️</span><span>أضف إلى السلة</span>
-                            </button>
-                        </div>
+
+        {{-- حلقة التكرار الرئيسية على الأقسام --}}
+        @forelse($categories as $category)
+            {{-- لا نعرض القسم إلا إذا كان يحتوي على منتجات مضافة ومفعلة --}}
+            @if($category->products->count() > 0)
+                
+                {{-- رأس القسم: يحتوي على اسم القسم وزر "عرض الكل" --}}
+                <div class="flex justify-between items-end mb-8 border-b pb-4 border-gray-100 mt-12">
+                    <div class="text-right">
+                        <h3 class="text-2xl md:text-3xl font-black text-gray-800">{{ $category->category_name }}</h3>
                     </div>
-                    <div class="ty-info-wrapper mt-3">
-                        <a href="{{ route('product.show', $product->id) }}" class="hover:text-rose-500 transition-colors"><h3 class="ty-title text-gray-800 line-clamp-1 text-right">{{ $product->name }}</h3></a>
-                        <div class="ty-price-wrapper mt-2"><span class="ty-final-price">{{ number_format($product->price, 2) }} ₺</span></div>
+                    <div>
+                        {{-- الزر ينقل المستخدم لصفحة القسم الكاملة المربوطة بالـ ID --}}
+                        <a href="{{ route('categories.show', $category->id) }}" class="apply-button text-xs md:text-sm inline-block px-4 py-2 rounded-xl transition-all">
+                            عرض كل قطع {{ $category->category_name }} &larr;
+                        </a>
                     </div>
                 </div>
-            @empty
-                <div class="col-span-full text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200 shadow-sm"><p class="text-gray-400 font-bold text-lg">لا توجد قطع معروضة حالياً!</p></div>
-            @endforelse
-        </div>
+
+                {{-- شبكة عرض المنتجات (ستعرض 3 منتجات فقط تلقائياً بناءً على كود الـ Controller) --}}
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10 mb-12">
+                    @foreach($category->products as $product)
+                        <div class="product-card-ty group">
+                            <div class="ty-image-wrapper">
+                                @if($product->original_price > $product->price)
+                                    <div class="ty-badge">خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%</div>
+                                @endif
+                                <button class="ty-wishlist-btn"><i class="far fa-heart"></i></button>
+                                
+                                <a href="{{ route('product.show', $product->id) }}" class="block w-full h-full">
+                                    <img loading="lazy" src="{{ $product->images->first() ? $product->images->first()->image : 'https://images.unsplash.com/photo-1515488042361-404e9250afef?q=80&w=400&auto=format&fit=crop' }}" class="ty-main-image group-hover:scale-105" alt="{{ $product->name }}">
+                                </a>
+                                
+                                <div class="ty-glass-overlay">
+                                    <button type="button" onclick="addToCart('{{ $product->id }}')" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs md:text-sm">
+                                        <span>🛍️</span><span>أضف إلى السلة</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="ty-info-wrapper mt-3">
+                                <a href="{{ route('product.show', $product->id) }}" class="hover:text-rose-500 transition-colors">
+                                    <h3 class="ty-title text-gray-800 line-clamp-1 text-right">{{ $product->name }}</h3>
+                                </a>
+                                <div class="ty-price-wrapper mt-2">
+                                    <span class="ty-final-price">{{ number_format($product->price, 2) }} ₺</span>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+            @endif
+        @empty
+            {{-- حالة عدم وجود أي أقسام أو منتجات بالموقع بالكامل --}}
+            <div class="col-span-full text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200 shadow-sm">
+                <p class="text-gray-400 font-bold text-lg">لا توجد قطع أو أقسام معروضة حالياً!</p>
+            </div>
+        @endforelse
+
     </div>
 </section>
 
