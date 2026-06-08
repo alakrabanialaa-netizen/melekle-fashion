@@ -142,7 +142,8 @@ Route::post('/dcart/data/store/{id}', [CartController::class, 'AddToCartDetails'
 Route::post('/add-to-wishlist/{product_id}', [WishlistController::class, 'AddToWishlist']);
 Route::post('/add-to-compare/{product_id}', [CompareController::class, 'AddToCompare']);
 
-Route::couponApply('/coupon-apply', [CartController::class, 'CouponApply']);
+
+Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
 Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
 Route::get('/coupon-remove', [CartController::class, 'CouponRemove']);
 Route::get('/checkout', [CheckoutController::class, 'CheckoutCreate'])->name('checkout');
