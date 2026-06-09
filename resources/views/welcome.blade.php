@@ -1,3 +1,4 @@
+HTML
 @extends('layouts.app')
 
 @section('content')
@@ -168,31 +169,6 @@
     .filter-input { width: 100%; border: none; padding: 12px 16px; font-weight: 600; color: #374151; }
     .apply-button { background-color: var(--brand-pink); color: white; font-weight: 700; padding: 12px 24px; border-radius: 12px; transition: all 0.2s ease; }
 
-    /* --- إصلاح كود التقويم لضمان عدم تداخل التواريخ --- */
-    .calendar-grid { 
-        display: grid !important; 
-        grid-template-cols: repeat(7, minmax(0, 1fr)) !important; 
-        gap: 8px !important; 
-        width: 100% !important; 
-        direction: ltr !important; /* يضمن الترتيب السليم لخانة الأيام */
-    }
-    .calendar-day { 
-        aspect-ratio: 1/1; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        font-size: 0.85rem; 
-        font-weight: 700; 
-        border-radius: 50%; 
-        transition: all 0.2s ease; 
-        cursor: pointer; 
-    }
-    .calendar-day.active { 
-        background-color: var(--brand-amber); 
-        color: var(--text-dark); 
-        box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4); 
-    }
-
     .marquee-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #111827; color: white; z-index: 60; overflow: hidden; padding: 12px 0; }
     .marquee-inner-wrap { display: flex; width: fit-content; animation: marquee 30s linear infinite; }
     .marquee-content { display: flex; align-items: center; white-space: nowrap; }
@@ -272,12 +248,10 @@
             </div>
         </div>
         <div class="md:w-1/2 flex flex-col items-center w-full order-1 md:order-2">
-            {{-- تم تعديل الحاوية هنا لضمان خلفية كرتونية بيضاء شفافة بحدود واضحة --}}
             <div class="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20 w-full max-w-sm shadow-xl">
                 <h3 class="text-xl font-black mb-6 text-center text-white">April 2026</h3>
                 
-                {{-- هيكل التقويم المقاوم لأي تداخل --}}
-                <div style="direction: ltr; w-full">
+                <div style="direction: ltr; width: 100%;">
                     <div style="display: flex; justify-content: space-between; text-align: center; font-weight: bold; margin-bottom: 12px; opacity: 0.9; color: white;">
                         <span style="width: 14%;">S</span><span style="width: 14%;">M</span><span style="width: 14%;">T</span><span style="width: 14%;">W</span><span style="width: 14%;">T</span><span style="width: 14%;">F</span><span style="width: 14%;">S</span>
                     </div>
@@ -313,7 +287,8 @@
                 </div>
             </div>
         </div>
-{{-- مصفوفة الأقسام الثابتة مع توسيع كلمات البحث لتغطية كافة الاحتمالات --}}
+
+        {{-- مصفوفة الأقسام الثابتة مع توسيع كلمات البحث لتغطية كافة الاحتمالات --}}
         @php
             $static_categories = [
                 [
@@ -399,32 +374,6 @@
                 </div>
             @endif
         @endforeach
-                                <button class="ty-wishlist-btn"><i class="far fa-heart"></i></button>
-                                
-                                <a href="{{ route('product.show', $product->id) }}" class="block w-full h-full">
-                                    <img loading="lazy" src="{{ $product->images->first() ? $product->images->first()->image : 'https://images.unsplash.com/photo-1515488042361-404e9250afef?q=80&w=400&auto=format&fit=crop' }}" class="ty-main-image group-hover:scale-105" alt="{{ $product->name }}">
-                                </a>
-                                
-                                <div class="ty-glass-overlay">
-                                    <button type="button" onclick="addToCart('{{ $product->id }}')" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs md:text-sm">
-                                        <span>🛍️</span><span>أضف إلى السلة</span>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="ty-info-wrapper mt-3">
-                                <a href="{{ route('product.show', $product->id) }}" class="hover:text-rose-500 transition-colors">
-                                    <h3 class="ty-title text-gray-800 line-clamp-1 text-right">{{ $product->name }}</h3>
-                                </a>
-                                <div class="ty-price-wrapper mt-2">
-                                    <span class="ty-final-price">{{ number_format($product->price, 2) }} ₺</span>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
-        @endforeach
 
     </div>
 </section>
@@ -449,8 +398,7 @@
     </div>
 </section>
 
-
-                            {{-- ==================== الـ الـ FOOTER القديم بعد استعادته بالكامل ==================== --}}
+{{-- ==================== الـ FOOTER المنظم والموحد ==================== --}}
 <footer class="bg-gradient-to-b from-gray-900 to-black text-gray-300 pt-20 pb-10">
     <div class="max-w-screen-xl mx-auto px-6">
         <div class="grid md:grid-cols-4 gap-12 mb-16">
@@ -496,12 +444,6 @@
         </div>
     </div>
 </footer>
-                            
-
-{{-- Footer --}}
-<footer class="bg-gradient-to-b from-gray-900 to-black text-gray-300 pt-20 pb-10">
-    <div class="max-w-screen-xl mx-auto px-6 text-center"><p class="text-gray-500 text-sm">© 2026 Melekler Fashion — جميع الحقوق محفوظة</p></div>
-</footer>
 
 <div class="marquee-footer">
     <div class="marquee-inner-wrap">
@@ -534,9 +476,7 @@
     window.addEventListener("scroll", reveal);
     reveal();
 
-    // دالة محسنة لإرسال المنتج وفتح السلة بشكل فوري ومباشر
     function addToCart(productId) {
-        // نرسل طلب الـ Ajax إلى مسار السلة الخاص بك لـ Laravel لكي يسجل المنتج فعلياً
         fetch(`/cart/add/${productId}`, {
             method: 'POST',
             headers: {
@@ -548,13 +488,10 @@
         })
         .then(response => response.json())
         .then(data => {
-            // بعد نجاح الإضافة، نقوم بفتح نافذة السلة الجانبية لرؤية التحديث
             openCart();
-            // إذا كان لديك دالة لتحديث العداد العلوي للسلة يمكنك استدعاؤها هنا (مثل updateCartCount())
         })
         .catch(error => {
             console.error('Error:', error);
-            // حل بديل في حال لم يكن الـ Ajax مجهز بالخلفية لكي تفتح السلة على الأقل
             openCart(); 
         });
     }
