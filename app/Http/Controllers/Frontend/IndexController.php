@@ -11,10 +11,10 @@ class IndexController extends Controller
 {
     public function Index()
     {
-        // 1. جلب كافة الأقسام مرتبة أبجدياً
+        // 1. جلب كافة الأقسام
         $categories = Category::orderBy('category_name', 'ASC')->get();
 
-        // 2. ربط صريح لكل قسم بمنتجاته بناءً على الاسم النصي المطابق في قاعدة البيانات
+        // 2. ربط صريح لكل قسم بـ 3 منتجات فقط تطابقه نصياً من قاعدة البيانات
         foreach ($categories as $category) {
             $productsForCategory = Product::where('category', $category->category_name)
                                           ->where('status', 1)
@@ -23,19 +23,18 @@ class IndexController extends Controller
                                           ->take(3)
                                           ->get();
             
-            // ربط المنتجات بالقسم ليقرأها ملف الـ welcome.blade.php
-            $category->setRelation('products', $productsForCategory);
+            // ندمج المنتجات الثلاثة داخل كائن القسم نفسه باسم علاقة ديناميكية
+            $category->setRelation('my_custom_products', $productsForCategory);
         }
         
+        // نرسل الأقسام محشوة بالمنتجات إلى الصفحة الرئيسية
         return view('welcome', compact('categories')); 
     }
 
-    // 🛍️ دالة تفاصيل المنتج (ضرورية جداً لأن الـ web.php يستدعيها)
     public function ProductDetails($id, $slug = null) 
     {
         $product = Product::findOrFail($id);
         
-        // جلب منتجات ذات صلة من نفس القسم كإجراء جمالي للمتجر
         $relatedProducts = Product::where('category', $product->category)
                                   ->where('id', '!=', $id)
                                   ->where('status', 1)
@@ -45,7 +44,6 @@ class IndexController extends Controller
         return view('frontend.shop.show', compact('product', 'relatedProducts'));
     }
 
-    // 🏪 دالات إضافية احتياطية منعاً لأي تضارب في روابط المتجر المستدوعة
     public function VendorDetails($id)
     {
         return redirect()->to('/');
