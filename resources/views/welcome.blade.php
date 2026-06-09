@@ -296,15 +296,15 @@
     </div>
 </div>
 
-{{-- Products Grid Organized by Categories --}}
+{{-- Products Grid Fixed by Categories (3 Products Each) --}}
 <section class="py-24" id="shop">
     <div class="max-w-screen-xl mx-auto px-6">
         
-        {{-- شريط البحث الرئيسي في أعلى المتجر --}}
+        {{-- شريط العناوين والبحث العلوي --}}
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div class="text-right w-full md:w-auto">
-                <span class="lux-badge block mb-2">COLLECTIONS</span>
-                <h2 class="text-4xl md:text-5xl font-black text-gray-900 leading-tight">تشكيلاتنا <span class="lux-gradient">الساحرة</span> ✨</h2>
+                <span class="lux-badge block mb-2">JUST ARRIVED</span>
+                <h2 class="text-4xl md:text-5xl font-black text-gray-900 leading-tight">قطعنا <span class="lux-gradient">الجديدة</span> الساحرة ✨</h2>
             </div>
             <div class="filter-bar w-full md:w-auto">
                 <div class="filter-group flex w-full">
@@ -314,27 +314,41 @@
             </div>
         </div>
 
-        {{-- حلقة التكرار الرئيسية على الأقسام --}}
-        @forelse($categories as $category)
-            {{-- لا نعرض القسم إلا إذا كان يحتوي على منتجات مضافة ومفعلة --}}
-            @if($category->products->count() > 0)
-                
-                {{-- رأس القسم: يحتوي على اسم القسم وزر "عرض الكل" --}}
-                <div class="flex justify-between items-end mb-8 border-b pb-4 border-gray-100 mt-12">
+        {{-- مصفوفة الأقسام الثابتة التي تطابق المجلدات عندك حرفياً لضمان جلب 3 منتجات لكل قسم --}}
+        @php
+            $static_categories = [
+                ['name' => 'ملابس الأولاد', 'route' => 'category.boys', 'keyword' => '%ولد%'],
+                ['name' => 'ملابس البنات', 'route' => 'category.girls', 'keyword' => '%بنات%'],
+                ['name' => 'ملابس الرضع', 'route' => 'category.babies', 'keyword' => '%رضع%'],
+                ['name' => 'ملابس الأمهات', 'route' => 'category.mothers', 'keyword' => '%أمهات%']
+            ];
+        @endphp
+
+        @foreach($static_categories as $cat)
+            @php
+                // جلب 3 منتجات فقط لكل قسم بشكل صريح ومضمون
+                $cat_products = \App\Models\Product::where('category', 'like', $cat['keyword'])
+                                                   ->where('status', 1)
+                                                   ->with('images')
+                                                   ->latest()
+                                                   ->take(3)
+                                                   ->get();
+            @endphp
+
+            @if($cat_products->count() > 0)
+                {{-- رأس القسم --}}
+                <div class="flex justify-between items-end mb-8 border-b pb-4 border-gray-100 {{ !$loop->first ? 'mt-16' : '' }}">
                     <div class="text-right">
-                        <h3 class="text-2xl md:text-3xl font-black text-gray-800">{{ $category->category_name }}</h3>
+                        <h3 class="text-2xl md:text-3xl font-black text-gray-800">{{ $cat['name'] }}</h3>
                     </div>
                     <div>
-                        {{-- الزر ينقل المستخدم لصفحة القسم الكاملة المربوطة بالـ ID --}}
-                        <a href="{{ route('categories.show', $category->id) }}" class="apply-button text-xs md:text-sm inline-block px-4 py-2 rounded-xl transition-all">
-                            عرض كل قطع {{ $category->category_name }} &larr;
-                        </a>
+                        <a href="{{ route($cat['route']) }}" class="apply-button text-xs md:text-sm inline-block px-4 py-2 rounded-xl transition-all">عرض الكل &larr;</a>
                     </div>
                 </div>
 
-                {{-- شبكة عرض المنتجات (ستعرض 3 منتجات فقط تلقائياً بناءً على كود الـ Controller) --}}
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10 mb-12">
-                    @foreach($category->products as $product)
+                {{-- شبكة عرض الـ 3 منتجات --}}
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10">
+                    @foreach($cat_products as $product)
                         <div class="product-card-ty group">
                             <div class="ty-image-wrapper">
                                 @if($product->original_price > $product->price)
@@ -364,14 +378,8 @@
                         </div>
                     @endforeach
                 </div>
-
             @endif
-        @empty
-            {{-- حالة عدم وجود أي أقسام أو منتجات بالموقع بالكامل --}}
-            <div class="col-span-full text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200 shadow-sm">
-                <p class="text-gray-400 font-bold text-lg">لا توجد قطع أو أقسام معروضة حالياً!</p>
-            </div>
-        @endforelse
+        @endforeach
 
     </div>
 </section>
