@@ -313,26 +313,45 @@
                 </div>
             </div>
         </div>
-
-        {{-- مصفوفة الأقسام الثابتة التي تطابق المجلدات عندك حرفياً لضمان جلب 3 منتجات لكل قسم --}}
+{{-- مصفوفة الأقسام الثابتة مع توسيع كلمات البحث لتغطية كافة الاحتمالات --}}
         @php
             $static_categories = [
-                ['name' => 'ملابس الأولاد', 'route' => 'category.boys', 'keyword' => '%ولد%'],
-                ['name' => 'ملابس البنات', 'route' => 'category.girls', 'keyword' => '%بنات%'],
-                ['name' => 'ملابس الرضع', 'route' => 'category.babies', 'keyword' => '%رضع%'],
-                ['name' => 'ملابس الأمهات', 'route' => 'category.mothers', 'keyword' => '%أمهات%']
+                [
+                    'name' => 'ملابس الأولاد', 
+                    'route' => 'category.boys', 
+                    'keywords' => ['%ولد%', '%ولادي%', '%boy%', '%boys%']
+                ],
+                [
+                    'name' => 'ملابس البنات', 
+                    'route' => 'category.girls', 
+                    'keywords' => ['%بنات%', '%بناتي%', '%girl%', '%girls%']
+                ],
+                [
+                    'name' => 'ملابس الرضع', 
+                    'route' => 'category.babies', 
+                    'keywords' => ['%رضع%', '%طفل%', '%أطفال%', '%اطفال%', '%baby%', '%babies%']
+                ],
+                [
+                    'name' => 'ملابس الأمهات', 
+                    'route' => 'category.mothers', 
+                    'keywords' => ['%أمهات%', '%نساء%', '%نسائي%', '%mother%', '%women%']
+                ]
             ];
         @endphp
 
         @foreach($static_categories as $cat)
             @php
-                // جلب 3 منتجات فقط لكل قسم بشكل صريح ومضمون
-                $cat_products = \App\Models\Product::where('category', 'like', $cat['keyword'])
-                                                   ->where('status', 1)
-                                                   ->with('images')
-                                                   ->latest()
-                                                   ->take(3)
-                                                   ->get();
+                // جلب 3 منتجات فقط لكل قسم بناءً على أي كلمة مفتاحية مطابقة
+                $cat_products = \App\Models\Product::where(function($query) use ($cat) {
+                                                    foreach($cat['keywords'] as $keyword) {
+                                                        $query->orWhere('category', 'like', $keyword);
+                                                    }
+                                               })
+                                               ->where('status', 1)
+                                               ->with('images')
+                                               ->latest()
+                                               ->take(3)
+                                               ->get();
             @endphp
 
             @if($cat_products->count() > 0)
@@ -354,6 +373,32 @@
                                 @if($product->original_price > $product->price)
                                     <div class="ty-badge">خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%</div>
                                 @endif
+                                <button class="ty-wishlist-btn"><i class="far fa-heart"></i></button>
+                                
+                                <a href="{{ route('product.show', $product->id) }}" class="block w-full h-full">
+                                    <img loading="lazy" src="{{ $product->images->first() ? $product->images->first()->image : 'https://images.unsplash.com/photo-1515488042361-404e9250afef?q=80&w=400&auto=format&fit=crop' }}" class="ty-main-image group-hover:scale-105" alt="{{ $product->name }}">
+                                </a>
+                                
+                                <div class="ty-glass-overlay">
+                                    <button type="button" onclick="addToCart('{{ $product->id }}')" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs md:text-sm">
+                                        <span>🛍️</span><span>أضف إلى السلة</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="ty-info-wrapper mt-3">
+                                <a href="{{ route('product.show', $product->id) }}" class="hover:text-rose-500 transition-colors">
+                                    <h3 class="ty-title text-gray-800 line-clamp-1 text-right">{{ $product->name }}</h3>
+                                </a>
+                                <div class="ty-price-wrapper mt-2">
+                                    <span class="ty-final-price">{{ number_format($product->price, 2) }} ₺</span>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        @endforeach
                                 <button class="ty-wishlist-btn"><i class="far fa-heart"></i></button>
                                 
                                 <a href="{{ route('product.show', $product->id) }}" class="block w-full h-full">
@@ -403,6 +448,55 @@
         </div>
     </div>
 </section>
+
+
+                            {{-- ==================== الـ الـ FOOTER القديم بعد استعادته بالكامل ==================== --}}
+<footer class="bg-gradient-to-b from-gray-900 to-black text-gray-300 pt-20 pb-10">
+    <div class="max-w-screen-xl mx-auto px-6">
+        <div class="grid md:grid-cols-4 gap-12 mb-16">
+            <div>
+                <h4 class="text-2xl font-black text-white mb-4 tracking-wide">MELEKLER GROUP</h4>
+                <p class="text-gray-400 leading-relaxed">متجرك الموثوق لأزياء الأطفال والنساء بتصاميم عصرية وجودة عالية.</p>
+                <div class="flex gap-4 mt-6 text-xl">
+                    <a href="https://www.instagram.com/meleklerkids/" target="_blank" class="hover:text-orange-500 transition"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/MELEKLERKIDSTR" target="_blank" class="hover:text-orange-500 transition"><i class="fab fa-facebook"></i></a>
+                    <a href="https://api.whatsapp.com/message/CL67ADRC7PMFO1" target="_blank" class="hover:text-orange-500 transition"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h5 class="font-bold text-white mb-5 text-lg">التسوق</h5>
+                <ul class="space-y-3 text-gray-400">
+                    <li><a href="#" class="hover:text-white transition">وصل حديثاً</a></li>
+                    <li><a href="{{ route('category.boys') }}" class="hover:text-white transition">ملابس أطفال</a></li>
+                    <li><a href="{{ route('category.mothers') }}" class="hover:text-white transition">ملابس نساء</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5 class="font-bold text-white mb-5 text-lg">خدمة العملاء</h5>
+                <ul class="space-y-3 text-gray-400">
+                    <li><a href="{{ route('contact') }}" class="hover:text-white transition">اتصل بنا</a></li>
+                    <li><a href="/refund-policy" class="hover:text-white transition">سياسة الإرجاع</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5 class="font-bold text-white mb-5 text-lg">اشترك في العروض</h5>
+                <div class="flex">
+                    <input type="email" placeholder="بريدك الإلكتروني" class="w-full px-4 py-3 rounded-l-xl bg-gray-800 border border-gray-700 text-white focus:outline-none" readonly>
+                    <button class="px-5 bg-orange-500 rounded-r-xl hover:bg-orange-600 transition">اشتراك</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-gray-500 text-sm">© 2026 Melekler Fashion — جميع الحقوق محفوظة</p>
+            <p class="text-gray-600 text-xs">CREATED BY ALAA ALAKRABANI</p>
+        </div>
+    </div>
+</footer>
+                            
 
 {{-- Footer --}}
 <footer class="bg-gradient-to-b from-gray-900 to-black text-gray-300 pt-20 pb-10">
