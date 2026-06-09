@@ -9,7 +9,7 @@ use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\User\AllUserController;
 use App\Http\Controllers\User\ReviewController;
 
-// 🌟 استدعاء ملفات الإدارة من مجلد Admin
+// استدعاء ملفات الإدارة من مجلد Admin
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AccountingController;
 use App\Http\Controllers\Admin\ClientController;
@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Middleware\RedirectIfAuthenticated;
 
-// 🛒 استدعاء الكنترولر الصحيح للسلة
+// استدعاء الكنترولر الصحيح للسلة
 use App\Http\Controllers\CartController;
 
 /*
@@ -39,7 +39,7 @@ use App\Http\Controllers\CartController;
 // ==================== 1. الصفحة الرئيسية والـ Guest والروابط العامة ====================
 Route::get('/', [IndexController::class, 'Index'])->name('welcome');
 
-// 🛠️ روابط الصفحات الثابتة لمنع الـ RouteNotFoundException
+// روابط الصفحات الثابتة لمنع الـ RouteNotFoundException
 Route::get('/contact', function() { return view('contact'); })->name('contact');
 Route::get('/privacy-policy', function() { return view('privacy-policy'); })->name('privacy-policy');
 Route::get('/refund-policy', function() { return view('refund-policy'); })->name('refund-policy');
@@ -167,9 +167,11 @@ Route::post('/dcart/data/store/{id}', [CartController::class, 'AddToCartDetails'
 Route::post('/add-to-wishlist/{product_id}', [WishlistController::class, 'AddToWishlist']);
 Route::post('/add-to-compare/{product_id}', [CompareController::class, 'AddToCompare']);
 
+// تم إصلاح مسارات الكوبون والـ السلة هنا بشكل دقيق لمنع خطأ Attribute [couponApply]
 Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
 Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
 Route::get('/coupon-remove', [CartController::class, 'CouponRemove']);
+
 Route::get('/checkout', [CheckoutController::class, 'CheckoutCreate'])->name('checkout');
 Route::get('/get-cart-product', [CartController::class, 'GetCartProduct']);
 Route::get('/cart-increment/{rowId}', [CartController::class, 'CartIncrement']);
