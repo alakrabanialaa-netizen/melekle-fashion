@@ -129,7 +129,10 @@ Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->na
 // ==================== 6. تفاصيل المنتجات والتنقل والأقسام الديناميكية الذكية ====================
 // ⭐ تم تعديل اسم الـ Route هنا ليكون category.show ليحل مشكلة توجيه الأقسام بالكامل
 Route::get('/category/{category}', [ShopController::class, 'category'])->name('category.show');
-Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
+
+// 🛠️ تم إعطاؤه الاسمين (المفرد والجمع) معاً لتفادي أي تعارض في ملفات الـ Blade المختلفة
+Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show')->name('products.show');
+
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
 
@@ -164,6 +167,10 @@ Route::get('/category/mothers', function() {
 // ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات ====================
 Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
 Route::post('/cart/data/store/{id}', [CartController::class, 'add'])->name('cart.add');
+
+// 🛠️ روت احتياطي بصيغة GET لمعالجة الضغطات المباشرة لروابط السلة (تجنب الـ 404)
+Route::get('/cart-add/{id}', [CartController::class, 'add']);
+
 Route::get('/cart-remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
 Route::get('/product/mini/cart', [CartController::class, 'AddMiniCart']);
