@@ -287,7 +287,7 @@
             </div>
         </div>
 
-        {{-- مصفوفة الأقسام الثابتة - تم تعديل التوجيه هنا ليتوافق مع الـ route الجديد --}}
+        {{-- مصفوفة الأقسام الثابتة --}}
         @php
             $static_categories = [
                 [
@@ -316,15 +316,15 @@
         @foreach($static_categories as $cat)
             @php
                 $cat_products = \App\Models\Product::where(function($query) use ($cat) {
-                                                                    foreach($cat['keywords'] as $keyword) {
-                                                                        $query->orWhere('category', 'like', $keyword);
-                                                                    }
-                                                               })
-                                                               ->where('status', 1)
-                                                               ->with('images')
-                                                               ->latest()
-                                                               ->take(3)
-                                                               ->get();
+                                                    foreach($cat['keywords'] as $keyword) {
+                                                        $query->orWhere('category', 'like', $keyword);
+                                                    }
+                                               })
+                                               ->where('status', 1)
+                                               ->with('images')
+                                               ->latest()
+                                               ->take(3)
+                                               ->get();
             @endphp
 
             @if($cat_products->count() > 0)
@@ -334,7 +334,6 @@
                         <h3 class="text-2xl md:text-3xl font-black text-gray-800">{{ $cat['name'] }}</h3>
                     </div>
                     <div>
-                        {{-- تعديل رابط عرض الكل ليتوجه إلى صفحة القسم المحددة --}}
                         <a href="{{ Route::has($cat['route']) ? route($cat['route']) : '/category/'.explode('.', $cat['route'])[1] }}" class="apply-button text-xs md:text-sm inline-block px-4 py-2 rounded-xl transition-all">عرض الكل &larr;</a>
                     </div>
                 </div>
@@ -349,21 +348,24 @@
                                 @endif
                                 <button class="ty-wishlist-btn"><i class="far fa-heart"></i></button>
                                 
-                                {{-- تم التعديل: رابط الصورة يتوجه لصفحة عرض المنتج --}}
                                 <a href="{{ route('product.show', $product->id) }}" class="block w-full h-full">
                                     <img loading="lazy" src="{{ $product->images->first() ? $product->images->first()->image : 'https://images.unsplash.com/photo-1515488042361-404e9250afef?q=80&w=400&auto=format&fit=crop' }}" class="ty-main-image group-hover:scale-105" alt="{{ $product->name }}">
                                 </a>
                                 
                                 <div class="ty-glass-overlay">
-                                    {{-- تم التعديل: الاستدعاء الآن يمرر الـ id ليعمل مع الـ JavaScript بالأسفل ويفتح السلة الجانبية فوراً --}}
-                                    <button type="button" onclick="addToCart('{{ $product->id }}')" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs md:text-sm">
-                                        <span>🛍️</span><span>أضف إلى السلة</span>
-                                    </button>
+                                    {{-- تم التعديل: تحويل الزر إلى فورم أجاكس لحل مشكلة السلة وتمرير معطيات الأجاكس بسلاسة --}}
+                                    <form action="{{ url('cart-add/'.$product->id) }}" method="POST" class="w-full add-to-cart-form">
+                                        @csrf
+                                        <input type="hidden" name="size" value="Free Size">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs md:text-sm">
+                                            <span>🛍️</span><span>أضف إلى السلة</span>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                             
                             <div class="ty-info-wrapper mt-3">
-                                {{-- تم التعديل: رابط عنوان المنتج يتوجه لصفحة عرض المنتج --}}
                                 <a href="{{ route('product.show', $product->id) }}" class="hover:text-rose-500 transition-colors">
                                     <h3 class="ty-title text-gray-800 line-clamp-1 text-right">{{ $product->name }}</h3>
                                 </a>
@@ -380,40 +382,6 @@
     </div>
 </section>
 
-{{-- سكريبت الجافاسكريبت للتعامل مع إضافة المنتج للسلة وفتح السلة الجانبية تلقائياً --}}
-<script>
-function addToCart(productId) {
-    fetch(`/cart/add/${productId}`, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({ quantity: 1 })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        // استدعاء دالة فتح السلة الجانبية لتظهر فوراً للمستخدم بعد نجاح الإضافة دون عمل تحديث للصفحة
-        if (typeof openCart === 'function') {
-            openCart();
-        } else {
-            console.warn('دالة openCart غير معرفة في هذا الملف، يرجى التأكد من وجودها بملف السلة الجانبية.');
-        }
-    })
-    .catch(error => {
-        console.error('حدث خطأ أثناء إضافة المنتج للسلة:', error);
-        // احتياطياً في حال حدوث مشكلة شبكة بسيطة نفتح السلة لرؤية محتواها الحاضر
-        if (typeof openCart === 'function') openCart();
-    });
-}
-</script>
-
 {{-- Premium Section --}}
 <section class="relative py-24 overflow-hidden bg-transparent select-none">
     <div class="max-w-screen-xl mx-auto px-6">
@@ -428,7 +396,14 @@ function addToCart(productId) {
             </div>
             <div class="space-y-8 text-right">
                 <div><span class="lux-badge block mb-2">MATCHING SET</span><h2 class="text-3xl md:text-4xl font-black text-gray-900 leading-tight">إطلالة كاملة <span class="lux-gradient">بضغطة واحدة</span> 🪄</h2></div>
-                <button onclick="addToCart('premium-set')" class="w-full py-4 mt-4 bg-gradient-to-r from-amber-500 to-rose-500 text-white rounded-2xl font-black text-base md:text-lg shadow-lg hover:shadow-xl transition-all duration-300">شراء الإطلالة كاملة الآن — 420.00 ₺</button>
+                
+                {{-- تم التعديل: تغليف زر العرض المميز داخل فورم لمنع توقف الرابط أو الجافا سكريبت --}}
+                <form action="{{ url('cart-add/premium-set') }}" method="POST" class="w-full add-to-cart-form">
+                    @csrf
+                    <input type="hidden" name="size" value="Free Size">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="w-full py-4 mt-4 bg-gradient-to-r from-amber-500 to-rose-500 text-white rounded-2xl font-black text-base md:text-lg shadow-lg hover:shadow-xl transition-all duration-300">شراء الإطلالة كاملة الآن — 420.00 ₺</button>
+                </form>
             </div>
         </div>
     </div>
@@ -440,7 +415,7 @@ function addToCart(productId) {
         <div class="grid md:grid-cols-4 gap-12 mb-16">
             <div>
                 <h4 class="text-2xl font-black text-white mb-4 tracking-wide">MELEKLER GROUP</h4>
-                <p class="text-gray-400 leading-relaxed">متجرك الموثوق لأزياء الأطفال والنساء بتصاميم عصرية وجودة عالية.</p>
+                <p class="text-gray-400 leading-relaxed">متجرك الموثوق لأزياء الأطفال والنساء بتصاميم عصرية جودة عالية.</p>
                 <div class="flex gap-4 mt-6 text-xl">
                     <a href="https://www.instagram.com/meleklerkids/" target="_blank" class="hover:text-orange-500 transition"><i class="fab fa-instagram"></i></a>
                     <a href="https://www.facebook.com/MELEKLERKIDSTR" target="_blank" class="hover:text-orange-500 transition"><i class="fab fa-facebook"></i></a>
@@ -512,30 +487,29 @@ function addToCart(productId) {
     window.addEventListener("scroll", reveal);
     reveal();
 
+    // دالة الإضافة الموحدة والآمنة للأجاكس لحل مشكلة استدعاء السلة بدون تحديث الصفحة
     function addToCart(productId) {
-    fetch(`/cart/add/${productId}`, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({ quantity: 1 })
-    })
-    .then(response => response.json())
-    .then(data => {
-        // إذا تمت الإضافة بنجاح، نقوم بفتح السلة الجانبية فوراً دون تحديث الصفحة
-        openCart();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        // احتياطياً في حال حدوث خطأ بسيط نفتح السلة أيضاً
-        openCart(); 
-    });
-}
+        fetch(`/cart-add/${productId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ quantity: 1, size: 'Free Size' })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(data => {
+            if (typeof openCart === 'function') {
+                openCart();
+            }
+        })
         .catch(error => {
             console.error('Error:', error);
-            window.location.href = '/shop'; 
+            if (typeof openCart === 'function') openCart(); 
         });
     }
 </script>
