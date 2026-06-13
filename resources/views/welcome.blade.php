@@ -1,4 +1,3 @@
-HTML
 @extends('layouts.app')
 
 @section('content')
