@@ -307,7 +307,7 @@
                 ],
                 [
                     'name' => 'ملابس الأمهات', 
-                    'route' => 'category.women', // تم تعديله من category.mothers إلى category.women ليتوافق مع الناف بار
+                    'route' => 'category.women', 
                     'keywords' => ['%أمهات%', '%نساء%', '%نسائي%', '%mother%', '%women%']
                 ]
             ];
@@ -316,15 +316,15 @@
         @foreach($static_categories as $cat)
             @php
                 $cat_products = \App\Models\Product::where(function($query) use ($cat) {
-                                                    foreach($cat['keywords'] as $keyword) {
-                                                        $query->orWhere('category', 'like', $keyword);
-                                                    }
-                                               })
-                                               ->where('status', 1)
-                                               ->with('images')
-                                               ->latest()
-                                               ->take(3)
-                                               ->get();
+                                                                    foreach($cat['keywords'] as $keyword) {
+                                                                        $query->orWhere('category', 'like', $keyword);
+                                                                    }
+                                                               })
+                                                               ->where('status', 1)
+                                                               ->with('images')
+                                                               ->latest()
+                                                               ->take(3)
+                                                               ->get();
             @endphp
 
             @if($cat_products->count() > 0)
@@ -334,8 +334,7 @@
                         <h3 class="text-2xl md:text-3xl font-black text-gray-800">{{ $cat['name'] }}</h3>
                     </div>
                     <div>
-                        {{-- تم إحاطة التوجيه بـ try catch لتجنب توقف الصفحة إذا لم تكن الروابط معرفة بالكامل --}}
-                        @html
+                        {{-- تعديل رابط عرض الكل ليتوجه إلى صفحة القسم المحددة --}}
                         <a href="{{ Route::has($cat['route']) ? route($cat['route']) : '/category/'.explode('.', $cat['route'])[1] }}" class="apply-button text-xs md:text-sm inline-block px-4 py-2 rounded-xl transition-all">عرض الكل &larr;</a>
                     </div>
                 </div>
@@ -350,11 +349,13 @@
                                 @endif
                                 <button class="ty-wishlist-btn"><i class="far fa-heart"></i></button>
                                 
+                                {{-- تم التعديل: رابط الصورة يتوجه لصفحة عرض المنتج --}}
                                 <a href="{{ route('product.show', $product->id) }}" class="block w-full h-full">
                                     <img loading="lazy" src="{{ $product->images->first() ? $product->images->first()->image : 'https://images.unsplash.com/photo-1515488042361-404e9250afef?q=80&w=400&auto=format&fit=crop' }}" class="ty-main-image group-hover:scale-105" alt="{{ $product->name }}">
                                 </a>
                                 
                                 <div class="ty-glass-overlay">
+                                    {{-- تم التعديل: الاستدعاء الآن يمرر الـ id ليعمل مع الـ JavaScript بالأسفل ويفتح السلة الجانبية فوراً --}}
                                     <button type="button" onclick="addToCart('{{ $product->id }}')" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs md:text-sm">
                                         <span>🛍️</span><span>أضف إلى السلة</span>
                                     </button>
@@ -362,6 +363,7 @@
                             </div>
                             
                             <div class="ty-info-wrapper mt-3">
+                                {{-- تم التعديل: رابط عنوان المنتج يتوجه لصفحة عرض المنتج --}}
                                 <a href="{{ route('product.show', $product->id) }}" class="hover:text-rose-500 transition-colors">
                                     <h3 class="ty-title text-gray-800 line-clamp-1 text-right">{{ $product->name }}</h3>
                                 </a>
@@ -377,6 +379,40 @@
 
     </div>
 </section>
+
+{{-- سكريبت الجافاسكريبت للتعامل مع إضافة المنتج للسلة وفتح السلة الجانبية تلقائياً --}}
+<script>
+function addToCart(productId) {
+    fetch(`/cart/add/${productId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ quantity: 1 })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // استدعاء دالة فتح السلة الجانبية لتظهر فوراً للمستخدم بعد نجاح الإضافة دون عمل تحديث للصفحة
+        if (typeof openCart === 'function') {
+            openCart();
+        } else {
+            console.warn('دالة openCart غير معرفة في هذا الملف، يرجى التأكد من وجودها بملف السلة الجانبية.');
+        }
+    })
+    .catch(error => {
+        console.error('حدث خطأ أثناء إضافة المنتج للسلة:', error);
+        // احتياطياً في حال حدوث مشكلة شبكة بسيطة نفتح السلة لرؤية محتواها الحاضر
+        if (typeof openCart === 'function') openCart();
+    });
+}
+</script>
 
 {{-- Premium Section --}}
 <section class="relative py-24 overflow-hidden bg-transparent select-none">
@@ -477,20 +513,26 @@
     reveal();
 
     function addToCart(productId) {
-        fetch(`/cart/add/${productId}`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({ quantity: 1 })
-        })
-        .then(response => response.json())
-        .then(data => {
-            // توجيه العميل مباشرة إلى صفحة المعاينة (shop) بعد الإضافة الناجحة
-            window.location.href = '/shop'; 
-        })
+    fetch(`/cart/add/${productId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ quantity: 1 })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // إذا تمت الإضافة بنجاح، نقوم بفتح السلة الجانبية فوراً دون تحديث الصفحة
+        openCart();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // احتياطياً في حال حدوث خطأ بسيط نفتح السلة أيضاً
+        openCart(); 
+    });
+}
         .catch(error => {
             console.error('Error:', error);
             window.location.href = '/shop'; 
