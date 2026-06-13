@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link class="rounded-full" rel="icon" type="image/png" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/hero-bg.png">
     <title>Melekler Group | @yield('title', 'Premium Fashion')</title>
     
@@ -32,7 +33,6 @@
             font-family: 'Cairo', sans-serif;
         }
 
-        /* المظهر الشفاف الأساسي الفخم في البداية */
         .header-transparent {
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(12px);
@@ -43,7 +43,6 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
         }
 
-        /* المظهر عند النزول بالصفحة */
         .header-scrolled {
             top: 0.5rem !important;
             background: rgba(255, 255, 255, 0.92);
@@ -55,15 +54,12 @@
             padding-bottom: 0.6rem;
         }
 
-        /* Nav Links */
         .nav-link { transition: all 0.3s ease; font-weight: 700; color: #1f2937; position: relative; }
         .nav-link:hover { color: #f43f5e !important; }
         
-        /* Icons */
         .nav-icon { transition: all 0.3s ease; cursor: pointer; color: #1f2937; }
         .nav-icon:hover { color: #f43f5e !important; transform: translateY(-2px); }
 
-        /* Language Switcher Button */
         .lang-btn {
             display: flex;
             align-items: center;
@@ -77,7 +73,6 @@
         }
         .lang-btn:hover { color: #f43f5e !important; border-color: #f43f5e; transform: translateY(-2px); }
 
-        /* Dropdowns */
         .dropdown-menu {
             opacity: 0;
             visibility: hidden;
@@ -120,7 +115,6 @@
                 </div>
             </div>
 
-            {{-- رابط لوحة تحكم الآدمن المباشر والآمن --}}
             <a href="/admin/dashboard" class="nav-icon text-xl hidden md:block" title="لوحة التحكم">
                 <i class="fas fa-user-shield"></i>
             </a>
@@ -143,7 +137,6 @@
                         <span>الأقسام</span>
                         <i class="fas fa-chevron-down text-[9px] transition-transform group-hover:rotate-180"></i>
                     </button>
-                    {{-- روابط الأقسام المتوافقة تماماً مع ملف web.php --}}
                     <div class="dropdown-menu absolute right-0 mt-4 w-56 bg-white rounded-3xl shadow-2xl py-4 border border-pink-50 overflow-hidden z-[120]">
                         <a href="/category/boys" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👦 ملابس أولاد</a>
                         <a href="/category/girls" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👧 ملابس بنات</a>
@@ -191,24 +184,21 @@
     @yield('content')
 </main>
 
-{{-- 🛒 Mini Cart --}}
+{{-- 🛒 Mini Cart Container (تم تزويده بـ ID للمحتوى الداخلي ليتم تحديثه عبر الجافاسكريبت تلقائياً) --}}
 <div id="mini-cart" class="fixed top-0 right-[-420px] w-[400px] h-screen bg-white shadow-2xl transition-all duration-300 z-[150] flex flex-col">
     <div class="p-6 border-b flex justify-between items-center">
         <h2 class="text-xl font-bold">🛒 سلة المشتريات</h2>
         <button onclick="closeCart()" class="text-2xl hover:text-red-500 transition">&times;</button>
     </div>
 
-    <div class="flex-1 p-6 overflow-y-auto">
-        @php $cart = session('cart', []); $total = 0; @endphp
-        
+    <div id="mini-cart-items-wrapper" class="flex-1 p-6 overflow-y-auto">
+        @php $cart = session('cart', []); @endphp
         @if(count($cart) > 0)
             @foreach($cart as $id => $item)
-                @php $total += $item['price'] * $item['quantity']; @endphp
                 <div class="flex gap-4 border-b py-4 items-center">
-                    <img src="{{ $item['image'] ? asset('storage/'.$item['image']) : asset('images/default.png') }}" 
+                    <img src="{{ $item['image'] ? asset('storage/'.$item['image']) : 'https://via.placeholder.com/150' }}" 
                          alt="{{ $item['name'] }}" 
                          class="w-16 h-16 object-cover rounded shadow-sm">
-                    
                     <div class="flex-1">
                         <h4 class="font-semibold text-gray-800">{{ $item['name'] }}</h4>
                         @if(isset($item['size']))
@@ -221,6 +211,9 @@
                     </div>
                 </div>
             @endforeach
+            <div class="p-4 border-t mt-auto">
+                <a href="{{ route('mycart') }}" class="block text-center bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 rounded-xl transition shadow-md">عرض سلة المشتريات الكاملة</a>
+            </div>
         @else
             <div class="text-center mt-20">
                 <div class="text-6xl mb-4 text-gray-200">🛒</div>
@@ -234,6 +227,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // 1. التعامل مع حركة الهيدر عند النزول
     const header = document.getElementById('main-header');
     window.addEventListener('scroll', () => {
         if (window.scrollY > 30) {
@@ -245,6 +239,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // 2. التحكم في فتح وإغلاق السلة المنبثقة
     const miniCart = document.getElementById('mini-cart');
     const cartIcon = document.getElementById('cart-icon');
     
@@ -258,16 +253,96 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     document.addEventListener('click', function(e) {
-        if (!miniCart.contains(e.target) && !cartIcon.contains(e.target)) {
+        if (!miniCart.contains(e.target) && !cartIcon.contains(e.target) && !e.target.closest('.add-to-cart-btn')) {
             closeCart();
         }
     });
 
+    // 3. قائمة الموبايل
     const mobileMenu = document.getElementById('mobile-menu');
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const closeMobileMenuButton = document.getElementById('close-mobile-menu');
     mobileMenuButton.addEventListener('click', () => mobileMenu.classList.add('open'));
     closeMobileMenuButton.addEventListener('click', () => mobileMenu.classList.remove('open'));
+
+    // ⭐ 4. المحرك السحري المطور: اعتراض فورامير الإضافة للسلة في المتجر وإرسالها عبر الأجاكس وتحديث القائمة فوراً
+    $(document).on('submit', 'form[action*="cart/data/store"]', function(e) {
+        e.preventDefault(); // منع الصفحة من إعادة التحميل
+        
+        const form = $(this);
+        const url = form.attr('action');
+        const formData = form.serialize();
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta/name="csrf-token"').attr('content')
+            },
+            success: function(response) {
+                if(response.status === 'success') {
+                    // تحديث عداد المنتجات العلوي
+                    $('#cart-count').text(response.cart_count);
+                    
+                    // تحديث وبناء محتوى الـ Mini Cart بشكل مباشر
+                    updateMiniCartUI(response.cart);
+                    
+                    // فتح السلة تلقائياً ليرى الزبون المنتج وهو ينضاف بنجاح!
+                    openCart();
+                }
+            },
+            error: function(xhr) {
+                console.error('حدث خطأ أثناء إضافة المنتج للسلة.');
+            }
+        });
+    });
+
+    // دالة بناء الـ HTML الداخلي للسلة بشكل حي وديناميكي بدون ريفريش
+    function updateMiniCartUI(cart) {
+        const wrapper = $('#mini-cart-items-wrapper');
+        wrapper.empty(); // مسح المحتوى القديم
+
+        const cartKeys = Object.keys(cart);
+
+        if(cartKeys.length > 0) {
+            let htmlContent = '';
+            cartKeys.forEach(id => {
+                const item = cart[id];
+                const itemImage = item.image ? `/storage/${item.image}` : 'https://via.placeholder.com/150';
+                const itemSize = item.size ? `<p class="text-xs text-gray-400">المقاس: ${item.size}</p>` : '';
+                const itemPrice = parseFloat(item.price).toFixed(2);
+
+                htmlContent += `
+                    <div class="flex gap-4 border-b py-4 items-center">
+                        <img src="${itemImage}" alt="${item.name}" class="w-16 h-16 object-cover rounded shadow-sm">
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-gray-800">${item.name}</h4>
+                            ${itemSize}
+                            <div class="flex justify-between items-center mt-1">
+                                <p class="text-sm text-gray-600">الكمية: ${item.quantity}</p>
+                                <p class="font-bold text-pink-600">${itemPrice} ₺</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            htmlContent += `
+                <div class="p-4 border-t mt-4">
+                    <a href="/mycart" class="block text-center bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 rounded-xl transition shadow-md">عرض سلة المشتريات الكاملة</a>
+                </div>
+            `;
+            wrapper.html(htmlContent);
+        } else {
+            wrapper.html(`
+                <div class="text-center mt-20">
+                    <div class="text-6xl mb-4 text-gray-200">🛒</div>
+                    <p class="text-gray-500">السلة فارغة حالياً</p>
+                </div>
+            `);
+        }
+    }
 });
 </script>
 
