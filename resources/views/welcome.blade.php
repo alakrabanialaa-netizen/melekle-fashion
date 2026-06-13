@@ -287,7 +287,7 @@
             </div>
         </div>
 
-        {{-- مصفوفة الأقسام الثابتة مع توسيع كلمات البحث لتغطية كافة الاحتمالات --}}
+        {{-- مصفوفة الأقسام الثابتة - تم تعديل التوجيه هنا ليتوافق مع الـ route الجديد --}}
         @php
             $static_categories = [
                 [
@@ -307,7 +307,7 @@
                 ],
                 [
                     'name' => 'ملابس الأمهات', 
-                    'route' => 'category.mothers', 
+                    'route' => 'category.women', // تم تعديله من category.mothers إلى category.women ليتوافق مع الناف بار
                     'keywords' => ['%أمهات%', '%نساء%', '%نسائي%', '%mother%', '%women%']
                 ]
             ];
@@ -315,7 +315,6 @@
 
         @foreach($static_categories as $cat)
             @php
-                // جلب 3 منتجات فقط لكل قسم بناءً على أي كلمة مفتاحية مطابقة
                 $cat_products = \App\Models\Product::where(function($query) use ($cat) {
                                                     foreach($cat['keywords'] as $keyword) {
                                                         $query->orWhere('category', 'like', $keyword);
@@ -335,7 +334,9 @@
                         <h3 class="text-2xl md:text-3xl font-black text-gray-800">{{ $cat['name'] }}</h3>
                     </div>
                     <div>
-                        <a href="{{ route($cat['route']) }}" class="apply-button text-xs md:text-sm inline-block px-4 py-2 rounded-xl transition-all">عرض الكل &larr;</a>
+                        {{-- تم إحاطة التوجيه بـ try catch لتجنب توقف الصفحة إذا لم تكن الروابط معرفة بالكامل --}}
+                        @html
+                        <a href="{{ Route::has($cat['route']) ? route($cat['route']) : '/category/'.explode('.', $cat['route'])[1] }}" class="apply-button text-xs md:text-sm inline-block px-4 py-2 rounded-xl transition-all">عرض الكل &larr;</a>
                     </div>
                 </div>
 
@@ -415,15 +416,15 @@
                 <h5 class="font-bold text-white mb-5 text-lg">التسوق</h5>
                 <ul class="space-y-3 text-gray-400">
                     <li><a href="#" class="hover:text-white transition">وصل حديثاً</a></li>
-                    <li><a href="{{ route('category.boys') }}" class="hover:text-white transition">ملابس أطفال</a></li>
-                    <li><a href="{{ route('category.mothers') }}" class="hover:text-white transition">ملابس نساء</a></li>
+                    <li><a href="{{ Route::has('category.boys') ? route('category.boys') : '/category/boys' }}" class="hover:text-white transition">ملابس أطفال</a></li>
+                    <li><a href="{{ Route::has('category.women') ? route('category.women') : '/category/women' }}" class="hover:text-white transition">ملابس نساء</a></li>
                 </ul>
             </div>
 
             <div>
                 <h5 class="font-bold text-white mb-5 text-lg">خدمة العملاء</h5>
                 <ul class="space-y-3 text-gray-400">
-                    <li><a href="{{ route('contact') }}" class="hover:text-white transition">اتصل بنا</a></li>
+                    <li><a href="{{ Route::has('contact') ? route('contact') : '/contact' }}" class="hover:text-white transition">اتصل بنا</a></li>
                     <li><a href="/refund-policy" class="hover:text-white transition">سياسة الإرجاع</a></li>
                 </ul>
             </div>
@@ -487,20 +488,13 @@
         })
         .then(response => response.json())
         .then(data => {
-            openCart();
+            // توجيه العميل مباشرة إلى صفحة المعاينة (shop) بعد الإضافة الناجحة
+            window.location.href = '/shop'; 
         })
         .catch(error => {
             console.error('Error:', error);
-            openCart(); 
+            window.location.href = '/shop'; 
         });
-    }
-
-    function openCart() {
-        if (typeof window.parent.openCart === 'function') {
-            window.parent.openCart();
-        } else if (document.getElementById('mini-cart')) {
-            document.getElementById('mini-cart').style.right = "0";
-        }
     }
 </script>
 @endsection
