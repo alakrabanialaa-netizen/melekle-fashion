@@ -22,14 +22,15 @@ class ShopController extends Controller
     }
 
     // ⭐ 3. الدالة الجديدة: عرض المنتجات حسب القسم المحدد بعد الإصلاح
+// ⭐ 3. الدالة المحدثة: لتتوافق تماماً مع مجلد categories الظاهر في الصورة
 public function category($category)
 {
-    // ربط روابط الـ URL بالكلمات الدلالية المخزنة في قاعدة البيانات
+    // ربط روابط الـ URL بأسماء ملفات الـ Blade ومصفوفة البحث
     $categoryMap = [
-        'boys'    => ['%ولد%', '%ولادي%', '%boy%', '%boys%'],
-        'girls'   => ['%بنات%', '%بناتي%', '%girl%', '%girls%'],
-        'babies'  => ['%رضع%', '%طفل%', '%أطفال%', '%اطفال%', '%baby%', '%babies%'],
-        'mothers' => ['%أمهات%', '%نساء%', '%نسائي%', '%mother%', '%women%', '%women%']
+        'boys'    => ['view' => 'categories.boys', 'keywords' => ['%ولد%', '%ولادي%', '%boy%', '%boys%']],
+        'girls'   => ['view' => 'categories.girls', 'keywords' => ['%بنات%', '%بناتي%', '%girl%', '%girls%']],
+        'babies'  => ['view' => 'categories.babies', 'keywords' => ['%رضع%', '%طفل%', '%أطفال%', '%اطفال%', '%baby%', '%babies%']],
+        'mothers' => ['view' => 'categories.mothers', 'keywords' => ['%أمهات%', '%نساء%', '%نسائي%', '%mother%', '%women%']]
     ];
 
     // إذا كتب المستخدم قسماً غير موجود بالخريطة يعطيه 404
@@ -39,25 +40,25 @@ public function category($category)
 
     // جلب المنتجات التابعة للكلمات الدلالية الخاصة بالقسم المختار
     $products = Product::where(function($query) use ($categoryMap, $category) {
-                            foreach($categoryMap[$category] as $keyword) {
+                            foreach($categoryMap[$category]['keywords'] as $keyword) {
                                 $query->orWhere('category', 'like', $keyword);
                             }
                        })
-                       ->where('status', 1) // تأكد إن المنتجات نشطة
+                       ->where('status', 1)
                        ->with('images')
                        ->latest()
                        ->get();
 
-    // عناوين الصفحات
-    $categoryTitles = [
-        'boys'    => 'ملابس الأولاد',
-        'girls'   => 'ملابس البنات',
-        'babies'  => 'المواليد والرضع',
-        'mothers' => 'قسم الأمهات'
-    ];
-    $pageTitle = $categoryTitles[$category];
+    // جلب بيانات القسم الأساسية إذا كنت تحتاجها في الصفحات
+    $categoryData = \App\Models\Category::where('category_slug', 'like', '%'.$category.'%')->first();
 
-    return view('frontend.shop.index', compact('products', 'pageTitle'));
+    // تحديد اسم ملف الـ View ديناميكياً بناءً على القسم (مثال: categories.boys)
+    $targetView = $categoryMap[$category]['view'];
+
+    return view($targetView, [
+        'products' => $products,
+        'category' => $categoryData
+    ]);
 }
     // 4. صفحة منتج واحد 
     public function show($id) 
