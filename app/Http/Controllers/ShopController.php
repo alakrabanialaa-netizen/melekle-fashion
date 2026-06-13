@@ -21,34 +21,44 @@ class ShopController extends Controller
         return view('frontend.shop.index', compact('products'));
     }
 
-    // ⭐ 3. الدالة الجديدة: عرض المنتجات حسب القسم المحدد
-    public function category($category)
-    {
-        // التحقق من أن القسم الممرر مدعوم في موقعك
-        $validCategories = ['girls', 'boys', 'babies', 'mothers'];
-        
-        if (!in_array($category, $validCategories)) {
-            abort(404); // إذا كتب المستخدم قسماً غير موجود بالرابط يعطيه 404
-        }
+    // ⭐ 3. الدالة الجديدة: عرض المنتجات حسب القسم المحدد بعد الإصلاح
+public function category($category)
+{
+    // ربط روابط الـ URL بالكلمات الدلالية المخزنة في قاعدة البيانات
+    $categoryMap = [
+        'boys'    => ['%ولد%', '%ولادي%', '%boy%', '%boys%'],
+        'girls'   => ['%بنات%', '%بناتي%', '%girl%', '%girls%'],
+        'babies'  => ['%رضع%', '%طفل%', '%أطفال%', '%اطفال%', '%baby%', '%babies%'],
+        'mothers' => ['%أمهات%', '%نساء%', '%نسائي%', '%mother%', '%women%', '%women%']
+    ];
 
-        // جلب المنتجات التابعة للقسم المختار فقط مع صورها
-        $products = Product::where('category', $category)
-                           ->with('images')
-                           ->latest()
-                           ->get();
-
-        // سنرسل أيضاً اسم القسم لعرضه كعنوان في الصفحة (مثلاً: قسم البنات)
-        $categoryTitles = [
-            'girls'   => 'ملابس البنات',
-            'boys'    => 'ملابس الأولاد',
-            'babies'  => 'المواليد والرضع',
-            'mothers' => 'قسم الأمهات'
-        ];
-        $pageTitle = $categoryTitles[$category];
-
-        return view('frontend.shop.index', compact('products', 'pageTitle'));
+    // إذا كتب المستخدم قسماً غير موجود بالخريطة يعطيه 404
+    if (!array_key_exists($category, $categoryMap)) {
+        abort(404);
     }
 
+    // جلب المنتجات التابعة للكلمات الدلالية الخاصة بالقسم المختار
+    $products = Product::where(function($query) use ($categoryMap, $category) {
+                            foreach($categoryMap[$category] as $keyword) {
+                                $query->orWhere('category', 'like', $keyword);
+                            }
+                       })
+                       ->where('status', 1) // تأكد إن المنتجات نشطة
+                       ->with('images')
+                       ->latest()
+                       ->get();
+
+    // عناوين الصفحات
+    $categoryTitles = [
+        'boys'    => 'ملابس الأولاد',
+        'girls'   => 'ملابس البنات',
+        'babies'  => 'المواليد والرضع',
+        'mothers' => 'قسم الأمهات'
+    ];
+    $pageTitle = $categoryTitles[$category];
+
+    return view('frontend.shop.index', compact('products', 'pageTitle'));
+}
     // 4. صفحة منتج واحد 
     public function show($id) 
     {
