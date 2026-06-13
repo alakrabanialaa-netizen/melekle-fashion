@@ -14,37 +14,44 @@ class CartController extends Controller
         return view('cart.index', compact('cart'));
     }
 
-    // 2. دالة إضافة المنتج للسلة (تم تعديل الرد ليدعم الـ Form العادي والـ Ajax معاً)
+    // 2. دالة إضافة المنتج للسلة (تم إصلاح أسماء الحقول لتتوافق مع قاعدة البيانات والـ View)
     public function add(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('images')->findOrFail($id);
         $cart = session()->get('cart', []);
 
         // جلب المقاس إذا أرسله الزبون، أو وضع مقاس افتراضي
         $size = $request->input('size', 'Free Size');
 
+        // جلب اسم الصورة الأولى بشكل صحيح وآمن لمنع الـ Errors
+        $imagePath = null;
+        if ($product->images && $product->images->first()) {
+            // تحقق إذا كان الحقل في جدول الصور اسمه image_name أو image
+            $imagePath = $product->images->first()->image_name ?? $product->images->first()->image;
+        }
+
         if(isset($cart[$id])) {
             $cart[$id]['quantity']++;
         } else {
+            // ⭐ تم تعديل الأسطر بالأسفل لتجلب البيانات الحقيقية من الموديل (product_name & selling_price)
             $cart[$id] = [
-                "name" => $product->name,
+                "name" => $product->product_name ?? $product->name,
                 "quantity" => 1,
-                "price" => $product->price,
+                "price" => $product->selling_price ?? $product->price,
                 "size" => $size,
-                // جلب الصورة الأولى للمنتج بشكل صحيح
-                "image" => $product->images && $product->images->first() ? $product->images->first()->image : ''
+                "image" => $imagePath
             ];
         }
 
         session()->put('cart', $cart);
 
-        // 🔥 هنا التعديل السحري:
-        // إذا كان الطلب Ajax يرسل JSON، وإذا كان طلباً عادياً يعود للخلف فوراً لمنع الشاشة البيضاء
+        // إذا كان الطلب Ajax يرسل JSON لتحديث النافذة المنبثقة فوراً
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'status' => 'success',
                 'message' => 'تم إضافة المنتج للسلة بنجاح!',
-                'cart' => $cart
+                'cart' => $cart,
+                'cart_count' => count($cart)
             ]);
         }
 
