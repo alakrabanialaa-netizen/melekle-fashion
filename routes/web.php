@@ -169,8 +169,7 @@ Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
 Route::post('/cart/data/store/{id}', [CartController::class, 'add'])->name('cart.add');
 
 // روت احتياطي بصيغة GET لمعالجة الضغطات المباشرة لروابط السلة (تجنب الـ 404)
-Route::get('/cart-add/{id}', [CartController::class, 'add']);
-
+Route::any('/cart-add/{id}', [CartController::class, 'add']);
 Route::get('/cart-remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
 Route::get('/product/mini/cart', [CartController::class, 'AddMiniCart']);
