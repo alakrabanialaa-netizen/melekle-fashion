@@ -127,11 +127,11 @@ Route::get('/become/vendor', [VendorController::class, 'BecomeVendor'])->name('b
 Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->name('vendor.register');
 
 // ==================== 6. تفاصيل المنتجات والتنقل والأقسام الديناميكية الذكية ====================
-// ⭐ تم تعديل اسم الـ Route هنا ليكون category.show ليحل مشكلة توجيه الأقسام بالكامل
 Route::get('/category/{category}', [ShopController::class, 'category'])->name('category.show');
 
-// 🛠️ تم إعطاؤه الاسمين (المفرد والجمع) معاً لتفادي أي تعارض في ملفات الـ Blade المختلفة
-Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show')->name('products.show');
+// ✅ تم إصلاح العطل هنا عبر إنشاء مسارين مستقلين تماماً ليدعم النظام الكلمتين (المفرد والجمع) معاً بنجاح
+Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
+Route::get('/product/info/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('products.show');
 
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
@@ -168,7 +168,7 @@ Route::get('/category/mothers', function() {
 Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
 Route::post('/cart/data/store/{id}', [CartController::class, 'add'])->name('cart.add');
 
-// 🛠️ روت احتياطي بصيغة GET لمعالجة الضغطات المباشرة لروابط السلة (تجنب الـ 404)
+// روت احتياطي بصيغة GET لمعالجة الضغطات المباشرة لروابط السلة (تجنب الـ 404)
 Route::get('/cart-add/{id}', [CartController::class, 'add']);
 
 Route::get('/cart-remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
