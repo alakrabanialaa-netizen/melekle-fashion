@@ -30,6 +30,9 @@ use App\Http\Middleware\RedirectIfAuthenticated;
 // استدعاء الكنترولر الصحيح للسلة
 use App\Http\Controllers\CartController;
 
+// ⭐ تم إضافة استدعاء الـ ShopController هنا لإصلاح خطأ الـ Target class does not exist
+use App\Http\Controllers\ShopController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -124,8 +127,8 @@ Route::get('/become/vendor', [VendorController::class, 'BecomeVendor'])->name('b
 Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->name('vendor.register');
 
 // ==================== 6. تفاصيل المنتجات والتنقل والأقسام الديناميكية الذكية ====================
-// روت لعرض منتجات قسم معين ديناميكياً
-Route::get('/category/{category}', [ShopController::class, 'category'])->name('shop.category');
+// ⭐ تم تعديل اسم الـ Route هنا ليكون category.show ليحل مشكلة توجيه الأقسام بالكامل
+Route::get('/category/{category}', [ShopController::class, 'category'])->name('category.show');
 Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
@@ -174,6 +177,7 @@ Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
 Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
 Route::get('/coupon-remove', [CartController::class, 'CouponRemove']);
 
+/* استدعاء صفحة الدفع وعمليات تعديل عناصر السلة */
 Route::get('/checkout', [CheckoutController::class, 'CheckoutCreate'])->name('checkout');
 Route::get('/get-cart-product', [CartController::class, 'GetCartProduct']);
 Route::get('/cart-increment/{rowId}', [CartController::class, 'CartIncrement']);
