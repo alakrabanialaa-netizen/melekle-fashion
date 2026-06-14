@@ -24,12 +24,12 @@
                             @endif
 
 @if($product->product_thambnail)
-    <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/{{ basename($product->product_thambnail) }}" class="ty-main-image w-full h-full object-cover" alt="{{ $product->name }}">
+    <img src="{{ $product->product_thambnail }}" class="ty-main-image w-full h-full object-cover" alt="{{ $product->name }}">
 @elseif($product->images && $product->images->first())
-    <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/{{ basename($product->images->first()->image) }}" class="ty-main-image w-full h-full object-cover" alt="{{ $product->name }}">
+    <img src="{{ $product->images->first()->image }}" class="ty-main-image w-full h-full object-cover" alt="{{ $product->name }}">
 @else
     <img src="https://via.placeholder.com/400x600?text=No+Image" class="ty-main-image w-full h-full object-cover" alt="{{ $product->name }}">
-@endif                            
+@endif                           
                             <div class="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/60 to-transparent hidden md:block z-20">
                                 <form action="{{ url('cart-add/'.$product->id) }}" method="POST">
                                     @csrf
