@@ -96,6 +96,8 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/users/fix', [AdminUserController::class, 'index'])->name('users.index'); 
 
     // 📊 5️⃣ قسم المحاسبة (accounting)
+    Route::post('/admin/accounting/capital', [AccountingController::class, 'storeCapital']);
+Route::delete('/admin/accounting/capital/{id}', [AccountingController::class, 'destroyCapital']);
     Route::get('/admin/accounting', [AccountingController::class, 'index'])->name('admin.accounting.index');
     Route::get('/admin/accounting/fix', [AccountingController::class, 'index'])->name('accounting.index'); 
 
