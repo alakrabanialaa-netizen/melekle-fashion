@@ -33,8 +33,8 @@ class AccountingController extends Controller
         $netProfit = $grossProfit - $totalExpenses;
 
         // 3. قيمة المخزون الحالية الدقيقة (الكمية الحالية في السعر)
-        $inventoryValue = Product::sum(DB::raw('stock * cost_price'));
-
+// 🎯 الحل: عمل explicit type cast للحقول بداخل الاستعلام ليتوافق مع PostgreSQL
+$inventoryValue = Product::sum(DB::raw('CAST(stock AS NUMERIC) * CAST(cost_price AS NUMERIC)'));
         // 4. حساب رأس المال ديناميكياً من جدول حركات رأس المال
         $capital = DB::table('capital_transactions')->sum('amount');
 
