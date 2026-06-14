@@ -196,11 +196,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const salesChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            // 💡 تعديل رئيسي: استبدال @json بـ json_encode المباشر لتلافي أخطاء المعالجة
-            labels: {!! json_encode($chartLabels) !!}, 
+            // 🎯 الحل: وضع علامات تنصيص فردية حول ألسنة الـ Blade لمنع خلط الفاصلة مع الـ PHP
+            labels: JSON.parse('{!! json_encode($chartLabels) !!}'), 
             datasets: [{
                 label: 'إجمالي المبيعات (ليرة تركية)',
-                data: {!! json_encode($chartData) !!}, 
+                data: JSON.parse('{!! json_encode($chartData) !!}'), 
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
