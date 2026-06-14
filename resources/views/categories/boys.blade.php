@@ -15,43 +15,50 @@
         @if($products->count() > 0)
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-8">
                 @foreach($products as $product)
-                    <div class="product-card-ty group">
-                        <!-- رابط المنتج مع الصورة -->
-                        <a href="{{ route('products.show', $product) }}" class="block relative overflow-hidden ty-image-wrapper">
-                            <!-- شارة الخصم -->
+                    <div class="product-card-ty group relative flex flex-col justify-between">
+                        
+                        <a href="{{ route('products.show', [$product->id, $product->product_slug ?? 'boy-style']) }}" class="ty-image-wrapper block relative overflow-hidden rounded-t-xl">
+                            
                             @if($product->original_price > $product->price)
-                                <span class="absolute top-2 right-2 z-10 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">خصم %{{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}</span>
+                                <span class="absolute top-2 right-2 z-20 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">خصم %{{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}</span>
                             @endif
 
-                            <img src="{{ $product->images->first() ? asset('storage/'.$product->images->first()->image) : 'https://via.placeholder.com/400x600' }}" 
-                                 class="ty-main-image" 
+                            <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/{{ $product->product_thambnail }}" 
+                                 class="ty-main-image w-full h-full object-cover" 
                                  alt="{{ $product->name }}">
                             
-                            <!-- زر أضف للسلة يظهر عند الحوم (للكمبيوتر ) -->
-                            <div class="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/60 to-transparent hidden md:block">
-                                <button class="w-full bg-white text-gray-900 font-bold py-2 rounded-lg text-sm hover:bg-blue-600 hover:text-white transition-colors">
-                                    أضف إلى السلة
-                                </button>
+                            <div class="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/60 to-transparent hidden md:block z-20">
+                                <form action="{{ url('cart-add/'.$product->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="w-full bg-white text-gray-900 font-bold py-2 rounded-lg text-sm hover:bg-blue-600 hover:text-white transition-colors">
+                                        أضف إلى السلة
+                                    </button>
+                                </form>
                             </div>
                         </a>
 
-                        <!-- معلومات المنتج -->
-                        <div class="ty-info-wrapper">
-                            <h3 class="ty-title mb-2">{{ $product->name }}</h3>
+                        <div class="ty-info-wrapper flex flex-col justify-between p-4 flex-grow">
+                            <a href="{{ route('products.show', [$product->id, $product->product_slug ?? 'boy-style']) }}">
+                                <h3 class="ty-title mb-2 hover:text-blue-600 transition-colors">{{ $product->name }}</h3>
+                            </a>
                             
-                            <div class="flex items-center justify-between mt-auto">
+                            <div class="flex items-center justify-between mt-auto pt-2">
                                 <div class="flex flex-col">
                                     @if($product->original_price)
                                         <span class="ty-original-price text-xs text-gray-400 line-through">{{ number_format($product->original_price, 2) }} ₺</span>
                                     @endif
                                     <span class="ty-final-price text-blue-700 font-black text-lg">{{ number_format($product->price, 2) }} ₺</span>
                                 </div>
-                                <!-- أيقونة سلة للجوال -->
-                                <button class="md:hidden w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all">
-                                    <i class="fas fa-shopping-cart text-sm"></i>
-                                </button>
+                                
+                                <form action="{{ url('cart-add/'.$product->id) }}" method="POST" class="md:hidden">
+                                    @csrf
+                                    <button type="submit" class="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all">
+                                        <i class="fas fa-shopping-cart text-sm"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
+
                     </div>
                 @endforeach
             </div>
@@ -72,7 +79,6 @@
     <footer class="bg-gradient-to-b from-gray-900 to-black text-gray-300 pt-20 pb-10">
         <div class="max-w-screen-xl mx-auto px-6">
             <div class="grid md:grid-cols-4 gap-12 mb-16">
-                <!-- Logo & Social -->
                 <div>
                     <h4 class="text-2xl font-black text-white mb-4 tracking-wide">MELEKLER GROUP</h4>
                     <p class="text-gray-400 leading-relaxed text-sm">
@@ -85,7 +91,6 @@
                     </div>
                 </div>
 
-                <!-- Shop Links -->
                 <div>
                     <h5 class="font-bold text-white mb-5 text-lg">التسوق</h5>
                     <ul class="space-y-3 text-gray-400 text-sm">
@@ -96,7 +101,6 @@
                     </ul>
                 </div>
 
-                <!-- Support Links -->
                 <div>
                     <h5 class="font-bold text-white mb-5 text-lg">خدمة العملاء</h5>
                     <ul class="space-y-3 text-gray-400 text-sm">
@@ -106,7 +110,6 @@
                     </ul>
                 </div>
 
-                <!-- Newsletter -->
                 <div>
                     <h5 class="font-bold text-white mb-5 text-lg">اشترك في العروض</h5>
                     <p class="text-gray-400 mb-4 text-xs">احصل على أحدث الخصومات مباشرة إلى بريدك.</p>
@@ -117,7 +120,6 @@
                 </div>
             </div>
 
-            <!-- Bottom Footer -->
             <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
                 <p class="text-gray-500">© 2026 Melekler Fashion — جميع الحقوق محفوظة</p>
                 <p class="text-gray-600">CREATED BY ALAA ALAKRABANI</p>
@@ -134,14 +136,12 @@
         border-radius: 12px;
         overflow: hidden;
         transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        display: flex;
-        flex-direction: column;
     }
 
     .product-card-ty:hover {
         transform: translateY(-8px);
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        border-color: #2563eb; /* لون أزرق للحوم في قسم الأولاد */
+        border-color: #2563eb;
     }
 
     .ty-image-wrapper {
@@ -150,9 +150,6 @@
     }
 
     .ty-main-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
         transition: transform 0.6s ease;
     }
 
@@ -161,11 +158,7 @@
     }
 
     .ty-info-wrapper {
-        padding: 15px;
         text-align: right;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
     }
 
     .ty-title {
