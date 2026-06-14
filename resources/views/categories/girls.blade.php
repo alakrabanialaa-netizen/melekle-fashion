@@ -16,28 +16,34 @@
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-8">
                 @foreach($products as $product)
                     <div class="product-card-ty group">
-                        <!-- رابط المنتج مع الصورة -->
                         <a href="{{ route('products.show', $product) }}" class="block relative overflow-hidden ty-image-wrapper">
-                            <!-- شارة الخصم -->
                             @if($product->original_price > $product->price)
                                 <span class="absolute top-2 right-2 z-10 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">خصم %{{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}</span>
                             @endif
 
-                            <img src="{{ $product->images->first() ? asset('storage/'.$product->images->first()->image) : 'https://via.placeholder.com/400x600' }}" 
-                                 class="ty-main-image" 
-                                 alt="{{ $product->name }}">
+                            {{-- 🔄 جلب روابط الصور المباشرة من Cloudinary --}}
+                            @if($product->product_thambnail)
+                                <img src="{{ $product->product_thambnail }}" class="ty-main-image" alt="{{ $product->name }}">
+                            @elseif($product->images && $product->images->first())
+                                <img src="{{ $product->images->first()->image }}" class="ty-main-image" alt="{{ $product->name }}">
+                            @else
+                                <img src="https://via.placeholder.com/400x600?text=No+Image" class="ty-main-image" alt="{{ $product->name }}">
+                            @endif
                             
-                            <!-- زر أضف للسلة يظهر عند الحوم (للكمبيوتر ) -->
                             <div class="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/60 to-transparent hidden md:block">
-                                <button class="w-full bg-white text-gray-900 font-bold py-2 rounded-lg text-sm hover:bg-pink-500 hover:text-white transition-colors">
-                                    أضف إلى السلة
-                                </button>
+                                <form action="{{ url('cart-add/'.$product->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="w-full bg-white text-gray-900 font-bold py-2 rounded-lg text-sm hover:bg-pink-500 hover:text-white transition-colors">
+                                        أضف إلى السلة
+                                    </button>
+                                </form>
                             </div>
                         </a>
 
-                        <!-- معلومات المنتج -->
                         <div class="ty-info-wrapper">
-                            <h3 class="ty-title mb-2">{{ $product->name }}</h3>
+                            <a href="{{ route('products.show', $product) }}">
+                                <h3 class="ty-title mb-2 hover:text-pink-500 transition-colors">{{ $product->name }}</h3>
+                            </a>
                             
                             <div class="flex items-center justify-between mt-auto">
                                 <div class="flex flex-col">
@@ -46,10 +52,12 @@
                                     @endif
                                     <span class="ty-final-price text-pink-600 font-black text-lg">{{ number_format($product->price, 2) }} ₺</span>
                                 </div>
-                                <!-- أيقونة سلة للجوال -->
-                                <button class="md:hidden w-10 h-10 bg-pink-50 text-pink-600 rounded-full flex items-center justify-center hover:bg-pink-500 hover:text-white transition-all">
-                                    <i class="fas fa-shopping-cart text-sm"></i>
-                                </button>
+                                <form action="{{ url('cart-add/'.$product->id) }}" method="POST" class="md:hidden">
+                                    @csrf
+                                    <button type="submit" class="w-10 h-10 bg-pink-50 text-pink-600 rounded-full flex items-center justify-center hover:bg-pink-500 hover:text-white transition-all">
+                                        <i class="fas fa-shopping-cart text-sm"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -72,7 +80,6 @@
     <footer class="bg-gradient-to-b from-gray-900 to-black text-gray-300 pt-20 pb-10">
         <div class="max-w-screen-xl mx-auto px-6">
             <div class="grid md:grid-cols-4 gap-12 mb-16">
-                <!-- Logo & Social -->
                 <div>
                     <h4 class="text-2xl font-black text-white mb-4 tracking-wide">MELEKLER GROUP</h4>
                     <p class="text-gray-400 leading-relaxed text-sm">
@@ -85,7 +92,6 @@
                     </div>
                 </div>
 
-                <!-- Shop Links -->
                 <div>
                     <h5 class="font-bold text-white mb-5 text-lg">التسوق</h5>
                     <ul class="space-y-3 text-gray-400 text-sm">
@@ -96,7 +102,6 @@
                     </ul>
                 </div>
 
-                <!-- Support Links -->
                 <div>
                     <h5 class="font-bold text-white mb-5 text-lg">خدمة العملاء</h5>
                     <ul class="space-y-3 text-gray-400 text-sm">
@@ -106,18 +111,16 @@
                     </ul>
                 </div>
 
-                <!-- Newsletter -->
                 <div>
                     <h5 class="font-bold text-white mb-5 text-lg">اشترك في العروض</h5>
                     <p class="text-gray-400 mb-4 text-xs">احصل على أحدث الخصومات مباشرة إلى بريدك.</p>
                     <div class="flex">
-                        <input type="email" placeholder="بريدك الإلكتروني" class="w-full px-4 py-2 rounded-r-xl bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none">
+                        <input type="email" placeholder="بريدك الإلكتروني" class="w-full px-4 py-2 rounded-r-xl bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none" readonly>
                         <button class="px-5 bg-pink-500 text-white rounded-l-xl hover:bg-pink-600 transition font-bold text-sm">اشترك</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Bottom Footer -->
             <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
                 <p class="text-gray-500">© 2026 Melekler Fashion — جميع الحقوق محفوظة</p>
                 <p class="text-gray-600">CREATED BY ALAA ALAKRABANI</p>
@@ -141,11 +144,11 @@
     .product-card-ty:hover {
         transform: translateY(-8px);
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        border-color: #ec4899; /* لون وردي خفيف للحوم في قسم البنات */
+        border-color: #ec4899;
     }
 
     .ty-image-wrapper {
-        aspect-ratio: 2/3; /* النسبة الذهبية لصور Trendyol */
+        aspect-ratio: 2/3;
         background: #f9fafb;
     }
 
