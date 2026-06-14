@@ -7,27 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    use HasFactory; // من الجيد إضافتها
+    use HasFactory;
+
+    // 💡 أضف هذا السطر وتأكد هل اسم الجدول في قاعدة البيانات عندك 'orders' أم شيء آخر
+    protected $table = 'orders'; 
 
     protected $fillable = [
         'customer_name',
         'phone',
-        'total_price', // ❗ انتبه: تأكد من أن هذا هو اسم الحقل الصحيح
+        'total_price',
         'status',
-        'user_id' // ❗ انتبه: تأكد من وجود هذا الحقل
+        'user_id'
     ];
 
-    /**
-     * علاقة لجلب عناصر هذا الطلب
-     */
     public function items()
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    /**
-     * علاقة لجلب المستخدم صاحب الطلب
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
