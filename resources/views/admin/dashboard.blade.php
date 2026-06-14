@@ -201,53 +201,54 @@ document.addEventListener('DOMContentLoaded', function() {
     animateCounter('counter-customers');
     animateCounter('counter-profit');
 
-    // 2. إعدادات الـ ApexCharts مع تدرج لوني يطابق تماماً الهوية البصرية
-    var options = {
-        chart: {
-            type: 'area',
-            height: 320,
-            toolbar: { show: false },
-            fontFamily: 'Cairo, sans-serif',
-            sparkline: { enabled: false }
-        },
-        series: [{
-            name: 'المبيعات الحالية',
-            data: @json($salesChartData ?? [1200, 1900, 3400, 2800, 5100, 4200, 7000])
-        }],
-        xaxis: {
-            categories: @json($salesChartLabels ?? ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد']),
-            axisBorder: { show: false },
-            axisTicks: { show: false }
-        },
-        stroke: {
-            curve: 'smooth',
-            width: 3,
-            colors: ['#f43f5e']
-        },
-        fill: {
-            type: 'gradient',
-            gradient: {
-                shadeIntensity: 1,
-                opacityFrom: 0.45,
-                opacityTo: 0.02,
-                stops: [0, 100],
-                colorStops: [
-                    { offset: 0, color: "#f43f5e", opacity: 0.4 },
-                    { offset: 100, color: "#fffaf0", opacity: 0.02 }
-                ]
-            }
-        },
-        colors: ['#f43f5e'],
-        grid: {
-            borderColor: '#f1f1f1',
-            strokeDashArray: 4,
-            yaxis: { lines: { show: true } }
-        },
-        dataLabels: { enabled: false }
-    };
+    // 2. إعدادات الـ ApexCharts
+var options = {
+    chart: {
+        type: 'area',
+        height: 320,
+        toolbar: { show: false },
+        fontFamily: 'Cairo, sans-serif',
+        sparkline: { enabled: false }
+    },
+    series: [{
+        name: 'المبيعات الحالية',
+        // تعديل السطر 215 إلى json_encode لتفادي خطأ الـ Blade ParseError 👇
+        data: {!! json_encode($salesChartData ?? [1200, 1900, 3400, 2800, 5100, 4200, 7000]) !!}
+    }],
+    xaxis: {
+        // تعديل السطر 220 أيضاً لضمان عدم تكرار الخطأ مع النصوص 👇
+        categories: {!! json_encode($salesChartLabels ?? ['الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد']) !!},
+        axisBorder: { show: false },
+        axisTicks: { show: false }
+    },
+    stroke: {
+        curve: 'smooth',
+        width: 3,
+        colors: ['#f43f5e']
+    },
+    fill: {
+        type: 'gradient',
+        gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.45,
+            opacityTo: 0.02,
+            stops: [0, 100],
+            colorStops: [
+                { offset: 0, color: "#f43f5e", opacity: 0.4 },
+                { offset: 100, color: "#fffaf0", opacity: 0.02 }
+            ]
+        }
+    },
+    colors: ['#f43f5e'],
+    grid: {
+        borderColor: '#f1f1f1',
+        strokeDashArray: 4,
+        yaxis: { lines: { show: true } }
+    },
+    dataLabels: { enabled: false }
+};
 
-    new ApexCharts(document.querySelector("#sales-chart"), options).render();
-});
+new ApexCharts(document.querySelector("#sales-chart"), options).render();
 </script>
 
 @endsection
