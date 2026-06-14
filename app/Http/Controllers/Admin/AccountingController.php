@@ -28,7 +28,8 @@ class AccountingController extends Controller
         foreach ($completedOrders as $order) {
             foreach ($order->items as $item) {
                 if ($item->product) {
-                    $costOfGoodsSold += ($item->qty * $item->product->cost_price);
+                    // 💡 تم تعديل $item->qty إلى $item->quantity لتتطابق مع اسم الحقل في سوبابيز
+                    $costOfGoodsSold += ($item->quantity * $item->product->cost_price);
                 }
             }
         }
@@ -43,16 +44,17 @@ class AccountingController extends Controller
         $lowStock = Product::where('stock', '<=', 5)->get();
 
         // =====================================================
-        // 2. تجهيز بيانات الرسم البياني للمبيعات الشهرية
+        // 2. تجهيز بيانات الرسم البياني للمبيعات الشهرية (متوافق مع PostgreSQL)
         // =====================================================
 
+        // ✅ تم تعديل MONTH(created_at) إلى EXTRACT(MONTH FROM created_at) ليعمل على Supabase دون مشاكل
         $salesData = Order::select(
             DB::raw('SUM(total_price) as total'),
-            DB::raw('MONTH(created_at) as month')
+            DB::raw('EXTRACT(MONTH FROM created_at) as month')
         )
         ->whereYear('created_at', date('Y'))
         ->where('status', 'completed')
-        ->groupBy('month')
+        ->groupBy(DB::raw('EXTRACT(MONTH FROM created_at)')) // بوستغرس يجبرك على وضع الدالة نفسها بالـ GroupBy
         ->orderBy('month', 'asc')
         ->get();
 
@@ -62,7 +64,12 @@ class AccountingController extends Controller
 
         for ($i = 1; $i <= 12; $i++) {
             $chartLabels[] = $months[$i - 1];
-            $monthData = $salesData->firstWhere('month', $i);
+            
+            // جلب البيانات مع التأكد من تحويل قيمة الشهر المتأتية من بوستغرس إلى رقم صحيح integer
+            $monthData = $salesData->first(function($value) use ($i) {
+                return (int)$value->month == $i;
+            });
+            
             $chartData[] = $monthData ? $monthData->total : 0;
         }
 
@@ -70,9 +77,7 @@ class AccountingController extends Controller
         // 3. جلب آخر المصاريف لعرضها في الجدول
         // =====================================================
 
-        // ✅ --- هذا هو السطر الجديد، في مكانه الصحيح داخل الدالة --- ✅
         $recentExpenses = Expense::latest()->take(10)->get();
-
 
         // =====================================================
         // 4. تمرير كل البيانات المجمعة إلى الواجهة (View)
@@ -91,7 +96,7 @@ class AccountingController extends Controller
             'chartLabels' => $chartLabels,
             'chartData' => $chartData,
 
-            // ✅ --- المتغير الجديد الذي يتم تمريره --- ✅
+            // المصاريف الحديثة
             'recentExpenses' => $recentExpenses,
         ]);
     }
