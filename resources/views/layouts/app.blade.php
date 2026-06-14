@@ -184,7 +184,7 @@
     @yield('content')
 </main>
 
-{{-- 🛒 Mini Cart Container (تم تزويده بـ ID للمحتوى الداخلي ليتم تحديثه عبر الجافاسكريبت تلقائياً) --}}
+{{-- 🛒 Mini Cart Container --}}
 <div id="mini-cart" class="fixed top-0 right-[-420px] w-[400px] h-screen bg-white shadow-2xl transition-all duration-300 z-[150] flex flex-col">
     <div class="p-6 border-b flex justify-between items-center">
         <h2 class="text-xl font-bold">🛒 سلة المشتريات</h2>
@@ -196,7 +196,18 @@
         @if(count($cart) > 0)
             @foreach($cart as $id => $item)
                 <div class="flex gap-4 border-b py-4 items-center">
-                    <img src="{{ $item['image'] ? asset('storage/'.$item['image']) : 'https://via.placeholder.com/150' }}" 
+                    {{-- 🛠️ تعديل 1: الفحص الذكي للرابط داخل الـ Blade لمنع تدمير الرابط الكامل لـ Cloudinary --}}
+                    @php
+                        $imageUrl = 'https://via.placeholder.com/150';
+                        if (isset($item['image']) && $item['image']) {
+                            if (str_starts_with($item['image'], 'http://') || str_starts_with($item['image'], 'https://')) {
+                                $imageUrl = $item['image'];
+                            } else {
+                                $imageUrl = asset('storage/' . $item['image']);
+                            }
+                        }
+                    @endphp
+                    <img src="{{ $imageUrl }}" 
                          alt="{{ $item['name'] }}" 
                          class="w-16 h-16 object-cover rounded shadow-sm">
                     <div class="flex-1">
@@ -265,9 +276,9 @@ document.addEventListener('DOMContentLoaded', function () {
     mobileMenuButton.addEventListener('click', () => mobileMenu.classList.add('open'));
     closeMobileMenuButton.addEventListener('click', () => mobileMenu.classList.remove('open'));
 
-    // ⭐ 4. المحرك السحري المطور: اعتراض فورامير الإضافة للسلة في المتجر وإرسالها عبر الأجاكس وتحديث القائمة فوراً
+    // 4. محرك الأجاكس المطور
     $(document).on('submit', 'form[action*="cart/data/store"]', function(e) {
-        e.preventDefault(); // منع الصفحة من إعادة التحميل
+        e.preventDefault(); 
         
         const form = $(this);
         const url = form.attr('action');
@@ -278,17 +289,12 @@ document.addEventListener('DOMContentLoaded', function () {
             type: 'POST',
             data: formData,
             headers: {
-                'X-CSRF-TOKEN': $('meta/name="csrf-token"').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
                 if(response.status === 'success') {
-                    // تحديث عداد المنتجات العلوي
                     $('#cart-count').text(response.cart_count);
-                    
-                    // تحديث وبناء محتوى الـ Mini Cart بشكل مباشر
                     updateMiniCartUI(response.cart);
-                    
-                    // فتح السلة تلقائياً ليرى الزبون المنتج وهو ينضاف بنجاح!
                     openCart();
                 }
             },
@@ -298,10 +304,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // دالة بناء الـ HTML الداخلي للسلة بشكل حي وديناميكي بدون ريفريش
+    // 🛠️ تعديل 2: إصلاح دالة البناء التلقائي لتدعم الروابط الخارجية (Cloudinary) والمسارات المحلية معاً دون كسرها
     function updateMiniCartUI(cart) {
         const wrapper = $('#mini-cart-items-wrapper');
-        wrapper.empty(); // مسح المحتوى القديم
+        wrapper.empty(); 
 
         const cartKeys = Object.keys(cart);
 
@@ -309,7 +315,17 @@ document.addEventListener('DOMContentLoaded', function () {
             let htmlContent = '';
             cartKeys.forEach(id => {
                 const item = cart[id];
-                const itemImage = item.image ? `/storage/${item.image}` : 'https://via.placeholder.com/150';
+                
+                // هنا كان الخطأ الفادح! الكود القديم كان يجبر الرابط على البدء بـ /storage/ مما يدمر رابط Cloudinary
+                let itemImage = 'https://via.placeholder.com/150';
+                if (item.image) {
+                    if (item.image.startsWith('http://') || item.image.startsWith('https://')) {
+                        itemImage = item.image; // إذا كان رابط مباشر لـ Cloudinary نأخذه كما هو
+                    } else {
+                        itemImage = `/storage/${item.image}`; // إذا كان مسار محلي نربطه بالمجلد
+                    }
+                }
+
                 const itemSize = item.size ? `<p class="text-xs text-gray-400">المقاس: ${item.size}</p>` : '';
                 const itemPrice = parseFloat(item.price).toFixed(2);
 
