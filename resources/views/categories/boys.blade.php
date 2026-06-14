@@ -23,8 +23,13 @@
                                 <span class="absolute top-2 right-2 z-20 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">خصم %{{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}</span>
                             @endif
 
-<img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/{{ basename($product->product_thambnail) }}" class="ty-main-image w-full h-full object-cover" alt="{{ $product->name }}">                                 alt="{{ $product->name }}">
-                            
+@if($product->product_thambnail)
+    <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/{{ basename($product->product_thambnail) }}" class="ty-main-image w-full h-full object-cover" alt="{{ $product->name }}">
+@elseif($product->images && $product->images->first())
+    <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/{{ basename($product->images->first()->image) }}" class="ty-main-image w-full h-full object-cover" alt="{{ $product->name }}">
+@else
+    <img src="https://via.placeholder.com/400x600?text=No+Image" class="ty-main-image w-full h-full object-cover" alt="{{ $product->name }}">
+@endif                            
                             <div class="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/60 to-transparent hidden md:block z-20">
                                 <form action="{{ url('cart-add/'.$product->id) }}" method="POST">
                                     @csrf
