@@ -172,6 +172,53 @@
         </div>
     </div>
 
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+    <h3 class="font-bold text-gray-800 border-b pb-3 mb-4">A_7 تسجيل وإدارة المصاريف التشغيلية</h3>
+    
+    {{-- فورم الإدراج الجديد --}}
+    <form action="{{ url('/admin/expenses') }}" method="POST" class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-gray-50 p-3 rounded-xl mb-4">
+        @csrf
+        <input type="hidden" name="expense_date" value="{{ date('Y-m-d') }}">
+        <input type="text" name="description" placeholder="البيان (شحن، إيجار...)" class="rounded-lg border-gray-300 text-xs shadow-xs focus:ring-indigo-500" required>
+        <input type="number" name="amount" step="0.01" placeholder="المبلغ (₺)" class="rounded-lg border-gray-300 text-xs shadow-xs focus:ring-indigo-500" required>
+        <button type="submit" class="bg-rose-600 text-white font-bold rounded-lg text-xs py-2 hover:bg-rose-700 transition-all">إدراج مصروف</button>
+    </form>
+
+    {{-- جدول عرض القيود مع التعديل والحذف الفوري --}}
+    <div class="overflow-y-auto max-h-64">
+        <table class="w-full text-right text-xs">
+            <thead>
+                <tr class="text-gray-400 border-b"><th class="pb-2">البيان</th><th class="pb-2">المبلغ</th><th class="pb-2 text-center">إجراءات</th></tr>
+            </thead>
+            <tbody>
+                @foreach($recentExpenses as $exp)
+                <tr class="border-b hover:bg-gray-50">
+                    <form action="{{ route('admin.accounting.expense.update', $exp->id) }}" method="POST" class="inline">
+                        @csrf
+                        <td class="py-2">
+                            <input type="text" name="description" value="{{ $exp->description }}" class="p-1 border rounded text-xs w-full bg-white">
+                        </td>
+                        <td class="py-2">
+                            <input type="number" step="0.01" name="amount" value="{{ $exp->amount }}" class="p-1 border rounded text-xs w-20 text-rose-600 font-bold bg-white"> ₺
+                        </td>
+                        <td class="py-2 text-center flex items-center justify-center gap-2 mt-1">
+                            <button type="submit" class="text-blue-600 hover:text-blue-800 font-bold">تحديث</button>
+                    </form>
+                    
+                    {{-- نموذج الحذف --}}
+                    <form action="{{ route('admin.accounting.expense.destroy', $exp->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا القيد؟')" class="inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-rose-600 hover:text-rose-800 font-bold ml-2">✕</button>
+                    </form>
+                        </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+
     {{-- ================= 🧾 قسم 4: المصاريف ورأس المال ================= --}}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {{-- فورم وجدول المصاريف التشغيلية --}}
