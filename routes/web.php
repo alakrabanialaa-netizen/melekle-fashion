@@ -60,7 +60,12 @@ require __DIR__.'/auth.php';
 
 // ==================== 3. مجموعة مسارات الآدمن المحمية والشاملة للمشروع ====================
 Route::middleware(['auth', 'role:admin'])->group(function() {
-    
+    // مسارات تعديل وحذف منتجات المستودع محاسبياً
+Route::post('/admin/accounting/product/update/{id}', [AccountingController::class, 'updateProduct'])->name('admin.accounting.product.update');
+
+// مسارات تعديل وحذف المصاريف التشغيلية
+Route::post('/admin/accounting/expense/update/{id}', [AccountingController::class, 'updateExpense'])->name('admin.accounting.expense.update');
+Route::delete('/admin/accounting/expense/delete/{id}', [AccountingController::class, 'destroyExpense'])->name('admin.accounting.expense.destroy');
     // لوحة التحكم والملف الشخصي للآدمن
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('admin.logout');
