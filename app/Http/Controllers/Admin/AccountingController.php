@@ -10,6 +10,53 @@ use Illuminate\Support\Facades\DB;
 
 class AccountingController extends Controller
 {
+
+    // تحديث بيانات المنتج في المستودع (الكود، السعر، اللون، المقاس، العدد)
+public function updateProduct(Request $request, $id)
+{
+    $request->validate([
+        'product_code' => 'required|string',
+        'color' => 'nullable|string',
+        'stock' => 'required|integer|min:0',
+        'cost_price' => 'required|numeric|min:0',
+        'price' => 'required|numeric|min:0',
+    ]);
+
+    $product = Product::findOrFail($id);
+    $product->update([
+        'product_code' => $request->product_code,
+        'color' => $request->color,
+        'stock' => $request->stock,
+        'cost_price' => $request->cost_price,
+        'price' => $request->price,
+    ]);
+
+    return redirect()->back()->with('success', 'تم تحديث بيانات الصنف في المستودع والملف المحاسبي فوراً!');
+}
+
+// تحديث قيد مصروف تشغيلي
+public function updateExpense(Request $request, $id)
+{
+    $request->validate([
+        'description' => 'required|string',
+        'amount' => 'required|numeric|min:0',
+    ]);
+
+    Expense::where('id', $id)->update([
+        'description' => $request->description,
+        'amount' => $request->amount,
+    ]);
+
+    return redirect()->back()->with('success', 'تم تعديل قيد المصروف بنجاح!');
+}
+
+// حذف قيد مصروف تشغيلي
+public function destroyExpense($id)
+{
+    Expense::where('id', $id)->delete();
+    return redirect()->back()->with('success', 'تم حذف قيد المصروف بنجاح وتحديث الحسبة المالية!');
+}
+    
     public function index()
     {
         // 1. جلب المصاريف ورأس المال
