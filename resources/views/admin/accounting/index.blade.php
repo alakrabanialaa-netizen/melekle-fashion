@@ -69,6 +69,55 @@
         </form>
     </div>
 
+
+    <table class="w-full text-right text-sm whitespace-nowrap">
+    <thead>
+        <tr class="bg-gray-100 text-gray-600 uppercase text-xs leading-normal">
+            <th class="py-3 px-4">كود المنتج</th>
+            <th class="py-3 px-4">اسم المنتج</th>
+            <th class="py-3 px-4 text-center">اللون</th>
+            <th class="py-3 px-4 text-center">العدد المتاح</th>
+            <th class="py-3 px-4 text-center">سعر الشراء (التكلفة)</th>
+            <th class="py-3 px-4 text-center">سعر البيع المعروض</th>
+            <th class="py-3 px-4 text-center">إجمالي التكلفة</th>
+            <th class="py-3 px-4 text-center">حفظ التعديل</th>
+        </tr>
+    </thead>
+    <tbody class="text-gray-600 text-xs">
+        @forelse($products as $product)
+        <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+            <form action="{{ route('admin.accounting.product.update', $product->id) }}" method="POST">
+                @csrf
+                <td class="py-2 px-2">
+                    <input type="text" name="product_code" value="{{ $product->product_code }}" class="w-24 p-1 text-xs border rounded font-mono text-indigo-600 font-bold bg-white focus:ring-1 focus:ring-indigo-500">
+                </td>
+                <td class="py-2 px-2 font-medium text-gray-800">{{ $product->product_name }}</td>
+                <td class="py-2 px-2 text-center">
+                    <input type="text" name="color" value="{{ $product->color ?? 'افتراضي' }}" class="w-16 p-1 text-xs border rounded text-center bg-white">
+                </td>
+                <td class="py-2 px-2 text-center">
+                    <input type="number" name="stock" value="{{ $product->stock }}" class="w-16 p-1 text-xs border rounded text-center font-bold bg-white">
+                </td>
+                <td class="py-2 px-2 text-center">
+                    <input type="number" step="0.01" name="cost_price" value="{{ $product->cost_price }}" class="w-20 p-1 text-xs border rounded text-center font-mono text-amber-700 font-bold bg-white"> ₺
+                </td>
+                <td class="py-2 px-2 text-center">
+                    <input type="number" step="0.01" name="price" value="{{ $product->price }}" class="w-20 p-1 text-xs border rounded text-center font-mono text-emerald-600 font-bold bg-white"> ₺
+                </td>
+                <td class="py-2 px-4 text-center font-mono text-gray-900 font-black bg-gray-50/50">
+                    {{ number_format($product->stock * $product->cost_price, 2) }} ₺
+                </td>
+                <td class="py-2 px-2 text-center">
+                    <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-white px-2 py-1 rounded text-[11px] font-bold shadow-xs transition-all">💾 حفظ</button>
+                </td>
+            </form>
+        </tr>
+        @empty
+        <tr><td colspan="8" class="text-center py-8 text-gray-400">المستودع فارغ تماماً.</td></tr>
+        @endforelse
+    </tbody>
+</table>
+    
     {{-- ================= 🏢 قسم 3: جدول جرد المستودع التفصيلي الشامل ================= --}}
     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
         <div class="flex justify-between items-center border-b pb-4 mb-4">
