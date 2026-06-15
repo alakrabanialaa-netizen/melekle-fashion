@@ -3,7 +3,7 @@
 @section('page-title', 'إضافة منتج جديد')
 
 @section('content')
-<div class="max-w-4xl mx-auto py-8">
+<div class="max-w-4xl mx-auto py-8" dir="rtl">
 
     {{-- رسائل الأخطاء (Validation Errors) --}}
     @if ($errors->any())
@@ -29,22 +29,29 @@
 
         <div class="space-y-8">
 
-            {{-- 1. المعلومات الأساسية --}}
+            {{-- 1. المعلومات الأساسية المطور --}}
             <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
                 <h2 class="text-xl font-bold text-indigo-800 mb-6 flex items-center gap-2">
                     <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm">1</span>
                     المعلومات الأساسية للمنتج
                 </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                        <label for="product_name" class="block text-sm font-bold text-gray-700 mb-2">اسم المنتج</label>
+                        <label for="product_code" class="block text-sm font-bold text-gray-700 mb-2">كود المنتج (Barcode / SKU) <span class="text-rose-500">*</span></label>
+                        <input type="text" name="product_code" id="product_code" value="{{ old('product_code') }}" 
+                               class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all font-mono font-bold" 
+                               placeholder="مثال: MELEK-101" required>
+                    </div>
+
+                    <div>
+                        <label for="product_name" class="block text-sm font-bold text-gray-700 mb-2">اسم المنتج <span class="text-rose-500">*</span></label>
                         <input type="text" name="product_name" id="product_name" value="{{ old('product_name') }}" 
                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all" 
                                placeholder="مثال: طقم ولادي صيفي 3 قطع" required>
                     </div>
 
                     <div>
-                        <label for="product_category" class="block text-sm font-bold text-gray-700 mb-2">القسم الرئيسي</label>
+                        <label for="product_category" class="block text-sm font-bold text-gray-700 mb-2">القسم الرئيسي <span class="text-rose-500">*</span></label>
                         <select name="product_category" id="product_category" 
                                 class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none appearance-none bg-white transition-all" required>
                             <option value="">-- اختر القسم المناسب --</option>
@@ -57,27 +64,42 @@
                 </div>
             </div>
 
-            {{-- 2. الأسعار والمخزون --}}
+            {{-- 2. الأسعار والمخزون المطور للربط المحاسبي --}}
             <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
                 <h2 class="text-xl font-bold text-indigo-800 mb-6 flex items-center gap-2">
                     <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm">2</span>
-                    الأسعار والمخزون
+                    الأسعار والمخزون والتفاصيل المادية
                 </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div>
-                        <label for="product_price" class="block text-sm font-bold text-gray-700 mb-2">السعر النهائي (بالأرقام)</label>
+                        <label for="cost_price" class="block text-sm font-bold text-gray-700 mb-2">سعر الشراء / التكلفة (₺) <span class="text-rose-500">*</span></label>
+                        <input type="text" name="cost_price" id="cost_price" value="{{ old('cost_price') }}" 
+                               inputmode="decimal" placeholder="0.00"
+                               class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-mono text-lg font-bold text-amber-700" required>
+                    </div>
+
+                    <div>
+                        <label for="product_price" class="block text-sm font-bold text-gray-700 mb-2">سعر البيع النهائي (₺) <span class="text-rose-500">*</span></label>
                         <input type="text" name="product_price" id="product_price" value="{{ old('product_price') }}" 
                                inputmode="decimal" placeholder="0.00"
-                               class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-mono text-lg" required>
-                        <p class="mt-1 text-xs text-gray-500">ملاحظة: يمكنك كتابة السعر بأي لغة أرقام، سيقوم النظام بتحويلها.</p>
+                               class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-mono text-lg font-bold text-emerald-600" required>
                     </div>
+
                     <div>
                         <label for="product_stock" class="block text-sm font-bold text-gray-700 mb-2">الكمية المتاحة (المخزون)</label>
-                        <input type="text" name="product_stock" id="product_stock" value="{{ old('product_stock') }}" 
+                        <input type="text" name="product_stock" id="product_stock" value="{{ old('product_stock', 0) }}" 
                                inputmode="numeric" placeholder="0"
-                               class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-mono text-lg">
+                               class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-mono text-lg font-bold text-gray-800">
+                    </div>
+
+                    <div>
+                        <label for="color" class="block text-sm font-bold text-gray-700 mb-2">اللون الأساسي</label>
+                        <input type="text" name="color" id="color" value="{{ old('color') }}" 
+                               class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all" 
+                               placeholder="مثال: أحمر / منقّط">
                     </div>
                 </div>
+                <p class="mt-3 text-xs text-gray-400">💡 إدخال سعر الشراء بدقة يتيح للنظام المحاسبي حساب أرباحك الحركية والفعالية داخل المستودع تلقائياً.</p>
             </div>
 
             {{-- 3. الوصف والملفات --}}
@@ -118,62 +140,61 @@
                 </div>
             </div>
 
-
             {{-- 4. المقاسات والأعمار --}}
-<div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
-    <h2 class="text-xl font-bold text-indigo-800 mb-6 flex items-center gap-2">
-        <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm">4</span>
-        المقاسات والأعمار المتاحة
-    </h2>
-    
-    <div class="space-y-6">
-        {{-- مقاسات الملابس العالمية --}}
-        <div>
-            <label class="block text-sm font-bold text-gray-700 mb-3">المقاسات (للأمهات أو المقاسات العامة)</label>
-            <div class="flex flex-wrap gap-4">
-                @foreach(['XS', 'S', 'M', 'L', 'XL', 'XXL'] as $size)
-                    <label class="inline-flex items-center p-3 bg-white border rounded-xl cursor-pointer hover:border-indigo-500 transition-all shadow-sm">
-                        <input type="checkbox" name="sizes[]" value="{{ $size }}" class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        <span class="mr-3 font-bold text-gray-700">{{ $size }}</span>
-                    </label>
-                @endforeach
+            <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
+                <h2 class="text-xl font-bold text-indigo-800 mb-6 flex items-center gap-2">
+                    <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm">4</span>
+                    المقاسات والأعمار المتاحة
+                </h2>
+                
+                <div class="space-y-6">
+                    {{-- مقاسات الملابس العالمية --}}
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-3">المقاسات (للأمهات أو المقاسات العامة)</label>
+                        <div class="flex flex-wrap gap-4">
+                            @foreach(['XS', 'S', 'M', 'L', 'XL', 'XXL'] as $size)
+                                <label class="inline-flex items-center p-3 bg-white border rounded-xl cursor-pointer hover:border-indigo-500 transition-all shadow-sm">
+                                    <input type="checkbox" name="sizes[]" value="{{ $size }}" class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                                    <span class="mr-3 font-bold text-gray-700">{{ $size }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <hr class="border-gray-200">
+
+                    {{-- مقاسات الأطفال بالأعمار --}}
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-3">الأعمار المتاحة (للأطفال والمواليد)</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                            @php
+                                $ages = [
+                                    'newborn' => 'حديث ولادة',
+                                    '0-3m' => '0-3 أشهر',
+                                    '3-6m' => '3-6 أشهر',
+                                    '6-12m' => '6-12 شهر',
+                                    '1-2y' => '1-2 سنة',
+                                    '2-3y' => '2-3 سنوات',
+                                    '3-4y' => '3-4 سنوات',
+                                    '4-5y' => '4-5 سنوات',
+                                    '6-7y' => '6-7 سنوات',
+                                    '8-9y' => '8-9 سنوات',
+                                    '10-12y' => '10-12 سنة'
+                                ];
+                            @endphp
+
+                            @foreach($ages as $value => $label)
+                                <label class="inline-flex items-center p-3 bg-white border rounded-xl cursor-pointer hover:border-indigo-500 transition-all shadow-sm">
+                                    <input type="checkbox" name="ages[]" value="{{ $value }}" class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                                    <span class="mr-3 text-sm font-bold text-gray-700">{{ $label }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <hr class="border-gray-200">
-
-        {{-- مقاسات الأطفال بالأعمار --}}
-        <div>
-            <label class="block text-sm font-bold text-gray-700 mb-3">الأعمار المتاحة (للأطفال والمواليد)</label>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                @php
-                    $ages = [
-                        'newborn' => 'حديث ولادة',
-                        '0-3m' => '0-3 أشهر',
-                        '3-6m' => '3-6 أشهر',
-                        '6-12m' => '6-12 شهر',
-                        '1-2y' => '1-2 سنة',
-                        '2-3y' => '2-3 سنوات',
-                        '3-4y' => '3-4 سنوات',
-                        '4-5y' => '4-5 سنوات',
-                        '6-7y' => '6-7 سنوات',
-                        '8-9y' => '8-9 سنوات',
-                        '10-12y' => '10-12 سنة'
-                    ];
-                @endphp
-
-                @foreach($ages as $value => $label)
-                    <label class="inline-flex items-center p-3 bg-white border rounded-xl cursor-pointer hover:border-indigo-500 transition-all shadow-sm">
-                        <input type="checkbox" name="ages[]" value="{{ $value }}" class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        <span class="mr-3 text-sm font-bold text-gray-700">{{ $label }}</span>
-                    </label>
-                @endforeach
-            </div>
-        </div>
-    </div>
-</div>
-
-            {{-- 4. الأزرار --}}
+            {{-- 5. الأزرار --}}
             <div class="flex items-center justify-center gap-6 pt-6">
                 <button type="submit" class="bg-indigo-600 text-white px-12 py-4 rounded-xl font-bold text-lg hover:bg-indigo-700 transform hover:scale-105 transition-all shadow-lg active:scale-95">
                     🚀 حفظ المنتج ونشره
