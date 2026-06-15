@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
-use App\Models\Expense;
 use App\Models\Product;
+use App\Models\Expense;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,110 +12,81 @@ class AccountingController extends Controller
 {
     public function index()
     {
-        // 1. حسابات المبيعات والمصاريف الفعلية
-        $totalSales = Order::where('status', 'completed')->sum('total_price');
+        // 1. جلب المصاريف ورأس المال
         $totalExpenses = Expense::sum('amount');
-
-        // 2. تكلفة البضاعة التي بيعت بالفعل (لحساب صافي الربح الحقيقي)
-        $costOfGoodsSold = 0;
-        $completedOrders = Order::with('items.product')->where('status', 'completed')->get();
-        foreach ($completedOrders as $order) {
-            foreach ($order->items as $item) {
-                if ($item->product) {
-                    // تحويل السعر والتكلفة احتياطياً لـ PostgreSQL
-                    $costOfGoodsSold += ($item->quantity * (float)$item->product->cost_price);
-                }
-            }
-        }
-        $actualGrossProfit = $totalSales - $costOfGoodsSold;
-        $netProfit = $actualGrossProfit - $totalExpenses;
-
-        // 3. 🔥 جرد وتحليل المخزون الحالي في المستودع بدقة متناهية 🔥
-        $totalStockPieces = Product::sum(DB::raw('CAST(stock AS INT)'));
-        
-        // إجمالي قيمة المستودع بسعر التكلفة (كم كلفنا هذا المخزون)
-        $inventoryCostValue = Product::sum(DB::raw('CAST(stock AS NUMERIC) * CAST(cost_price AS NUMERIC)'));
-        
-        // إجمالي قيمة المستودع عند البيع (كم سعره بالسوق حالياً)
-        $inventorySaleValue = Product::sum(DB::raw('CAST(stock AS NUMERIC) * CAST(price AS NUMERIC)'));
-        
-        // الأرباح المخزنة (التي سنجنيها عند بيع المخزون بالكامل)
-        $expectedInventoryProfit = $inventorySaleValue - $inventoryCostValue;
-
-        // 4. رأس المال ديناميكياً من القيود
         $capital = DB::table('capital_transactions')->sum('amount');
-        $lowStock = Product::where('stock', '<=', 5)->get();
 
-        // 5. بيانات الرسم البياني للمبيعات
-        $salesData = Order::select(
-            DB::raw('SUM(total_price) as total'),
-            DB::raw('EXTRACT(MONTH FROM created_at) as month')
-        )
-        ->whereYear('created_at', date('Y'))
-        ->where('status', 'completed')
-        ->groupBy(DB::raw('EXTRACT(MONTH FROM created_at)'))
-        ->orderBy('month', 'asc')
-        ->get();
+        // 2. المبيعات اليدوية وتكلفتها (لحساب الأرباح بدقة)
+        // سنفترض أننا نجمع المبيعات من جدول مبيعات يدوي مستقل أسميناه manual_sales
+        $totalSales = DB::table('manual_sales')->sum('total_price');
+        $costOfGoodsSold = DB::table('manual_sales')->sum('total_cost');
 
-        $chartLabels = [];
-        $chartData = [];
-        $months = ['كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران', 'تموز', 'آب', 'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول'];
+        // 3. الحسبة المالية: صافي الربح = إجمالي المبيعات - تكلفة البضاعة المباعة - المصاريف
+        $netProfit = $totalSales - $costOfGoodsSold - $totalExpenses;
 
-        for ($i = 1; $i <= 12; $i++) {
-            $chartLabels[] = $months[$i - 1];
-            $monthData = $salesData->first(function($value) use ($i) {
-                return (int)$value->month == $i;
-            });
-            $chartData[] = $monthData ? $monthData->total : 0;
-        }
+        // 4. جرد المستودع الحالي
+        $totalStockPieces = Product::sum(DB::raw('CAST(stock AS INT)'));
+        $inventoryCostValue = Product::sum(DB::raw('CAST(stock AS NUMERIC) * CAST(cost_price AS NUMERIC)'));
+        $inventorySaleValue = Product::sum(DB::raw('CAST(stock AS NUMERIC) * CAST(price AS NUMERIC)'));
 
-        // 6. آخر القيود والمصاريف لجداول الإدارة
+        // 5. جلب البيانات للجداول
+        $products = Product::latest()->get(); // بضاعة المستودع
+        $recentSales = DB::table('manual_sales')->latest()->take(10)->get(); // آخر المبيعات اليدوية
         $recentExpenses = Expense::latest()->take(5)->get();
         $capitalTransactions = DB::table('capital_transactions')->latest()->take(5)->get();
 
-        return view('admin.accounting.index', [
-            'totalSales' => $totalSales,
-            'totalExpenses' => $totalExpenses,
-            'actualGrossProfit' => $actualGrossProfit,
-            'net' => $netProfit,
-            
-            // متغيرات الجرد الجديدة
-            'totalStockPieces' => $totalStockPieces,
-            'inventoryCostValue' => $inventoryCostValue,
-            'inventorySaleValue' => $inventorySaleValue,
-            'expectedInventoryProfit' => $expectedInventoryProfit,
-            
-            'capital' => $capital,
-            'lowStock' => $lowStock,
-            'chartLabels' => $chartLabels,
-            'chartData' => $chartData,
-            'recentExpenses' => $recentExpenses,
-            'capitalTransactions' => $capitalTransactions
-        ]);
+        return view('admin.accounting.index', compact(
+            'totalSales', 'totalExpenses', 'netProfit', 'totalStockPieces', 
+            'inventoryCostValue', 'inventorySaleValue', 'products', 
+            'recentSales', 'recentExpenses', 'capitalTransactions', 'capital'
+        ));
     }
 
-    public function storeCapital(Request $request)
+    // 🔥 دالة البيع اليدوي والخصم من المستودع تلقائياً
+    public function storeSale(Request $request)
     {
         $request->validate([
-            'description' => 'required|string|max:255',
-            'amount' => 'required|numeric',
-            'transaction_date' => 'required|date',
+            'product_code' => 'required|string',
+            'quantity' => 'required|integer|min:1',
+            'sale_price' => 'required|numeric'
         ]);
 
-        DB::table('capital_transactions')->insert([
-            'description' => $request->description,
-            'amount' => $request->amount,
-            'transaction_date' => $request->transaction_date,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        // البحث عن المنتج في المستودع بواسطة الكود
+        $product = Product::where('product_code', $request->product_code)->first();
 
-        return redirect('/admin/accounting')->with('success', 'تم تسجيل القيد المالي بنجاح');
-    }
+        if (!$product) {
+            return redirect()->back()->with('error', 'خطأ: كود المنتج غير موجود في المستودع!');
+        }
 
-    public function destroyCapital($id)
-    {
-        DB::table('capital_transactions')->where('id', $id)->delete();
-        return redirect('/admin/accounting')->with('success', 'تم حذف القيد بنجاح');
+        if ((int)$product->stock < (int)$request->quantity) {
+            return redirect()->back()->with('error', 'خطأ: الكمية المطلوبة غير متوفرة في المستودع! المتاح حالياً: ' . $product->stock);
+        }
+
+        // حساب الإجماليات
+        $totalPrice = $request->quantity * $request->sale_price;
+        $totalCost = $request->quantity * (float)$product->cost_price;
+
+        DB::beginTransaction();
+        try {
+            // 1. تسجيل عملية البيع اليدوي
+            DB::table('manual_sales')->insert([
+                'product_code' => $product->product_code,
+                'product_name' => $product->product_name,
+                'quantity' => $request->quantity,
+                'sale_price' => $request->sale_price,
+                'total_price' => $totalPrice,
+                'total_cost' => $totalCost,
+                'created_at' => now()
+            ]);
+
+            // 2. 🎯 خصم الكمية من المستودع تلقائياً
+            $product->decrement('stock', $request->quantity);
+
+            DB::commit();
+            return redirect()->back()->with('success', 'تم تسجيل المبيعات وخصم القطع من المخزن بنجاح!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'حدث خطأ أثناء المعالجة: ' . $e->getMessage());
+        }
     }
 }
