@@ -38,7 +38,7 @@ use App\Http\Controllers\ShopController;
 | Web Routes
 |--------------------------------------------------------------------------
 */
-
+Route::post('/admin/accounting/sale', [AccountingController::class, 'storeSale']);
 // ==================== 1. الصفحة الرئيسية والـ Guest والروابط العامة ====================
 Route::get('/', [IndexController::class, 'Index'])->name('welcome');
 
