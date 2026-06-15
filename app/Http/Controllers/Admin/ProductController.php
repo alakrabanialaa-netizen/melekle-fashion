@@ -18,7 +18,8 @@ class ProductController extends Controller
 
         // البحث إذا كان موجوداً
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('product_code', 'like', '%' . $request->search . '%');
         }
 
         // جلب البيانات مع الترقيم (10 منتجات في الصفحة)
@@ -49,18 +50,25 @@ class ProductController extends Controller
         if($request->has('product_price')) {
             $request->merge(['product_price' => $convertDigits($request->product_price)]);
         }
+        if($request->has('cost_price')) {
+            $request->merge(['cost_price' => $convertDigits($request->cost_price)]);
+        }
         if($request->has('product_stock')) {
             $request->merge(['product_stock' => $convertDigits($request->product_stock)]);
         }
 
+        // تم إضافة الحقول الجديدة هنا في الـ Validation
         $validatedData = $request->validate([
+            'product_code'        => 'required|string|unique:products,product_code',
             'product_name'        => 'required|string|max:255',
             'product_price'       => 'required|numeric|min:0',
+            'cost_price'          => 'required|numeric|min:0',
             'product_stock'       => 'nullable', 
             'product_category'    => 'required|string',
+            'color'               => 'nullable|string|max:100',
             'product_description' => 'nullable|string',
-            'sizes'               => 'nullable|array', // تم الإصلاح هنا
-            'ages'                => 'nullable|array',  // تم الإصلاح هنا
+            'sizes'               => 'nullable|array',
+            'ages'                => 'nullable|array', 
             'images'              => 'nullable|array',
             'images.*'            => 'image|mimes:jpeg,png,webp,gif|max:5120',
             'video'               => 'nullable|file|mimes:mp4,mov,ogg,qt|max:30720',
@@ -68,15 +76,19 @@ class ProductController extends Controller
 
         try {
             return DB::transaction(function () use ($request, $validatedData) {
+                // تم إدراج الحقول المحاسبية الجديدة هنا لتخزن في الـ Database فوراً
                 $product = Product::create([
-                    'name'        => $validatedData['product_name'],
-                    'price'       => $validatedData['product_price'],
-                    'description' => $validatedData['product_description'] ?? null,
-                    'category'    => $validatedData['product_category'],
-                    'stock'       => (int)($request->product_stock ?? 0),
-                    'sizes'       => $request->input('sizes', []), // تم الإصلاح هنا
-                    'ages'        => $request->input('ages', []),  // تم الإصلاح هنا
-                    'slug'        => $this->generateSlug($validatedData['product_name']),
+                    'product_code' => $validatedData['product_code'],
+                    'name'         => $validatedData['product_name'],
+                    'price'        => $validatedData['product_price'],
+                    'cost_price'   => $validatedData['cost_price'],
+                    'color'        => $validatedData['color'] ?? null,
+                    'description'  => $validatedData['product_description'] ?? null,
+                    'category'     => $validatedData['product_category'],
+                    'stock'        => (int)($request->product_stock ?? 0),
+                    'sizes'        => $request->input('sizes', []),
+                    'ages'         => $request->input('ages', []), 
+                    'slug'         => $this->generateSlug($validatedData['product_name']),
                 ]);
 
                 $cloudName = "doajfaz15";
@@ -151,8 +163,8 @@ class ProductController extends Controller
             'product_category' => 'required|string',
             'product_description' => 'nullable|string',
             'product_stock' => 'nullable',
-            'sizes' => 'nullable|array', // تم الإصلاح هنا
-            'ages' => 'nullable|array',  // تم الإصلاح هنا
+            'sizes' => 'nullable|array',
+            'ages' => 'nullable|array', 
         ]);
 
         try {
@@ -162,8 +174,8 @@ class ProductController extends Controller
                 'category'    => $validatedData['product_category'],
                 'description' => $validatedData['product_description'] ?? null,
                 'stock'       => (int)($request->product_stock ?? 0),
-                'sizes'       => $request->input('sizes', []), // تم الإصلاح هنا
-                'ages'        => $request->input('ages', []),  // تم الإصلاح هنا
+                'sizes'       => $request->input('sizes', []),
+                'ages'        => $request->input('ages', []), 
                 'slug'        => $this->generateSlug($validatedData['product_name'], $product->id),
             ]);
 
