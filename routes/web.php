@@ -102,9 +102,12 @@ Route::delete('/admin/accounting/capital/{id}', [AccountingController::class, 'd
     Route::get('/admin/accounting/fix', [AccountingController::class, 'index'])->name('accounting.index'); 
 
     // 💰 6️⃣ قسم المصاريف (expenses)
-    Route::get('/admin/expenses', [ExpenseController::class, 'index'])->name('admin.expenses.index');
-    Route::get('/admin/expenses/fix', [ExpenseController::class, 'index'])->name('expenses.index'); 
+Route::get('/admin/expenses', [ExpenseController::class, 'index'])->name('admin.expenses.index');
+Route::get('/admin/expenses/fix', [ExpenseController::class, 'index'])->name('accounting.index'); 
 
+// 🎯 السطرين الجديدين لحل مشكلة الإضافة والحذف للمصاريف:
+Route::post('/admin/expenses', [ExpenseController::class, 'store'])->name('admin.expenses.store');
+Route::delete('/admin/expenses/{id}', [ExpenseController::class, 'destroy'])->name('admin.expenses.destroy');
     // ⚙️ مسارات إضافية احتياطية
     Route::get('/admin/settings/site', [AdminDashboardController::class, 'index'])->name('admin.settings.index');
     Route::get('/admin/reports/all', [AdminDashboardController::class, 'index'])->name('admin.reports.index');
