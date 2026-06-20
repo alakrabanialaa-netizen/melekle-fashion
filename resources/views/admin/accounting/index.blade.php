@@ -1,270 +1,270 @@
 @extends('admin.layouts.app')
 
-@section('page-title', 'النظام المحاسبي المتكامل والمستودعات')
+@section('page-title', 'الدفتر المالي وجرد المستودع - Melekler')
 
 @section('content')
-<div class="container mx-auto p-6 space-y-8 bg-gray-50 min-h-screen" dir="rtl">
-    
-    {{-- الهيدر الرئيسي --}}
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4 border-gray-200">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<div class="p-6 bg-[#fffaf0] min-h-screen" dir="rtl">
+
+    {{-- الهيدر العلوي --}}
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
-            <h1 class="text-3xl font-extrabold text-gray-900">الدفتر المالي المطور وجرد المستودع</h1>
-            <p class="text-sm text-gray-500 mt-1">Melekler Fashion - إدارة المخزون والمبيعات الحركية</p>
+            <h1 class="text-2xl font-black text-gray-800 flex items-center gap-2">
+                <span class="text-pink-500">📦</span> الدفتر المالي المطور وجرد المستودع
+            </h1>
+            <p class="text-gray-400 text-xs font-bold mt-1">إدارة المخزون والمبيعات اليدوية والحسابات المالية فورياً</p>
         </div>
+
+        <a href="{{ url('/') }}" target="_blank"
+           class="group flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-5 py-3 rounded-2xl font-bold text-sm hover:from-pink-600 hover:to-rose-600 transition-all shadow-md">
+            <i class="fas fa-globe"></i>
+            <span>عرض المتجر الرئيسي</span>
+        </a>
     </div>
 
-    {{-- تنبيهات النظام --}}
-    @if (session('success'))
-        <div class="bg-emerald-50 border-r-4 border-emerald-500 text-emerald-800 p-4 rounded-xl shadow-xs font-bold">✨ {{ session('success') }}</div>
-    @endif
-    @if (session('error'))
-        <div class="bg-rose-50 border-r-4 border-rose-500 text-rose-800 p-4 rounded-xl shadow-xs font-bold">⚠️ {{ session('error') }}</div>
-    @endif
+    {{-- كروت الإحصائيات المالية للمستودع --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
-    {{-- ================= 💰 قسم 1: المؤشرات المادية الدقيقة ================= --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-xs">
-            <span class="text-xs font-bold text-gray-400 block uppercase">إجمالي المبيعات</span>
-            <p class="text-3xl font-black text-emerald-600 mt-2 font-mono">{{ number_format($totalSales ?? 0, 2) }} ₺</p>
+        {{-- إجمالي المبيعات اليدوية --}}
+        <div class="bg-white p-6 rounded-[24px] border border-pink-100/40 shadow-sm">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h3 class="text-gray-400 text-xs font-bold mb-1">إجمالي المبيعات</h3>
+                    <p class="text-3xl font-black text-gray-800">
+                        {{ number_format($manualSales->sum('total_price') ?? 0, 2) }} <span class="text-sm font-bold text-gray-400">₺</span>
+                    </p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-green-50 text-green-500 flex items-center justify-center text-lg">
+                    <i class="fas fa-wallet"></i>
+                </div>
+            </div>
         </div>
-        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-xs">
-            <span class="text-xs font-bold text-gray-400 block uppercase">إجمالي المصاريف التشغيلية</span>
-            <p class="text-3xl font-black text-rose-600 mt-2 font-mono">{{ number_format($totalExpenses ?? 0, 2) }} ₺</p>
+
+        {{-- إجمالي المصاريف التشغيلية --}}
+        <div class="bg-white p-6 rounded-[24px] border border-pink-100/40 shadow-sm">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h3 class="text-gray-400 text-xs font-bold mb-1">المصاريف التشغيلية</h3>
+                    <p class="text-3xl font-black text-rose-500">
+                        {{ number_format($totalExpenses ?? 0, 2) }} <span class="text-sm font-bold text-rose-400">₺</span>
+                    </p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-lg">
+                    <i class="fas fa-receipt"></i>
+                </div>
+            </div>
         </div>
-        
-        <div class="{{ ($netProfit ?? 0) >= 0 ? 'bg-indigo-50 border-indigo-200' : 'bg-red-50 border-red-200' }} p-6 rounded-2xl border shadow-xs">
-            <span class="text-xs font-bold {{ ($netProfit ?? 0) >= 0 ? 'text-indigo-700' : 'text-red-700' }} block uppercase">صافي المربح / الخسارة</span>
-            <p class="text-3xl font-black {{ ($netProfit ?? 0) >= 0 ? 'text-indigo-700' : 'text-red-700' }} mt-2 font-mono">
-                {{ ($netProfit ?? 0) >= 0 ? '+' : '' }}{{ number_format($netProfit ?? 0, 2) }} ₺
-            </p>
-            <span class="text-[10px] text-gray-400 block mt-1">(المبيعات - تكلفة البضاعة المباعة - المصاريف)</span>
+
+        {{-- صافي الربح / الخسارة --}}
+        <div class="bg-white p-6 rounded-[24px] border border-pink-100/40 shadow-sm">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h3 class="text-gray-400 text-xs font-bold mb-1">صافي الربح / الخسارة</h3>
+                    @php 
+                        $netProfit = ($manualSales->sum('total_price') ?? 0) - ($manualSales->sum('total_cost') ?? 0) - ($totalExpenses ?? 0);
+                    @endphp
+                    <p class="text-3xl font-black {{ $netProfit >= 0 ? 'text-teal-500' : 'text-red-500' }}">
+                        {{ number_format($netProfit, 2) }} <span class="text-sm font-bold">₺</span>
+                    </p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-teal-50 text-teal-500 flex items-center justify-center text-lg">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+            </div>
         </div>
-        
-        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-xs">
-            <span class="text-xs font-bold text-gray-400 block uppercase">قيمة بضاعة المستودع الحالية</span>
-            <p class="text-2xl font-black text-amber-600 mt-2 font-mono">{{ number_format($inventoryCostValue ?? 0, 2) }} ₺</p>
-            <span class="text-[10px] text-gray-400 block mt-1">(رأس المال الفعلي المخزن بالتكلفة)</span>
+
+        {{-- قيمة بضاعة المستودع الحالية بناءً على التكلفة --}}
+        <div class="bg-white p-6 rounded-[24px] border border-pink-100/40 shadow-sm">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h3 class="text-gray-400 text-xs font-bold mb-1">قيمة بضاعة المستودع</h3>
+                    <p class="text-3xl font-black text-amber-500">
+                        {{ number_format($warehouseProducts->sum(function($prod) { return $prod->quantity * $prod->purchase_price; }) ?? 0, 2) }} <span class="text-sm font-bold text-amber-400">₺</span>
+                    </p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-lg">
+                    <i class="fas fa-boxes-stacked"></i>
+                </div>
+            </div>
         </div>
+
     </div>
 
-    {{-- ================= 🛍️ قسم 2: وحدة المبيعات اليدوية الفورية (POS) ================= --}}
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-        <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">📦 وحدة تسجيل مبيعات يدوية (تخصم فوراً من المستودع)</h2>
-        <form action="{{ url('/admin/accounting/sale') }}" method="POST" class="grid grid-cols-1 sm:grid-cols-4 gap-4 bg-gray-50 p-4 rounded-xl">
+    {{-- وحدة تسجيل المبيعات اليدوية الفورية --}}
+    <div class="bg-white p-6 rounded-[28px] border border-pink-50/60 shadow-sm mb-8">
+        <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
+            <span class="text-pink-500">📦</span> وحدة تسجيل مبيعات يدوية (تخصم فوراً من المستودع)
+        </h3>
+        <form action="{{ route('admin.sales.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
             @csrf
             <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">كود المنتج (Barcode/Code)</label>
-                <input type="text" name="product_code" placeholder="مثال: PROD-102" class="w-full rounded-lg border-gray-300 text-sm shadow-xs focus:ring-indigo-500" required>
+                <label class="block text-xs font-bold text-gray-500 mb-2">كود المنتج (Barcode/Code)</label>
+                <input type="text" name="product_code" required placeholder="مثال: MK-57685" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-pink-400">
             </div>
             <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">الكمية المباعة</label>
-                <input type="number" name="quantity" min="1" placeholder="1" class="w-full rounded-lg border-gray-300 text-sm shadow-xs focus:ring-indigo-500" required>
+                <label class="block text-xs font-bold text-gray-500 mb-2">الكمية المباعة</label>
+                <input type="number" name="quantity" value="1" min="1" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-pink-400">
             </div>
             <div>
-                <label class="block text-xs font-bold text-gray-600 mb-1">سعر البيع الفعلي للقطعة (₺)</label>
-                <input type="number" step="0.01" name="sale_price" placeholder="0.00" class="w-full rounded-lg border-gray-300 text-sm shadow-xs focus:ring-indigo-500" required>
+                <label class="block text-xs font-bold text-gray-500 mb-2">سعر البيع الفعلي للقطعة (₺)</label>
+                <input type="number" step="0.01" name="sale_price" required placeholder="0.00" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-pink-400">
             </div>
-            <div class="flex items-end">
-                <button type="submit" class="w-full bg-indigo-600 text-white font-bold rounded-lg text-sm py-2.5 hover:bg-indigo-700 transition-all shadow-md">🚀 إتمام البيع والخصم</button>
-            </div>
+            <button type="submit" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-2.5 rounded-xl text-sm shadow-md hover:from-pink-600 hover:to-rose-600 transition-all">
+                🚀 إتمام البيع والخصم
+            </button>
         </form>
     </div>
 
-    {{-- ================= 📝 قسم 3: وحدة التعديل والتحديث السريع للمنتجات ================= --}}
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-        <h2 class="text-lg font-bold text-gray-800 mb-2">⚙️ التعديل والتحديث السريع لبيانات المستودع</h2>
-        <p class="text-xs text-gray-400 mb-4">يمكنك تعديل الأسعار، الأكواد، والمخزون مباشرة من الجدول والضغط على حفظ</p>
+    {{-- جدول التعديل السريع لبيانات المستودع الحالي --}}
+    <div class="bg-white rounded-[28px] border border-pink-50/60 shadow-sm p-6 mb-8">
+        <h3 class="text-lg font-black text-gray-800 mb-1">📋 التعديل والتحديث السريع بيانات المستودع</h3>
+        <p class="text-gray-400 text-xs font-bold mb-4">يمكنك تعديل الأسعار، الأكواد، والمخزون مباشرة من الجدول والضغط على حفظ</p>
         
         <div class="overflow-x-auto">
-            <table class="w-full text-right text-sm whitespace-nowrap">
+            <table class="w-full text-right border-collapse">
                 <thead>
-                    <tr class="bg-gray-100 text-gray-600 uppercase text-xs leading-normal">
-                        <th class="py-3 px-4">كود المنتج</th>
-                        <th class="py-3 px-4">اسم المنتج</th>
-                        <th class="py-3 px-4 text-center">اللون</th>
-                        <th class="py-3 px-4 text-center">العدد المتاح</th>
-                        <th class="py-3 px-4 text-center">سعر الشراء (التكلفة)</th>
-                        <th class="py-3 px-4 text-center">سعر البيع المعروض</th>
-                        <th class="py-3 px-4 text-center">إجمالي التكلفة</th>
-                        <th class="py-3 px-4 text-center">إجراء</th>
+                    <tr class="bg-gray-50 text-gray-500 text-xs font-bold border-b border-gray-100">
+                        <th class="p-3">كود المنتج</th>
+                        <th class="p-3">اسم المنتج</th>
+                        <th class="p-3">اللون</th>
+                        <th class="p-3">العدد المتاح</th>
+                        <th class="p-3">سعر الشراء (التكلفة)</th>
+                        <th class="p-3">سعر البيع المعروض</th>
+                        <th class="p-3">إجمالي التكلفة</th>
+                        <th class="p-3 text-center">إجراء</th>
                     </tr>
                 </thead>
-                <tbody class="text-gray-600 text-xs">
-                    @forelse($products as $product)
-                    <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
-                        <form action="{{ route('admin.accounting.product.update', $product->id) }}" method="POST">
+                <tbody class="divide-y divide-gray-50 text-sm font-bold text-gray-700">
+                    @forelse($warehouseProducts ?? [] as $product)
+                        <form action="{{ route('admin.warehouse.update', $product->id) }}" method="POST">
                             @csrf
-                            <td class="py-2 px-2">
-                                <input type="text" name="product_code" value="{{ $product->product_code }}" class="w-28 p-1 text-xs border rounded font-mono text-indigo-600 font-bold bg-white focus:ring-1 focus:ring-indigo-500">
-                            </td>
-                            <td class="py-2 px-2 font-medium text-gray-800 max-w-xs truncate">{{ $product->product_name }}</td>
-                            <td class="py-2 px-2 text-center">
-                                <input type="text" name="color" value="{{ $product->color ?? 'افتراضي' }}" class="w-20 p-1 text-xs border rounded text-center bg-white">
-                            </td>
-                            <td class="py-2 px-2 text-center">
-                                <input type="number" name="stock" value="{{ $product->stock }}" class="w-16 p-1 text-xs border rounded text-center font-bold bg-white">
-                            </td>
-                            <td class="py-2 px-2 text-center">
-                                <div class="flex items-center justify-center gap-1">
-                                    <input type="number" step="0.01" name="cost_price" value="{{ $product->cost_price }}" class="w-20 p-1 text-xs border rounded text-center font-mono text-amber-700 font-bold bg-white">
-                                    <span>₺</span>
-                                </div>
-                            </td>
-                            <td class="py-2 px-2 text-center">
-                                <div class="flex items-center justify-center gap-1">
-                                    <input type="number" step="0.01" name="price" value="{{ $product->price }}" class="w-20 p-1 text-xs border rounded text-center font-mono text-emerald-600 font-bold bg-white">
-                                    <span>₺</span>
-                                </div>
-                            </td>
-                            <td class="py-2 px-4 text-center font-mono text-gray-900 font-black bg-gray-50/50">
-                                {{ number_format($product->stock * $product->cost_price, 2) }} ₺
-                            </td>
-                            <td class="py-2 px-2 text-center">
-                                <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded text-[11px] font-bold shadow-xs transition-all">💾 حفظ</button>
-                            </td>
+                            @method('PUT')
+                            <tr class="hover:bg-pink-50/10 transition-colors">
+                                <td class="p-3">
+                                    <input type="text" name="product_code" value="{{ $product->product_code }}" class="bg-transparent border-b border-transparent hover:border-gray-300 focus:border-pink-500 w-28 text-sm font-bold px-1 py-0.5">
+                                </td>
+                                <td class="p-3 text-gray-400 font-normal">{{ $product->name ?? 'افتراضي' }}</td>
+                                <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded-lg text-xs">{{ $product->color ?? 'افتراضي' }}</span></td>
+                                <td class="p-3">
+                                    <input type="number" name="quantity" value="{{ $product->quantity }}" class="bg-transparent border-b border-transparent hover:border-gray-300 focus:border-pink-500 w-16 text-center text-sm font-bold">
+                                </td>
+                                <td class="p-3">
+                                    <input type="number" step="0.01" name="purchase_price" value="{{ $product->purchase_price }}" class="bg-transparent border-b border-transparent hover:border-gray-300 focus:border-pink-500 w-20 text-sm font-bold text-amber-600"> ₺
+                                </td>
+                                <td class="p-3">
+                                    <input type="number" step="0.01" name="sale_price" value="{{ $product->sale_price }}" class="bg-transparent border-b border-transparent hover:border-gray-300 focus:border-pink-500 w-20 text-sm font-bold text-green-600"> ₺
+                                </td>
+                                <td class="p-3 text-gray-800 font-black">
+                                    {{ number_format($product->quantity * $product->purchase_price, 2) }} ₺
+                                </td>
+                                <td class="p-3 text-center">
+                                    <button type="submit" class="bg-emerald-50 text-emerald-600 px-3 py-1.5 rounded-xl hover:bg-emerald-100 transition-colors text-xs flex items-center gap-1 mx-auto">
+                                        <i class="fas fa-save"></i> حفظ
+                                    </button>
+                                </td>
+                            </tr>
                         </form>
-                    </tr>
                     @empty
-                    <tr><td colspan="8" class="text-center py-8 text-gray-400">المستودع فارغ تماماً.</td></tr>
+                        <tr>
+                            <td colspan="8" class="p-8 text-center text-gray-400">لا توجد منتجات في المستودع حالياً.</td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
     </div>
-    
-    {{-- ================= 🏢 قسم 4: جدول جرد المستودع التفصيلي المظهر النهائي ================= --}}
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-4 gap-2">
-            <div>
-                <h2 class="text-xl font-bold text-gray-800">تفاصيل وجرد بضاعة المستودع الحالية (للقراءة والجرد)</h2>
-                <p class="text-xs text-gray-400">قائمة تفصيلية مخصصة لمراجعة حالة وتصنيفات المخزون الحالية</p>
-            </div>
-            <span class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg font-bold">إجمالي قطع المستودع: {{ number_format($totalStockPieces ?? 0) }} قطعة</span>
-        </div>
 
+    {{-- تفاصيل وجرد بضاعة المستودع الحالية (للقراءة والجرد الفعلي) --}}
+    <div class="bg-white rounded-[28px] border border-pink-50/60 shadow-sm p-6 mb-8">
+        <h3 class="text-lg font-black text-gray-800 mb-1">📊 تفاصيل وجرد بضاعة المستودع الحالية (للقراءة والجرد)</h3>
+        <p class="text-gray-400 text-xs font-bold mb-4">قائمة تفصيلية مخصصة لمراجعة حالة وتصنيفات المخزون الحالية</p>
+        
         <div class="overflow-x-auto">
-            <table class="w-full text-right text-sm whitespace-nowrap">
+            <table class="w-full text-right border-collapse">
                 <thead>
-                    <tr class="bg-gray-100 text-gray-600 uppercase text-xs leading-normal">
-                        <th class="py-3 px-6">كود المنتج</th>
-                        <th class="py-3 px-6">اسم المنتج</th>
-                        <th class="py-3 px-6 text-center">اللون</th>
-                        <th class="py-3 px-6 text-center">العمر / المقاس</th>
-                        <th class="py-3 px-6 text-center">العدد المتاح</th>
-                        <th class="py-3 px-6 text-center">سعر الشراء (التكلفة)</th>
-                        <th class="py-3 px-6 text-center">سعر البيع المعروض</th>
-                        <th class="py-3 px-6 text-center">إجمالي قيمة التكلفة</th>
+                    <tr class="bg-gray-50 text-gray-500 text-xs font-bold border-b border-gray-100">
+                        <th class="p-3">كود المنتج</th>
+                        <th class="p-3">اسم المنتج</th>
+                        <th class="p-3">اللون</th>
+                        <th class="p-3">العمر / المقاس</th>
+                        <th class="p-3">العدد المتاح</th>
+                        <th class="p-3">سعر الشراء (التكلفة)</th>
+                        <th class="p-3">سعر البيع المعروض</th>
+                        <th class="p-3">إجمالي قيمة التكلفة</th>
                     </tr>
                 </thead>
-                <tbody class="text-gray-600 text-xs">
-                    @forelse($products as $product)
-                    <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
-                        <td class="py-3 px-6 font-bold text-indigo-600 font-mono">{{ $product->product_code ?? 'N/A' }}</td>
-                        <td class="py-3 px-6 font-medium text-gray-800">{{ $product->product_name }}</td>
-                        <td class="py-3 px-6 text-center">{{ $product->color ?? 'افتراضي' }}</td>
-                        <td class="py-3 px-6 text-center">
-                            <span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px] font-bold">
-                                {{ $product->product_category == 'mothers' ? 'حريمي' : 'أطفال' }}
-                            </span>
-                        </td>
-                        <td class="py-3 px-6 text-center font-bold font-mono">
-                            <span class="{{ $product->stock <= 5 ? 'text-rose-600 bg-rose-50 px-2 py-1 rounded' : 'text-gray-700' }}">
-                                {{ $product->stock }} قطعة
-                            </span>
-                        </td>
-                        <td class="py-3 px-6 text-center font-mono text-amber-700 font-bold">{{ number_format($product->cost_price, 2) }} ₺</td>
-                        <td class="py-3 px-6 text-center font-mono text-emerald-600 font-bold">{{ number_format($product->price, 2) }} ₺</td>
-                        <td class="py-3 px-6 text-center font-mono text-gray-900 font-black bg-gray-50/50">
-                            {{ number_format($product->stock * $product->cost_price, 2) }} ₺
-                        </td>
-                    </tr>
-                    @empty
-                    <tr><td colspan="8" class="text-center py-8 text-gray-400">المستودع فارغ تماماً، قم بإضافة منتجات أولاً.</td></tr>
-                    @endforelse
+                <tbody class="divide-y divide-gray-50 text-sm font-bold text-gray-700">
+                    @foreach($warehouseProducts ?? [] as $product)
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+                            <td class="p-3 text-pink-600">{{ $product->product_code }}</td>
+                            <td class="p-3 text-gray-500 font-normal">{{ $product->name ?? 'افتراضي' }}</td>
+                            <td class="p-3">{{ $product->color ?? 'افتراضي' }}</td>
+                            <td class="p-3"><span class="bg-pink-50 text-pink-600 px-2 py-0.5 rounded-md text-xs">{{ $product->size ?? 'أطفال' }}</span></td>
+                            <td class="p-3">
+                                <span class="{{ $product->quantity <= 2 ? 'text-rose-500 bg-rose-50' : 'text-gray-700 bg-gray-50' }} px-2 py-1 rounded-lg">
+                                    {{ $product->quantity }} قطعة
+                                </span>
+                            </td>
+                            <td class="p-3 text-amber-600">{{ number_format($product->purchase_price, 2) }} ₺</td>
+                            <td class="p-3 text-green-600">{{ number_format($product->sale_price, 2) }} ₺</td>
+                            <td class="p-3 text-gray-900 font-black">{{ number_format($product->quantity * $product->purchase_price, 2) }} ₺</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
     </div>
 
-    {{-- ================= 🧾 قسم 5: المصاريف التشغيلية وحركات رأس المال جنباً إلى جنب ================= --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        
-        {{-- كرت إدارة المصاريف التشغيلية المنظم --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-            <h3 class="font-bold text-gray-800 border-b pb-3 mb-4">🧾 تسجيل وإدارة المصاريف التشغيلية</h3>
-            
-            {{-- فورم الإدراج الجديد --}}
-            <form action="{{ url('/admin/expenses') }}" method="POST" class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-gray-50 p-3 rounded-xl mb-4">
+    {{-- قسم تسجيل وإدارة المصاريف التشغيلية --}}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-[28px] border border-pink-50/60 shadow-sm lg:col-span-1">
+            <h3 class="text-md font-black text-gray-800 mb-4"><i class="fas fa-plus text-pink-500 ml-1"></i> تسجيل مصروف تشغيلي جديد</h3>
+            <form action="{{ route('admin.expenses.store') }}" method="POST" class="space-y-4">
                 @csrf
-                <input type="hidden" name="expense_date" value="{{ date('Y-m-d') }}">
-                <input type="text" name="description" placeholder="البيان (شحن، إيجار...)" class="rounded-lg border-gray-300 text-xs shadow-xs focus:ring-indigo-500" required>
-                <input type="number" name="amount" step="0.01" placeholder="المبلغ (₺)" class="rounded-lg border-gray-300 text-xs shadow-xs focus:ring-indigo-500" required>
-                <button type="submit" class="bg-rose-600 text-white font-bold rounded-lg text-xs py-2 hover:bg-rose-700 transition-all">إدراج مصروف</button>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">البيان (شحن، إيجار...)</label>
+                    <input type="text" name="description" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-pink-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">المبلغ (₺)</label>
+                    <input type="number" step="0.01" name="amount" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-pink-400">
+                </div>
+                <button type="submit" class="w-full bg-rose-500 text-white font-bold py-2 rounded-xl text-sm hover:bg-rose-600 transition-all">
+                    إدراج مصروف
+                </button>
             </form>
+        </div>
 
-            {{-- جدول عرض القيود التابع للمصاريف --}}
-            <div class="overflow-y-auto max-h-64">
-                <table class="w-full text-right text-xs">
+        <div class="bg-white p-6 rounded-[28px] border border-pink-50/60 shadow-sm lg:col-span-2">
+            <h3 class="text-md font-black text-gray-800 mb-4"><i class="fas fa-list text-pink-500 ml-1"></i> قيود التمويل ورأس المال الفعلي</h3>
+            <div class="overflow-y-auto max-h-[220px] text-xs">
+                {{-- جدول بسيط لاستعراض المصاريف المضافة حركياً --}}
+                <table class="w-full text-right">
                     <thead>
-                        <tr class="text-gray-400 border-b">
+                        <tr class="text-gray-400 border-b border-gray-100 pb-2">
                             <th class="pb-2">البيان</th>
                             <th class="pb-2">المبلغ</th>
-                            <th class="pb-2 text-center">إجراءات</th>
+                            <th class="pb-2">التاريخ</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach($recentExpenses as $exp)
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="py-2 font-medium text-gray-700">{{ $exp->description }}</td>
-                            <td class="py-2 font-bold text-rose-600 font-mono">{{ number_format($exp->amount, 2) }} ₺</td>
-                            <td class="py-2 text-center">
-                                {{-- نموذج الحذف الفوري للمصروف --}}
-                                <form action="{{ route('admin.accounting.expense.destroy', $exp->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا القيد؟')" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-rose-500 hover:text-rose-700 font-bold transition-colors">✕ حذف</button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
+                    <tbody class="divide-y divide-gray-50">
+                        @isset($expensesList)
+                            @foreach($expensesList as $exp)
+                                <tr>
+                                    <td class="py-2 font-bold">{{ $exp->description }}</td>
+                                    <td class="py-2 text-rose-500 font-bold">{{ number_format($exp->amount, 2) }} ₺</td>
+                                    <td class="py-2 text-gray-400">{{ $exp->created_at->format('Y-m-d') }}</td>
+                                </tr>
+                            @endforeach
+                        @endisset
                     </tbody>
                 </table>
             </div>
-        </div>
-
-        {{-- كرت حركات رأس المال والتمويل --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-            <h3 class="font-bold text-gray-800 border-b pb-3 mb-4">🪙 قيود التمويل ورأس المال الفعلي</h3>
-            
-            <form action="{{ url('/admin/accounting/capital') }}" method="POST" class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-gray-50 p-3 rounded-xl mb-4">
-                @csrf
-                <input type="hidden" name="transaction_date" value="{{ date('Y-m-d') }}">
-                <input type="text" name="description" placeholder="البيان (رأس مال أول السلسلة)" class="rounded-lg border-gray-300 text-xs shadow-xs focus:ring-indigo-500" required>
-                <input type="number" name="amount" step="0.01" placeholder="المبلغ (+ أو -)" class="rounded-lg border-gray-300 text-xs shadow-xs focus:ring-indigo-500" required>
-                <button type="submit" class="bg-slate-800 text-white font-bold rounded-lg text-xs py-2 hover:bg-slate-900 transition-all">إدراج قيد</button>
-            </form>
-            
-            <div class="overflow-y-auto max-h-64">
-                <table class="w-full text-right text-xs">
-                    <thead>
-                        <tr class="text-gray-400 border-b">
-                            <th class="pb-2">البيان</th>
-                            <th class="pb-2">المبلغ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($capitalTransactions as $cap)
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="py-2.5 font-medium text-gray-700">{{ $cap->description }}</td>
-                            <td class="py-2.5 font-bold text-emerald-600 font-mono">{{ number_format($cap->amount, 2) }} ₺</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
+        </tr>
     </div>
 
 </div>
+
 @endsection
