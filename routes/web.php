@@ -38,7 +38,7 @@ use App\Http\Controllers\ShopController;
 | Web Routes
 |--------------------------------------------------------------------------
 */
-Route::post('/admin/accounting/sale', [AccountingController::class, 'storeSale']);
+
 // ==================== 1. الصفحة الرئيسية والـ Guest والروابط العامة ====================
 Route::get('/', [IndexController::class, 'Index'])->name('welcome');
 
@@ -60,12 +60,7 @@ require __DIR__.'/auth.php';
 
 // ==================== 3. مجموعة مسارات الآدمن المحمية والشاملة للمشروع ====================
 Route::middleware(['auth', 'role:admin'])->group(function() {
-    // مسارات تعديل وحذف منتجات المستودع محاسبياً
-Route::post('/admin/accounting/product/update/{id}', [AccountingController::class, 'updateProduct'])->name('admin.accounting.product.update');
-
-// مسارات تعديل وحذف المصاريف التشغيلية
-Route::post('/admin/accounting/expense/update/{id}', [AccountingController::class, 'updateExpense'])->name('admin.accounting.expense.update');
-Route::delete('/admin/accounting/expense/delete/{id}', [AccountingController::class, 'destroyExpense'])->name('admin.accounting.expense.destroy');
+    
     // لوحة التحكم والملف الشخصي للآدمن
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/logout', [AdminController::class, 'AdminDestroy'])->name('admin.logout');
@@ -100,20 +95,33 @@ Route::delete('/admin/accounting/expense/delete/{id}', [AccountingController::cl
     Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
     Route::get('/admin/users/fix', [AdminUserController::class, 'index'])->name('users.index'); 
 
-    // 📊 5️⃣ قسم المحاسبة (accounting)
-    Route::post('/admin/accounting/capital', [AccountingController::class, 'storeCapital']);
-Route::delete('/admin/accounting/capital/{id}', [AccountingController::class, 'destroyCapital']);
+    // 📊 5️⃣ قسم المحاسبة والمستودع المطور الحركي (accounting)
     Route::get('/admin/accounting', [AccountingController::class, 'index'])->name('admin.accounting.index');
     Route::get('/admin/accounting/fix', [AccountingController::class, 'index'])->name('accounting.index'); 
 
-    // 💰 6️⃣ قسم المصاريف (expenses)
-Route::get('/admin/expenses', [ExpenseController::class, 'index'])->name('admin.expenses.index');
-Route::get('/admin/expenses/fix', [ExpenseController::class, 'index'])->name('accounting.index'); 
+    // مسار تعديل وحفظ منتجات المستودع محاسبياً وحركياً
+    Route::put('/admin/warehouse/update/{id}', [AccountingController::class, 'updateProduct'])->name('admin.warehouse.update');
+    Route::post('/admin/accounting/product/update/{id}', [AccountingController::class, 'updateProduct'])->name('admin.accounting.product.update');
 
-// 🎯 السطرين الجديدين لحل مشكلة الإضافة والحذف للمصاريف:
-Route::post('/admin/expenses', [ExpenseController::class, 'store'])->name('admin.expenses.store');
-Route::delete('/admin/expenses/{id}', [ExpenseController::class, 'destroy'])->name('admin.expenses.destroy');
-    // ⚙️ مسارات إضافية احتياطية
+    // مسار تسجيل البيع اليدوي والخصم الفوري من المخزن
+    Route::post('/admin/sales/store', [AccountingController::class, 'storeSale'])->name('admin.sales.store');
+
+    // روابط إدارة وحفظ المصاريف التشغيلية المرتبطة بالدفتر المالي
+    Route::post('/admin/expenses/store', [AccountingController::class, 'storeExpense'])->name('admin.expenses.store');
+    Route::post('/admin/accounting/expense/update/{id}', [AccountingController::class, 'updateExpense'])->name('admin.accounting.expense.update');
+    Route::delete('/admin/accounting/expense/delete/{id}', [AccountingController::class, 'destroyExpense'])->name('admin.accounting.expense.destroy');
+
+    // روابط رأس المال والتمويل (Capital)
+    Route::post('/admin/accounting/capital', [AccountingController::class, 'storeCapital']);
+    Route::delete('/admin/accounting/capital/{id}', [AccountingController::class, 'destroyCapital']);
+
+    // 💰 6️⃣ قسم المصاريف القديم الاحتياطي (expenses)
+    Route::get('/admin/expenses', [ExpenseController::class, 'index'])->name('admin.expenses.index');
+    Route::get('/admin/expenses/fix', [ExpenseController::class, 'index'])->name('accounting.index'); 
+    Route::post('/admin/expenses', [ExpenseController::class, 'store'])->name('admin.expenses.store_old');
+    Route::delete('/admin/expenses/{id}', [ExpenseController::class, 'destroy'])->name('admin.expenses.destroy_old');
+
+    // ⚙️ مسارات إضافية احتياطية للموقع
     Route::get('/admin/settings/site', [AdminDashboardController::class, 'index'])->name('admin.settings.index');
     Route::get('/admin/reports/all', [AdminDashboardController::class, 'index'])->name('admin.reports.index');
     Route::get('/admin/reviews/all', [AdminDashboardController::class, 'index'])->name('admin.reviews.index');
@@ -139,7 +147,7 @@ Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->na
 // ==================== 6. تفاصيل المنتجات والتنقل والأقسام الديناميكية الذكية ====================
 Route::get('/category/{category}', [ShopController::class, 'category'])->name('category.show');
 
-// ✅ تم إصلاح العطل هنا عبر إنشاء مسارين مستقلين تماماً ليدعم النظام الكلمتين (المفرد والجمع) معاً بنجاح
+// مسارين مستقلين ليدعم النظام الكلمتين (المفرد والجمع) معاً بنجاح للمنتجات
 Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
 Route::get('/product/info/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('products.show');
 
@@ -188,7 +196,7 @@ Route::post('/dcart/data/store/{id}', [CartController::class, 'AddToCartDetails'
 Route::post('/add-to-wishlist/{product_id}', [WishlistController::class, 'AddToWishlist']);
 Route::post('/add-to-compare/{product_id}', [CompareController::class, 'AddToCompare']);
 
-// تم إصلاح مسارات الكوبون والـ السلة هنا بشكل دقيق لمنع خطأ Attribute [couponApply]
+// مسارات الكوبون والـ السلة لمنع خطأ Attribute [couponApply]
 Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
 Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
 Route::get('/coupon-remove', [CartController::class, 'CouponRemove']);
