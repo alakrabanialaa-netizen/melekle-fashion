@@ -35,12 +35,12 @@ class AccountingController extends Controller
         $expensesList = Expense::latest()->get(); // قائمة المصاريف (مطابق للـ Blade)
         $capitalTransactions = DB::table('capital_transactions')->latest()->take(5)->get();
 
-        return view('admin.accounting', compact(
-            'totalSales', 'totalExpenses', 'netProfit', 'totalStockPieces', 
-            'inventoryCostValue', 'inventorySaleValue', 'warehouseProducts', 
-            'manualSales', 'expensesList', 'capitalTransactions', 'capital'
-        ));
-    }
+  // ابحث عن هذا السطر في نهاية دالة index() بالـ Controller:
+return view('admin.accounting.index', compact(
+    'totalSales', 'totalExpenses', 'netProfit', 'totalStockPieces', 
+    'inventoryCostValue', 'inventorySaleValue', 'warehouseProducts', 
+    'manualSales', 'expensesList', 'capitalTransactions', 'capital'
+));
 
     // تحديث بيانات المنتج في المستودع فوراً من الجدول السريع
     public function updateProduct(Request $request, $id)
