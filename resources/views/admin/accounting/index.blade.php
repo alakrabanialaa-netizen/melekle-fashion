@@ -8,6 +8,36 @@
 
 <div class="p-6 bg-slate-50 min-h-screen font-sans" dir="rtl">
 
+    {{-- 🌟 قسم عرض رسائل النجاح، الأخطاء، والـ Validation 🌟 --}}
+    @if(session('success'))
+        <div class="mb-6 p-4 bg-emerald-100 text-emerald-800 rounded-xl font-bold text-sm text-right flex items-center gap-2 shadow-sm border border-emerald-200">
+            <i class="fas fa-check-circle text-emerald-600 text-base"></i> 
+            <span>{{ session('success') }}</span>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="mb-6 p-4 bg-rose-100 text-rose-800 rounded-xl font-bold text-sm text-right flex items-center gap-2 shadow-sm border border-rose-200">
+            <i class="fas fa-exclamation-circle text-rose-600 text-base"></i> 
+            <span>{{ session('error') }}</span>
+        </div>
+    @endif
+
+    @if($errors->any())
+        <div class="mb-6 p-4 bg-amber-100 text-amber-800 rounded-xl font-bold text-sm text-right shadow-sm border border-amber-200">
+            <div class="flex items-center gap-2 mb-2 text-amber-900 font-black">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>يرجى مراجعة الأخطاء التالية:</span>
+            </div>
+            <ul class="list-disc list-inside text-xs space-y-1 pr-2 font-medium">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    {{-- 🌟 نهاية قسم الرسائل الإشعارية 🌟 --}}
+
     {{-- 1. الهيدر العلوي --}}
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
         <div>
@@ -50,7 +80,7 @@
                 </p>
             </div>
             <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl">
-                <i class="fas fa-tray-value"></i>
+                <i class="fas fa-money-bill-wave"></i>
             </div>
         </div>
 
@@ -66,7 +96,7 @@
                 </p>
             </div>
             <div class="w-12 h-12 rounded-xl {{ $netProfit >= 0 ? 'bg-teal-50 text-teal-600' : 'bg-rose-50 text-rose-600' }} flex items-center justify-center text-xl">
-                <i class="fas fa-chart-line-up"></i>
+                <i class="fas fa-chart-line"></i>
             </div>
         </div>
 
@@ -141,40 +171,44 @@
                 <tbody class="divide-y divide-slate-100 text-sm font-medium text-slate-700">
                     @forelse($warehouseProducts ?? [] as $product)
                         <tr class="hover:bg-slate-50/70 transition-colors">
-                            <form action="{{ route('admin.warehouse.update', $product->id) }}" method="POST">
+                            {{-- نموذج مخفي مستقل تماماً خارج خلايا الجدول لضمان توافقية التحديث --}}
+                            <form id="form-update-{{ $product->id }}" action="{{ route('admin.warehouse.update', $product->id) }}" method="POST" class="hidden">
                                 @csrf
                                 @method('PUT')
-                                <td class="p-4">
-                                    <input type="text" name="product_code" value="{{ $product->product_code }}" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg w-32 text-xs font-bold px-2 py-1 focus:outline-none">
-                                </td>
-                                <td class="p-4 text-slate-500 font-normal">{{ $product->product_name ?? $product->name ?? 'صنف غير مسمى' }}</td>
-                                <td class="p-4">
-                                    <input type="text" name="color" value="{{ $product->color ?? 'افتراضي' }}" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg w-20 text-xs font-bold px-2 py-1 focus:outline-none">
-                                </td>
-                                <td class="p-4 text-center">
-                                    <input type="number" name="stock" value="{{ $product->stock }}" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg w-16 text-center text-xs font-black text-slate-800">
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex items-center gap-1">
-                                        <input type="number" step="0.01" name="cost_price" value="{{ $product->cost_price ?? 0 }}" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg w-20 text-xs font-bold text-amber-600 px-2 py-1">
-                                        <span class="text-xs text-slate-400">₺</span>
-                                    </div>
-                                </td>
-                                <td class="p-4">
-                                    <div class="flex items-center gap-1">
-                                        <input type="number" step="0.01" name="price" value="{{ $product->price ?? 0 }}" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg w-20 text-xs font-bold text-emerald-600 px-2 py-1">
-                                        <span class="text-xs text-slate-400">₺</span>
-                                    </div>
-                                </td>
-                                <td class="p-4 text-slate-900 font-black">
-                                    {{ number_format((int)$product->stock * (float)($product->cost_price ?? 0), 2) }} ₺
-                                </td>
-                                <td class="p-4 text-center">
-                                    <button type="submit" class="bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors text-xs flex items-center gap-1 mx-auto font-bold">
-                                        <i class="fas fa-sync-alt"></i> تحديث
-                                    </button>
-                                </td>
                             </form>
+
+                            <td class="p-4">
+                                <input type="text" name="product_code" form="form-update-{{ $product->id }}" value="{{ $product->product_code }}" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg w-32 text-xs font-bold px-2 py-1 focus:outline-none">
+                            </td>
+                            <td class="p-4 text-slate-500 font-normal">
+                                {{ $product->product_name ?? $product->name ?? 'صنف غير مسمى' }}
+                            </td>
+                            <td class="p-4">
+                                <input type="text" name="color" form="form-update-{{ $product->id }}" value="{{ $product->color ?? 'افتراضي' }}" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg w-20 text-xs font-bold px-2 py-1 focus:outline-none">
+                            </td>
+                            <td class="p-4 text-center">
+                                <input type="number" name="stock" form="form-update-{{ $product->id }}" value="{{ $product->stock }}" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg w-16 text-center text-xs font-black text-slate-800">
+                            </td>
+                            <td class="p-4">
+                                <div class="flex items-center gap-1">
+                                    <input type="number" step="0.01" name="cost_price" form="form-update-{{ $product->id }}" value="{{ $product->cost_price ?? 0 }}" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg w-20 text-xs font-bold text-amber-600 px-2 py-1">
+                                    <span class="text-xs text-slate-400">₺</span>
+                                </div>
+                            </td>
+                            <td class="p-4">
+                                <div class="flex items-center gap-1">
+                                    <input type="number" step="0.01" name="price" form="form-update-{{ $product->id }}" value="{{ $product->price ?? 0 }}" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg w-20 text-xs font-bold text-emerald-600 px-2 py-1">
+                                    <span class="text-xs text-slate-400">₺</span>
+                                </div>
+                            </td>
+                            <td class="p-4 text-slate-900 font-black">
+                                {{ number_format((int)$product->stock * (float)($product->cost_price ?? 0), 2) }} ₺
+                            </td>
+                            <td class="p-4 text-center">
+                                <button type="submit" form="form-update-{{ $product->id }}" class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700 transition-colors text-xs flex items-center gap-1 mx-auto font-bold shadow-sm">
+                                    <i class="fas fa-sync-alt"></i> تحديث
+                                </button>
+                            </td>
                         </tr>
                     @empty
                         <tr>
@@ -239,7 +273,7 @@
                             @empty
                                 <tr>
                                     <td colspan="3" class="p-4 text-center text-slate-400">لم يتم تسجيل أي مصاريف تشغيلية بعد.</td>
-                                endtr>
+                                </tr>
                             @endforelse
                         @endisset
                     </tbody>
