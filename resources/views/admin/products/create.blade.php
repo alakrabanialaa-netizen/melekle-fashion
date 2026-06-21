@@ -29,7 +29,7 @@
 
         <div class="space-y-8">
 
-            {{-- 1. المعلومات الأساسية المطور --}}
+            {{-- 1. المعلومات الأساسية --}}
             <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
                 <h2 class="text-xl font-bold text-indigo-800 mb-6 flex items-center gap-2">
                     <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm">1</span>
@@ -44,27 +44,27 @@
                     </div>
 
                     <div>
-                        <label for="product_name" class="block text-sm font-bold text-gray-700 mb-2">اسم المنتج <span class="text-rose-500">*</span></label>
-                        <input type="text" name="product_name" id="product_name" value="{{ old('product_name') }}" 
+                        <label for="name" class="block text-sm font-bold text-gray-700 mb-2">اسم المنتج <span class="text-rose-500">*</span></label>
+                        <input type="text" name="name" id="name" value="{{ old('name') }}" 
                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all" 
                                placeholder="مثال: طقم ولادي صيفي 3 قطع" required>
                     </div>
 
                     <div>
-                        <label for="product_category" class="block text-sm font-bold text-gray-700 mb-2">القسم الرئيسي <span class="text-rose-500">*</span></label>
-                        <select name="product_category" id="product_category" 
+                        <label for="category" class="block text-sm font-bold text-gray-700 mb-2">القسم الرئيسي <span class="text-rose-500">*</span></label>
+                        <select name="category" id="category" 
                                 class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none appearance-none bg-white transition-all" required>
                             <option value="">-- اختر القسم المناسب --</option>
-                            <option value="girls" {{ old('product_category') == 'girls' ? 'selected' : '' }}>بنات</option>
-                            <option value="boys" {{ old('product_category') == 'boys' ? 'selected' : '' }}>أولاد</option>
-                            <option value="babies" {{ old('product_category') == 'babies' ? 'selected' : '' }}>مواليد / رضع</option>
-                            <option value="mothers" {{ old('product_category') == 'mothers' ? 'selected' : '' }}>أمهات</option>
+                            <option value="girls" {{ old('category') == 'girls' ? 'selected' : '' }}>بنات</option>
+                            <option value="boys" {{ old('category') == 'boys' ? 'selected' : '' }}>أولاد</option>
+                            <option value="babies" {{ old('category') == 'babies' ? 'selected' : '' }}>مواليد / رضع</option>
+                            <option value="mothers" {{ old('category') == 'mothers' ? 'selected' : '' }}>أمهات</option>
                         </select>
                     </div>
                 </div>
             </div>
 
-            {{-- 2. الأسعار والمخزون المطور للربط المحاسبي --}}
+            {{-- 2. الأسعار والمخزون --}}
             <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
                 <h2 class="text-xl font-bold text-indigo-800 mb-6 flex items-center gap-2">
                     <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm">2</span>
@@ -73,33 +73,48 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div>
                         <label for="cost_price" class="block text-sm font-bold text-gray-700 mb-2">سعر الشراء / التكلفة (₺) <span class="text-rose-500">*</span></label>
-                        <input type="text" name="cost_price" id="cost_price" value="{{ old('cost_price') }}" 
-                               inputmode="decimal" placeholder="0.00"
+                        <input type="number" step="0.01" name="cost_price" id="cost_price" value="{{ old('cost_price') }}" 
+                               placeholder="0.00"
                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-mono text-lg font-bold text-amber-700" required>
                     </div>
 
                     <div>
-                        <label for="product_price" class="block text-sm font-bold text-gray-700 mb-2">سعر البيع النهائي (₺) <span class="text-rose-500">*</span></label>
-                        <input type="text" name="product_price" id="product_price" value="{{ old('product_price') }}" 
-                               inputmode="decimal" placeholder="0.00"
+                        <label for="original_price" class="block text-sm font-bold text-gray-700 mb-2">السعر الأصلي (قبل الخصم)</label>
+                        <input type="number" step="0.01" name="original_price" id="original_price" value="{{ old('original_price') }}" 
+                               placeholder="0.00"
+                               class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-mono text-lg font-bold text-gray-500">
+                    </div>
+
+                    <div>
+                        <label for="price" class="block text-sm font-bold text-gray-700 mb-2">سعر البيع النهائي (₺) <span class="text-rose-500">*</span></label>
+                        <input type="number" step="0.01" name="price" id="price" value="{{ old('price') }}" 
+                               placeholder="0.00"
                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-mono text-lg font-bold text-emerald-600" required>
                     </div>
 
                     <div>
-                        <label for="product_stock" class="block text-sm font-bold text-gray-700 mb-2">الكمية المتاحة (المخزون)</label>
-                        <input type="text" name="product_stock" id="product_stock" value="{{ old('product_stock', 0) }}" 
-                               inputmode="numeric" placeholder="0"
+                        <label for="stock" class="block text-sm font-bold text-gray-700 mb-2">الكمية المتاحة (المخزون)</label>
+                        <input type="number" name="stock" id="stock" value="{{ old('stock', 0) }}" 
+                               placeholder="0"
                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-mono text-lg font-bold text-gray-800">
                     </div>
-
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                     <div>
                         <label for="color" class="block text-sm font-bold text-gray-700 mb-2">اللون الأساسي</label>
                         <input type="text" name="color" id="color" value="{{ old('color') }}" 
                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all" 
                                placeholder="مثال: أحمر / منقّط">
                     </div>
+                    <div>
+                        <label for="badge_text" class="block text-sm font-bold text-gray-700 mb-2">نص الشارة (اختياري)</label>
+                        <input type="text" name="badge_text" id="badge_text" value="{{ old('badge_text') }}" 
+                               class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all" 
+                               placeholder="مثال: الأكثر مبيعاً">
+                    </div>
                 </div>
-                <p class="mt-3 text-xs text-gray-400">💡 إدخال سعر الشراء بدقة يتيح للنظام المحاسبي حساب أرباحك الحركية والفعالية داخل المستودع تلقائياً.</p>
+                <p class="mt-3 text-xs text-gray-400">💡 إدخال سعر الشراء بدقة يتيح للنظام المحاسبي حساب أرباحك تلقائياً.</p>
             </div>
 
             {{-- 3. الوصف والملفات --}}
@@ -110,10 +125,10 @@
                 </h2>
                 <div class="space-y-8">
                     <div>
-                        <label for="product_description" class="block text-sm font-bold text-gray-700 mb-2">شرح المنتج</label>
-                        <textarea name="product_description" id="product_description" rows="4" 
+                        <label for="description" class="block text-sm font-bold text-gray-700 mb-2">شرح المنتج</label>
+                        <textarea name="description" id="description" rows="4" 
                                   class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all" 
-                                  placeholder="اكتب تفاصيل المنتج هنا (المادة، المقاسات، إلخ...)">{{ old('product_description') }}</textarea>
+                                  placeholder="اكتب تفاصيل المنتج هنا (المادة، المقاسات، إلخ...)">{{ old('description') }}</textarea>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
