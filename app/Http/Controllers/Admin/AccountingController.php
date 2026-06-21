@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class AccountingController extends Controller
 {
-    // 1. دالة العرض الرئيسية الموحدة (تم توجيهها للمجلد الفرعي الصحيح index)
+    // 1. دالة العرض الرئيسية الموحدة 
     public function index()
     {
         // جلب المصاريف ورأس المال
@@ -42,27 +42,47 @@ class AccountingController extends Controller
         ));
     }
 
-    // 2. تحديث بيانات المنتج في المستودع (الكود، السعر، اللون، المقاس، العدد)
+    // 2. تحديث بيانات المنتج في المستودع (نسخة مرنة ومضمونة لمنع تعليق الـ Validation)
     public function updateProduct(Request $request, $id)
     {
+        // تحقق مرن يسمح بالقيم الفارغة لتجنب الرفض التلقائي من النظام
         $request->validate([
-            'product_code' => 'required|string',
+            'product_code' => 'nullable|string',
             'color' => 'nullable|string',
-            'stock' => 'required|integer|min:0',
-            'cost_price' => 'required|numeric|min:0',
-            'price' => 'required|numeric|min:0',
+            'stock' => 'nullable|numeric',
+            'cost_price' => 'nullable|numeric',
+            'price' => 'nullable|numeric',
         ]);
 
         $product = Product::findOrFail($id);
-        $product->update([
-            'product_code' => $request->product_code,
-            'color' => $request->color,
-            'stock' => $request->stock,
-            'cost_price' => $request->cost_price,
-            'price' => $request->price,
-        ]);
 
-        return redirect()->back()->with('success', 'تم تحديث بيانات الصنف في المستودع والملف المحاسبي فوراً!');
+        // بناء مصفوفة التحديث ديناميكياً لتعديل الحقول المرسلة فقط
+        $updateData = [];
+
+        if ($request->has('product_code')) {
+            $updateData['product_code'] = $request->product_code;
+        }
+        if ($request->has('color')) {
+            $updateData['color'] = $request->color;
+        }
+        if ($request->has('stock')) {
+            $updateData['stock'] = $request->stock;
+        }
+        if ($request->has('cost_price')) {
+            $updateData['cost_price'] = $request->cost_price ?? 0;
+        }
+        if ($request->has('price')) {
+            $updateData['price'] = $request->price ?? 0;
+            // تضمن تحديث الحقل الأساسي للمتجر ليظهر السعر الجديد فوراً للعملاء
+            if (\Schema::hasColumn('products', 'selling_price')) {
+                $updateData['selling_price'] = $request->price ?? 0;
+            }
+        }
+
+        // حفظ التعديلات في قاعدة البيانات
+        $product->update($updateData);
+
+        return redirect()->back()->with('success', 'تم تحديث بيانات الصنف في المستودع وتعديل الأسعار والمخزون في الموقع فوراً!');
     }
 
     // 3. تسجيل مصروف تشغيلي جديد
@@ -113,7 +133,6 @@ class AccountingController extends Controller
             'sale_price' => 'required|numeric'
         ]);
 
-        // البحث عن المنتج في المستودع بواسطة الكود
         $product = Product::where('product_code', $request->product_code)->first();
 
         if (!$product) {
@@ -124,13 +143,11 @@ class AccountingController extends Controller
             return redirect()->back()->with('error', 'خطأ: الكمية المطلوبة غير متوفرة في المستودع! المتاح حالياً: ' . $product->stock);
         }
 
-        // حساب الإجماليات
         $totalPrice = $request->quantity * $request->sale_price;
         $totalCost = $request->quantity * (float)$product->cost_price;
 
         DB::beginTransaction();
         try {
-            // تسجيل عملية البيع اليدوي
             DB::table('manual_sales')->insert([
                 'product_code' => $product->product_code,
                 'product_name' => $product->name ?? $product->product_name ?? 'منتج غير محدد',
@@ -141,7 +158,6 @@ class AccountingController extends Controller
                 'created_at' => now()
             ]);
 
-            // خصم الكمية من المستودع تلقائياً
             $product->decrement('stock', $request->quantity);
 
             DB::commit();
