@@ -118,7 +118,7 @@
             <div class="w-2 h-6 bg-indigo-600 rounded-full"></div>
             <h3 class="text-lg font-bold text-slate-800">وحدة البيع المباشر والخصم الفوري للمخزون</h3>
         </div>
-        
+         
         <form action="{{ route('admin.sales.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
             @csrf
             <div>
@@ -126,7 +126,7 @@
                 <input type="text" name="product_code" required placeholder="مثال: MK-57685" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-indigo-500 transition-all">
             </div>
             <div>
-                <label class="block text-xs font-bold text-slate-500 mb-2">الالكمية المباعة</label>
+                <label class="block text-xs font-bold text-slate-500 mb-2">الكمية المباعة</label>
                 <input type="number" name="quantity" value="1" min="1" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-indigo-500 transition-all text-center">
             </div>
             <div>
@@ -150,7 +150,7 @@
                 </div>
             </div>
         </div>
-        
+         
         <div class="overflow-x-auto rounded-xl border border-slate-100">
             <table class="w-full text-right border-collapse">
                 <thead>
@@ -162,7 +162,7 @@
                         <th class="p-4">سعر التكلفة (الشراء)</th>
                         <th class="p-4">سعر البيع المعروض</th>
                         <th class="p-4">إجمالي رأس المال فيه</th>
-                        <th class="p-4 text-emerald-600">إجمالي المبيعات المحصلة</th> {{-- إضافة العمود الجديد المطلوب --}}
+                        <th class="p-4 text-emerald-600">إجمالي المبيعات المحصلة</th>
                         <th class="p-4 text-center">الإجراء</th>
                     </tr>
                 </thead>
@@ -175,7 +175,6 @@
                             </form>
 
                             <td class="p-4">
-                                {{-- تم وضع التعديل هنا ليدعم تعبير الخيار البديل في حال كان مسمى الحقل في الـ Object مختصراً --}}
                                 <input type="text" name="product_code" form="form-update-{{ $product->id }}" value="{{ $product->product_code ?? $product->code }}" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg w-32 text-xs font-bold px-2 py-1 focus:outline-none">
                             </td>
                             <td class="p-4 text-slate-500 font-normal">
@@ -203,11 +202,11 @@
                                 {{ number_format((int)$product->stock * (float)($product->cost_price ?? 0), 2) }} ₺
                             </td>
                             
-                            {{-- حساب إجمالي المبيعات المحصلة لهذا المنتج عبر علاقة المبيعات (Sales Relation) --}}
+                            {{-- حساب إجمالي المبيعات المحصلة النظيف بعد الفلترة --}}
                             <td class="p-4 text-emerald-700 font-extrabold">
                                 @php
-                                    // فرضاً أن العلاقة مجهزة في الموديل، أو يتم الفلترة البرمجية من الـ collection الممرر
-                                    $productSalesTotal = font_black($manualSales ?? collect())->where('product_code', $product->product_code ?? $product->code)->sum('total_price');
+                                    $currentCode = $product->product_code ?? $product->code;
+                                    $productSalesTotal = collect($manualSales ?? [])->where('product_code', $currentCode)->sum('total_price');
                                 @endphp
                                 {{ number_format($productSalesTotal, 2) }} ₺
                             </td>
@@ -236,7 +235,7 @@
                 <i class="fas fa-plus-circle text-rose-500"></i>
                 <h3 class="text-md font-bold text-slate-800">تسجيل قيد مصروفات تشغيلية</h3>
             </div>
-            
+             
             <form action="{{ route('admin.expenses.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
@@ -259,7 +258,7 @@
                 <i class="fas fa-receipt text-slate-700"></i>
                 <h3 class="text-md font-bold text-slate-800">سجل القيود المالية والمصاريف الأخيرة</h3>
             </div>
-            
+             
             <div class="overflow-y-auto max-h-[250px] border border-slate-50 rounded-xl">
                 <table class="w-full text-right border-collapse">
                     <thead>
