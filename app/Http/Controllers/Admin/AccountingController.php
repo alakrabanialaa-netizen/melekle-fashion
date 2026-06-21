@@ -10,39 +10,39 @@ use Illuminate\Support\Facades\DB;
 
 class AccountingController extends Controller
 {
-    // دالة العرض الرئيسية الموحدة والمنظفة بالكامل
+    // 1. دالة العرض الرئيسية الموحدة (تم توجيهها للمجلد الفرعي الصحيح index)
     public function index()
     {
-        // 1. جلب المصاريف ورأس المال
+        // جلب المصاريف ورأس المال
         $totalExpenses = Expense::sum('amount');
         $capital = DB::table('capital_transactions')->sum('amount');
 
-        // 2. المبيعات اليدوية وتكلفتها (لحساب الأرباح بدقة)
+        // المبيعات اليدوية وتكلفتها
         $totalSales = DB::table('manual_sales')->sum('total_price');
         $costOfGoodsSold = DB::table('manual_sales')->sum('total_cost');
 
-        // 3. الحسبة المالية: صافي الربح = إجمالي المبيعات - تكلفة البضاعة المباعة - المصاريف
+        // الحسبة المالية: صافي الربح
         $netProfit = $totalSales - $costOfGoodsSold - $totalExpenses;
 
-        // 4. جرد المستودع الحالي (تحويل نوع البيانات لضمان دقة العمليات الحسابية)
+        // جرد المستودع الحالي
         $totalStockPieces = Product::sum(DB::raw('CAST(stock AS INT)'));
         $inventoryCostValue = Product::sum(DB::raw('CAST(stock AS NUMERIC) * CAST(cost_price AS NUMERIC)'));
         $inventorySaleValue = Product::sum(DB::raw('CAST(stock AS NUMERIC) * CAST(price AS NUMERIC)'));
 
-        // 5. جلب البيانات للجداول لتطابق متغيرات صفحة الـ Blade
-        $warehouseProducts = Product::latest()->get(); // بضاعة المستودع (مطابق للـ Blade)
-        $manualSales = DB::table('manual_sales')->latest()->get(); // قائمة المبيعات (مطابق للـ Blade)
-        $expensesList = Expense::latest()->get(); // قائمة المصاريف (مطابق للـ Blade)
+        // جلب البيانات المتوافقة مع متغيرات الـ Blade تماماً
+        $warehouseProducts = Product::latest()->get(); 
+        $manualSales = DB::table('manual_sales')->latest()->get(); 
+        $expensesList = Expense::latest()->get(); 
         $capitalTransactions = DB::table('capital_transactions')->latest()->take(5)->get();
 
-  // ابحث عن هذا السطر في نهاية دالة index() بالـ Controller:
-return view('admin.accounting.index', compact(
-    'totalSales', 'totalExpenses', 'netProfit', 'totalStockPieces', 
-    'inventoryCostValue', 'inventorySaleValue', 'warehouseProducts', 
-    'manualSales', 'expensesList', 'capitalTransactions', 'capital'
-));
+        return view('admin.accounting.index', compact(
+            'totalSales', 'totalExpenses', 'netProfit', 'totalStockPieces', 
+            'inventoryCostValue', 'inventorySaleValue', 'warehouseProducts', 
+            'manualSales', 'expensesList', 'capitalTransactions', 'capital'
+        ));
+    }
 
-    // تحديث بيانات المنتج في المستودع فوراً من الجدول السريع
+    // 2. تحديث بيانات المنتج في المستودع (الكود، السعر، اللون، المقاس، العدد)
     public function updateProduct(Request $request, $id)
     {
         $request->validate([
@@ -65,7 +65,7 @@ return view('admin.accounting.index', compact(
         return redirect()->back()->with('success', 'تم تحديث بيانات الصنف في المستودع والملف المحاسبي فوراً!');
     }
 
-    // تسجيل مصروف تشغيلي جديد
+    // 3. تسجيل مصروف تشغيلي جديد
     public function storeExpense(Request $request)
     {
         $request->validate([
@@ -81,7 +81,7 @@ return view('admin.accounting.index', compact(
         return redirect()->back()->with('success', 'تم تسجيل المصروف التشغيلي بنجاح!');
     }
 
-    // تحديث قيد مصروف تشغيلي
+    // 4. تحديث قيد مصروف تشغيلي
     public function updateExpense(Request $request, $id)
     {
         $request->validate([
@@ -97,14 +97,14 @@ return view('admin.accounting.index', compact(
         return redirect()->back()->with('success', 'تم تعديل قيد المصروف بنجاح!');
     }
 
-    // حذف قيد مصروف تشغيلي
+    // 5. حذف قيد مصروف تشغيلي
     public function destroyExpense($id)
     {
         Expense::where('id', $id)->delete();
         return redirect()->back()->with('success', 'تم حذف قيد المصروف بنجاح وتحديث الحسبة المالية!');
     }
-    
-    // تسجيل عملية بيع يدوي وخصم مخزني مباشر
+        
+    // 6. دالة البيع اليدوي والخصم من المستودع تلقائياً
     public function storeSale(Request $request)
     {
         $request->validate([
@@ -124,16 +124,16 @@ return view('admin.accounting.index', compact(
             return redirect()->back()->with('error', 'خطأ: الكمية المطلوبة غير متوفرة في المستودع! المتاح حالياً: ' . $product->stock);
         }
 
-        // حساب الإجماليات بناءً على أسعار قاعدة البيانات الحقيقية
+        // حساب الإجماليات
         $totalPrice = $request->quantity * $request->sale_price;
         $totalCost = $request->quantity * (float)$product->cost_price;
 
         DB::beginTransaction();
         try {
-            // 1. تسجيل عملية البيع اليدوي
+            // تسجيل عملية البيع اليدوي
             DB::table('manual_sales')->insert([
                 'product_code' => $product->product_code,
-                'product_name' => $product->name ?? $product->product_name ?? 'منتج غير محدد', // حماية للاسم
+                'product_name' => $product->name ?? $product->product_name ?? 'منتج غير محدد',
                 'quantity' => $request->quantity,
                 'sale_price' => $request->sale_price,
                 'total_price' => $totalPrice,
@@ -141,7 +141,7 @@ return view('admin.accounting.index', compact(
                 'created_at' => now()
             ]);
 
-            // 2. خصم الكمية المباعة من الـ stock الفعلي للمستودع تلقائياً
+            // خصم الكمية من المستودع تلقائياً
             $product->decrement('stock', $request->quantity);
 
             DB::commit();
