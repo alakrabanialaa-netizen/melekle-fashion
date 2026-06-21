@@ -6,6 +6,21 @@
 
 <div x-data="{ layout: 'grid' }" class="w-full">
 
+    {{-- 🌟 قسم عرض رسائل النجاح والأخطاء والتنبيهات 🌟 --}}
+    @if(session('success'))
+        <div class="mb-6 p-4 bg-emerald-100 text-emerald-800 rounded-xl font-bold text-sm text-right flex items-center gap-2 shadow-sm border border-emerald-200">
+            <i class="fas fa-check-circle text-emerald-600 text-base"></i> 
+            <span>{{ session('success') }}</span>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="mb-6 p-4 bg-rose-100 text-rose-800 rounded-xl font-bold text-sm text-right flex items-center gap-2 shadow-sm border border-rose-200">
+            <i class="fas fa-exclamation-circle text-rose-600 text-base"></i> 
+            <span>{{ session('error') }}</span>
+        </div>
+    @endif
+
     {{-- رأس الصفحة --}}
     <div class="mb-8">
         <div class="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -17,7 +32,7 @@
             <a href="{{ route('admin.products.create') }}"
                class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition flex items-center gap-2">
                 <i class="fas fa-plus"></i>
-                إضافة منتج
+                <span>إضافة منتج</span>
             </a>
         </div>
 
@@ -53,7 +68,6 @@
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-md transition-all">
                 {{-- الصورة الكبيرة --}}
                 <div class="relative h-48 overflow-hidden">
-                    {{-- تم التعديل هنا: نستخدم الرابط مباشرة بدلاً من Storage::url --}}
                     <img src="{{ $product->images->count() ? $product->images->first()->image : 'https://via.placeholder.com/400x300' }}"
                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 </div>
@@ -61,7 +75,7 @@
                 {{-- تفاصيل المنتج --}}
                 <div class="p-4">
                     <h3 class="font-bold text-gray-800 truncate">{{ $product->name }}</h3>
-                    <p class="mt-2 font-black text-indigo-600 text-lg">{{ number_format($product->price, 2) }} $</p>
+                    <p class="mt-2 font-black text-indigo-600 text-lg">{{ number_format($product->price, 2) }} ₺</p>
                     
                     <div class="mt-2">
                         @if($product->stock > 10)
@@ -74,22 +88,23 @@
                     </div>
                 </div>
 
-                {{-- أزرار التحكم القابلة للظهور عند التحويم --}}
+                {{-- أزرار التحكم عند التحويم --}}
                 <div class="p-3 bg-gray-50 border-t flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <a href="{{ route('admin.products.edit', $product->id) }}"
                        class="flex-1 bg-white border border-blue-200 text-blue-600 text-center py-2 rounded-xl text-sm font-bold hover:bg-blue-600 hover:text-white transition">تعديل</a>
 
-                    <form method="POST" action="{{ route('admin.products.destroy', $product) }}" class="flex-1">
+                    {{-- تم تصحيح مسار الحذف هنا بتمرير الـ id مباشرة --}}
+                    <form method="POST" action="{{ route('admin.products.destroy', $product->id) }}" class="flex-1">
                         @csrf
                         @method('DELETE')
                         <button type="submit" 
-                                onclick="return confirm('هل أنت متأكد من الحذف؟')"
+                                onclick="return confirm('هل أنت متأكد من حذف هذا المنتج نهائياً؟')"
                                 class="w-full bg-white border border-red-200 text-red-600 py-2 rounded-xl text-sm font-bold hover:bg-red-600 hover:text-white transition">حذف</button>
                     </form>
                 </div>
             </div>
         @empty
-            <div class="col-span-full text-center text-gray-500 py-20 bg-white rounded-3xl border border-dashed">لا يوجد منتجات حالياً</div>
+            <div class="col-span-full text-center text-gray-500 py-20 bg-white rounded-3xl border border-dashed">لا توجد منتجات حالياً</div>
         @endforelse
     </div>
 
@@ -111,18 +126,17 @@
                 <tr class="hover:bg-indigo-50/30 transition">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
-                            {{-- تم التعديل هنا أيضاً: نستخدم الرابط مباشرة --}}
                             <img src="{{ $product->images->count() ? $product->images->first()->image : 'https://via.placeholder.com/60' }}"
                                  class="w-12 h-12 rounded-xl object-cover shadow-sm">
                             <span class="font-bold text-gray-700">{{ $product->name }}</span>
                         </div>
                     </td>
-                    <td class="px-6 py-4 font-black text-indigo-600">{{ number_format($product->price, 2) }} $</td>
+                    <td class="px-6 py-4 font-black text-indigo-600">{{ number_format($product->price, 2) }} ₺</td>
                     <td class="px-6 py-4">
                         @if($product->stock > 10)
-                            <span class="text-green-600 text-sm font-bold">متوفر</span>
+                            <span class="text-green-600 text-sm font-bold">متوفر ({{ $product->stock }})</span>
                         @elseif($product->stock > 0)
-                            <span class="text-yellow-600 text-sm font-bold">منخفض</span>
+                            <span class="text-yellow-600 text-sm font-bold">منخفض ({{ $product->stock }})</span>
                         @else
                             <span class="text-red-600 text-sm font-bold">نفد</span>
                         @endif
@@ -134,11 +148,12 @@
                                 <i class="fas fa-edit"></i>
                             </a>
 
-                            <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="inline">
+                            {{-- تم تصحيح مسار الحذف هنا أيضاً --}}
+                            <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" 
-                                        onclick="return confirm('هل أنت متأكد؟')"
+                                        onclick="return confirm('هل أنت متأكد من حذف هذا المنتج نهائياً؟')"
                                         class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition">
                                     <i class="fas fa-trash"></i>
                                 </button>
