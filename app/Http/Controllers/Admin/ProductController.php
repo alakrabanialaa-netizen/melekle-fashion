@@ -38,7 +38,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        // فنكشن تحويل الأرقام العربية/الفارسية إلى إنجليزية لضمان الحفظ في قاعدة البيانات
+        // دالة تحويل الأرقام العربية/الفارسية إلى إنجليزية لضمان الحفظ في قاعدة البيانات
         $convertDigits = function($string) {
             $arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
             $persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
@@ -47,48 +47,47 @@ class ProductController extends Controller
             return str_replace($persian, $english, $string);
         };
 
-        if($request->has('product_price')) {
-            $request->merge(['product_price' => $convertDigits($request->product_price)]);
+        if($request->has('price')) {
+            $request->merge(['price' => $convertDigits($request->price)]);
         }
         if($request->has('cost_price')) {
             $request->merge(['cost_price' => $convertDigits($request->cost_price)]);
         }
-        if($request->has('product_stock')) {
-            $request->merge(['product_stock' => $convertDigits($request->product_stock)]);
+        if($request->has('stock')) {
+            $request->merge(['stock' => $convertDigits($request->stock)]);
         }
 
-        // تم إضافة الحقول الجديدة هنا في الـ Validation
+        // تم تعديل المفاتيح هنا لتطابق الحقول الموحدة الجديدة في الـ Blade
         $validatedData = $request->validate([
-            'product_code'        => 'required|string|unique:products,product_code',
-            'product_name'        => 'required|string|max:255',
-            'product_price'       => 'required|numeric|min:0',
-            'cost_price'          => 'required|numeric|min:0',
-            'product_stock'       => 'nullable', 
-            'product_category'    => 'required|string',
-            'color'               => 'nullable|string|max:100',
-            'product_description' => 'nullable|string',
-            'sizes'               => 'nullable|array',
-            'ages'                => 'nullable|array', 
-            'images'              => 'nullable|array',
-            'images.*'            => 'image|mimes:jpeg,png,webp,gif|max:5120',
-            'video'               => 'nullable|file|mimes:mp4,mov,ogg,qt|max:30720',
+            'product_code' => 'required|string|unique:products,product_code',
+            'name'         => 'required|string|max:255',
+            'price'        => 'required|numeric|min:0',
+            'cost_price'   => 'required|numeric|min:0',
+            'stock'        => 'nullable', 
+            'category'     => 'required|string',
+            'color'        => 'nullable|string|max:100',
+            'description'  => 'nullable|string',
+            'sizes'        => 'nullable|array',
+            'ages'         => 'nullable|array', 
+            'images'       => 'nullable|array',
+            'images.*'     => 'image|mimes:jpeg,png,webp,gif|max:5120',
+            'video'        => 'nullable|file|mimes:mp4,mov,ogg,qt|max:30720',
         ]);
 
         try {
             return DB::transaction(function () use ($request, $validatedData) {
-                // تم إدراج الحقول المحاسبية الجديدة هنا لتخزن في الـ Database فوراً
                 $product = Product::create([
                     'product_code' => $validatedData['product_code'],
-                    'name'         => $validatedData['product_name'],
-                    'price'        => $validatedData['product_price'],
+                    'name'         => $validatedData['name'],
+                    'price'        => $validatedData['price'],
                     'cost_price'   => $validatedData['cost_price'],
                     'color'        => $validatedData['color'] ?? null,
-                    'description'  => $validatedData['product_description'] ?? null,
-                    'category'     => $validatedData['product_category'],
-                    'stock'        => (int)($request->product_stock ?? 0),
+                    'description'  => $validatedData['description'] ?? null,
+                    'category'     => $validatedData['category'],
+                    'stock'        => (int)($request->stock ?? 0),
                     'sizes'        => $request->input('sizes', []),
                     'ages'         => $request->input('ages', []), 
-                    'slug'         => $this->generateSlug($validatedData['product_name']),
+                    'slug'         => $this->generateSlug($validatedData['name']),
                 ]);
 
                 $cloudName = "doajfaz15";
@@ -157,26 +156,46 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
+        // دالة تحويل الأرقام العربية للتعديل أيضاً لضمان السلامة
+        $convertDigits = function($string) {
+            $arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+            $persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','٩'];
+            $english = range(0, 9);
+            $string = str_replace($arabic, $english, $string);
+            return str_replace($persian, $english, $string);
+        };
+
+        if($request->has('price')) { $request->merge(['price' => $convertDigits($request->price)]); }
+        if($request->has('cost_price')) { $request->merge(['cost_price' => $convertDigits($request->cost_price)]); }
+        if($request->has('stock')) { $request->merge(['stock' => $convertDigits($request->stock)]); }
+
+        // تحديث الفالياديشن ليشمل كافة الحقول المدعومة والمضافة حديثاً للتعديل
         $validatedData = $request->validate([
-            'product_name' => 'required|string|max:255',
-            'product_price' => 'required|numeric|min:0',
-            'product_category' => 'required|string',
-            'product_description' => 'nullable|string',
-            'product_stock' => 'nullable',
-            'sizes' => 'nullable|array',
-            'ages' => 'nullable|array', 
+            'product_code' => 'required|string|unique:products,product_code,' . $product->id,
+            'name'         => 'required|string|max:255',
+            'price'        => 'required|numeric|min:0',
+            'cost_price'   => 'required|numeric|min:0',
+            'category'     => 'required|string',
+            'description'  => 'nullable|string',
+            'stock'        => 'nullable',
+            'color'        => 'nullable|string|max:100',
+            'sizes'        => 'nullable|array',
+            'ages'         => 'nullable|array', 
         ]);
 
         try {
             $product->update([
-                'name'        => $validatedData['product_name'],
-                'price'       => $validatedData['product_price'],
-                'category'    => $validatedData['product_category'],
-                'description' => $validatedData['product_description'] ?? null,
-                'stock'       => (int)($request->product_stock ?? 0),
-                'sizes'       => $request->input('sizes', []),
-                'ages'        => $request->input('ages', []), 
-                'slug'        => $this->generateSlug($validatedData['product_name'], $product->id),
+                'product_code' => $validatedData['product_code'],
+                'name'         => $validatedData['name'],
+                'price'        => $validatedData['price'],
+                'cost_price'   => $validatedData['cost_price'],
+                'category'     => $validatedData['category'],
+                'description'  => $validatedData['description'] ?? null,
+                'color'        => $validatedData['color'] ?? null,
+                'stock'        => (int)($request->stock ?? 0),
+                'sizes'        => $request->input('sizes', []),
+                'ages'         => $request->input('ages', []), 
+                'slug'         => $this->generateSlug($validatedData['name'], $product->id),
             ]);
 
             return redirect()->route('admin.products.index')->with('success', 'تم تعديل المنتج بنجاح');
@@ -185,13 +204,15 @@ class ProductController extends Controller
         }
     }
 
-    public function destroy(Product $product)
+    // تعديل الدالة لاستقبال الـ ID مباشرة لضمان نجاح الحذف من مسار الـ Blade المصحح
+    public function destroy($id)
     {
         try {
+            $product = Product::findOrFail($id);
             $product->delete();
             return redirect()->route('admin.products.index')->with('success', 'تم حذف المنتج بنجاح');
         } catch (\Exception $e) {
-            return redirect()->route('admin.products.index')->with('error', 'خطأ في الحذف');
+            return redirect()->route('admin.products.index')->with('error', 'خطأ في الحذف: ' . $e->getMessage());
         }
     }
 
