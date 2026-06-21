@@ -36,7 +36,6 @@
             </ul>
         </div>
     @endif
-    {{-- 🌟 نهاية قسم الرسائل الإشعارية 🌟 --}}
 
     {{-- 1. الهيدر العلوي --}}
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
@@ -57,7 +56,6 @@
 
     {{-- 2. كروت المؤشرات المالية الحية --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-
         {{-- إجمالي المبيعات --}}
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
             <div>
@@ -112,7 +110,6 @@
                 <i class="fas fa-warehouse"></i>
             </div>
         </div>
-
     </div>
 
     {{-- 3. وحدة تسجيل المبيعات السريعة والخصم من المستودع --}}
@@ -129,7 +126,7 @@
                 <input type="text" name="product_code" required placeholder="مثال: MK-57685" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-indigo-500 transition-all">
             </div>
             <div>
-                <label class="block text-xs font-bold text-slate-500 mb-2">الكمية المباعة</label>
+                <label class="block text-xs font-bold text-slate-500 mb-2">الالكمية المباعة</label>
                 <input type="number" name="quantity" value="1" min="1" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-indigo-500 transition-all text-center">
             </div>
             <div>
@@ -165,20 +162,21 @@
                         <th class="p-4">سعر التكلفة (الشراء)</th>
                         <th class="p-4">سعر البيع المعروض</th>
                         <th class="p-4">إجمالي رأس المال فيه</th>
+                        <th class="p-4 text-emerald-600">إجمالي المبيعات المحصلة</th> {{-- إضافة العمود الجديد المطلوب --}}
                         <th class="p-4 text-center">الإجراء</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 text-sm font-medium text-slate-700">
                     @forelse($warehouseProducts ?? [] as $product)
                         <tr class="hover:bg-slate-50/70 transition-colors">
-                            {{-- نموذج مخفي مستقل تماماً خارج خلايا الجدول لضمان توافقية التحديث --}}
                             <form id="form-update-{{ $product->id }}" action="{{ route('admin.warehouse.update', $product->id) }}" method="POST" class="hidden">
                                 @csrf
                                 @method('PUT')
                             </form>
 
                             <td class="p-4">
-                                <input type="text" name="product_code" form="form-update-{{ $product->id }}" value="{{ $product->product_code }}" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg w-32 text-xs font-bold px-2 py-1 focus:outline-none">
+                                {{-- تم وضع التعديل هنا ليدعم تعبير الخيار البديل في حال كان مسمى الحقل في الـ Object مختصراً --}}
+                                <input type="text" name="product_code" form="form-update-{{ $product->id }}" value="{{ $product->product_code ?? $product->code }}" class="bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-lg w-32 text-xs font-bold px-2 py-1 focus:outline-none">
                             </td>
                             <td class="p-4 text-slate-500 font-normal">
                                 {{ $product->product_name ?? $product->name ?? 'صنف غير مسمى' }}
@@ -204,6 +202,16 @@
                             <td class="p-4 text-slate-900 font-black">
                                 {{ number_format((int)$product->stock * (float)($product->cost_price ?? 0), 2) }} ₺
                             </td>
+                            
+                            {{-- حساب إجمالي المبيعات المحصلة لهذا المنتج عبر علاقة المبيعات (Sales Relation) --}}
+                            <td class="p-4 text-emerald-700 font-extrabold">
+                                @php
+                                    // فرضاً أن العلاقة مجهزة في الموديل، أو يتم الفلترة البرمجية من الـ collection الممرر
+                                    $productSalesTotal = font_black($manualSales ?? collect())->where('product_code', $product->product_code ?? $product->code)->sum('total_price');
+                                @endphp
+                                {{ number_format($productSalesTotal, 2) }} ₺
+                            </td>
+
                             <td class="p-4 text-center">
                                 <button type="submit" form="form-update-{{ $product->id }}" class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700 transition-colors text-xs flex items-center gap-1 mx-auto font-bold shadow-sm">
                                     <i class="fas fa-sync-alt"></i> تحديث
@@ -212,7 +220,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="p-8 text-center text-slate-400 font-medium">لا توجد منتجات مسجلة بالمستودع حالياً.</td>
+                            <td colspan="9" class="p-8 text-center text-slate-400 font-medium">لا توجد منتجات مسجلة بالمستودع حالياً.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -222,7 +230,6 @@
 
     {{-- 5. قسم إدارة وتسجيل المصاريف التشغيلية --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
         {{-- كرت الإضافة --}}
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm lg:col-span-1 h-fit">
             <div class="flex items-center gap-2 mb-4">
@@ -280,7 +287,6 @@
                 </table>
             </div>
         </div>
-
     </div>
 
 </div>
