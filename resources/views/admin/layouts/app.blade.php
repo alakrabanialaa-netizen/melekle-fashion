@@ -73,10 +73,6 @@
     <span class="font-bold">العملاء والموردين</span>
 </a>
 
-            <!-- النظام -->
-            <p class="text-xs font-bold text-gray-400 uppercase px-4 mt-6 mb-2 tracking-widest">
-                النظام
-            </p>
 
         <a href="{{ route('admin.users.index') }}"
    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 hover:text-indigo-600 hover:bg-gray-50">
