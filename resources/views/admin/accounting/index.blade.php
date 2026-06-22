@@ -112,31 +112,54 @@
         </div>
     </div>
 
-    {{-- 3. وحدة تسجيل المبيعات السريعة والخصم من المستودع --}}
+    {{-- 3. جدول عرض المبيعات اليدوية المضافة --}}
     <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm mb-8">
         <div class="flex items-center gap-2 mb-4">
             <div class="w-2 h-6 bg-indigo-600 rounded-full"></div>
-            <h3 class="text-lg font-bold text-slate-800">وحدة البيع المباشر والخصم الفوري للمخزون</h3>
+            <h3 class="text-lg font-bold text-gray-800">📋 سجل المبيعات اليدوية والقيود المالية المكتوبة</h3>
         </div>
-         
-        <form action="{{ route('admin.sales.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-            @csrf
-            <div>
-                <label class="block text-xs font-bold text-slate-500 mb-2">كود منتج المستودع (Barcode / Code)</label>
-                <input type="text" name="product_code" required placeholder="مثال: MK-57685" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-indigo-500 transition-all">
-            </div>
-            <div>
-                <label class="block text-xs font-bold text-slate-500 mb-2">الكمية المباعة</label>
-                <input type="number" name="quantity" value="1" min="1" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-indigo-500 transition-all text-center">
-            </div>
-            <div>
-                <label class="block text-xs font-bold text-slate-500 mb-2">سعر البيع الفعلي المحصل (₺)</label>
-                <input type="number" step="0.01" name="sale_price" required placeholder="0.00" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-indigo-500 transition-all">
-            </div>
-            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-sm shadow-sm transition-all flex items-center justify-center gap-2">
-                <i class="fas fa-check-circle"></i> إتمام حركة البيع والخصم
-            </button>
-        </form>
+        
+        <div class="overflow-x-auto rounded-xl border border-slate-100">
+            <table class="w-full text-right border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 text-slate-500 text-xs font-bold border-b border-slate-100">
+                        <th class="p-4">كود المنتج</th>
+                        <th class="p-4">اسم المنتج</th>
+                        <th class="p-4">الكمية</th>
+                        <th class="p-4">سعر البيع</th>
+                        <th class="p-4">الإجمالي المحصل</th>
+                        <th class="p-4">التاريخ والوقت</th>
+                        <th class="p-4 text-center">العمليات</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-sm font-medium text-slate-700">
+                    @forelse($manualSales ?? [] as $sale)
+                    <tr class="hover:bg-slate-50/70 transition-colors">
+                        <td class="p-4 text-slate-900 font-bold">{{ $sale->product_code }}</td>
+                        <td class="p-4 text-slate-500 font-normal">{{ $sale->product_name }}</td>
+                        <td class="p-4 text-center text-slate-800 font-black">{{ $sale->quantity }}</td>
+                        <td class="p-4 text-emerald-600 font-bold">{{ number_format($sale->sale_price, 2) }} ₺</td>
+                        <td class="p-4 text-slate-900 font-black">{{ number_format($sale->total_price, 2) }} ₺</td>
+                        <td class="p-4 text-slate-400 text-xs font-medium">{{ \Carbon\Carbon::parse($sale->created_at)->format('Y-m-d H:i') }}</td>
+                        <td class="p-4 text-center">
+                            <div class="flex items-center justify-center gap-3">
+                                <button onclick='openEditModal({!! json_encode($sale) !!})' class="text-indigo-600 hover:text-indigo-900 flex items-center gap-1 font-bold text-xs bg-indigo-50 px-2.5 py-1.5 rounded-lg transition-all">
+                                    <i class="fas fa-edit"></i> تعديل
+                                </button>
+                                <a href="{{ url('admin/sales/delete/'.$sale->id) }}" class="text-rose-600 hover:text-rose-900 flex items-center gap-1 font-bold text-xs bg-rose-50 px-2.5 py-1.5 rounded-lg transition-all" onclick="return confirm('هل أنت متأكد من حذف هذا القيد المالي بالكامل؟')">
+                                    <i class="fas fa-trash-alt"></i> حذف
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7" class="p-8 text-center text-slate-400 font-medium">لا توجد مبيعات مسجلة في الدفتر حالياً.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
     {{-- 4. لوحة الإدارة السريعة لتحديث بيانات المستودع --}}
@@ -202,7 +225,6 @@
                                 {{ number_format((int)$product->stock * (float)($product->cost_price ?? 0), 2) }} ₺
                             </td>
                             
-                            {{-- حساب إجمالي المبيعات المحصلة النظيف بعد الفلترة --}}
                             <td class="p-4 text-emerald-700 font-extrabold">
                                 @php
                                     $currentCode = $product->product_code ?? $product->code;
@@ -247,7 +269,7 @@
                     <input type="number" step="0.01" name="amount" required placeholder="0.00" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-indigo-500 transition-all">
                 </div>
                 <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-2.5 rounded-xl text-sm shadow-sm transition-all">
-                    إدراج وقيد المصروف فوراً
+                    إدرج وقيد المصروف فوراً
                 </button>
             </form>
         </div>
@@ -289,5 +311,71 @@
     </div>
 
 </div>
+
+{{-- 🌟 6. نافذة الـ Modal التفاعلية لتعديل القيود اليدوية 🌟 --}}
+<div id="editSaleModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-100 max-w-md w-full p-6 animate-fade-in text-right" dir="rtl">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+            <h3 class="text-lg font-black text-slate-800 flex items-center gap-2">
+                <i class="fas fa-edit text-indigo-600"></i> تعديل قيد البيع اليدوي
+            </h3>
+            <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
+        </div>
+
+        <form id="editSaleForm" action="" method="POST" class="space-y-4">
+            @csrf
+            @method('PUT')
+
+            <div>
+                <label class="block text-xs font-bold text-slate-500 mb-1">كود المنتج</label>
+                <input type="text" id="modal_product_code" readonly class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-500 focus:outline-none">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-500 mb-1">الكمية المباعة</label>
+                <input type="number" name="quantity" id="modal_quantity" required min="1" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-indigo-500 transition-all">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-500 mb-1">سعر قطعة البيع (₺)</label>
+                <input type="number" step="0.01" name="sale_price" id="modal_sale_price" required min="0" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-indigo-500 transition-all">
+            </div>
+
+            <div class="flex items-center gap-3 pt-2">
+                <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-sm shadow-sm transition-all text-center">
+                    حفظ التغييرات المحدثة
+                </button>
+                <button type="button" onclick="closeEditModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 px-4 rounded-xl text-sm transition-all">
+                    إلغاء
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{-- 🌟 7. كود السكريبت لتشغيل الـ Modal ديناميكياً 🌟 --}}
+<script>
+    function openEditModal(sale) {
+        // تحديد المسار Action للفورم بشكل ديناميكي حسب الـ ID التابع للقيد المالي
+        document.getElementById('editSaleForm').action = "{{ url('admin/sales/update') }}/" + sale.id;
+        
+        // تعبئة حقول المدخلات بالبيانات القديمة تلقائياً
+        document.getElementById('modal_product_code').value = sale.product_code;
+        document.getElementById('modal_quantity').value = sale.quantity;
+        document.getElementById('modal_sale_price').value = sale.sale_price;
+        
+        // إظهار النافذة المنبثقة
+        const modal = document.getElementById('editSaleModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeEditModal() {
+        // إخفاء النافذة المنبثقة
+        const modal = document.getElementById('editSaleModal');
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }
+</script>
 
 @endsection
