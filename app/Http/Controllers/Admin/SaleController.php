@@ -13,10 +13,11 @@ class SaleController extends Controller
 {
     public function store(Request $request)
     {
+        // ✅ تم تصحيح علامات الساواة إلى نقطتين فوق بعض لضمان عمل الـ Validator بدون أخطاء
         $request->validate([
             'product_code' => 'required|string',
-            'quantity'     => 'required|integer|min=1',
-            'sale_price'   => 'required|numeric|min=0',
+            'quantity'     => 'required|integer|min:1',
+            'sale_price'   => 'required|numeric|min:0', 
         ]);
 
         // تنظيف الكود المدخل من أي فراغات زائدة قد تأتي من النسخ واللصق
