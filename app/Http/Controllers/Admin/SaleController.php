@@ -13,31 +13,31 @@ class SaleController extends Controller
 {
     public function store(Request $request)
     {
-        // ✅ تم تصحيح علامات الساواة إلى نقطتين فوق بعض لضمان عمل الـ Validator بدون أخطاء
         $request->validate([
             'product_code' => 'required|string',
             'quantity'     => 'required|integer|min:1',
-            'sale_price'   => 'required|numeric|min:0', 
+            'sale_price'   => 'required|numeric|min:0',
         ]);
 
-        // تنظيف الكود المدخل من أي فراغات زائدة قد تأتي من النسخ واللصق
+        // تنظيف الكود من الفراغات
         $inputCode = trim($request->product_code);
 
         DB::beginTransaction();
 
         try {
-            // البحث المرن: نجرب المطابقة التامة أو باستخدام LIKE لضمان تلافي مشاكل الفراغات المخفية
-            // والبحث في الحقلين المحتملين (product_code أو code)
+            // ✅ تصحيح الاستعلام ليتوافق مع PostgreSQL (Supabase)
+            // تم إزالة عمود "code" غير الموجود وضبط الـ LIKE لتبحث كـ String آمن
             $product = Product::where('product_code', $inputCode)
-                              ->orWhere('code', $inputCode)
                               ->orWhere('product_code', 'LIKE', '%' . $inputCode . '%')
                               ->first();
 
+            // إذا لم يتم العثور على المنتج
             if (!$product) {
                 return back()->with('error', "خطأ: كود المنتج ({$inputCode}) غير موجود بالمستودع! تأكد من الكود المكتوب في الجدول بالأسفل.");
             }
 
-            if ($product->stock < $request->quantity) {
+            // التحقق من المخزون
+            if ((int)$product->stock < (int)$request->quantity) {
                 return back()->with('error', "المخزون غير كافٍ! الكمية المتاحة حالياً للمنتج ({$product->name}) هي: {$product->stock}");
             }
 
@@ -53,8 +53,6 @@ class SaleController extends Controller
                 'total_profit' => $totalProfit,
             ]);
 
-            // هنا نقوم بالتحقق برمجياً من اسم الحقل في جدول الـ items لتفادي الـ Crash
-            // إذا كان الجدول عندك يستخدم product_variant_id بدلاً من product_id سنمرر له الـ ID المتوفر
             $itemData = [
                 'sale_id'  => $sale->id,
                 'quantity' => $quantity,
@@ -62,7 +60,7 @@ class SaleController extends Controller
                 'profit'   => $totalProfit,
             ];
 
-            // فحص ذكي للحقول لضمان عدم حدوث خطأ Column not found
+            // فحص الأعمدة لجدول تفاصيل المبيعات
             if (\Schema::hasColumn('sale_items', 'product_id')) {
                 $itemData['product_id'] = $product->id;
             } elseif (\Schema::hasColumn('sale_items', 'product_variant_id')) {
@@ -71,7 +69,7 @@ class SaleController extends Controller
 
             SaleItem::create($itemData);
 
-            // الخصم من حقل المخزون المعتمد
+            // الخصم الفوري من المخزن
             $product->decrement('stock', $quantity);
 
             DB::commit();
