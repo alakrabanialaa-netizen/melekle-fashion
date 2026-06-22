@@ -57,8 +57,13 @@ class SaleController extends Controller
                 'created_at'   => now()
             ]);
 
-            // الخصم الفوري للقطع من مخزون هذا المنتج بجدول المنتجات
-            $product->decrement('stock', $quantity);
+          // ✅ تحويل المخزون النصي إلى رقم، طرح الكمية، ثم إعادة الحفظ بأمان متوافق مع Postgres
+            $currentStock = (int)($product->stock ?? 0);
+            $newStock = $currentStock - $quantity;
+            
+            $product->update([
+                'stock' => (string)$newStock
+            ]);
 
             DB::commit();
 
