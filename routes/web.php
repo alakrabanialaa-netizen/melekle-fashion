@@ -29,8 +29,6 @@ use App\Http\Middleware\RedirectIfAuthenticated;
 
 // استدعاء الكنترولر الصحيح للسلة
 use App\Http\Controllers\CartController;
-
-// ⭐ تم إضافة استدعاء الـ ShopController هنا لإصلاح خطأ الـ Target class does not exist
 use App\Http\Controllers\ShopController;
 
 /*
@@ -69,12 +67,15 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/change/password', [AdminController::class, 'AdminChangePassword'])->name('admin.change.password');
     Route::post('/admin/update/password', [AdminController::class, 'AdminUpdatePassword'])->name('admin.update.password');
     
-    // 🛍️ 1️⃣ قسم المنتجات (products)
+    // 🛍️ 1️⃣ قسم المنتجات الأساسي (products)
     Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products.index');
     Route::get('/admin/products/create', [ProductController::class, 'create'])->name('admin.products.create');
     Route::post('/admin/products/store', [ProductController::class, 'store'])->name('admin.products.store');
+    
+    // ⭐ تم تصحيح مسار فتح صفحة التعديل ليوجه لدالة edit وليس index!
+    Route::get('/admin/products/edit/{id}', [ProductController::class, 'edit'])->name('admin.products.edit');
+    Route::put('/admin/products/update/{product}', [ProductController::class, 'update'])->name('admin.products.update');
     Route::delete('/admin/products/destroy/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
-    Route::get('/admin/products/store', [ProductController::class, 'index']);
     
     Route::get('/admin/products-fix', [ProductController::class, 'index'])->name('products.index'); 
     Route::get('/admin/products/create-fix', [ProductController::class, 'create'])->name('products.create');
@@ -91,7 +92,7 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/clients/create', [ClientController::class, 'create'])->name('admin.clients.create');
     Route::get('/admin/clients-fix', [ClientController::class, 'index'])->name('clients.index'); 
 
-    // 👨‍💻 4️⃣ قسم المستخدمين والآدمنية (users)
+    // 4️⃣ قسم المستخدمين والآدمنية (users)
     Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
     Route::get('/admin/users/fix', [AdminUserController::class, 'index'])->name('users.index'); 
 
@@ -99,12 +100,12 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/accounting', [AccountingController::class, 'index'])->name('admin.accounting.index');
     Route::get('/admin/accounting/fix', [AccountingController::class, 'index'])->name('accounting.index'); 
 
-    // مسار تعديل وحفظ منتجات المستودع محاسبياً وحركياً
-    Route::put('/admin/warehouse/update/{id}', [AccountingController::class, 'updateProduct'])->name('admin.warehouse.update');
+    // مسار تعديل وحفظ منتجات المستودع الفوري - تم جعله POST و PUT معاً لدعم كافة أنواع الـ Forms بالـ Blade
+    Route::match(['POST', 'PUT'], '/admin/warehouse/update/{id}', [AccountingController::class, 'updateProduct'])->name('admin.warehouse.update');
     Route::post('/admin/accounting/product/update/{id}', [AccountingController::class, 'updateProduct'])->name('admin.accounting.product.update');
 
-    // مسار تسجيل البيع اليدوي والخصم الفوري من المخزن
-    Route::post('/admin/sales/store', [AccountingController::class, 'storeSale'])->name('admin.sales.store');
+    // ⭐ مسار تسجيل البيع اليدوي والخصم الفوري الموجه للـ SaleController المطور والمصلح!
+    Route::post('/admin/sales/store', [SaleController::class, 'store'])->name('admin.sales.store');
 
     // روابط إدارة وحفظ المصاريف التشغيلية المرتبطة بالدفتر المالي
     Route::post('/admin/expenses/store', [AccountingController::class, 'storeExpense'])->name('admin.expenses.store');
@@ -117,11 +118,10 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
 
     // 💰 6️⃣ قسم المصاريف القديم الاحتياطي (expenses)
     Route::get('/admin/expenses', [ExpenseController::class, 'index'])->name('admin.expenses.index');
-    Route::get('/admin/expenses/fix', [ExpenseController::class, 'index'])->name('accounting.index'); 
     Route::post('/admin/expenses', [ExpenseController::class, 'store'])->name('admin.expenses.store_old');
     Route::delete('/admin/expenses/{id}', [ExpenseController::class, 'destroy'])->name('admin.expenses.destroy_old');
 
-    // ⚙️ مسارات إضافية احتياطية للموقع
+    // مسارات إضافية احتياطية للموقع
     Route::get('/admin/settings/site', [AdminDashboardController::class, 'index'])->name('admin.settings.index');
     Route::get('/admin/reports/all', [AdminDashboardController::class, 'index'])->name('admin.reports.index');
     Route::get('/admin/reviews/all', [AdminDashboardController::class, 'index'])->name('admin.reviews.index');
@@ -147,37 +147,33 @@ Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->na
 // ==================== 6. تفاصيل المنتجات والتنقل والأقسام الديناميكية الذكية ====================
 Route::get('/category/{category}', [ShopController::class, 'category'])->name('category.show');
 
-// مسارين مستقلين ليدعم النظام الكلمتين (المفرد والجمع) معاً بنجاح للمنتجات
 Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
 Route::get('/product/info/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('products.show');
 
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
 
-// 👦 قسم ملابس الأولاد
+// الأقسام الثابتة
 Route::get('/category/boys', function() { 
-    $category = \App\Models\Category::where('category_name', 'like', '%ولد%')->orWhere('category_slug', 'like', '%boy%')->first();
+    $category = \App\Models\Category::where('category_name', 'like', '%ولد%')->orWhere('category_slug', 'like', '%boys%')->first();
     $products = \App\Models\Product::where('category', 'like', '%ولد%')->where('status', 1)->get();
     return view('categories.boys', compact('products', 'category')); 
 })->name('category.boys');
 
-// 👧 قسم ملابس البنات
 Route::get('/category/girls', function() { 
-    $category = \App\Models\Category::where('category_name', 'like', '%بنات%')->orWhere('category_slug', 'like', '%girl%')->first();
+    $category = \App\Models\Category::where('category_name', 'like', '%بنات%')->orWhere('category_slug', 'like', '%girls%')->first();
     $products = \App\Models\Product::where('category', 'like', '%بنات%')->where('status', 1)->get();
     return view('categories.girls', compact('products', 'category')); 
 })->name('category.girls');
 
-// 👶 قسم ملابس الرضع
 Route::get('/category/babies', function() { 
-    $category = \App\Models\Category::where('category_name', 'like', '%رضع%')->orWhere('category_name', 'like', '%طفل%')->orWhere('category_slug', 'like', '%bab%')->first();
+    $category = \App\Models\Category::where('category_name', 'like', '%رضع%')->orWhere('category_name', 'like', '%طفل%')->orWhere('category_slug', 'like', '%babies%')->first();
     $products = \App\Models\Product::where('category', 'like', '%رضع%')->orWhere('category', 'like', '%طفل%')->where('status', 1)->get();
     return view('categories.babies', compact('products', 'category')); 
 })->name('category.babies');
 
-// 👩 قسم ملابس الأمهات
 Route::get('/category/mothers', function() { 
-    $category = \App\Models\Category::where('category_name', 'like', '%أمهات%')->orWhere('category_name', 'like', '%نساء%')->orWhere('category_slug', 'like', '%moth%')->first();
+    $category = \App\Models\Category::where('category_name', 'like', '%أمهات%')->orWhere('category_name', 'like', '%نساء%')->orWhere('category_slug', 'like', '%mothers%')->first();
     $products = \App\Models\Product::where('category', 'like', '%أمهات%')->orWhere('category', 'like', '%نساء%')->where('status', 1)->get();
     return view('categories.mothers', compact('products', 'category')); 
 })->name('category.mothers');
@@ -185,8 +181,6 @@ Route::get('/category/mothers', function() {
 // ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات ====================
 Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
 Route::post('/cart/data/store/{id}', [CartController::class, 'add'])->name('cart.add');
-
-// روت احتياطي بصيغة GET لمعالجة الضغطات المباشرة لروابط السلة (تجنب الـ 404)
 Route::any('/cart-add/{id}', [CartController::class, 'add']);
 Route::get('/cart-remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
@@ -196,12 +190,10 @@ Route::post('/dcart/data/store/{id}', [CartController::class, 'AddToCartDetails'
 Route::post('/add-to-wishlist/{product_id}', [WishlistController::class, 'AddToWishlist']);
 Route::post('/add-to-compare/{product_id}', [CompareController::class, 'AddToCompare']);
 
-// مسارات الكوبون والـ السلة لمنع خطأ Attribute [couponApply]
 Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
 Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
 Route::get('/coupon-remove', [CartController::class, 'CouponRemove']);
 
-/* استدعاء صفحة الدفع وعمليات تعديل عناصر السلة */
 Route::get('/checkout', [CheckoutController::class, 'CheckoutCreate'])->name('checkout');
 Route::get('/get-cart-product', [CartController::class, 'GetCartProduct']);
 Route::get('/cart-increment/{rowId}', [CartController::class, 'CartIncrement']);
@@ -216,8 +208,6 @@ Route::post('/search', [IndexController::class, 'ProductSearch'])->name('product
 Route::post('/search-product', [IndexController::class, 'SearchProduct']);
 Route::get('/shop', [IndexController::class, 'ShopPage'])->name('shop.page');
 Route::post('/shop/filter', [IndexController::class, 'ShopFilter'])->name('shop.filter');
-
-Route::get('/admin/products/edit/{id}', [ProductController::class, 'index'])->name('admin.products.edit');
 
 // ==================== 9. تحويلات تلقائية ذكية لمنع الـ 404 ====================
 Route::redirect('/home', '/admin/dashboard');
@@ -236,5 +226,5 @@ Route::get('/clear-cache', function () {
         'created_at' => now(),
         'updated_at' => now(),
     ]);
-    return "✅ تم تنظيف كاش الموقع بنجاح، وتأمين حساب الآدمن دون مسح تعديلات قاعدة البيانات في Supabase!";
+    return "✅ تم تنظيف كاش الموقع بنجاح، وتأمين حساب الآدمن وتثبيت كافة الروابط والمسارات الجديدة محاسبياً!";
 });
