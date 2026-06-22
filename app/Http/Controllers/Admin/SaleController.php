@@ -46,7 +46,7 @@ class SaleController extends Controller
             $totalPrice = $actualSalePrice * $quantity;
             $totalCost = $costPrice * $quantity;
 
-            // ✅ الإدراج المباشر في جدول manual_sales المعتمد لديك في قاعدة البيانات
+            // ✅ تم إزالة 'updated_at' ليتوافق 100% مع أعمدة الجدول في Supabase منعاً للـ Crash
             DB::table('manual_sales')->insert([
                 'product_code' => $product->product_code,
                 'product_name' => $product->name ?? 'منتج غير محدد',
@@ -54,8 +54,7 @@ class SaleController extends Controller
                 'sale_price'   => $actualSalePrice,
                 'total_price'  => $totalPrice,
                 'total_cost'   => $totalCost,
-                'created_at'   => now(),
-                'updated_at'   => now()
+                'created_at'   => now()
             ]);
 
             // الخصم الفوري للقطع من مخزون هذا المنتج بجدول المنتجات
