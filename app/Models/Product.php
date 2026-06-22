@@ -34,6 +34,7 @@ class Product extends Model
     }
 
     protected $fillable = [
+        'product_code', // ✅ أضف هذا السطر هنا ليتم السماح بحفظ كود المنتج
         'name',
         'price',
         'stock',
@@ -49,7 +50,6 @@ class Product extends Model
         'video',
         'image',
     ];
-
     protected $casts = [
         'sizes' => 'array',
         'colors' => 'array',
