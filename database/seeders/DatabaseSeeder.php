@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
-class UsersTableSeeder extends Seeder
+class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
@@ -18,11 +18,11 @@ class UsersTableSeeder extends Seeder
             'is_admin' => 1,
         ]);
 
-        // الأدمن الجديد (قم بتغيير البيانات هنا)
+        // الأدمن الجديد
         User::create([
             'name' => 'New Admin', 
             'email' => 'newadmin@example.com',
-            'password' => Hash::make('password123'), // كلمة مرور الأدمن الجديد
+            'password' => Hash::make('password123'),
             'is_admin' => 1,
         ]);
     }
