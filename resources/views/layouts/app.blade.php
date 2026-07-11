@@ -142,7 +142,7 @@
                         <a href="/category/girls" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👧 ملابس بنات</a>
                         <a href="/category/babies" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👶 ملابس رضع</a>
                         <a href="/category/mothers" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👩 ملابس نساء</a>
-                        <a href="{{ route('category.offers') }}" class="block px-6 py-3 text-red-500 bg-red-50 hover:bg-red-100 transition font-black border-t border-dashed border-red-100">🔥 التشكيلة الجديدة %</a>
+                        <a href="{{ route('category.offers') }}" class="block px-6 py-3 text-red-500 bg-red-50 hover:bg-red-100 transition font-black border-t border-dashed border-red-100">🔥 عروض تركية</a>
                     </div>
                 </div>
             </nav>
