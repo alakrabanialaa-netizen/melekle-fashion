@@ -40,8 +40,6 @@ use App\Http\Controllers\ShopController;
 // ==================== 1. الصفحة الرئيسية والـ Guest والروابط العامة ====================
 Route::get('/', [IndexController::class, 'Index'])->name('welcome');
 
-// ⭐ تم نقل روت صفحة العروض إلى قسم الأقسام في الأسفل ليعمل بشكل مستقل وديناميكي تماماً دون صلاحيات آدمن
-
 // روابط الصفحات الثابتة لمنع الـ RouteNotFoundException
 Route::get('/contact', function() { return view('contact'); })->name('contact');
 Route::get('/privacy-policy', function() { return view('privacy-policy'); })->name('privacy-policy');
@@ -74,7 +72,6 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/products/create', [ProductController::class, 'create'])->name('admin.products.create');
     Route::post('/admin/products/store', [ProductController::class, 'store'])->name('admin.products.store');
     
-    // ⭐ تم تصحيح مسار فتح صفحة التعديل ليوجه لدالة edit وليس index!
     Route::get('/admin/products/edit/{id}', [ProductController::class, 'edit'])->name('admin.products.edit');
     Route::put('/admin/products/update/{product}', [ProductController::class, 'update'])->name('admin.products.update');
     Route::delete('/admin/products/destroy/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
@@ -102,19 +99,15 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/accounting', [AccountingController::class, 'index'])->name('admin.accounting.index');
     Route::get('/admin/accounting/fix', [AccountingController::class, 'index'])->name('accounting.index'); 
 
-    // مسار تعديل وحفظ منتجات المستودع الفوري - تم جعله POST و PUT معاً لدعم كافة أنواع الـ Forms بالـ Blade
     Route::match(['POST', 'PUT'], '/admin/warehouse/update/{id}', [AccountingController::class, 'updateProduct'])->name('admin.warehouse.update');
     Route::post('/admin/accounting/product/update/{id}', [AccountingController::class, 'updateProduct'])->name('admin.accounting.product.update');
 
-    // ⭐ مسار تسجيل البيع اليدوي والخصم الفوري الموجه للـ SaleController المطور والمصلح!
     Route::post('/admin/sales/store', [SaleController::class, 'store'])->name('admin.sales.store');
 
-    // روابط إدارة وحفظ المصاريف التشغيلية المرتبطة بالدفتر المالي
     Route::post('/admin/expenses/store', [AccountingController::class, 'storeExpense'])->name('admin.expenses.store');
     Route::post('/admin/accounting/expense/update/{id}', [AccountingController::class, 'updateExpense'])->name('admin.accounting.expense.update');
     Route::delete('/admin/accounting/expense/delete/{id}', [AccountingController::class, 'destroyExpense'])->name('admin.accounting.expense.destroy');
 
-    // روابط رأس المال والتمويل (Capital)
     Route::post('/admin/accounting/capital', [AccountingController::class, 'storeCapital']);
     Route::delete('/admin/accounting/capital/{id}', [AccountingController::class, 'destroyCapital']);
 
@@ -147,17 +140,10 @@ Route::get('/become/vendor', [VendorController::class, 'BecomeVendor'])->name('b
 Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->name('vendor.register');
 
 // ==================== 6. تفاصيل المنتجات والتنقل والأقسام الديناميكية الذكية ====================
-Route::get('/category/{category}', [ShopController::class, 'category'])->name('category.show');
 
-Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
+// 🚀 [تعديل جوهري] تم رفع روت العروض والأقسام الثابتة هنا فوق الروت الديناميكي لمنع تعارض الـ 404
+Route::get('/category/offers', [ProductController::class, 'getOffers'])->name('category.offers');
 
-// ⭐ تم تصحيح اسم هذا الروت لمنع التضارب البرمجي مع لوحة تحكم الآدمن
-Route::get('/product/info/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('frontend.products.show');
-
-Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
-Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
-
-// الأقسام الثابتة
 Route::get('/category/boys', function() { 
     $category = \App\Models\Category::where('category_name', 'like', '%ولد%')->orWhere('category_slug', 'like', '%boys%')->first();
     $products = \App\Models\Product::where('category', 'like', '%ولد%')->where('status', 1)->get();
@@ -182,10 +168,13 @@ Route::get('/category/mothers', function() {
     return view('categories.mothers', compact('products', 'category')); 
 })->name('category.mothers');
 
-// ⭐ الروت الجديد والمستقر الخاص بقسم العروض والتصفيات
-Route::get('/category/offers', function() { 
-    return "صفحة العروض تعمل بنجاح!";
-})->name('category.offers');
+// الروت الديناميكي أصبح أسفل المسارات الثابتة الآن لمنع أي تعارض
+Route::get('/category/{category}', [ShopController::class, 'category'])->name('category.show');
+
+Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
+Route::get('/product/info/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('frontend.products.show');
+Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
+Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
 
 // ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات ====================
 Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
