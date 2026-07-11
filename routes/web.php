@@ -184,9 +184,7 @@ Route::get('/category/mothers', function() {
 
 // ⭐ الروت الجديد والمستقر الخاص بقسم العروض والتصفيات
 Route::get('/category/offers', function() { 
-    $category = \App\Models\Category::where('category_name', 'like', '%عروض%')->orWhere('category_slug', 'like', '%offers%')->first();
-    $products = \App\Models\Product::where('original_price', '>', \Illuminate\Support\Facades\DB::raw('price'))->where('status', 1)->get();
-    return view('categories.offers', compact('products', 'category')); 
+    return "صفحة العروض تعمل بنجاح!";
 })->name('category.offers');
 
 // ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات ====================
