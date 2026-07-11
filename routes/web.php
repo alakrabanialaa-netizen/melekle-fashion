@@ -40,6 +40,8 @@ use App\Http\Controllers\ShopController;
 // ==================== 1. الصفحة الرئيسية والـ Guest والروابط العامة ====================
 Route::get('/', [IndexController::class, 'Index'])->name('welcome');
 
+// ⭐ تم نقل روت صفحة العروض إلى قسم الأقسام في الأسفل ليعمل بشكل مستقل وديناميكي تماماً دون صلاحيات آدمن
+
 // روابط الصفحات الثابتة لمنع الـ RouteNotFoundException
 Route::get('/contact', function() { return view('contact'); })->name('contact');
 Route::get('/privacy-policy', function() { return view('privacy-policy'); })->name('privacy-policy');
@@ -148,7 +150,9 @@ Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->na
 Route::get('/category/{category}', [ShopController::class, 'category'])->name('category.show');
 
 Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
-Route::get('/product/info/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('products.show');
+
+// ⭐ تم تصحيح اسم هذا الروت لمنع التضارب البرمجي مع لوحة تحكم الآدمن
+Route::get('/product/info/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('frontend.products.show');
 
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
@@ -177,6 +181,13 @@ Route::get('/category/mothers', function() {
     $products = \App\Models\Product::where('category', 'like', '%أمهات%')->orWhere('category', 'like', '%نساء%')->where('status', 1)->get();
     return view('categories.mothers', compact('products', 'category')); 
 })->name('category.mothers');
+
+// ⭐ الروت الجديد والمستقر الخاص بقسم العروض والتصفيات
+Route::get('/category/offers', function() { 
+    $category = \App\Models\Category::where('category_name', 'like', '%عروض%')->orWhere('category_slug', 'like', '%offers%')->first();
+    $products = \App\Models\Product::where('original_price', '>', \Illuminate\Support\Facades\DB::raw('price'))->where('status', 1)->get();
+    return view('categories.offers', compact('products', 'category')); 
+})->name('category.offers');
 
 // ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات ====================
 Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
