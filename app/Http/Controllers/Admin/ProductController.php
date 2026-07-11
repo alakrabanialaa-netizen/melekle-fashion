@@ -11,6 +11,23 @@ use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
+    // دالة العروض والتصفيات المخصصة للـ Frontend
+    public function getOffers()
+    {
+        // جلب تصنيف العروض إن وجد
+        $category = \App\Models\Category::where('category_name', 'like', '%عروض%')
+                                         ->orWhere('category_slug', 'like', '%offers%')
+                                         ->first();
+
+        // جلب المنتجات المخفضة (السعر الأصلي أكبر من السعر الحالي)
+        $products = Product::whereNotNull('original_price')
+                            ->whereRaw('CAST(original_price AS DECIMAL(10,2)) > CAST(price AS DECIMAL(10,2))')
+                            ->where('status', 1)
+                            ->get();
+
+        return view('categories.offers', compact('products', 'category'));
+    }
+
     // دالة واحدة متكاملة للعرض والبحث والترقيم
     public function index(Request $request)
     {
@@ -159,7 +176,7 @@ class ProductController extends Controller
         // دالة تحويل الأرقام العربية للتعديل أيضاً لضمان السلامة
         $convertDigits = function($string) {
             $arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-            $persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','٩'];
+            $persian = ['۰','۱','۲','۳','۴','۵','٦','٧','٨','٩'];
             $english = range(0, 9);
             $string = str_replace($arabic, $english, $string);
             return str_replace($persian, $english, $string);
