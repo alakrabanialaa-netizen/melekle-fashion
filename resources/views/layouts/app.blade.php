@@ -142,6 +142,7 @@
                         <a href="/category/girls" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👧 ملابس بنات</a>
                         <a href="/category/babies" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👶 ملابس رضع</a>
                         <a href="/category/mothers" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👩 ملابس نساء</a>
+                        <a href="{{ route('category.offers') }}" class="block px-6 py-3 text-red-500 bg-red-50 hover:bg-red-100 transition font-black border-t border-dashed border-red-100">🔥 التشكيلة الجديدة %</a>
                     </div>
                 </div>
             </nav>
@@ -160,16 +161,19 @@
     </div>
 </header>
 
-{{-- 📱 Mobile Menu --}}
+{{-- 📱 Mobile Menu (تم تنظيف التكرار بالكامل) --}}
 <div id="mobile-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[150] p-8">
     <button id="close-mobile-menu" class="absolute top-6 left-6 text-2xl text-gray-600">&times;</button>
     <nav class="flex flex-col gap-6 mt-12 font-bold text-gray-800">
         <a href="/" class="hover:text-pink-500">الرئيسية</a>
+        
         <h3 class="text-gray-400 text-sm mt-4">الأقسام</h3>
         <a href="/category/boys" class="hover:text-pink-500 pr-4">ملابس أولاد</a>
         <a href="/category/girls" class="hover:text-pink-500 pr-4">ملابس بنات</a>
         <a href="/category/babies" class="hover:text-pink-500 pr-4">ملابس رضع</a>
         <a href="/category/mothers" class="hover:text-pink-500 pr-4">ملابس نساء</a>
+        <a href="{{ route('category.offers') }}" class="text-red-500 font-black pr-4 hover:text-red-600">🔥 التشكيلة الجديدة %</a>
+        
         <hr class="border-gray-100">
         <a href="/shop" class="hover:text-pink-500">كل المنتجات</a>
         <a href="/blog" class="hover:text-pink-500">المدونة</a>
@@ -196,7 +200,6 @@
         @if(count($cart) > 0)
             @foreach($cart as $id => $item)
                 <div class="flex gap-4 border-b py-4 items-center">
-                    {{-- 🛠️ تعديل 1: الفحص الذكي للرابط داخل الـ Blade لمنع تدمير الرابط الكامل لـ Cloudinary --}}
                     @php
                         $imageUrl = 'https://via.placeholder.com/150';
                         if (isset($item['image']) && $item['image']) {
@@ -304,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // 🛠️ تعديل 2: إصلاح دالة البناء التلقائي لتدعم الروابط الخارجية (Cloudinary) والمسارات المحلية معاً دون كسرها
+    // بناء دالة البناء التلقائي لتدعم الروابط الخارجية (Cloudinary) والمسارات المحلية
     function updateMiniCartUI(cart) {
         const wrapper = $('#mini-cart-items-wrapper');
         wrapper.empty(); 
@@ -316,13 +319,12 @@ document.addEventListener('DOMContentLoaded', function () {
             cartKeys.forEach(id => {
                 const item = cart[id];
                 
-                // هنا كان الخطأ الفادح! الكود القديم كان يجبر الرابط على البدء بـ /storage/ مما يدمر رابط Cloudinary
                 let itemImage = 'https://via.placeholder.com/150';
                 if (item.image) {
                     if (item.image.startsWith('http://') || item.image.startsWith('https://')) {
-                        itemImage = item.image; // إذا كان رابط مباشر لـ Cloudinary نأخذه كما هو
+                        itemImage = item.image; 
                     } else {
-                        itemImage = `/storage/${item.image}`; // إذا كان مسار محلي نربطه بالمجلد
+                        itemImage = `/storage/${item.image}`; 
                     }
                 }
 
