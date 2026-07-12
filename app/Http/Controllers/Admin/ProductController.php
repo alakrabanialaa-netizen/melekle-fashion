@@ -28,7 +28,7 @@ class ProductController extends Controller
         return view('categories.offers', compact('products', 'category'));
     }
 
-    // دالة المستودع وجرد البضاعة (تم تعديلها لجلب كامل البيانات لضمان نجاح الفلترة الفورية)
+    // دالة المستودع وجرد البضاعة (تم تغيير مسار الـ View إلى مجلد users ليعمل ملفك الحالي بنجاح)
     public function index(Request $request)
     {
         $query = Product::with('images');
@@ -42,7 +42,8 @@ class ProductController extends Controller
         // جلب كامل بضاعة المستودع لتعمل فلترة الأجاكس والـ JS الذكية على كل المنتجات
         $products = $query->latest()->get();
         
-        return view('admin.products.index', compact('products'));
+        // التعديل هنا: توجيه الكنترولر ليقرأ من المجلد والملف الذي اخترته بدلاً من مجلد products
+        return view('admin.users.index', compact('products'));
     }
 
     // دالة التحديث السريع لقطع المستودع عبر الأجاكس (+ / -)
@@ -72,7 +73,7 @@ class ProductController extends Controller
         // دالة تحويل الأرقام العربية/الفارسية إلى إنجليزية لضمان الحفظ في قاعدة البيانات
         $convertDigits = function($string) {
             $arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-            $persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+            $persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','٩'];
             $english = range(0, 9);
             $string = str_replace($arabic, $english, $string);
             return str_replace($persian, $english, $string);
