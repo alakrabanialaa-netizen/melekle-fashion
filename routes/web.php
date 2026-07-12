@@ -178,6 +178,7 @@ Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.a
 
 // ==================== 7. أجاكس السلة، المقارنة، وقائمة الأمنيات ====================
 Route::get('/mycart', [CartController::class, 'MyCart'])->name('mycart');
+Route::post('/admin/products/{id}/update-stock', [App\Http\Controllers\Admin\ProductController::class, 'updateStock']);
 Route::post('/cart/data/store/{id}', [CartController::class, 'add'])->name('cart.add');
 Route::any('/cart-add/{id}', [CartController::class, 'add']);
 Route::get('/cart-remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
