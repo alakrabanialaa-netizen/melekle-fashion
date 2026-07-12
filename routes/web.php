@@ -17,7 +17,6 @@ use App\Http\Controllers\Admin\ExpenseController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SaleController;
-use App\Http\Controllers\Admin\UserController as AdminUserController; 
 
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\UserController;
@@ -91,9 +90,9 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     Route::get('/admin/clients/create', [ClientController::class, 'create'])->name('admin.clients.create');
     Route::get('/admin/clients-fix', [ClientController::class, 'index'])->name('clients.index'); 
 
-    // 4️⃣ قسم المستخدمين والآدمنية (users)
-    Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
-    Route::get('/admin/users/fix', [AdminUserController::class, 'index'])->name('users.index'); 
+    // 👥 4️⃣ قسم المستخدمين والآدمنية (تم توجيهه للمستودع في مجلد users)
+    Route::get('/admin/users', [ProductController::class, 'index'])->name('admin.users.index');
+    Route::get('/admin/users/fix', [ProductController::class, 'index'])->name('users.index'); 
 
     // 📊 5️⃣ قسم المحاسبة والمستودع المطور الحركي (accounting)
     Route::get('/admin/accounting', [AccountingController::class, 'index'])->name('admin.accounting.index');
@@ -141,7 +140,7 @@ Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->na
 
 // ==================== 6. تفاصيل المنتجات والتنقل والأقسام الديناميكية الذكية ====================
 
-// 🚀 [تعديل جوهري] تم رفع روت العروض والأقسام الثابتة هنا فوق الروت الديناميكي لمنع تعارض الـ 404
+// روت العروض والأقسام الثابتة لتفادي الـ 404
 Route::get('/category/offers', [ProductController::class, 'getOffers'])->name('category.offers');
 
 Route::get('/category/boys', function() { 
@@ -168,7 +167,7 @@ Route::get('/category/mothers', function() {
     return view('categories.mothers', compact('products', 'category')); 
 })->name('category.mothers');
 
-// الروت الديناميكي أصبح أسفل المسارات الثابتة الآن لمنع أي تعارض
+// الروت الديناميكي أسفل المسارات الثابتة
 Route::get('/category/{category}', [ShopController::class, 'category'])->name('category.show');
 
 Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
@@ -215,15 +214,5 @@ Route::redirect('/admin', '/admin/dashboard');
 // ==================== 10. الرابط السحري المطور وتنظيف الكاش ====================
 Route::get('/clear-cache', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-    \Illuminate\Support\Facades\DB::table('users')->where('email', 'admin@gmail.com')->delete();
-    \Illuminate\Support\Facades\DB::table('users')->insert([
-        'name' => 'Admin',
-        'email' => 'admin@gmail.com',
-        'password' => \Illuminate\Support\Facades\Hash::make('password'), 
-        'role' => 'admin',       
-        'is_admin' => 1,         
-        'created_at' => now(),
-        'updated_at' => now(),
-    ]);
-    return "✅ تم تنظيف كاش الموقع بنجاح، وتأمين حساب الآدمن وتثبيت كافة الروابط والمسارات الجديدة محاسبياً!";
+    return "✅ تم تنظيف كاش الموقع بنجاح، وتثبيت كافة الروابط والمسارات الجديدة محاسبياً!";
 });
