@@ -28,24 +28,38 @@ class ProductController extends Controller
         return view('categories.offers', compact('products', 'category'));
     }
 
-    // دالة واحدة متكاملة للعرض والبحث والترقيم
+    // دالة المستودع وجرد البضاعة (تم تعديلها لجلب كامل البيانات لضمان نجاح الفلترة الفورية)
     public function index(Request $request)
     {
         $query = Product::with('images');
 
-        // البحث إذا كان موجوداً
+        // البحث إذا كان موجوداً عبر السيرفر
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%')
                   ->orWhere('product_code', 'like', '%' . $request->search . '%');
         }
 
-        // جلب البيانات مع الترقيم (10 منتجات في الصفحة)
-        $products = $query->latest()->paginate(10);
+        // جلب كامل بضاعة المستودع لتعمل فلترة الأجاكس والـ JS الذكية على كل المنتجات
+        $products = $query->latest()->get();
         
-        // الحفاظ على بارامترات البحث عند التنقل بين الصفحات
-        $products->appends($request->all());
-
         return view('admin.products.index', compact('products'));
+    }
+
+    // دالة التحديث السريع لقطع المستودع عبر الأجاكس (+ / -)
+    public function updateStock(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+        
+        if ($request->action === 'increase') {
+            $product->increment('quantity');
+        } elseif ($request->action === 'decrease' && $product->quantity > 0) {
+            $product->decrement('quantity');
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'new_quantity' => $product->quantity
+        ]);
     }
 
     public function create()
@@ -70,17 +84,17 @@ class ProductController extends Controller
         if($request->has('cost_price')) {
             $request->merge(['cost_price' => $convertDigits($request->cost_price)]);
         }
-        if($request->has('stock')) {
-            $request->merge(['stock' => $convertDigits($request->stock)]);
+        if($request->has('quantity')) {
+            $request->merge(['quantity' => $convertDigits($request->quantity)]);
         }
 
-        // تم تعديل المفاتيح هنا لتطابق الحقول الموحدة الجديدة في الـ Blade
+        // تم توحيد الحقل هنا ليصبح quantity متوافقاً مع قاعدة البيانات والمستودع
         $validatedData = $request->validate([
             'product_code' => 'required|string|unique:products,product_code',
             'name'         => 'required|string|max:255',
             'price'        => 'required|numeric|min:0',
             'cost_price'   => 'required|numeric|min:0',
-            'stock'        => 'nullable', 
+            'quantity'     => 'nullable', 
             'category'     => 'required|string',
             'color'        => 'nullable|string|max:100',
             'description'  => 'nullable|string',
@@ -101,7 +115,7 @@ class ProductController extends Controller
                     'color'        => $validatedData['color'] ?? null,
                     'description'  => $validatedData['description'] ?? null,
                     'category'     => $validatedData['category'],
-                    'stock'        => (int)($request->stock ?? 0),
+                    'quantity'     => (int)($request->quantity ?? 0), // الحفظ في حقل quantity الموحد
                     'sizes'        => $request->input('sizes', []),
                     'ages'         => $request->input('ages', []), 
                     'slug'         => $this->generateSlug($validatedData['name']),
@@ -160,7 +174,7 @@ class ProductController extends Controller
                 }
 
                 return redirect()->route('admin.products.index')->with('success', 'تم إضافة المنتج بنجاح');
-            });
+            ]);
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'حدث خطأ أثناء الحفظ: ' . $e->getMessage());
         }
@@ -184,9 +198,8 @@ class ProductController extends Controller
 
         if($request->has('price')) { $request->merge(['price' => $convertDigits($request->price)]); }
         if($request->has('cost_price')) { $request->merge(['cost_price' => $convertDigits($request->cost_price)]); }
-        if($request->has('stock')) { $request->merge(['stock' => $convertDigits($request->stock)]); }
+        if($request->has('quantity')) { $request->merge(['quantity' => $convertDigits($request->quantity)]); }
 
-        // تحديث الفالياديشن ليشمل كافة الحقول المدعومة والمضافة حديثاً للتعديل
         $validatedData = $request->validate([
             'product_code' => 'required|string|unique:products,product_code,' . $product->id,
             'name'         => 'required|string|max:255',
@@ -194,7 +207,7 @@ class ProductController extends Controller
             'cost_price'   => 'required|numeric|min:0',
             'category'     => 'required|string',
             'description'  => 'nullable|string',
-            'stock'        => 'nullable',
+            'quantity'     => 'nullable',
             'color'        => 'nullable|string|max:100',
             'sizes'        => 'nullable|array',
             'ages'         => 'nullable|array', 
@@ -209,7 +222,7 @@ class ProductController extends Controller
                 'category'     => $validatedData['category'],
                 'description'  => $validatedData['description'] ?? null,
                 'color'        => $validatedData['color'] ?? null,
-                'stock'        => (int)($request->stock ?? 0),
+                'quantity'     => (int)($request->quantity ?? 0), // التعديل في حقل quantity
                 'sizes'        => $request->input('sizes', []),
                 'ages'         => $request->input('ages', []), 
                 'slug'         => $this->generateSlug($validatedData['name'], $product->id),
@@ -221,7 +234,6 @@ class ProductController extends Controller
         }
     }
 
-    // تعديل الدالة لاستقبال الـ ID مباشرة لضمان نجاح الحذف من مسار الـ Blade المصحح
     public function destroy($id)
     {
         try {
