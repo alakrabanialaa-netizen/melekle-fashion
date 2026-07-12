@@ -28,7 +28,7 @@ class ProductController extends Controller
         return view('categories.offers', compact('products', 'category'));
     }
 
-    // دالة المستودع وجرد البضاعة (تم تغيير مسار الـ View إلى مجلد users ليعمل ملفك الحالي بنجاح)
+    // دالة المستودع وجرد البضاعة
     public function index(Request $request)
     {
         $query = Product::with('images');
@@ -42,7 +42,7 @@ class ProductController extends Controller
         // جلب كامل بضاعة المستودع لتعمل فلترة الأجاكس والـ JS الذكية على كل المنتجات
         $products = $query->latest()->get();
         
-        // التعديل هنا: توجيه الكنترولر ليقرأ من المجلد والملف الذي اخترته بدلاً من مجلد products
+        // توجيه الكنترولر ليقرأ من المجلد والملف داخل مجلد users
         return view('admin.users.index', compact('products'));
     }
 
@@ -73,7 +73,7 @@ class ProductController extends Controller
         // دالة تحويل الأرقام العربية/الفارسية إلى إنجليزية لضمان الحفظ في قاعدة البيانات
         $convertDigits = function($string) {
             $arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-            $persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','٩'];
+            $persian = ['۰','۱','۲','۳','۴','۵','٦','٧','٨','٩'];
             $english = range(0, 9);
             $string = str_replace($arabic, $english, $string);
             return str_replace($persian, $english, $string);
@@ -89,7 +89,7 @@ class ProductController extends Controller
             $request->merge(['quantity' => $convertDigits($request->quantity)]);
         }
 
-        // تم توحيد الحقل هنا ليصبح quantity متوافقاً مع قاعدة البيانات والمستودع
+        // توحيد الحقل ليكون متوافقاً مع قاعدة البيانات والمستودع
         $validatedData = $request->validate([
             'product_code' => 'required|string|unique:products,product_code',
             'name'         => 'required|string|max:255',
@@ -116,7 +116,7 @@ class ProductController extends Controller
                     'color'        => $validatedData['color'] ?? null,
                     'description'  => $validatedData['description'] ?? null,
                     'category'     => $validatedData['category'],
-                    'quantity'     => (int)($request->quantity ?? 0), // الحفظ في حقل quantity الموحد
+                    'quantity'     => (int)($request->quantity ?? 0),
                     'sizes'        => $request->input('sizes', []),
                     'ages'         => $request->input('ages', []), 
                     'slug'         => $this->generateSlug($validatedData['name']),
@@ -175,7 +175,7 @@ class ProductController extends Controller
                 }
 
                 return redirect()->route('admin.products.index')->with('success', 'تم إضافة المنتج بنجاح');
-            ]);
+            });
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'حدث خطأ أثناء الحفظ: ' . $e->getMessage());
         }
@@ -223,7 +223,7 @@ class ProductController extends Controller
                 'category'     => $validatedData['category'],
                 'description'  => $validatedData['description'] ?? null,
                 'color'        => $validatedData['color'] ?? null,
-                'quantity'     => (int)($request->quantity ?? 0), // التعديل في حقل quantity
+                'quantity'     => (int)($request->quantity ?? 0),
                 'sizes'        => $request->input('sizes', []),
                 'ages'         => $request->input('ages', []), 
                 'slug'         => $this->generateSlug($validatedData['name'], $product->id),
