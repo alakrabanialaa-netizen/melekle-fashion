@@ -46,20 +46,20 @@ class ProductController extends Controller
         return view('admin.users.index', compact('products'));
     }
 
-    // دالة التحديث السريع لقطع المستودع عبر الأجاكس (+ / -)
+    // دالة التحديث السريع لقطع المستودع عبر الأجاكس (+ / -) متوافقة مع حقل stock
     public function updateStock(Request $request, $id)
     {
         $product = Product::findOrFail($id);
         
         if ($request->action === 'increase') {
-            $product->increment('quantity');
-        } elseif ($request->action === 'decrease' && $product->quantity > 0) {
-            $product->decrement('quantity');
+            $product->increment('stock');
+        } elseif ($request->action === 'decrease' && $product->stock > 0) {
+            $product->decrement('stock');
         }
 
         return response()->json([
             'status' => 'success',
-            'new_quantity' => $product->quantity
+            'new_quantity' => $product->stock
         ]);
     }
 
@@ -85,17 +85,20 @@ class ProductController extends Controller
         if($request->has('cost_price')) {
             $request->merge(['cost_price' => $convertDigits($request->cost_price)]);
         }
-        if($request->has('quantity')) {
-            $request->merge(['quantity' => $convertDigits($request->quantity)]);
+        // تحويل أرقام كمية المستودع (stock أو quantity القادمة من الفورم)
+        if($request->has('stock')) {
+            $request->merge(['stock' => $convertDigits($request->stock)]);
+        } elseif($request->has('quantity')) {
+            $request->merge(['stock' => $convertDigits($request->quantity)]);
         }
 
-        // توحيد الحقل ليكون متوافقاً مع قاعدة البيانات والمستودع
+        // توحيد الحقل ليكون متوافقاً مع قاعدة البيانات والمستودع (تم تغيير الاسم إلى stock)
         $validatedData = $request->validate([
             'product_code' => 'required|string|unique:products,product_code',
             'name'         => 'required|string|max:255',
             'price'        => 'required|numeric|min:0',
             'cost_price'   => 'required|numeric|min:0',
-            'quantity'     => 'nullable', 
+            'stock'        => 'nullable|integer|min:0', // تعديل هنا ليتوافق مع الموديل
             'category'     => 'required|string',
             'color'        => 'nullable|string|max:100',
             'description'  => 'nullable|string',
@@ -116,7 +119,7 @@ class ProductController extends Controller
                     'color'        => $validatedData['color'] ?? null,
                     'description'  => $validatedData['description'] ?? null,
                     'category'     => $validatedData['category'],
-                    'quantity'     => (int)($request->quantity ?? 0),
+                    'stock'        => (int)($validatedData['stock'] ?? 0), // استخدام حقل stock للموديل
                     'sizes'        => $request->input('sizes', []),
                     'ages'         => $request->input('ages', []), 
                     'slug'         => $this->generateSlug($validatedData['name']),
@@ -199,7 +202,11 @@ class ProductController extends Controller
 
         if($request->has('price')) { $request->merge(['price' => $convertDigits($request->price)]); }
         if($request->has('cost_price')) { $request->merge(['cost_price' => $convertDigits($request->cost_price)]); }
-        if($request->has('quantity')) { $request->merge(['quantity' => $convertDigits($request->quantity)]); }
+        if($request->has('stock')) { 
+            $request->merge(['stock' => $convertDigits($request->stock)]); 
+        } elseif($request->has('quantity')) { 
+            $request->merge(['stock' => $convertDigits($request->quantity)]); 
+        }
 
         $validatedData = $request->validate([
             'product_code' => 'required|string|unique:products,product_code,' . $product->id,
@@ -208,7 +215,7 @@ class ProductController extends Controller
             'cost_price'   => 'required|numeric|min:0',
             'category'     => 'required|string',
             'description'  => 'nullable|string',
-            'quantity'     => 'nullable',
+            'stock'        => 'nullable|integer|min:0', // تعديل هنا ليتوافق مع الموديل
             'color'        => 'nullable|string|max:100',
             'sizes'        => 'nullable|array',
             'ages'         => 'nullable|array', 
@@ -223,7 +230,7 @@ class ProductController extends Controller
                 'category'     => $validatedData['category'],
                 'description'  => $validatedData['description'] ?? null,
                 'color'        => $validatedData['color'] ?? null,
-                'quantity'     => (int)($request->quantity ?? 0),
+                'stock'        => (int)($validatedData['stock'] ?? 0), // تعديل هنا ليتوافق مع الموديل
                 'sizes'        => $request->input('sizes', []),
                 'ages'         => $request->input('ages', []), 
                 'slug'         => $this->generateSlug($validatedData['name'], $product->id),
