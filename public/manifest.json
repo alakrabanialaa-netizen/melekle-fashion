@@ -1,21 +1,21 @@
 {
-    "short_name": "MK",
+    "short_name": "Melekler",
     "name": "Melekler Fashion",
     "icons": [
         {
-            "src": "/images/icon-192.png",
+            "src": "https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png",
             "type": "image/png",
             "sizes": "192x192"
         },
         {
-            "src": "/images/icon-512.png",
+            "src": "https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png",
             "type": "image/png",
             "sizes": "512x512"
         }
     ],
     "start_url": "/admin/products",
-    "background_color": "#ffffff",
-    "theme_color": "#317EFB",
+    "background_color": "#fffaf0",
+    "theme_color": "#f43f5e",
     "display": "standalone",
     "orientation": "portrait"
 }
