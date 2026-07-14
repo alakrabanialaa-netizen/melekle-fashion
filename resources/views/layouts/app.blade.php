@@ -7,8 +7,12 @@
     
     <!-- أيقونة المتصفح المحدثة (Favicon) -->
     <link class="rounded-full" rel="icon" type="image/png" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png">
-    
-    <title>Melekler Group | @yield('title', 'Premium Fashion')</title>
+    <!-- أيقونة المتصفح (تم إضافة ?v=3 لكسر الكاش وقراءة الصورة الجديدة فوراً) -->
+<link class="rounded-full" rel="icon" type="image/png" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png?v=3">
+
+<!-- أيقونة الآيفون (iOS) -->
+<link class="apple-touch-icon" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png?v=3">
+    <title>MK| @yield('title', 'Premium Fashion')</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
