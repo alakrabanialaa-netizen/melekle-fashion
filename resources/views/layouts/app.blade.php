@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link class="rounded-full" rel="icon" type="image/png" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/hero-bg.png">
+    
+    <!-- أيقونة المتصفح المحدثة (Favicon) -->
+    <link class="rounded-full" rel="icon" type="image/png" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png">
+    
     <title>Melekler Group | @yield('title', 'Premium Fashion')</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -120,10 +123,10 @@
             </a>
         </div>
         
-        {{-- 2. Center Side: Logo Image --}}
+        {{-- 2. Center Side: Logo Image (تم تحديثه باللوغو الجديد) --}}
         <div class="logo-container text-center flex justify-center items-center">
             <a href="/" class="inline-block">
-                <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/hero-bg.png" alt="Melekler Logo" class="logo-img h-12 md:h-16 w-auto object-contain transition-all duration-300">
+                <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png" alt="Melekler Logo" class="logo-img h-12 md:h-16 w-auto object-contain transition-all duration-300 rounded-full">
             </a>
         </div>
 
@@ -159,9 +162,19 @@
             </button>
         </div>
     </div>
+
+    <!-- رابط ملف الـ Manifest لتثبيت التطبيق على الموبايل -->
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+
+    <!-- أيقونات تدعم أجهزة الآيفون (iOS) باستخدام رابط الصورة المحدثة والمباشرة -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Melekler Fashion">
+    <link rel="apple-touch-icon" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png">
+    
 </header>
 
-{{-- 📱 Mobile Menu (تم تنظيف التكرار بالكامل) --}}
+{{-- 📱 Mobile Menu --}}
 <div id="mobile-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[150] p-8">
     <button id="close-mobile-menu" class="absolute top-6 left-6 text-2xl text-gray-600">&times;</button>
     <nav class="flex flex-col gap-6 mt-12 font-bold text-gray-800">
@@ -307,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // بناء دالة البناء التلقائي لتدعم الروابط الخارجية (Cloudinary) والمسارات المحلية
+    // بناء دالة البناء التلقائي لتدعم الروابط الخارجية والمسارات المحلية
     function updateMiniCartUI(cart) {
         const wrapper = $('#mini-cart-items-wrapper');
         wrapper.empty(); 
