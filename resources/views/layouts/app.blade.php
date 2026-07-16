@@ -378,8 +378,18 @@ document.addEventListener('DOMContentLoaded', function () {
             `);
         }
     }
-});
-</script>
 
+    // 5. تسجيل الـ Service Worker بشكل صحيح داخل نطاق الـ DOMContentLoaded
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js?v=99')
+            .then(function(registration) {
+                console.log('Service Worker registered successfully with scope: ', registration.scope);
+            })
+            .catch(function(err) {
+                console.log('Service Worker registration failed: ', err);
+            });
+    }
+}); // القوس هنا يغلق الـ DOMContentLoaded بشكل سليم قبل إغلاق السكريبت
+</script>
 </body>
 </html>
