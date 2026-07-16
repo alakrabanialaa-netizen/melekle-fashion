@@ -17,6 +17,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- أيقونات المتصفح العامة -->
+<link rel="icon" type="image/png" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png?v=99">
+
+<!-- إعدادات وتوافقية أجهزة الآيفون (iOS) الكاملة -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Melekler">
+
+<!-- أيقونة التطبيق عند التثبيت على شاشة الآيفون الرئيسية -->
+<link rel="apple-touch-icon" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png?v=99">
+<link rel="apple-touch-icon" sizes="180x180" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png?v=99">
+
+<!-- كود شاشة الإقلاع (Splash Screen) المخصص للآيفون لتظهر الصورة قبل الدخول للموقع -->
+<link rel="apple-touch-startup-image" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png?v=99">
 
     <style>
         /* --- Global Styles --- */
