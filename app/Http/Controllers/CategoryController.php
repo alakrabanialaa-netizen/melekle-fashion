@@ -8,15 +8,13 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     /**
-     * عرض صفحة قسم البنات مع مرونة في فحص اسم القسم وحالة الأحرف
+     * عرض صفحة قسم البنات
      */
     public function girls()
     {
+        // TRIM(LOWER(category)) تتجاهل المسافات المخفية والأحرف الكبيرة/الصغيرة في Supabase
         $products = Product::with('images')
-            ->where(function($query) {
-                $query->whereIn('category', ['girls', 'girl', 'Girls', 'Girl'])
-                      ->orWhereRaw('LOWER(category) = ?', ['girls']);
-            })
+            ->whereRaw("TRIM(LOWER(category)) = ?", ['girls'])
             ->latest()
             ->get();
 
@@ -29,10 +27,7 @@ class CategoryController extends Controller
     public function boys()
     {
         $products = Product::with('images')
-            ->where(function($query) {
-                $query->whereIn('category', ['boys', 'boy', 'Boys', 'Boy'])
-                      ->orWhereRaw('LOWER(category) = ?', ['boys']);
-            })
+            ->whereRaw("TRIM(LOWER(category)) = ?", ['boys'])
             ->latest()
             ->get();
 
@@ -45,10 +40,7 @@ class CategoryController extends Controller
     public function babies()
     {
         $products = Product::with('images')
-            ->where(function($query) {
-                $query->whereIn('category', ['babies', 'baby', 'Babies', 'Baby'])
-                      ->orWhereRaw('LOWER(category) = ?', ['babies']);
-            })
+            ->whereRaw("TRIM(LOWER(category)) = ?", ['babies'])
             ->latest()
             ->get();
 
@@ -61,10 +53,7 @@ class CategoryController extends Controller
     public function mothers()
     {
         $products = Product::with('images')
-            ->where(function($query) {
-                $query->whereIn('category', ['mothers', 'mother', 'Mothers', 'Mother'])
-                      ->orWhereRaw('LOWER(category) = ?', ['mothers']);
-            })
+            ->whereRaw("TRIM(LOWER(category)) = ?", ['mothers'])
             ->latest()
             ->get();
 
