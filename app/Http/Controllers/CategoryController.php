@@ -10,16 +10,27 @@ class CategoryController extends Controller
     /**
      * عرض صفحة قسم البنات
      */
-    public function girls()
-    {
-        // TRIM(LOWER(category)) تتجاهل المسافات المخفية والأحرف الكبيرة/الصغيرة في Supabase
-        $products = Product::with('images')
-            ->whereRaw("TRIM(LOWER(category)) = ?", ['girls'])
-            ->latest()
-            ->get();
-
-        return view('categories.girls', compact('products'));
+public function girls()
+{
+    // 1. فحص هل سيرفر Render متصل بقاعدة البيانات الصحيحة أم لا
+    try {
+        \DB::connection()->getPdo();
+        $dbName = \DB::connection()->getDatabaseName();
+    } catch (\Exception $e) {
+        return "خطأ في الاتصال بقاعدة البيانات: " . $e->getMessage();
     }
+
+    // 2. جلب كافة المنتجات الموجودة في جدول products بدون أي فلترة
+    $allProducts = Product::all();
+
+    // 3. طباعة التقرير كاملاً على الشاشة للتأكد
+    return response()->json([
+        'status' => 'connected',
+        'database_name' => $dbName,
+        'total_products_count' => $allProducts->count(),
+        'products_data' => $allProducts
+    ]);
+}
 
     /**
      * عرض صفحة قسم الأولاد
