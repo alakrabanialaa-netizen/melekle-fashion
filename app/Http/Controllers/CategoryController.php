@@ -12,24 +12,11 @@ class CategoryController extends Controller
      */
 public function girls()
 {
-    // 1. فحص هل سيرفر Render متصل بقاعدة البيانات الصحيحة أم لا
-    try {
-        \DB::connection()->getPdo();
-        $dbName = \DB::connection()->getDatabaseName();
-    } catch (\Exception $e) {
-        return "خطأ في الاتصال بقاعدة البيانات: " . $e->getMessage();
-    }
+    $products = Product::whereRaw("TRIM(LOWER(category)) = ?", ['girls'])
+        ->latest()
+        ->get();
 
-    // 2. جلب كافة المنتجات الموجودة في جدول products بدون أي فلترة
-    $allProducts = Product::all();
-
-    // 3. طباعة التقرير كاملاً على الشاشة للتأكد
-    return response()->json([
-        'status' => 'connected',
-        'database_name' => $dbName,
-        'total_products_count' => $allProducts->count(),
-        'products_data' => $allProducts
-    ]);
+    return view('categories.girls', compact('products'));
 }
 
     /**
