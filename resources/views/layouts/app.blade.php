@@ -220,82 +220,99 @@
 </main>
 
 {{-- 🛒 Mini Cart Container --}}
+
 <div id="mini-cart" class="fixed top-0 right-[-420px] w-[400px] h-screen bg-white shadow-2xl transition-all duration-300 z-[150] flex flex-col">
+
     <div class="p-6 border-b flex justify-between items-center">
+
         <h2 class="text-xl font-bold">🛒 سلة المشتريات</h2>
+
         <button onclick="closeCart()" class="text-2xl hover:text-red-500 transition">&times;</button>
+
     </div>
 
+
+
     <div id="mini-cart-items-wrapper" class="flex-1 p-6 overflow-y-auto">
-        @php 
-            $cart = session('cart', []); 
-            
-            // جلب أسعار الصرف الممررة من AppServiceProvider (مع قيم احتياطية)
-            $rateTry = $rates['USD_TRY'] ?? 33.0;
-            $rateSyp = $rates['USD_SYP'] ?? 14000.0;
-        @endphp
+
+        @php $cart = session('cart', []); @endphp
 
         @if(count($cart) > 0)
-            @foreach($cart as $id => $item)
-                @php
-                    $imageUrl = 'https://via.placeholder.com/150';
-                    if (isset($item['image']) && $item['image']) {
-                        if (str_starts_with($item['image'], 'http://') || str_starts_with($item['image'], 'https://')) {
-                            $imageUrl = $item['image'];
-                        } else {
-                            $imageUrl = asset('storage/' . $item['image']);
-                        }
-                    }
 
-                    // الحسابات المالية بالعملات الثلاث (بافتراض السعر الأساسي TL)
-                    $priceTry = $item['price'];
-                    $priceUsd = $priceTry / ($rateTry > 0 ? $rateTry : 1);
-                    $priceSyp = $priceUsd * $rateSyp;
-                @endphp
+            @foreach($cart as $id => $item)
 
                 <div class="flex gap-4 border-b py-4 items-center">
+
+                    @php
+
+                        $imageUrl = 'https://via.placeholder.com/150';
+
+                        if (isset($item['image']) && $item['image']) {
+
+                            if (str_starts_with($item['image'], 'http://') || str_starts_with($item['image'], 'https://')) {
+
+                                $imageUrl = $item['image'];
+
+                            } else {
+
+                                $imageUrl = asset('storage/' . $item['image']);
+
+                            }
+
+                        }
+
+                    @endphp
+
                     <img src="{{ $imageUrl }}" 
+
                          alt="{{ $item['name'] }}" 
+
                          class="w-16 h-16 object-cover rounded shadow-sm">
-                    
+
                     <div class="flex-1">
+
                         <h4 class="font-semibold text-gray-800">{{ $item['name'] }}</h4>
+
                         @if(isset($item['size']))
+
                             <p class="text-xs text-gray-400">المقاس: {{ $item['size'] }}</p>
+
                         @endif
 
-                        <div class="mt-2 space-y-0.5 bg-gray-50 p-2 rounded-lg text-xs">
-                            <div class="flex justify-between font-bold text-pink-600">
-                                <span>تركية (TRY):</span>
-                                <span>{{ number_format($priceTry, 2) }} ₺</span>
-                            </div>
-                            <div class="flex justify-between text-green-700 font-semibold">
-                                <span>دولار (USD):</span>
-                                <span>${{ number_format($priceUsd, 2) }}</span>
-                            </div>
-                            <div class="flex justify-between text-blue-700 font-semibold">
-                                <span>سورية (SYP):</span>
-                                <span>{{ number_format($priceSyp, 0) }} ل.س</span>
-                            </div>
+                        <div class="flex justify-between items-center mt-1">
+
+                            <p class="text-sm text-gray-600">الكمية: {{ $item['quantity'] }}</p>
+
+                            <p class="font-bold text-pink-600">{{ number_format($item['price'], 2) }} ₺</p>
+
                         </div>
 
-                        <div class="flex justify-between items-center mt-2 text-xs text-gray-500">
-                            <span>الكمية: {{ $item['quantity'] }}</span>
-                        </div>
                     </div>
+
                 </div>
+
             @endforeach
 
             <div class="p-4 border-t mt-auto">
+
                 <a href="{{ route('mycart') }}" class="block text-center bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 rounded-xl transition shadow-md">عرض سلة المشتريات الكاملة</a>
+
             </div>
+
         @else
+
             <div class="text-center mt-20">
+
                 <div class="text-6xl mb-4 text-gray-200">🛒</div>
+
                 <p class="text-gray-500">السلة فارغة حالياً</p>
+
             </div>
+
         @endif
+
     </div>
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
