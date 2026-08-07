@@ -11,20 +11,17 @@ class Product extends Model
 {
     use HasFactory;
 
-    /**
-     * هذا الكود سيقوم بفحص قاعدة البيانات وإضافة الأعمدة الناقصة تلقائياً
-     * بمجرد محاولة حفظ أو إنشاء منتج جديد.
-     */
+    // تحديد اسم الجدول صراحة في Supabase
+    protected $table = 'products';
+
     protected static function booted()
     {
         static::saving(function ($product) {
-            // التحقق من وجود عمود المقاسات
             if (!Schema::hasColumn('products', 'sizes')) {
                 Schema::table('products', function (Blueprint $table) {
                     $table->text('sizes')->nullable();
                 });
             }
-            // التحقق من وجود عمود الأعمار
             if (!Schema::hasColumn('products', 'ages')) {
                 Schema::table('products', function (Blueprint $table) {
                     $table->text('ages')->nullable();
@@ -34,7 +31,9 @@ class Product extends Model
     }
 
     protected $fillable = [
-        'product_code', // ✅ أضف هذا السطر هنا ليتم السماح بحفظ كود المنتج
+        'product_code',
+        'product_name', // تم التعديل لتطابق Supabase
+        'product_slug', // تم التعديل لتطابق Supabase
         'name',
         'price',
         'stock',
@@ -50,27 +49,32 @@ class Product extends Model
         'video',
         'image',
     ];
+
     protected $casts = [
         'sizes' => 'array',
         'colors' => 'array',
         'ages' => 'array',
     ];
 
-    // علاقة صور المنتج
+    // علاقة الصور (مع حماية في حال عدم وجود الجدول)
     public function images()
     {
-        return $this->hasMany(ProductImage::class);
+        return $this->hasMany(ProductImage::class, 'product_id');
     }
 
-    // علاقة المتغيرات
     public function variants()
     {
-        return $this->hasMany(ProductVariant::class);
+        return $this->hasMany(ProductVariant::class, 'product_id');
     }
 
-    // استخدام slug للروت بدلاً من id
+    // لضمان جلب اسم المنتج سواء كان العمود اسمه name أو product_name
+    public function getNameAttribute()
+    {
+        return $this->attributes['product_name'] ?? $this->attributes['name'] ?? '';
+    }
+
     public function getRouteKeyName()
     {
-        return 'slug';
+        return 'product_slug';
     }
 }
