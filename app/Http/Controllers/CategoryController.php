@@ -12,11 +12,13 @@ class CategoryController extends Controller
      */
 public function girls()
 {
-    $products = Product::whereRaw("TRIM(LOWER(category)) = ?", ['girls'])
-        ->latest()
-        ->get();
-
-    return view('categories.girls', compact('products'));
+    $products = Product::whereRaw("TRIM(LOWER(category)) = ?", ['girls'])->get();
+    
+    // إرجاع النتيجة كنص JSON مباشر على الشاشة لفحصها
+    return response()->json([
+        'count' => $products->count(),
+        'data' => $products
+    ]);
 }
 
     /**
