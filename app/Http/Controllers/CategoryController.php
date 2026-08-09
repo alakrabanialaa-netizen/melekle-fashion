@@ -10,24 +10,21 @@ class CategoryController extends Controller
     /**
      * عرض صفحة قسم البنات
      */
-public function girls()
-{
-    $products = Product::whereRaw("TRIM(LOWER(category)) = ?", ['girls'])->get();
-    
-    // إرجاع النتيجة كنص JSON مباشر على الشاشة لفحصها
-    return response()->json([
-        'count' => $products->count(),
-        'data' => $products
-    ]);
-}
+    public function girls()
+    {
+        $products = Product::whereRaw("TRIM(LOWER(category)) = ?", ['girls'])
+            ->latest()
+            ->get();
+
+        return view('categories.girls', compact('products'));
+    }
 
     /**
      * عرض صفحة قسم الأولاد
      */
     public function boys()
     {
-        $products = Product::with('images')
-            ->whereRaw("TRIM(LOWER(category)) = ?", ['boys'])
+        $products = Product::whereRaw("TRIM(LOWER(category)) = ?", ['boys'])
             ->latest()
             ->get();
 
@@ -39,8 +36,7 @@ public function girls()
      */
     public function babies()
     {
-        $products = Product::with('images')
-            ->whereRaw("TRIM(LOWER(category)) = ?", ['babies'])
+        $products = Product::whereRaw("TRIM(LOWER(category)) = ?", ['babies'])
             ->latest()
             ->get();
 
@@ -52,8 +48,7 @@ public function girls()
      */
     public function mothers()
     {
-        $products = Product::with('images')
-            ->whereRaw("TRIM(LOWER(category)) = ?", ['mothers'])
+        $products = Product::whereRaw("TRIM(LOWER(category)) = ?", ['mothers'])
             ->latest()
             ->get();
 
