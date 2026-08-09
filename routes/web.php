@@ -26,9 +26,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Middleware\RedirectIfAuthenticated;
 
-// استدعاء الكنترولر الصحيح للسلة
+// استدعاء الكنترولرات الخاصة بالسلة والأقسام
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\CategoryController; // ✅ تم إضافة استدعاء CategoryController
 
 /*
 |--------------------------------------------------------------------------
@@ -143,29 +144,11 @@ Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->na
 // روت العروض والأقسام الثابتة لتفادي الـ 404
 Route::get('/category/offers', [ProductController::class, 'getOffers'])->name('category.offers');
 
-Route::get('/category/boys', function() { 
-    $category = \App\Models\Category::where('category_name', 'like', '%ولد%')->orWhere('category_slug', 'like', '%boys%')->first();
-    $products = \App\Models\Product::where('category', 'like', '%ولد%')->where('status', 1)->get();
-    return view('categories.boys', compact('products', 'category')); 
-})->name('category.boys');
-
-Route::get('/category/girls', function() { 
-    $category = \App\Models\Category::where('category_name', 'like', '%بنات%')->orWhere('category_slug', 'like', '%girls%')->first();
-    $products = \App\Models\Product::where('category', 'like', '%بنات%')->where('status', 1)->get();
-    return view('categories.girls', compact('products', 'category')); 
-})->name('category.girls');
-
-Route::get('/category/babies', function() { 
-    $category = \App\Models\Category::where('category_name', 'like', '%رضع%')->orWhere('category_name', 'like', '%طفل%')->orWhere('category_slug', 'like', '%babies%')->first();
-    $products = \App\Models\Product::where('category', 'like', '%رضع%')->orWhere('category', 'like', '%طفل%')->where('status', 1)->get();
-    return view('categories.babies', compact('products', 'category')); 
-})->name('category.babies');
-
-Route::get('/category/mothers', function() { 
-    $category = \App\Models\Category::where('category_name', 'like', '%أمهات%')->orWhere('category_name', 'like', '%نساء%')->orWhere('category_slug', 'like', '%mothers%')->first();
-    $products = \App\Models\Product::where('category', 'like', '%أمهات%')->orWhere('category', 'like', '%نساء%')->where('status', 1)->get();
-    return view('categories.mothers', compact('products', 'category')); 
-})->name('category.mothers');
+// ✅ تم تعديل هذه الروابط لترتبط بالـ CategoryController مباشرة
+Route::get('/category/boys', [CategoryController::class, 'boys'])->name('category.boys');
+Route::get('/category/girls', [CategoryController::class, 'girls'])->name('category.girls');
+Route::get('/category/babies', [CategoryController::class, 'babies'])->name('category.babies');
+Route::get('/category/mothers', [CategoryController::class, 'mothers'])->name('category.mothers');
 
 // الروت الديناميكي أسفل المسارات الثابتة
 Route::get('/category/{category}', [ShopController::class, 'category'])->name('category.show');
