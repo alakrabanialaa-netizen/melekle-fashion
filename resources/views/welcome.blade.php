@@ -269,15 +269,16 @@
     </div>
 </div>
 
-{{-- Products Grid Fixed by Categories (3 Products Each) --}}
-<section class="py-24" id="shop">
+
+    {{-- Products Infinite Ticker Section --}}
+<section class="py-20 bg-gray-50/50 overflow-hidden" id="shop">
     <div class="max-w-screen-xl mx-auto px-6">
         
         {{-- شريط العناوين والبحث العلوي --}}
-        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
             <div class="text-right w-full md:w-auto">
                 <span class="lux-badge block mb-2">JUST ARRIVED</span>
-                <h2 class="text-4xl md:text-5xl font-black text-gray-900 leading-tight">قطعنا <span class="lux-gradient">الجديدة</span> الساحرة ✨</h2>
+                <h2 class="text-3xl md:text-5xl font-black text-gray-900 leading-tight">قطعنا <span class="lux-gradient">الجديدة</span> الساحرة ✨</h2>
             </div>
             <div class="filter-bar w-full md:w-auto">
                 <div class="filter-group flex w-full">
@@ -315,6 +316,7 @@
 
         @foreach($static_categories as $cat)
             @php
+                // جلب عدد أكبر من المنتجات بدلاً من 3 فقط لعرضها في الشريط المتحرك
                 $cat_products = \App\Models\Product::where(function($query) use ($cat) {
                                                     foreach($cat['keywords'] as $keyword) {
                                                         $query->orWhere('category', 'like', $keyword);
@@ -323,13 +325,13 @@
                                                ->where('status', 1)
                                                ->with('images')
                                                ->latest()
-                                               ->take(3)
+                                               ->take(12)
                                                ->get();
             @endphp
 
             @if($cat_products->count() > 0)
                 {{-- رأس القسم --}}
-                <div class="flex justify-between items-end mb-8 border-b pb-4 border-gray-100 {{ !$loop->first ? 'mt-16' : '' }}">
+                <div class="flex justify-between items-end mb-6 border-b pb-4 border-gray-200 {{ !$loop->first ? 'mt-16' : '' }}">
                     <div class="text-right">
                         <h3 class="text-2xl md:text-3xl font-black text-gray-800">{{ $cat['name'] }}</h3>
                     </div>
@@ -338,39 +340,42 @@
                     </div>
                 </div>
 
-                {{-- شبكة عرض الـ 3 منتجات --}}
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10">
+                {{-- شريط المنتجات المتحرك (Carousel / Ticker) --}}
+                <div class="relative w-full overflow-x-auto pb-4 pt-2 no-scrollbar scroll-smooth flex gap-6 snap-x snap-mandatory">
                     @foreach($cat_products as $product)
-                        <div class="product-card-ty group">
-                            <div class="ty-image-wrapper">
+                        <div class="product-card-ty group flex-shrink-0 w-[220px] sm:w-[260px] md:w-[280px] snap-start">
+                            <div class="ty-image-wrapper relative overflow-hidden rounded-2xl bg-gray-100">
                                 @if($product->original_price > $product->price)
-                                    <div class="ty-badge">خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%</div>
+                                    <div class="ty-badge absolute top-3 right-3 z-10 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-md">خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%</div>
                                 @endif
-                                <button class="ty-wishlist-btn"><i class="far fa-heart"></i></button>
                                 
-                                <a href="{{ route('product.show', $product->id) }}" class="block w-full h-full">
-                                    <img loading="lazy" src="{{ $product->images->first() ? $product->images->first()->image : 'https://images.unsplash.com/photo-1515488042361-404e9250afef?q=80&w=400&auto=format&fit=crop' }}" class="ty-main-image group-hover:scale-105" alt="{{ $product->name }}">
+                                <button class="ty-wishlist-btn absolute top-3 left-3 z-10 w-8 h-8 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-gray-600 hover:text-rose-500 transition"><i class="far fa-heart"></i></button>
+                                
+                                <a href="{{ route('products.show', [$product->id, $product->product_slug ?? 'item']) }}" class="block w-full h-full">
+                                    <img loading="lazy" src="{{ $product->images->first() ? $product->images->first()->image : ($product->product_thambnail ?? 'https://via.placeholder.com/400x600') }}" class="ty-main-image w-full h-[320px] object-cover group-hover:scale-105 transition-transform duration-500" alt="{{ $product->name }}">
                                 </a>
                                 
-                                <div class="ty-glass-overlay">
-                                    {{-- تم التعديل: تحويل الزر إلى فورم أجاكس لحل مشكلة السلة وتمرير معطيات الأجاكس بسلاسة --}}
+                                <div class="ty-glass-overlay absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                                     <form action="{{ url('cart-add/'.$product->id) }}" method="POST" class="w-full add-to-cart-form">
                                         @csrf
                                         <input type="hidden" name="size" value="Free Size">
                                         <input type="hidden" name="quantity" value="1">
-                                        <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs md:text-sm">
+                                        <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-2.5 px-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-xs md:text-sm">
                                             <span>🛍️</span><span>أضف إلى السلة</span>
                                         </button>
                                     </form>
                                 </div>
                             </div>
                             
-                            <div class="ty-info-wrapper mt-3">
-                                <a href="{{ route('product.show', $product->id) }}" class="hover:text-rose-500 transition-colors">
-                                    <h3 class="ty-title text-gray-800 line-clamp-1 text-right">{{ $product->name }}</h3>
+                            <div class="ty-info-wrapper mt-3 text-right">
+                                <a href="{{ route('products.show', [$product->id, $product->product_slug ?? 'item']) }}" class="hover:text-rose-500 transition-colors">
+                                    <h3 class="ty-title text-gray-800 font-bold text-sm line-clamp-1">{{ $product->name }}</h3>
                                 </a>
-                                <div class="ty-price-wrapper mt-2">
-                                    <span class="ty-final-price">{{ number_format($product->price, 2) }} ₺</span>
+                                <div class="ty-price-wrapper mt-1 flex items-center justify-end gap-2">
+                                    @if($product->original_price)
+                                        <span class="text-xs text-gray-400 line-through">{{ number_format($product->original_price, 2) }} ₺</span>
+                                    @endif
+                                    <span class="ty-final-price font-black text-rose-600 text-base">{{ number_format($product->price, 2) }} ₺</span>
                                 </div>
                             </div>
                         </div>
@@ -381,6 +386,18 @@
 
     </div>
 </section>
+
+{{-- أنماط CSS لإخفاء شريط التمرير الافتراضي وتنعيم الحركة --}}
+<style>
+    /* إخفاء شريط التمرير للـ Webkit و Firefox */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
 
 {{-- Premium Section --}}
 <section class="relative py-24 overflow-hidden bg-transparent select-none">
