@@ -153,7 +153,9 @@ Route::get('/category/mothers', [CategoryController::class, 'mothers'])->name('c
 // الروت الديناميكي أسفل المسارات الثابتة
 Route::get('/category/{category}', [ShopController::class, 'category'])->name('category.show');
 
+// ✅ تم إضافة اسم products.show كروت احتياطي لمنع الـ RouteNotFoundException
 Route::get('/product/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('product.show');
+Route::get('/product/item/details/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('products.show');
 Route::get('/product/info/{id}/{slug?}', [IndexController::class, 'ProductDetails'])->name('frontend.products.show');
 Route::get('/vendor/details/{id}', [IndexController::class, 'VendorDetails'])->name('vendor.details');
 Route::get('/vendor/all', [IndexController::class, 'VendorAll'])->name('vendor.all');
