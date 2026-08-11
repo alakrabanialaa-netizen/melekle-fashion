@@ -3,10 +3,10 @@
 @section('content')
 <main class="bg-[#fdfdfd] min-h-screen">
     
-    {{-- 🏷️ Title Section --}}
+    {{-- 🏷️ Header Section --}}
     <div class="container mx-auto px-4 pt-16 pb-12 text-center">
         <h1 class="text-4xl md:text-5xl font-black text-gray-900 mb-3 animate-fade-in">عروض تركية وتشكيلة مشكلة</h1>
-        <div class="w-20 h-1 bg-orange-500 mx-auto mb-4 rounded-full"></div>
+        <div class="w-20 h-1 bg-amber-500 mx-auto mb-4 rounded-full"></div>
         <p class="text-gray-500 text-lg">أقوى التخفيضات الحصرية على المنتجات التركية واصلة مستودع الشام</p>
     </div>
 
@@ -23,28 +23,27 @@
                                 <span class="absolute top-2 right-2 z-20 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">خصم %{{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}</span>
                             @endif
 
-                            {{-- 🔄 عرض روابط Cloudinary المباشرة والذكية هنا --}}
                             @if($product->product_thambnail)
                                 <img src="{{ $product->product_thambnail }}" class="ty-main-image w-full h-full object-cover" alt="{{ $product->name }}">
                             @elseif($product->images && $product->images->first())
                                 <img src="{{ $product->images->first()->image }}" class="ty-main-image w-full h-full object-cover" alt="{{ $product->name }}">
                             @else
                                 <img src="https://via.placeholder.com/400x600?text=No+Image" class="ty-main-image w-full h-full object-cover" alt="{{ $product->name }}">
-                            @endif                            
+                            @endif
                             
                             <div class="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/60 to-transparent hidden md:block z-20">
                                 <form action="{{ url('cart-add/'.$product->id) }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="w-full bg-white text-gray-900 font-bold py-2 rounded-lg text-sm hover:bg-orange-500 hover:text-white transition-colors">
+                                    <button type="submit" class="w-full bg-white text-gray-900 font-bold py-2 rounded-lg text-sm hover:bg-amber-500 hover:text-white transition-colors">
                                         أضف إلى السلة
                                     </button>
                                 </form>
                             </div>
                         </a>
 
-                        <div class="ty-info-wrapper flex flex-col justify-between p-4 flex-grow">
+                        <div class="ty-info-wrapper flex flex-col justify-between p-4 flex-grow text-right">
                             <a href="{{ route('products.show', [$product->id, $product->product_slug ?? 'offer-style']) }}">
-                                <h3 class="ty-title mb-2 hover:text-orange-500 transition-colors">{{ $product->name }}</h3>
+                                <h3 class="ty-title mb-2 hover:text-amber-500 transition-colors">{{ $product->name }}</h3>
                             </a>
                             
                             <div class="flex items-center justify-between mt-auto pt-2">
@@ -52,12 +51,12 @@
                                     @if($product->original_price)
                                         <span class="ty-original-price text-xs text-gray-400 line-through">{{ number_format($product->original_price, 2) }} ₺</span>
                                     @endif
-                                    <span class="ty-final-price text-orange-600 font-black text-lg">{{ number_format($product->price, 2) }} ₺</span>
+                                    <span class="ty-final-price text-amber-600 font-black text-lg">{{ number_format($product->price, 2) }} ₺</span>
                                 </div>
                                 
                                 <form action="{{ url('cart-add/'.$product->id) }}" method="POST" class="md:hidden">
                                     @csrf
-                                    <button type="submit" class="w-10 h-10 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all">
+                                    <button type="submit" class="w-10 h-10 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center hover:bg-amber-500 hover:text-white transition-all">
                                         <i class="fas fa-shopping-cart text-sm"></i>
                                     </button>
                                 </form>
@@ -73,7 +72,7 @@
                 <div class="text-6xl mb-6">🎁</div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-2">لا توجد عروض متوفرة حالياً</h3>
                 <p class="text-gray-500 mb-8">ترقبوا إطلاق أقوى التشكيلات والتصفيات قريباً جداً!</p>
-                <a href="{{ url('/') }}" class="inline-block px-10 py-3 bg-gray-900 text-white font-bold rounded-full hover:bg-orange-500 transition-all">
+                <a href="{{ url('/') }}" class="inline-block px-10 py-3 bg-gray-900 text-white font-bold rounded-full hover:bg-amber-500 transition-all">
                     العودة للرئيسية
                 </a>
             </div>
@@ -90,9 +89,9 @@
                         متجرك الموثوق لأزياء الأطفال والنساء بتصاميم عصرية وجودة عالية تمنحك تجربة تسوق مميزة.
                     </p>
                     <div class="flex gap-4 mt-6 text-xl">
-                        <a href="https://www.instagram.com/meleklerkids/" target="_blank" rel="noopener noreferrer" class="hover:text-orange-500 transition"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.facebook.com/MELEKLERKIDSTR" target="_blank" rel="noopener noreferrer" class="hover:text-orange-500 transition"><i class="fab fa-facebook"></i></a>
-                        <a href="https://api.whatsapp.com/message/CL67ADRC7PMFO1?autoload=1&app_absent=0" target="_blank" rel="noopener noreferrer" class="hover:text-orange-500 transition"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.instagram.com/meleklerkids/" target="_blank" rel="noopener noreferrer" class="hover:text-amber-500 transition"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/MELEKLERKIDSTR" target="_blank" rel="noopener noreferrer" class="hover:text-amber-500 transition"><i class="fab fa-facebook"></i></a>
+                        <a href="https://api.whatsapp.com/message/CL67ADRC7PMFO1" target="_blank" rel="noopener noreferrer" class="hover:text-amber-500 transition"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
 
@@ -119,10 +118,10 @@
                 <div>
                     <h5 class="font-bold text-white mb-5 text-lg">اشترك في العروض</h5>
                     <p class="text-gray-400 mb-4 text-xs">احصل على أحدث الخصومات والعروض الحصرية مباشرة إلى بريدك.</p>
-                    <a href="mailto:meleklerkids@gmail.com?subject=اشتراك%20جديد&body=أود%20الاشتراك%20في%20العروض%20الخاصة." class="flex">
-                        <input type="email" placeholder="بريدك الإلكتروني" class="w-full px-4 py-3 rounded-l-xl bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none" readonly>
-                        <button class="px-5 bg-orange-500 text-white rounded-r-xl hover:bg-orange-600 transition font-bold text-sm">اشتراك</button>
-                    </a>
+                    <div class="flex">
+                        <input type="email" placeholder="بريدك الإلكتروني" class="w-full px-4 py-2 rounded-r-xl bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none">
+                        <button class="px-5 bg-amber-500 text-white rounded-l-xl hover:bg-amber-600 transition font-bold text-sm">اشتراك</button>
+                    </div>
                 </div>
             </div>
 
@@ -134,7 +133,6 @@
     </footer>
 </main>
 
-{{-- 🎨 Stylesheet --}}
 <style>
     .product-card-ty {
         background: white;
@@ -143,30 +141,21 @@
         overflow: hidden;
         transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
-
     .product-card-ty:hover {
         transform: translateY(-8px);
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        border-color: #f97316;
+        border-color: #f59e0b;
     }
-
     .ty-image-wrapper {
         aspect-ratio: 2/3;
         background: #f9fafb;
     }
-
     .ty-main-image {
         transition: transform 0.6s ease;
     }
-
     .product-card-ty:hover .ty-main-image {
         transform: scale(1.08);
     }
-
-    .ty-info-wrapper {
-        text-align: right;
-    }
-
     .ty-title {
         font-size: 0.85rem;
         font-weight: 600;
@@ -178,7 +167,6 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
     }
-
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
