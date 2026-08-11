@@ -178,33 +178,43 @@
     }
 </style>
 
-{{-- 🚀 HERO SLIDER --}}
-<div class="swiper hero-swiper">
-    <div class="swiper-wrapper">
-        <div class="swiper-slide" style="background-image: url('https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/MkdnFgIRAmlobtLe.png')">
-            <div class="slide-overlay"></div>
-            <div class="max-w-7xl mx-auto w-full px-6">
-                <div class="slide-content">
-                    <span class="lux-badge">NEW COLLECTION 2026</span>
-                    <h1 class="hero-title font-black">عالم من <span class="text-rose-500">الأناقة</span> لصغيرك</h1>
-                    <p class="hero-subtitle mb-8 text-gray-600">اكتشفي تشكيلتنا الجديدة من ملابس الأطفال المصنوعة بحب وعناية فائقة.</p>
-                    <a href="#shop" class="hero-btn">تسوقي الآن 🛍️</a>
-                </div>
-            </div>
-        </div>
-        <div class="swiper-slide" style="background-image: url('https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/tVwHaWhOrDBbxEvW.png')">
-            <div class="slide-overlay"></div>
-            <div class="max-w-7xl mx-auto w-full px-6">
-                <div class="slide-content">
-                    <span class="lux-badge">ARTISTIC TEXTURES</span>
-                    <h1 class="hero-title font-black">تصاميم <span class="text-amber-500">عصرية</span> بلمسة فنية</h1>
-                    <p class="hero-subtitle mb-8 text-gray-600">نمزج بين الراحة والجمال في كل قطعة، لنمنح أطفالك إطلالة فريدة.</p>
-                    <a href="#collection" class="hero-btn">اكتشفي المزيد ✨</a>
-                </div>
+
+{{-- 🚀 HERO VIDEO SECTION --}}
+<div class="relative w-full h-screen overflow-hidden flex items-center justify-center">
+    
+    {{-- 🎥 Background Video --}}
+    <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
+        {{-- استبدل المسار أدناه بمسار الفيديو الخاص بك داخل مجلد public --}}
+        <source src="{{ asset('videos/hero.mp4') }}" type="video/mp4">
+        متصفحك لا يدعم تشغيل الفيديو.
+    </video>
+
+    {{-- 🌑 Dark Overlay for Contrast --}}
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] z-10"></div>
+
+    {{-- 📝 Content Overlay --}}
+    <div class="relative z-20 max-w-7xl mx-auto w-full px-6 text-center md:text-right">
+        <div class="slide-content max-w-2xl">
+            <span class="lux-badge inline-block mb-4 px-4 py-1.5 bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-full text-xs font-bold tracking-widest uppercase">NEW COLLECTION 2026</span>
+            <h1 class="hero-title font-black text-4xl sm:text-6xl text-white leading-tight mb-4">
+                عالم من <span class="text-rose-400">الأناقة</span> لصغيرك
+            </h1>
+            <p class="hero-subtitle mb-8 text-gray-200 text-lg md:text-xl font-light">
+                اكتشفي تشكيلتنا الجديدة من ملابس الأطفال المصنوعة بحب وعناية فائقة.
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+                <a href="#shop" class="hero-btn inline-flex items-center gap-2 bg-rose-500 hover:bg-rose-600 text-white font-bold py-3.5 px-8 rounded-2xl shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <span>تسوقي الآن</span>
+                    <span>🛍️</span>
+                </a>
+                <a href="#collection" class="hero-btn inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white font-bold py-3.5 px-8 rounded-2xl border border-white/40 backdrop-blur-md transition-all duration-300">
+                    <span>اكتشفي المزيد</span>
+                    <span>✨</span>
+                </a>
             </div>
         </div>
     </div>
-    <div class="swiper-pagination"></div>
+
 </div>
 
 {{-- Features Section --}}
