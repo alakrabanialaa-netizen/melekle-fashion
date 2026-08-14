@@ -604,7 +604,7 @@
                     <label class="block text-xs font-bold text-gray-300 mb-2">المبلغ بالليرة التركية (₺):</label>
                     <div class="relative">
                         <input type="number" id="tryAmount" value="1000" min="1" class="w-full bg-black/40 border border-white/20 rounded-2xl py-3 px-4 text-white font-bold text-lg focus:outline-none focus:border-rose-400 transition" placeholder="أدخل المبلغ...">
-                        <span class="absolute left-4 top-3.5 text-gray-400 font-bold">₺ TRY</span>
+                        <span class="absolute left-4 top-3.5 text-gray-400 font-bold"> </span>
                     </div>
                 </div>
 
