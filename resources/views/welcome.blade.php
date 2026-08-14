@@ -575,6 +575,143 @@
 </section>
 
 {{-- ==================== الـ FOOTER المنظم والموحد ==================== --}}
+
+{{-- 🔀 SMART CURRENCY CONVERTER SECTION --}}
+<section class="py-12 bg-gradient-to-r from-gray-900 via-rose-950 to-gray-900 text-white relative overflow-hidden my-12 border-y border-rose-500/20">
+    {{-- خلفية جمالية ضوئية --}}
+    <div class="absolute -top-24 -left-24 w-72 h-72 bg-rose-500/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
+        
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-bold tracking-wider uppercase mb-4 backdrop-blur-md text-amber-300">
+            <span>🔱 حاسبة أسعار التسوق الحية</span>
+        </div>
+
+        <h3 class="text-2xl md:text-4xl font-black text-white mb-2">
+            حاسبة العملات <span class="lux-gradient">الذكية</span> ✨
+        </h3>
+        <p class="text-gray-300 text-xs md:text-sm mb-8 font-light">
+            اعرف تكلفة مشترياتك بعملك المفتضلة وبأسعار الصرف الحية لحظة بلحظة.
+        </p>
+
+        {{-- بطاقة الحاسبة --}}
+        <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                
+                {{-- المبلغ بالليرة التركية --}}
+                <div class="text-right">
+                    <label class="block text-xs font-bold text-gray-300 mb-2">المبلغ بالليرة التركية (₺):</label>
+                    <div class="relative">
+                        <input type="number" id="tryAmount" value="1000" min="1" class="w-full bg-black/40 border border-white/20 rounded-2xl py-3 px-4 text-white font-bold text-lg focus:outline-none focus:border-rose-400 transition" placeholder="أدخل المبلغ...">
+                        <span class="absolute left-4 top-3.5 text-gray-400 font-bold">₺ TRY</span>
+                    </div>
+                </div>
+
+                {{-- اختيار العملة المراد التحويل إليها --}}
+                <div class="text-right">
+                    <label class="block text-xs font-bold text-gray-300 mb-2">تحويل إلى:</label>
+                    <select id="targetCurrency" class="w-full bg-black/40 border border-white/20 rounded-2xl py-3 px-4 text-white font-bold text-lg focus:outline-none focus:border-rose-400 transition cursor-pointer">
+                        <option value="USD" selected>💵 دولار أمريكي ($)</option>
+                        <option value="EUR">💶 يورو (€)</option>
+                        <option value="SAR">🇸🇦 ريال سعودي (SAR)</option>
+                        <option value="AED">🇦🇪 درهم إماراتي (AED)</option>
+                        <option value="JOD">🇯🇴 دينار أردني (JOD)</option>
+                        <option value="KWD">🇰🇼 دينار كويتي (KWD)</option>
+                    </select>
+                </div>
+
+                {{-- النتيجة --}}
+                <div class="text-right md:text-center bg-rose-500/20 border border-rose-500/30 p-4 rounded-2xl">
+                    <span class="block text-xs font-bold text-rose-200 mb-1">المبلغ المقابل تقريباً:</span>
+                    <span class="text-2xl md:text-3xl font-black text-amber-300" id="convertedResult">0.00 $</span>
+                </div>
+
+            </div>
+
+            {{-- شريط ملخص أسعار الصرف --}}
+            <div class="mt-6 pt-4 border-t border-white/10 flex flex-wrap justify-between items-center text-xs text-gray-300 gap-2">
+                <div class="flex items-center gap-4">
+                    <span>💲 1 USD = <strong class="text-white" id="rateUSD">--</strong> TRY</span>
+                    <span>💶 1 EUR = <strong class="text-white" id="rateEUR">--</strong> TRY</span>
+                    <span>🇸🇦 1 SAR = <strong class="text-white" id="rateSAR">--</strong> TRY</span>
+                </div>
+                <span class="text-gray-400 text-[10px]" id="lastUpdate">🔄 جاري تحديث الأسعار...</span>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{{-- ⚙️ SCRIPT FOR LIVE CURRENCY CONVERSION --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const apiUrl = "https://open.er-api.com/v6/latest/TRY";
+    let exchangeRates = {};
+
+    const tryInput = document.getElementById('tryAmount');
+    const targetSelect = document.getElementById('targetCurrency');
+    const convertedResult = document.getElementById('convertedResult');
+    const lastUpdateSpan = document.getElementById('lastUpdate');
+
+    const currencySymbols = {
+        USD: '$',
+        EUR: '€',
+        SAR: 'ر.س',
+        AED: 'د.إ',
+        JOD: 'د.أ',
+        KWD: 'د.ك'
+    };
+
+    async function fetchRates() {
+        try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            
+            if(data.result === "success") {
+                exchangeRates = data.rates;
+
+                document.getElementById('rateUSD').innerText = (1 / exchangeRates.USD).toFixed(2);
+                document.getElementById('rateEUR').innerText = (1 / exchangeRates.EUR).toFixed(2);
+                document.getElementById('rateSAR').innerText = (1 / exchangeRates.SAR).toFixed(2);
+
+                const now = new Date();
+                lastUpdateSpan.innerText = `تحديث مباشر: ${now.getHours()}:${now.getMinutes() < 10 ? '0' : ''}${now.getMinutes()}`;
+
+                calculateConversion();
+            }
+        } catch (error) {
+            console.error("خطأ في جلب أسعار العملات:", error);
+            lastUpdateSpan.innerText = "تعذر تحديث الأسعار التلقائي";
+        }
+    }
+
+    function calculateConversion() {
+        const amount = parseFloat(tryInput.value) || 0;
+        const targetCurrency = targetSelect.value;
+        const symbol = currencySymbols[targetCurrency] || targetCurrency;
+
+        if (exchangeRates[targetCurrency]) {
+            const converted = amount * exchangeRates[targetCurrency];
+            convertedResult.innerText = `${converted.toFixed(2)} ${symbol}`;
+        }
+    }
+
+    tryInput.addEventListener('input', calculateConversion);
+    targetSelect.addEventListener('change', function() {
+        localStorage.setItem('preferred_currency', targetSelect.value);
+        calculateConversion();
+    });
+
+    const savedCurrency = localStorage.getItem('preferred_currency');
+    if (savedCurrency && targetSelect.querySelector(`option[value="${savedCurrency}"]`)) {
+        targetSelect.value = savedCurrency;
+    }
+
+    fetchRates();
+});
+</script>
+
 <footer class="bg-gradient-to-b from-gray-900 to-black text-gray-300 pt-20 pb-10">
     <div class="max-w-screen-xl mx-auto px-6">
         <div class="grid md:grid-cols-4 gap-12 mb-16">
@@ -607,10 +744,12 @@
 
             <div>
                 <h5 class="font-bold text-white mb-5 text-lg">اشترك في العروض</h5>
-                <div class="flex">
-                    <input type="email" placeholder="بريدك الإلكتروني" class="w-full px-4 py-3 rounded-l-xl bg-gray-800 border border-gray-700 text-white focus:outline-none" readonly>
-                    <button class="px-5 bg-orange-500 rounded-r-xl hover:bg-orange-600 transition">اشتراك</button>
-                </div>
+                <form action="#" method="POST" class="flex">
+                    @csrf
+                    {{-- تم إزالة readonly ليتأح للمستخدم الكتابة --}}
+                    <input type="email" name="email" placeholder="بريدك الإلكتروني" class="w-full px-4 py-3 rounded-l-xl bg-gray-800 border border-gray-700 text-white focus:outline-none focus:border-orange-500 transition" required>
+                    <button type="submit" class="px-5 bg-orange-500 rounded-r-xl hover:bg-orange-600 text-white font-bold transition">اشتراك</button>
+                </form>
             </div>
         </div>
 
@@ -652,7 +791,6 @@
     window.addEventListener("scroll", reveal);
     reveal();
 
-    // دالة الإضافة الموحدة والآمنة للأجاكس لحل مشكلة استدعاء السلة بدون تحديث الصفحة
     function addToCart(productId) {
         fetch(`/cart-add/${productId}`, {
             method: 'POST',
