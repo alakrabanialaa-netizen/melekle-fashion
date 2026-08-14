@@ -179,50 +179,92 @@
 </style>
 
 
-{{-- 🚀 HERO VIDEO SECTION (SUPABASE BUCKET) --}}
-<div class="relative w-full h-screen overflow-hidden flex items-center justify-center bg-black">
-    
-    {{-- 🎥 Supabase Streaming Video --}}
-    <video 
-        autoplay 
-        loop 
-        muted 
-        playsinline 
-        webkit-playsinline
-        preload="auto"
-        class="absolute inset-0 w-full h-full object-cover z-0">
-        {{-- ضع رابط الفيديو المباشر المأخوذ من Supabase Storage هنا --}}
-        <source src="https://YOUR_SUPABASE_PROJECT_ID.supabase.co/storage/v1/object/public/YOUR_BUCKET/hero.mp4" type="video/mp4">
-        متصفحك لا يدعم تشغيل الفيديو.
-    </video>
+{{-- 🚀 HERO IMAGE SECTION (FULLSCREEN LUXURY STYLE) --}}
+<div class="relative w-full h-screen min-h-[600px] overflow-hidden bg-gray-900 flex items-center">
 
-    {{-- 🌑 Dark Overlay for Better Text Contrast --}}
-    <div class="absolute inset-0 bg-black/40 backdrop-blur-[1px] z-10"></div>
+    {{-- 🖼️ Background Image with Subtle Zoom Effect --}}
+    <div class="absolute inset-0 z-0">
+        <img 
+            src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/MkdnFgIRAmlobtLe.png" 
+            alt="Melekler Fashion Hero" 
+            class="w-full h-full object-cover object-center scale-105 animate-subtle-zoom"
+        >
+        {{-- Overlays for Text Readability --}}
+        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent rtl:bg-gradient-to-l"></div>
+        <div class="absolute inset-0 bg-black/20 backdrop-blur-[1px]"></div>
+    </div>
 
-    {{-- 📝 Content Overlay --}}
-    <div class="relative z-20 max-w-7xl mx-auto w-full px-6 text-center md:text-right">
-        <div class="slide-content max-w-2xl">
-            <span class="lux-badge inline-block mb-4 px-4 py-1.5 bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-full text-xs font-bold tracking-widest uppercase">NEW COLLECTION 2026</span>
-            <h1 class="hero-title font-black text-4xl sm:text-6xl text-white leading-tight mb-4">
-                عالم من <span class="text-rose-400">الأناقة</span> لصغيرك
+    {{-- 📝 Main Content Container --}}
+    <div class="relative z-10 max-w-screen-xl mx-auto px-6 w-full pt-16">
+        <div class="max-w-2xl text-right">
+            
+            {{-- Badge --}}
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 backdrop-blur-md rounded-full mb-6">
+                <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                <span class="text-white text-xs font-bold tracking-widest uppercase">NEW COLLECTION 2026</span>
+            </div>
+
+            {{-- Title --}}
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-white leading-tight mb-6 tracking-tight">
+                عالم من <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-pink-500">الأناقة</span> لصغيرك ✨
             </h1>
-            <p class="hero-subtitle mb-8 text-gray-200 text-lg md:text-xl font-light">
-                اكتشفي تشكيلتنا الجديدة من ملابس الأطفال المصنوعة بحب وعناية فائقة.
+
+            {{-- Subtitle --}}
+            <p class="text-gray-200 text-lg md:text-xl font-light leading-relaxed mb-10 max-w-xl">
+                اكتشفي أحدث صيحات الموضة التركية المصممة بعناية وفخامة تمنح طفلك إطلالة استثنائية وراحة مطلقة.
             </p>
-            <div class="flex flex-wrap gap-4 justify-center md:justify-start">
-                <a href="#shop" class="hero-btn inline-flex items-center gap-2 bg-rose-500 hover:bg-rose-600 text-white font-bold py-3.5 px-8 rounded-2xl shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                    <span>تسوقي الآن</span>
-                    <span>🛍️</span>
+
+            {{-- Action Buttons --}}
+            <div class="flex flex-wrap gap-4 items-center">
+                <a href="#shop" class="group relative px-8 py-4 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-2xl shadow-xl shadow-rose-500/30 transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-3">
+                    <span>تسوقي المجموعة</span>
+                    <span class="group-hover:translate-x-[-4px] transition-transform rtl:group-hover:translate-x-[4px]">←</span>
                 </a>
-                <a href="#collection" class="hero-btn inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white font-bold py-3.5 px-8 rounded-2xl border border-white/40 backdrop-blur-md transition-all duration-300">
-                    <span>اكتشفي المزيد</span>
-                    <span>✨</span>
+                
+                <a href="#collection" class="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-2xl border border-white/20 backdrop-blur-md transition-all duration-300">
+                    استكشفي الأقسام
                 </a>
+            </div>
+
+        </div>
+    </div>
+
+    {{-- 🌟 Bottom Quick Info Strip --}}
+    <div class="absolute bottom-0 inset-x-0 z-10 bg-gradient-to-t from-black/80 to-transparent pt-10 pb-6">
+        <div class="max-w-screen-xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-white/80 text-xs md:text-sm border-t border-white/10 pt-4">
+            <div class="flex items-center gap-3">
+                <span class="text-xl">✨</span>
+                <span>تصاميم تركية حصرية</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-xl">🚚</span>
+                <span>توصيل سريع وضمون</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-xl">🧵</span>
+                <span>أقمشة قطنية 100%</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-xl">💎</span>
+                <span>جودة عالية وأسعار منافسة</span>
             </div>
         </div>
     </div>
 
 </div>
+
+{{-- Animate CSS for Hero Image --}}
+<style>
+    @keyframes subtleZoom {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    .animate-subtle-zoom {
+        animation: subtleZoom 20s infinite alternate ease-in-out;
+    }
+</style>
+
 
 {{-- Features Section --}}
 <div class="grid grid-cols-1 md:grid-cols-3 gap-12 py-20 text-center select-none max-w-7xl mx-auto px-6">
@@ -249,43 +291,132 @@
     </div>
 </div>
 
-{{-- Event & Calendar --}}
-<div class="mt-16 py-20 text-white select-none relative" style="background-color: #f43f5e;">
-    <div class="absolute top-0 left-0 right-0 h-4 bg-[radial-gradient(circle_at_bottom,_transparent_60%,_#fffaf0_65%)] bg-[length:16px_16px]"></div>
-    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row gap-12 items-center justify-between">
-        <div class="md:w-1/2 space-y-6 text-right w-full order-2 md:order-1">
-            <h2 class="text-3xl md:text-4xl font-black tracking-wide leading-tight text-white">April's Upcoming Event</h2>
-            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 border border-white/25 shadow-xl text-right">
-                <div class="flex gap-4 text-xs md:text-sm mb-4 font-bold opacity-95 flex-row-reverse justify-start">
-                    <span>📅 17.04.2026</span><span>⏰ 09:00 AM</span><span>📍 اسطنبول</span>
+{{-- 🗓️ LUXURY EVENT & CALENDAR SECTION --}}
+<section class="mt-16 py-20 text-white relative bg-gradient-to-br from-rose-500 via-rose-600 to-pink-600 overflow-hidden select-none">
+    
+    {{-- 🎨 Decorative Top Pattern --}}
+    <div class="absolute top-0 inset-x-0 h-4 bg-[radial-gradient(circle_at_bottom,_transparent_60%,_#ffffff_65%)] bg-[length:16px_16px] opacity-20"></div>
+
+    <div class="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row gap-12 items-center justify-between relative z-10">
+        
+        {{-- 📝 Event Info Card (Right Side in RTL) --}}
+        <div class="lg:w-1/2 space-y-6 text-right w-full">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 border border-white/30 text-xs font-bold tracking-wider uppercase backdrop-blur-md">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                <span>فعالية خاصة قادمة</span>
+            </div>
+
+            <h2 class="text-3xl md:text-5xl font-black tracking-tight leading-tight text-white">
+                عرض ربيع <span class="text-amber-300">2026</span> الأكبر ✨
+            </h2>
+
+            <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl relative overflow-hidden group">
+                <div class="flex flex-wrap gap-4 text-xs md:text-sm mb-6 font-bold text-rose-100 items-center justify-start">
+                    <span class="flex items-center gap-1.5 bg-black/20 px-3 py-1.5 rounded-xl border border-white/10">📅 17 أبريل 2026</span>
+                    <span class="flex items-center gap-1.5 bg-black/20 px-3 py-1.5 rounded-xl border border-white/10">⏰ 09:00 صباحاً</span>
+                    <span class="flex items-center gap-1.5 bg-black/20 px-3 py-1.5 rounded-xl border border-white/10">📍 اسطنبول</span>
                 </div>
-                <p class="mb-6 leading-relaxed text-white/90 text-sm md:text-base">انضموا إلينا في فعاليتنا القادمة لربيع 2026، حيث سنقوم بالعديد من الأنشطة التفاعلية.</p>
-                <div class="text-left"><a href="#" class="inline-block bg-white text-rose-500 font-bold px-6 py-3 rounded-2xl hover:bg-rose-50 transition-all shadow-md text-sm">معرفة المزيد</a></div>
+
+                <p class="mb-8 leading-relaxed text-white/90 text-sm md:text-base font-light">
+                    انضموا إلينا في إطلاق التشكيلة الجديدة لربيع 2026! خصومات حصرية، هدايا مميزة للأطفال، وأنشطة تفاعلية لا تُنسى طوال اليوم.
+                </p>
+
+                {{-- ⏳ Live Countdown Timer --}}
+                <div class="grid grid-cols-4 gap-2 text-center mb-8 bg-black/20 p-3 rounded-2xl border border-white/10">
+                    <div>
+                        <span class="block text-xl md:text-2xl font-black text-amber-300" id="days">00</span>
+                        <span class="text-[10px] text-rose-200">يوم</span>
+                    </div>
+                    <div>
+                        <span class="block text-xl md:text-2xl font-black text-amber-300" id="hours">00</span>
+                        <span class="text-[10px] text-rose-200">ساعة</span>
+                    </div>
+                    <div>
+                        <span class="block text-xl md:text-2xl font-black text-amber-300" id="minutes">00</span>
+                        <span class="text-[10px] text-rose-200">دقيقة</span>
+                    </div>
+                    <div>
+                        <span class="block text-xl md:text-2xl font-black text-amber-300" id="seconds">00</span>
+                        <span class="text-[10px] text-rose-200">ثانية</span>
+                    </div>
+                </div>
+
+                <a href="#register" class="inline-flex items-center gap-2 bg-white text-rose-600 font-extrabold px-8 py-3.5 rounded-2xl hover:bg-amber-400 hover:text-gray-900 transition-all shadow-lg hover:shadow-xl text-sm transform hover:-translate-y-0.5">
+                    <span>احجزي مقعدك الآن</span>
+                    <span>←</span>
+                </a>
             </div>
         </div>
-        <div class="md:w-1/2 flex flex-col items-center w-full order-1 md:order-2">
-            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20 w-full max-w-sm shadow-xl">
-                <h3 class="text-xl font-black mb-6 text-center text-white">April 2026</h3>
+
+        {{-- 📅 Visual Calendar (Left Side in RTL) --}}
+        <div class="lg:w-1/2 flex flex-col items-center w-full">
+            <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-6 md:p-8 border border-white/20 w-full max-w-md shadow-2xl">
                 
-                <div style="direction: ltr; width: 100%;">
-                    <div style="display: flex; justify-content: space-between; text-align: center; font-weight: bold; margin-bottom: 12px; opacity: 0.9; color: white;">
-                        <span style="width: 14%;">S</span><span style="width: 14%;">M</span><span style="width: 14%;">T</span><span style="width: 14%;">W</span><span style="width: 14%;">T</span><span style="width: 14%;">F</span><span style="width: 14%;">S</span>
+                {{-- Month Header --}}
+                <div class="flex justify-between items-center mb-6 border-b border-white/15 pb-4">
+                    <span class="text-sm font-bold text-rose-200">2026</span>
+                    <h3 class="text-2xl font-black text-white tracking-wider">أبريل / April</h3>
+                    <span class="text-amber-300 text-lg">✨</span>
+                </div>
+                
+                {{-- Calendar Grid --}}
+                <div dir="ltr" class="w-full">
+                    {{-- Days of Week --}}
+                    <div class="grid grid-cols-7 text-center font-black text-xs md:text-sm mb-4 opacity-80 text-rose-100">
+                        <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
                     </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px 0;">
+
+                    {{-- Days Grid --}}
+                    <div class="grid grid-cols-7 gap-y-2 text-center text-xs md:text-sm">
+                        {{-- Offset for April 2026 starting on Wednesday (3 empty slots) --}}
+                        <div></div><div></div><div></div>
+
                         @for ($d = 1; $d <= 30; $d++)
-                            <div style="width: 14%; display: flex; justify-content: center; align-items: center; margin-bottom: 4px;">
-                                <div class="{{ $d == 17 ? 'active' : '' }}" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 0.85rem; {{ $d == 17 ? 'background-color: #f59e0b; color: #1f2937; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);' : 'color: white;' }}">
+                            <div class="flex items-center justify-center">
+                                <div class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-full font-bold transition-all duration-300 {{ $d == 17 ? 'bg-amber-400 text-gray-900 shadow-lg shadow-amber-400/50 scale-110 ring-4 ring-amber-400/30 font-black' : 'hover:bg-white/10 text-white' }}">
                                     {{ $d }}
                                 </div>
                             </div>
                         @endfor
                     </div>
                 </div>
+
+                {{-- Calendar Footer Note --}}
+                <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-rose-100">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
+                        <span>يوم الفعالية</span>
+                    </div>
+                    <span class="opacity-75">معرض اسطنبول الدولي</span>
+                </div>
+
             </div>
         </div>
-    </div>
-</div>
 
+    </div>
+</section>
+
+{{-- ⏱️ Countdown Timer Script --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const eventDate = new Date("April 17, 2026 09:00:00").getTime();
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                return;
+            }
+
+            document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
+        }, 1000);
+    });
+</script>
 
     {{-- Products Infinite Ticker Section --}}
 <section class="py-20 bg-gray-50/50 overflow-hidden" id="shop">
