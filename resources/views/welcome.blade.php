@@ -179,18 +179,25 @@
 </style>
 
 
-{{-- 🚀 HERO VIDEO SECTION --}}
-<div class="relative w-full h-screen overflow-hidden flex items-center justify-center">
+{{-- 🚀 HERO VIDEO SECTION (SUPABASE BUCKET) --}}
+<div class="relative w-full h-screen overflow-hidden flex items-center justify-center bg-black">
     
-    {{-- 🎥 Background Video --}}
-    <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
-        {{-- استبدل المسار أدناه بمسار الفيديو الخاص بك داخل مجلد public --}}
-        <source src="{{ asset('videos/hero.mp4') }}" type="video/mp4">
+    {{-- 🎥 Supabase Streaming Video --}}
+    <video 
+        autoplay 
+        loop 
+        muted 
+        playsinline 
+        webkit-playsinline
+        preload="auto"
+        class="absolute inset-0 w-full h-full object-cover z-0">
+        {{-- ضع رابط الفيديو المباشر المأخوذ من Supabase Storage هنا --}}
+        <source src="https://YOUR_SUPABASE_PROJECT_ID.supabase.co/storage/v1/object/public/YOUR_BUCKET/hero.mp4" type="video/mp4">
         متصفحك لا يدعم تشغيل الفيديو.
     </video>
 
-    {{-- 🌑 Dark Overlay for Contrast --}}
-    <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] z-10"></div>
+    {{-- 🌑 Dark Overlay for Better Text Contrast --}}
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-[1px] z-10"></div>
 
     {{-- 📝 Content Overlay --}}
     <div class="relative z-20 max-w-7xl mx-auto w-full px-6 text-center md:text-right">
