@@ -3,7 +3,7 @@
 @section('page-title', 'إضافة منتج جديد')
 
 @section('content')
-<div class="max-w-4xl mx-auto py-8" dir="rtl">
+<div class="max-w-5xl mx-auto py-8" dir="rtl">
 
     {{-- رسائل الأخطاء (Validation Errors) --}}
     @if ($errors->any())
@@ -32,12 +32,12 @@
             {{-- 1. المعلومات الأساسية --}}
             <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
                 <h2 class="text-xl font-bold text-indigo-800 mb-6 flex items-center gap-2">
-                    <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm">1</span>
-                    المعلومات الأساسية للمنتج
+                    <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                    المعلومات الأساسية والفيئة
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                        <label for="product_code" class="block text-sm font-bold text-gray-700 mb-2">كود المنتج (Barcode / SKU) <span class="text-rose-500">*</span></label>
+                        <label for="product_code" class="block text-sm font-bold text-gray-700 mb-2">كود المنتج (SKU / Barcode) <span class="text-rose-500">*</span></label>
                         <input type="text" name="product_code" id="product_code" value="{{ old('product_code') }}" 
                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all font-mono font-bold" 
                                placeholder="مثال: MELEK-101" required>
@@ -47,18 +47,30 @@
                         <label for="name" class="block text-sm font-bold text-gray-700 mb-2">اسم المنتج <span class="text-rose-500">*</span></label>
                         <input type="text" name="name" id="name" value="{{ old('name') }}" 
                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all" 
-                               placeholder="مثال: طقم ولادي صيفي 3 قطع" required>
+                               placeholder="مثال: حقيبة يد جلدية / طقم نسائي" required>
                     </div>
 
                     <div>
                         <label for="category" class="block text-sm font-bold text-gray-700 mb-2">القسم الرئيسي <span class="text-rose-500">*</span></label>
                         <select name="category" id="category" 
-                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none appearance-none bg-white transition-all" required>
+                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none appearance-none bg-white transition-all font-medium" required>
                             <option value="">-- اختر القسم المناسب --</option>
-                            <option value="girls" {{ old('category') == 'girls' ? 'selected' : '' }}>بنات</option>
-                            <option value="boys" {{ old('category') == 'boys' ? 'selected' : '' }}>أولاد</option>
-                            <option value="babies" {{ old('category') == 'babies' ? 'selected' : '' }}>مواليد / رضع</option>
-                            <option value="mothers" {{ old('category') == 'mothers' ? 'selected' : '' }}>أمهات</option>
+                            <optgroup label="الألبسة والموضة">
+                                <option value="women" {{ old('category') == 'women' ? 'selected' : '' }}>نسائي</option>
+                                <option value="girls" {{ old('category') == 'girls' ? 'selected' : '' }}>بناتي</option>
+                                <option value="boys" {{ old('category') == 'boys' ? 'selected' : '' }}>أولادي</option>
+                                <option value="babies" {{ old('category') == 'babies' ? 'selected' : '' }}>مواليد / رضع</option>
+                                <option value="mothers" {{ old('category') == 'mothers' ? 'selected' : '' }}>أمهات / حوامل</option>
+                            </optgroup>
+                            <optgroup label="الإكسسوارات والحقائب">
+                                <option value="bags" {{ old('category') == 'bags' ? 'selected' : '' }}>حقائب وشنط</option>
+                                <option value="shoes" {{ old('category') == 'shoes' ? 'selected' : '' }}>أحذية</option>
+                                <option value="accessories" {{ old('category') == 'accessories' ? 'selected' : '' }}>إكسسوارات</option>
+                            </optgroup>
+                            <optgroup label="العروض الخاصة والتصفية">
+                                <option value="turkish_offers" {{ old('category') == 'turkish_offers' ? 'selected' : '' }}>🇹🇷 عروض تركية خاصة</option>
+                                <option value="stocks" {{ old('category') == 'stocks' ? 'selected' : '' }}>📦 ستوكات وتصفية</option>
+                            </optgroup>
                         </select>
                     </div>
                 </div>
@@ -67,22 +79,22 @@
             {{-- 2. الأسعار والمخزون --}}
             <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
                 <h2 class="text-xl font-bold text-indigo-800 mb-6 flex items-center gap-2">
-                    <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm">2</span>
-                    الأسعار والمخزون والتفاصيل المادية
+                    <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                    الأسعار والمخزون والتفاصيل
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div>
-                        <label for="cost_price" class="block text-sm font-bold text-gray-700 mb-2">سعر الشراء / التكلفة (₺) <span class="text-rose-500">*</span></label>
+                        <label for="cost_price" class="block text-sm font-bold text-gray-700 mb-2">سعر التكلفة (₺) <span class="text-rose-500">*</span></label>
                         <input type="number" step="0.01" name="cost_price" id="cost_price" value="{{ old('cost_price') }}" 
                                placeholder="0.00"
                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-mono text-lg font-bold text-amber-700" required>
                     </div>
 
                     <div>
-                        <label for="original_price" class="block text-sm font-bold text-gray-700 mb-2">السعر الأصلي (قبل الخصم)</label>
+                        <label for="original_price" class="block text-sm font-bold text-gray-700 mb-2">السعر قبل الخصم (₺)</label>
                         <input type="number" step="0.01" name="original_price" id="original_price" value="{{ old('original_price') }}" 
                                placeholder="0.00"
-                               class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-mono text-lg font-bold text-gray-500">
+                               class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-mono text-lg font-bold text-gray-400 line-through">
                     </div>
 
                     <div>
@@ -93,42 +105,42 @@
                     </div>
 
                     <div>
-                        <label for="stock" class="block text-sm font-bold text-gray-700 mb-2">الكمية المتاحة (المخزون)</label>
+                        <label for="stock" class="block text-sm font-bold text-gray-700 mb-2">الكمية المتاحة</label>
                         <input type="number" name="stock" id="stock" value="{{ old('stock', 0) }}" 
                                placeholder="0"
                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-mono text-lg font-bold text-gray-800">
                     </div>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <div>
-                        <label for="color" class="block text-sm font-bold text-gray-700 mb-2">اللون الأساسي</label>
+                        <label for="color" class="block text-sm font-bold text-gray-700 mb-2">اللون / الألوان المتاحة</label>
                         <input type="text" name="color" id="color" value="{{ old('color') }}" 
                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all" 
-                               placeholder="مثال: أحمر / منقّط">
+                               placeholder="مثال: أسود، بيج، بني">
                     </div>
                     <div>
-                        <label for="badge_text" class="block text-sm font-bold text-gray-700 mb-2">نص الشارة (اختياري)</label>
+                        <label for="badge_text" class="block text-sm font-bold text-gray-700 mb-2">نص الشارة المميزة (Badge)</label>
                         <input type="text" name="badge_text" id="badge_text" value="{{ old('badge_text') }}" 
                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all" 
-                               placeholder="مثال: الأكثر مبيعاً">
+                               placeholder="مثال: عرض خاص ⚡ / ستوك ممتاز / الأكثر مبيعاً">
                     </div>
                 </div>
-                <p class="mt-3 text-xs text-gray-400">💡 إدخال سعر الشراء بدقة يتيح للنظام المحاسبي حساب أرباحك تلقائياً.</p>
+                <p class="mt-3 text-xs text-gray-400">💡 إدخال سعر التكلفة بدقة يساعد في حساب الأرباح التلقائية في النظام.</p>
             </div>
 
-            {{-- 3. الوصف والملفات --}}
+            {{-- 3. الوصف والوسائط --}}
             <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
                 <h2 class="text-xl font-bold text-indigo-800 mb-6 flex items-center gap-2">
-                    <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm">3</span>
+                    <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm font-bold">3</span>
                     الصور والوصف
                 </h2>
-                <div class="space-y-8">
+                <div class="space-y-6">
                     <div>
-                        <label for="description" class="block text-sm font-bold text-gray-700 mb-2">شرح المنتج</label>
+                        <label for="description" class="block text-sm font-bold text-gray-700 mb-2">تفاصيل وشرح المنتج</label>
                         <textarea name="description" id="description" rows="4" 
                                   class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all" 
-                                  placeholder="اكتب تفاصيل المنتج هنا (المادة، المقاسات، إلخ...)">{{ old('description') }}</textarea>
+                                  placeholder="اكتب تفاصيل المنتج (نوع القماش/الجلد، بلد التصنيع، تفاصيل العرض أو الستوك...)">{{ old('description') }}</textarea>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -155,22 +167,22 @@
                 </div>
             </div>
 
-            {{-- 4. المقاسات والأعمار --}}
+            {{-- 4. المقاسات والخيارات المتنوعة --}}
             <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm">
                 <h2 class="text-xl font-bold text-indigo-800 mb-6 flex items-center gap-2">
-                    <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm">4</span>
-                    المقاسات والأعمار المتاحة
+                    <span class="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm font-bold">4</span>
+                    المقاسات والأبعاد (حسب نوع المنتج)
                 </h2>
                 
                 <div class="space-y-6">
-                    {{-- مقاسات الملابس العالمية --}}
+                    {{-- المقاسات القياسية (نسائي / ألبسة عامة) --}}
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-3">المقاسات (للأمهات أو المقاسات العامة)</label>
-                        <div class="flex flex-wrap gap-4">
-                            @foreach(['XS', 'S', 'M', 'L', 'XL', 'XXL'] as $size)
+                        <label class="block text-sm font-bold text-gray-700 mb-3">مقاسات الألبسة العامة والنسائية</label>
+                        <div class="flex flex-wrap gap-3">
+                            @foreach(['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', 'One Size (قياس موحد)'] as $size)
                                 <label class="inline-flex items-center p-3 bg-white border rounded-xl cursor-pointer hover:border-indigo-500 transition-all shadow-sm">
                                     <input type="checkbox" name="sizes[]" value="{{ $size }}" class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                                    <span class="mr-3 font-bold text-gray-700">{{ $size }}</span>
+                                    <span class="mr-2.5 font-bold text-gray-700 text-sm">{{ $size }}</span>
                                 </label>
                             @endforeach
                         </div>
@@ -178,9 +190,9 @@
 
                     <hr class="border-gray-200">
 
-                    {{-- مقاسات الأطفال بالأعمار --}}
+                    {{-- مقاسات الأطفال --}}
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-3">الأعمار المتاحة (للأطفال والمواليد)</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-3">أعمار ومقاسات الأطفال والمواليد</label>
                         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                             @php
                                 $ages = [
@@ -194,14 +206,15 @@
                                     '4-5y' => '4-5 سنوات',
                                     '6-7y' => '6-7 سنوات',
                                     '8-9y' => '8-9 سنوات',
-                                    '10-12y' => '10-12 سنة'
+                                    '10-12y' => '10-12 سنة',
+                                    '13-16y' => '13-16 سنة'
                                 ];
                             @endphp
 
                             @foreach($ages as $value => $label)
                                 <label class="inline-flex items-center p-3 bg-white border rounded-xl cursor-pointer hover:border-indigo-500 transition-all shadow-sm">
                                     <input type="checkbox" name="ages[]" value="{{ $value }}" class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                                    <span class="mr-3 text-sm font-bold text-gray-700">{{ $label }}</span>
+                                    <span class="mr-2.5 text-sm font-bold text-gray-700">{{ $label }}</span>
                                 </label>
                             @endforeach
                         </div>
@@ -215,9 +228,10 @@
                     🚀 حفظ المنتج ونشره
                 </button>
                 <a href="{{ route('admin.products.index') }}" class="px-10 py-4 rounded-xl border border-gray-300 font-bold text-gray-600 hover:bg-gray-100 transition-all">
-                    إلغاء الرجوع
+                    إلغاء والرجوع
                 </a>
             </div>
+
         </div>
     </form>
 </div>
