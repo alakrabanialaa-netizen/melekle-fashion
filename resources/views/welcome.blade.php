@@ -418,10 +418,10 @@
     });
 </script>
 
-    {{-- Products Infinite Ticker Section --}}
+     {{-- Products Infinite Ticker Section --}}
 <section class="py-20 bg-gray-50/50 overflow-hidden" id="shop">
     <div class="max-w-screen-xl mx-auto px-6">
-        
+
         {{-- شريط العناوين والبحث العلوي --}}
         <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
             <div class="text-right w-full md:w-auto">
@@ -464,7 +464,6 @@
 
         @foreach($static_categories as $cat)
             @php
-                // جلب عدد أكبر من المنتجات بدلاً من 3 فقط لعرضها في الشريط المتحرك
                 $cat_products = \App\Models\Product::where(function($query) use ($cat) {
                                                     foreach($cat['keywords'] as $keyword) {
                                                         $query->orWhere('category', 'like', $keyword);
@@ -476,7 +475,6 @@
                                                ->take(12)
                                                ->get();
             @endphp
-
             @if($cat_products->count() > 0)
                 {{-- رأس القسم --}}
                 <div class="flex justify-between items-end mb-6 border-b pb-4 border-gray-200 {{ !$loop->first ? 'mt-16' : '' }}">
@@ -496,13 +494,28 @@
                                 @if($product->original_price > $product->price)
                                     <div class="ty-badge absolute top-3 right-3 z-10 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-md">خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%</div>
                                 @endif
-                                
-                                <button class="ty-wishlist-btn absolute top-3 left-3 z-10 w-8 h-8 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-gray-600 hover:text-rose-500 transition"><i class="far fa-heart"></i></button>
-                                
+
+                                {{-- أزرار التفاعل علوي اليمين واليسار --}}
+                                <div class="absolute top-3 left-3 z-10 flex flex-col gap-2">
+                                    {{-- زر المفضلة --}}
+                                    <button class="ty-wishlist-btn w-8 h-8 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-gray-600 hover:text-rose-500 transition shadow-sm">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+
+                                    {{-- زر تجربة القطعة (Fitting Room) --}}
+                                    <button onclick="openFittingRoom('{{ $product->id }}', '{{ $product->name }}', '{{ $product->images->first() ? $product->images->first()->image : $product->product_thambnail }}')" 
+                                            class="try-on-btn w-8 h-8 bg-gray-900/80 backdrop-blur text-white rounded-full flex items-center justify-center hover:bg-rose-500 transition shadow-sm"
+                                            title="تجربة القطعة افتراضياً">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+
                                 <a href="{{ route('products.show', [$product->id, $product->product_slug ?? 'item']) }}" class="block w-full h-full">
                                     <img loading="lazy" src="{{ $product->images->first() ? $product->images->first()->image : ($product->product_thambnail ?? 'https://via.placeholder.com/400x600') }}" class="ty-main-image w-full h-[320px] object-cover group-hover:scale-105 transition-transform duration-500" alt="{{ $product->name }}">
                                 </a>
-                                
+
                                 <div class="ty-glass-overlay absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                                     <form action="{{ url('cart-add/'.$product->id) }}" method="POST" class="w-full add-to-cart-form">
                                         @csrf
@@ -514,7 +527,6 @@
                                     </form>
                                 </div>
                             </div>
-                            
                             <div class="ty-info-wrapper mt-3 text-right">
                                 <a href="{{ route('products.show', [$product->id, $product->product_slug ?? 'item']) }}" class="hover:text-rose-500 transition-colors">
                                     <h3 class="ty-title text-gray-800 font-bold text-sm line-clamp-1">{{ $product->name }}</h3>
@@ -535,17 +547,36 @@
     </div>
 </section>
 
-{{-- أنماط CSS لإخفاء شريط التمرير الافتراضي وتنعيم الحركة --}}
-<style>
-    /* إخفاء شريط التمرير للـ Webkit و Firefox */
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
-    .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-</style>
+{{-- Fitting Room Modal (نافذة التجربة الافتراضية) --}}
+<div id="fittingRoomModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-gray-900 text-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl border border-gray-800 text-center">
+        <button onclick="closeFittingRoom()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl font-bold">&times;</button>
+        <div class="mb-4">
+            <span class="text-xs text-rose-400 font-bold uppercase tracking-widest">Fitting Room</span>
+            <h3 id="fittingProductName" class="text-lg font-bold mt-1 text-gray-200">غرفة التجربة الافتراضية</h3>
+        </div>
+        <div class="relative w-full h-72 bg-gray-800 rounded-2xl overflow-hidden flex items-center justify-center border border-gray-700">
+            <img id="fittingProductImg" src="" class="max-h-full object-contain" alt="Selected Product">
+            <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center p-4">
+                <div class="w-10 h-10 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+                <p class="text-sm text-gray-300">جاري قياس وتلبيس القطعة افتراضياً...</p>
+            </div>
+        </div>
+        <button onclick="closeFittingRoom()" class="w-full mt-5 bg-rose-500 hover:bg-rose-600 font-bold py-3 rounded-xl transition">إغلاق</button>
+    </div>
+</div>
+
+<script>
+function openFittingRoom(id, name, img) {
+    document.getElementById('fittingProductName').innerText = name;
+    document.getElementById('fittingProductImg').src = img;
+    document.getElementById('fittingRoomModal').classList.remove('hidden');
+}
+
+function closeFittingRoom() {
+    document.getElementById('fittingRoomModal').classList.add('hidden');
+}
+</script>
 
 {{-- Premium Section --}}
 <section class="relative py-24 overflow-hidden bg-transparent select-none">
