@@ -50,29 +50,18 @@
                                placeholder="مثال: حقيبة يد جلدية / طقم نسائي" required>
                     </div>
 
-                    <div>
-                        <label for="category" class="block text-sm font-bold text-gray-700 mb-2">القسم الرئيسي <span class="text-rose-500">*</span></label>
-                        <select name="category" id="category" 
-                                class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none appearance-none bg-white transition-all font-medium" required>
-                            <option value="">-- اختر القسم المناسب --</option>
-                            <optgroup label="الألبسة والموضة">
-                                <option value="women" {{ old('category') == 'women' ? 'selected' : '' }}>نسائي</option>
-                                <option value="girls" {{ old('category') == 'girls' ? 'selected' : '' }}>بناتي</option>
-                                <option value="boys" {{ old('category') == 'boys' ? 'selected' : '' }}>أولادي</option>
-                                <option value="babies" {{ old('category') == 'babies' ? 'selected' : '' }}>مواليد / رضع</option>
-                                <option value="mothers" {{ old('category') == 'mothers' ? 'selected' : '' }}>أمهات / حوامل</option>
-                            </optgroup>
-                            <optgroup label="الإكسسوارات والحقائب">
-                                <option value="bags" {{ old('category') == 'bags' ? 'selected' : '' }}>حقائب وشنط</option>
-                                <option value="shoes" {{ old('category') == 'shoes' ? 'selected' : '' }}>أحذية</option>
-                                <option value="accessories" {{ old('category') == 'accessories' ? 'selected' : '' }}>إكسسوارات</option>
-                            </optgroup>
-                            <optgroup label="العروض الخاصة والتصفية">
-                                <option value="turkish_offers" {{ old('category') == 'turkish_offers' ? 'selected' : '' }}>🇹🇷 عروض تركية خاصة</option>
-                                <option value="stocks" {{ old('category') == 'stocks' ? 'selected' : '' }}>📦 ستوكات وتصفية</option>
-                            </optgroup>
-                        </select>
-                    </div>
+                   <div>
+    <label for="category" class="block text-sm font-bold text-gray-700 mb-2">القسم الرئيسي <span class="text-rose-500">*</span></label>
+    <select name="category" id="category" 
+            class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none appearance-none bg-white transition-all font-medium" required>
+        <option value="">-- اختر القسم المناسب --</option>
+        <option value="babies" {{ old('category') == 'babies' ? 'selected' : '' }}>مواليد / رضع</option>
+        <option value="boys" {{ old('category') == 'boys' ? 'selected' : '' }}>أولادي</option>
+        <option value="girls" {{ old('category') == 'girls' ? 'selected' : '' }}>بناتي</option>
+        <option value="mothers" {{ old('category') == 'mothers' ? 'selected' : '' }}>أمهات / حوامل</option>
+        <option value="offers" {{ old('category') == 'offers' ? 'selected' : '' }}>🇹🇷 عروض خاصة</option>
+    </select>
+</div>
                 </div>
             </div>
 
