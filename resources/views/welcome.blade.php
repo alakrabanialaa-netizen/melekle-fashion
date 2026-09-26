@@ -323,6 +323,94 @@
     }
 </style>
 
+<style>
+    /* Instagram-style story circles: fixed, perfectly round and never compressed */
+    .category-strip .category-scroll {
+        align-items: flex-start !important;
+        justify-content: center !important;
+        flex-wrap: nowrap !important;
+    }
+    .category-strip .category-item {
+        flex: 0 0 104px !important;
+        width: 104px !important;
+        min-width: 104px !important;
+    }
+    .category-strip .category-orbit {
+        display: block !important;
+        width: 84px !important;
+        min-width: 84px !important;
+        height: 84px !important;
+        min-height: 84px !important;
+        aspect-ratio: 1 / 1 !important;
+        padding: 3px !important;
+        margin: 0 auto 10px !important;
+        border-radius: 50% !important;
+        background: conic-gradient(from 220deg, #f7b731, #f43f5e 38%, #c026d3 68%, #f7b731) !important;
+        box-shadow: 0 0 0 2px #fff, 0 7px 20px rgba(244,63,94,.22) !important;
+    }
+    .category-strip .category-orbit::before {
+        inset: -5px !important;
+        width: auto !important;
+        height: auto !important;
+        border-radius: 50% !important;
+        border: 1px solid rgba(244,63,94,.28) !important;
+    }
+    .category-strip .category-icon {
+        display: flex !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        border-radius: 50% !important;
+        border: 4px solid #fffaf0 !important;
+        background: linear-gradient(145deg, #fff, #fff1f4) !important;
+        font-size: 27px !important;
+    }
+    .category-strip .category-name { font-size: .8rem !important; }
+    @media (max-width: 768px) {
+        .category-strip .category-scroll {
+            justify-content: flex-start !important;
+            overflow-x: auto !important;
+            padding: 6px 8px 8px !important;
+        }
+        .category-strip .category-item { width: 82px !important; min-width: 82px !important; flex-basis: 82px !important; }
+        .category-strip .category-orbit { width: 70px !important; min-width: 70px !important; height: 70px !important; min-height: 70px !important; }
+        .category-strip .category-icon { font-size: 23px !important; }
+    }
+    .hero-offer-card {
+        position: absolute;
+        z-index: 12;
+        left: clamp(24px, 6vw, 92px);
+        bottom: 118px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        max-width: 245px;
+        padding: 12px 16px;
+        border: 1px solid rgba(255,255,255,.32);
+        border-radius: 18px;
+        background: rgba(17,24,39,.38);
+        box-shadow: 0 14px 30px rgba(0,0,0,.16);
+        color: #fff;
+        backdrop-filter: blur(12px);
+    }
+    .hero-offer-icon {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        flex: 0 0 38px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f59e0b, #f43f5e);
+        font-size: 17px;
+    }
+    .hero-offer-card strong { display: block; font-size: .8rem; }
+    .hero-offer-card span { display: block; margin-top: 2px; color: rgba(255,255,255,.76); font-size: .68rem; }
+    @media (max-width: 768px) {
+        .hero-offer-card { left: 18px; bottom: 112px; max-width: 205px; padding: 10px 12px; }
+        .hero-offer-icon { width: 32px; height: 32px; flex-basis: 32px; font-size: 14px; }
+    }
+</style>
+
 <section class="category-strip" dir="rtl" aria-label="تصفح الأقسام">
     <div class="category-panel">
         <h2 class="category-heading">تسوّقي حسب القسم</h2>
@@ -366,8 +454,8 @@
             class="w-full h-full object-cover object-center scale-105 animate-subtle-zoom"
         >
         {{-- Overlays for Text Readability --}}
-        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent rtl:bg-gradient-to-l"></div>
-        <div class="absolute inset-0 bg-black/20 backdrop-blur-[1px]"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-black/45 via-black/20 to-transparent rtl:bg-gradient-to-l"></div>
+        <div class="absolute inset-0 bg-black/5"></div>
     </div>
 
     {{-- 📝 Main Content Container --}}
@@ -402,6 +490,15 @@
                 </a>
             </div>
 
+        </div>
+    </div>
+
+    {{-- ✨ Premium Service Card --}}
+    <div class="hero-offer-card">
+        <span class="hero-offer-icon"><i class="fas fa-truck-fast"></i></span>
+        <div>
+            <strong>توصيل سريع لباب بيتك</strong>
+            <span>شحن مجاني للطلبات فوق 1000 ₺</span>
         </div>
     </div>
 
