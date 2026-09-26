@@ -179,6 +179,118 @@
 </style>
 
 
+{{-- ✨ PREMIUM CATEGORY CIRCLES (تظهر مباشرة تحت النافر) --}}
+<style>
+    .category-strip {
+        position: relative;
+        z-index: 20;
+        background: rgba(255, 250, 240, 0.96);
+        border-bottom: 1px solid rgba(244, 63, 94, 0.08);
+        box-shadow: 0 12px 30px rgba(31, 41, 55, 0.06);
+    }
+    .category-strip-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 18px 24px 20px;
+    }
+    .category-scroll {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        gap: clamp(18px, 3vw, 42px);
+        overflow-x: auto;
+        scrollbar-width: none;
+        padding: 4px 8px 3px;
+    }
+    .category-scroll::-webkit-scrollbar { display: none; }
+    .category-item {
+        flex: 0 0 auto;
+        min-width: 84px;
+        text-align: center;
+        color: #374151;
+        text-decoration: none;
+        transition: transform .3s ease, color .3s ease;
+    }
+    .category-item:hover { transform: translateY(-5px); color: var(--brand-pink); }
+    .category-orbit {
+        width: 76px;
+        height: 76px;
+        padding: 3px;
+        margin: 0 auto 8px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #f59e0b, #f43f5e 52%, #a855f7);
+        box-shadow: 0 7px 18px rgba(244, 63, 94, .16);
+        transition: transform .3s ease, box-shadow .3s ease;
+    }
+    .category-item:hover .category-orbit {
+        transform: rotate(7deg) scale(1.08);
+        box-shadow: 0 12px 24px rgba(244, 63, 94, .28);
+    }
+    .category-icon {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid #fffaf0;
+        border-radius: inherit;
+        background: #fff;
+        font-size: 30px;
+    }
+    .category-name {
+        display: block;
+        font-size: .78rem;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+    .category-kicker {
+        text-align: center;
+        margin: 0 0 13px;
+        color: #9ca3af;
+        font-size: .68rem;
+        font-weight: 700;
+        letter-spacing: .16em;
+    }
+    @media (max-width: 768px) {
+        .category-strip-inner { padding: 14px 12px 16px; }
+        .category-scroll { justify-content: flex-start; gap: 20px; padding-inline: 4px; }
+        .category-orbit { width: 68px; height: 68px; }
+        .category-icon { font-size: 26px; }
+    }
+</style>
+
+<section class="category-strip" aria-label="تصفح الأقسام">
+    <div class="category-strip-inner">
+        <p class="category-kicker">اكتشفي مجموعتنا</p>
+        <div class="category-scroll">
+            <a href="{{ Route::has('category.boys') ? route('category.boys') : '/category/boys' }}" class="category-item">
+                <span class="category-orbit"><span class="category-icon">🧢</span></span>
+                <span class="category-name">أولاد</span>
+            </a>
+            <a href="{{ Route::has('category.girls') ? route('category.girls') : '/category/girls' }}" class="category-item">
+                <span class="category-orbit"><span class="category-icon">🎀</span></span>
+                <span class="category-name">بنات</span>
+            </a>
+            <a href="{{ Route::has('category.babies') ? route('category.babies') : '/category/babies' }}" class="category-item">
+                <span class="category-orbit"><span class="category-icon">🍼</span></span>
+                <span class="category-name">بيبي</span>
+            </a>
+            <a href="{{ Route::has('category.women') ? route('category.women') : '/category/women' }}" class="category-item">
+                <span class="category-orbit"><span class="category-icon">👗</span></span>
+                <span class="category-name">نسائي</span>
+            </a>
+            <a href="#shop" class="category-item">
+                <span class="category-orbit"><span class="category-icon">✨</span></span>
+                <span class="category-name">وصل حديثاً</span>
+            </a>
+            <a href="#shop" class="category-item">
+                <span class="category-orbit"><span class="category-icon">🔥</span></span>
+                <span class="category-name">الأكثر طلباً</span>
+            </a>
+        </div>
+    </div>
+</section>
+
 {{-- 🚀 HERO IMAGE SECTION (FULLSCREEN LUXURY STYLE) --}}
 <div class="relative w-full h-screen min-h-[600px] overflow-hidden bg-gray-900 flex items-center">
 
@@ -862,5 +974,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (typeof openCart === 'function') openCart(); 
         });
     }
+
 </script>
+
 @endsection
+
