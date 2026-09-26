@@ -180,6 +180,35 @@
 </style>
 
 
+{{-- ✨ PROFESSIONAL STORE UPGRADES --}}
+<style>
+    .trust-bar { padding: 18px 16px; background: #fff; border-bottom: 1px solid #f3f4f6; }
+    .trust-grid { max-width: 1220px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .trust-item { display:flex; align-items:center; justify-content:center; gap:10px; color:#374151; font-size:.78rem; font-weight:800; text-align:center; }
+    .trust-item i { display:grid; place-items:center; width:34px; height:34px; border-radius:50%; background:#fff1f2; color:#f43f5e; font-size:14px; }
+    .campaign-section { position:relative; overflow:hidden; margin: 26px auto 0; max-width:1220px; border-radius:30px; padding:34px 42px; background:linear-gradient(110deg,#23111a,#881337 55%,#be123c); color:#fff; box-shadow:0 18px 40px rgba(136,19,55,.18); }
+    .campaign-section::after { content:''; position:absolute; width:260px; height:260px; right:-80px; top:-120px; border:1px solid rgba(255,255,255,.16); border-radius:50%; box-shadow:0 0 0 25px rgba(255,255,255,.04),0 0 0 50px rgba(255,255,255,.03); }
+    .campaign-content { position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+    .campaign-tag { display:inline-block; margin-bottom:8px; padding:5px 12px; border:1px solid rgba(255,255,255,.25); border-radius:999px; color:#fde68a; font-size:.7rem; font-weight:900; }
+    .campaign-title { margin:0; font-size:clamp(1.45rem,3vw,2.5rem); font-weight:900; line-height:1.2; }
+    .campaign-copy { margin:8px 0 0; color:rgba(255,255,255,.76); font-size:.85rem; }
+    .campaign-button { display:inline-flex; align-items:center; gap:8px; flex:0 0 auto; padding:13px 22px; border-radius:15px; background:#fbbf24; color:#3f1d0b; font-size:.82rem; font-weight:900; box-shadow:0 8px 20px rgba(251,191,36,.2); transition:transform .25s,background .25s; }
+    .campaign-button:hover { transform:translateY(-3px); background:#fcd34d; }
+    .product-rating { display:flex; align-items:center; justify-content:flex-end; gap:5px; margin-top:7px; color:#f59e0b; font-size:.67rem; }
+    .product-rating span { color:#9ca3af; font-weight:700; }
+    .product-new-badge { position:absolute; top:12px; right:12px; z-index:19; padding:4px 9px; border-radius:999px; background:#111827; color:#fff; font-size:.62rem; font-weight:900; }
+    .reviews-section { padding:72px 16px; background:#fffaf0; }
+    .reviews-grid { max-width:1100px; margin:26px auto 0; display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .review-card { padding:22px; border:1px solid #f3e8e8; border-radius:22px; background:#fff; box-shadow:0 10px 25px rgba(31,41,55,.05); text-align:right; }
+    .review-stars { color:#f59e0b; letter-spacing:2px; font-size:.8rem; }
+    .review-text { margin:12px 0; color:#4b5563; font-size:.84rem; line-height:1.9; }
+    .review-name { color:#1f2937; font-size:.78rem; font-weight:900; }
+    .whatsapp-float { position:fixed; right:22px; bottom:78px; z-index:70; display:flex; align-items:center; gap:9px; padding:11px 15px 11px 12px; border-radius:999px; background:#25d366; color:#fff; box-shadow:0 10px 25px rgba(37,211,102,.28); font-size:.75rem; font-weight:900; transition:transform .25s,box-shadow .25s; }
+    .whatsapp-float:hover { color:#fff; transform:translateY(-4px); box-shadow:0 14px 30px rgba(37,211,102,.38); }
+    .whatsapp-float i { font-size:19px; }
+    @media (max-width:768px) { .trust-grid{grid-template-columns:repeat(2,1fr);gap:16px 8px}.trust-item{font-size:.68rem}.campaign-section{margin:18px 12px 0;padding:26px 22px;border-radius:24px}.campaign-content{align-items:flex-start;flex-direction:column}.campaign-button{width:100%;justify-content:center}.reviews-grid{grid-template-columns:1fr;max-width:420px}.reviews-section{padding:52px 16px}.whatsapp-float{right:14px;bottom:76px;padding:11px;width:46px;height:46px;justify-content:center}.whatsapp-float span{display:none} }
+</style>
+
 {{-- ✨ PREMIUM CATEGORY CIRCLES (تظهر مباشرة تحت النافر) --}}
 <style>
     .category-strip {
@@ -443,6 +472,16 @@
     </div>
 </section>
 
+{{-- 🛡️ TRUST & SERVICE BAR --}}
+<section class="trust-bar" aria-label="خدمات المتجر">
+    <div class="trust-grid">
+        <div class="trust-item"><i class="fas fa-truck-fast"></i><span>توصيل سريع وآمن</span></div>
+        <div class="trust-item"><i class="fas fa-shield-halved"></i><span>دفع آمن 100%</span></div>
+        <div class="trust-item"><i class="fas fa-rotate-left"></i><span>إرجاع سهل</span></div>
+        <div class="trust-item"><i class="fab fa-whatsapp"></i><span>دعم عبر واتساب</span></div>
+    </div>
+</section>
+
 {{-- 🚀 HERO IMAGE SECTION (FULLSCREEN LUXURY STYLE) --}}
 <div class="relative w-full h-screen min-h-[600px] overflow-hidden bg-gray-900 flex items-center">
 
@@ -545,21 +584,21 @@
         <div class="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-emerald-200 group-hover:rotate-12 transition-all duration-300 transform group-hover:scale-105">
             <span class="text-4xl">🍼</span>
         </div>
-        <h3 class="font-black text-emerald-500 text-xl mb-3">About Product</h3>
+        <h3 class="font-black text-emerald-500 text-xl mb-3">عن منتجاتنا</h3>
         <p class="text-gray-400 text-sm px-6 leading-relaxed">ملابس خاصة صنعت بعناية فائقة لحديثي الولادة.</p>
     </div>
     <div class="group cursor-pointer">
         <div class="w-24 h-24 bg-rose-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-rose-200 group-hover:-rotate-12 transition-all duration-300 transform group-hover:scale-105">
             <span class="text-4xl">🧷</span>
         </div>
-        <h3 class="font-black text-rose-500 text-xl mb-3">Our Experience</h3>
+        <h3 class="font-black text-rose-500 text-xl mb-3">خبرتنا</h3>
         <p class="text-gray-400 text-sm px-6 leading-relaxed">صنعت كل قطعة بحب وشغف مخصص لطفلكِ.</p>
     </div>
     <div class="group cursor-pointer">
         <div class="w-24 h-24 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-sky-200 group-hover:rotate-12 transition-all duration-300 transform group-hover:scale-105">
             <span class="text-4xl">🪄</span>
         </div>
-        <h3 class="font-black text-sky-500 text-xl mb-3">Big Fun for Kids!</h3>
+        <h3 class="font-black text-sky-500 text-xl mb-3">متعة كبيرة للصغار</h3>
         <p class="text-gray-400 text-sm px-6 leading-relaxed">مع كل قطعة من متجرنا ستحصل على هدية مميزة مخصصة.</p>
     </div>
 </div>
@@ -698,7 +737,7 @@
         {{-- شريط العناوين والبحث العلوي --}}
         <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
             <div class="text-right w-full md:w-auto">
-                <span class="lux-badge block mb-2">JUST ARRIVED</span>
+                <span class="lux-badge block mb-2">وصل حديثاً</span>
                 <h2 class="text-3xl md:text-5xl font-black text-gray-900 leading-tight">قطعنا <span class="lux-gradient">الجديدة</span> الساحرة ✨</h2>
             </div>
             <div class="filter-bar w-full md:w-auto">
@@ -769,6 +808,7 @@
                             
                             {{-- غلاف الصورة الرئيسي --}}
                             <div class="ty-image-wrapper relative overflow-hidden rounded-xl bg-gray-100 h-[300px]">
+                                <span class="product-new-badge">جديد</span>
                                 
                                 {{-- نسبة الخصم إن وجد --}}
                                 @if($product->original_price > $product->price)
@@ -793,6 +833,7 @@
                                 <a href="{{ route('products.show', [$product->id, $product->product_slug ?? 'item']) }}" class="hover:text-rose-500 transition-colors">
                                     <h3 class="ty-title text-gray-800 font-bold text-sm line-clamp-1">{{ $product->name }}</h3>
                                 </a>
+                                <div class="product-rating"><span>4.9</span><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                                 <div class="ty-price-wrapper mt-1 flex items-center justify-end gap-2">
                                     @if($product->original_price)
                                         <span class="text-xs text-gray-400 line-through">{{ number_format($product->original_price, 2) }} ₺</span>
@@ -867,6 +908,18 @@ function closeFittingRoom() {
     document.getElementById('fittingRoomModal').classList.add('hidden');
 }
 </script>
+{{-- 🎁 SEASONAL CAMPAIGN --}}
+<section class="campaign-section" aria-label="العرض الموسمي">
+    <div class="campaign-content">
+        <div>
+            <span class="campaign-tag">عرض حصري لفترة محدودة</span>
+            <h2 class="campaign-title">خصم 20% على تشكيلة العيد ✨</h2>
+            <p class="campaign-copy">استخدمي الكود <strong>MELEK20</strong> عند إتمام الطلب واستفيدي من العرض.</p>
+        </div>
+        <a href="#shop" class="campaign-button">استفيدي من العرض <span>←</span></a>
+    </div>
+</section>
+
 {{-- Premium Section --}}
 <section class="relative py-24 overflow-hidden bg-transparent select-none">
     <div class="max-w-screen-xl mx-auto px-6">
@@ -880,7 +933,7 @@ function closeFittingRoom() {
                 </div>
             </div>
             <div class="space-y-8 text-right">
-                <div><span class="lux-badge block mb-2">MATCHING SET</span><h2 class="text-3xl md:text-4xl font-black text-gray-900 leading-tight">إطلالة كاملة <span class="lux-gradient">بضغطة واحدة</span> 🪄</h2></div>
+                <div><span class="lux-badge block mb-2">إطلالة متكاملة</span><h2 class="text-3xl md:text-4xl font-black text-gray-900 leading-tight">إطلالة كاملة <span class="lux-gradient">بضغطة واحدة</span> 🪄</h2></div>
                 
                 {{-- تم التعديل: تغليف زر العرض المميز داخل فورم لمنع توقف الرابط أو الجافا سكريبت --}}
                 <form action="{{ url('cart-add/premium-set') }}" method="POST" class="w-full add-to-cart-form">
@@ -891,6 +944,19 @@ function closeFittingRoom() {
                 </form>
             </div>
         </div>
+    </div>
+</section>
+
+{{-- 💬 CUSTOMER REVIEWS --}}
+<section class="reviews-section" aria-label="آراء العملاء">
+    <div class="text-center">
+        <span class="lux-badge">آراء عميلاتنا</span>
+        <h2 class="text-3xl md:text-4xl font-black text-gray-900 mt-2">تجارب تحكي عن أناقتكِ</h2>
+    </div>
+    <div class="reviews-grid">
+        <article class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">الخامة مرتبة والتوصيل كان سريع جداً. القطعة طلعت أجمل من الصور.</p><span class="review-name">— سارة، إسطنبول</span></article>
+        <article class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">تجربة شراء مريحة وخدمة واتساب ممتازة، أكيد رح أطلب مرة ثانية.</p><span class="review-name">— نور، غازي عنتاب</span></article>
+        <article class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">المقاسات دقيقة والتغليف أنيق جداً. متجر يستحق الثقة.</p><span class="review-name">— ليان، أنقرة</span></article>
     </div>
 </section>
 
@@ -1142,5 +1208,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 </script>
+
+<a class="whatsapp-float" href="https://api.whatsapp.com/message/CL67ADRC7PMFO1" target="_blank" rel="noopener" aria-label="تواصلي معنا عبر واتساب"><i class="fab fa-whatsapp"></i><span>تواصلي معنا</span></a>
 
 @endsection
