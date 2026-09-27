@@ -729,8 +729,7 @@
         }, 1000);
     });
 </script>
-
-    {{-- Products Infinite Ticker Section --}}
+{{-- Products Infinite Ticker Section --}}
 <section class="py-20 bg-gray-50/50 overflow-hidden" id="shop">
     <div class="max-w-screen-xl mx-auto px-6">
 
@@ -748,177 +747,228 @@
             </div>
         </div>
 
-        {{-- مصفوفة الأقسام الثابتة --}}
         @php
             $static_categories = [
-                [
-                    'name' => 'ملابس الأولاد', 
-                    'route' => 'category.boys', 
-                    'keywords' => ['%ولد%', '%ولادي%', '%boy%', '%boys%']
-                ],
-                [
-                    'name' => 'ملابس البنات', 
-                    'route' => 'category.girls', 
-                    'keywords' => ['%بنات%', '%بناتي%', '%girl%', '%girls%']
-                ],
-                [
-                    'name' => 'ملابس الرضع', 
-                    'route' => 'category.babies', 
-                    'keywords' => ['%رضع%', '%طفل%', '%أطفال%', '%اطفال%', '%baby%', '%babies%']
-                ],
-                [
-                    'name' => 'ملابس الأمهات', 
-                    'route' => 'category.women', 
-                    'keywords' => ['%أمهات%', '%نساء%', '%نسائي%', '%mother%', '%women%']
-                ]
+                ['name' => 'ملابس الأولاد', 'route' => 'category.boys', 'keywords' => ['%ولد%', '%ولادي%', '%boy%', '%boys%']],
+                ['name' => 'ملابس البنات', 'route' => 'category.girls', 'keywords' => ['%بنات%', '%بناتي%', '%girl%', '%girls%']],
+                ['name' => 'ملابس الرضع', 'route' => 'category.babies', 'keywords' => ['%رضع%', '%طفل%', '%أطفال%', '%اطفال%', '%baby%', '%babies%']],
+                ['name' => 'ملابس الأمهات', 'route' => 'category.women', 'keywords' => ['%أمهات%', '%نساء%', '%نسائي%', '%mother%', '%women%']]
             ];
         @endphp
 
         @foreach($static_categories as $cat)
             @php
                 $cat_products = \App\Models\Product::where(function($query) use ($cat) {
-                                                    foreach($cat['keywords'] as $keyword) {
-                                                        $query->orWhere('category', 'like', $keyword);
-                                                    }
-                                               })
-                                               ->where('status', 1)
-                                               ->with('images')
-                                               ->latest()
-                                               ->take(12)
-                                               ->get();
+                    foreach($cat['keywords'] as $keyword) $query->orWhere('category', 'like', $keyword);
+                })->where('status', 1)->with('images')->latest()->take(12)->get();
             @endphp
             @if($cat_products->count() > 0)
-                {{-- رأس القسم --}}
                 <div class="flex justify-between items-end mb-6 border-b pb-4 border-gray-200 {{ !$loop->first ? 'mt-16' : '' }}">
-                    <div class="text-right">
-                        <h3 class="text-2xl md:text-3xl font-black text-gray-800">{{ $cat['name'] }}</h3>
-                    </div>
-                    <div>
-                        <a href="{{ Route::has($cat['route']) ? route($cat['route']) : '/category/'.explode('.', $cat['route'])[1] }}" class="apply-button text-xs md:text-sm inline-block px-4 py-2 rounded-xl transition-all">عرض الكل &larr;</a>
-                    </div>
+                    <div class="text-right"><h3 class="text-2xl md:text-3xl font-black text-gray-800">{{ $cat['name'] }}</h3></div>
+                    <a href="{{ Route::has($cat['route']) ? route($cat['route']) : '/category/'.explode('.', $cat['route'])[1] }}" class="apply-button text-xs md:text-sm inline-block px-4 py-2 rounded-xl transition-all">عرض الكل &larr;</a>
                 </div>
 
-                {{-- شريط المنتجات المتحرك (Carousel / Ticker) --}}
                 <div class="relative w-full overflow-x-auto pb-4 pt-2 no-scrollbar scroll-smooth flex gap-6 snap-x snap-mandatory">
                     @foreach($cat_products as $product)
-                        @php
-                            $prodImg = $product->images->first() ? $product->images->first()->image : ($product->product_thambnail ?? 'https://via.placeholder.com/400x600');
-                        @endphp
+                        @php $prodImg = $product->images->first() ? $product->images->first()->image : ($product->product_thambnail ?? 'https://via.placeholder.com/400x600'); @endphp
                         <div class="product-card-ty group flex-shrink-0 w-[240px] sm:w-[270px] md:w-[290px] snap-start bg-white rounded-2xl p-3 border border-gray-100 shadow-sm hover:shadow-md transition">
-                            
-                            {{-- غلاف الصورة الرئيسي --}}
                             <div class="ty-image-wrapper relative overflow-hidden rounded-xl bg-gray-100 h-[300px]">
                                 <span class="product-new-badge">جديد</span>
-                                
-                                {{-- نسبة الخصم إن وجد --}}
                                 @if($product->original_price > $product->price)
-                                    <div class="ty-badge absolute top-3 right-3 z-20 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-md">
-                                        خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%
-                                    </div>
+                                    <div class="ty-badge absolute top-3 right-3 z-20 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-md">خصم {{ round((($product->original_price - $product->price) / $product->original_price) * 100) }}%</div>
                                 @endif
-
-                                {{-- زر المفضلة مفصول تماماً أعلى اليسار --}}
-                                <button class="ty-wishlist-btn absolute top-3 left-3 z-20 w-8 h-8 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-gray-600 hover:text-rose-500 transition shadow-sm">
-                                    <i class="far fa-heart text-sm"></i>
-                                </button>
-
-                                {{-- صورة المنتج --}}
+                                <button class="ty-wishlist-btn absolute top-3 left-3 z-20 w-8 h-8 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-gray-600 hover:text-rose-500 transition shadow-sm"><i class="far fa-heart text-sm"></i></button>
                                 <a href="{{ route('products.show', [$product->id, $product->product_slug ?? 'item']) }}" class="block w-full h-full">
                                     <img loading="lazy" src="{{ $prodImg }}" class="ty-main-image w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="{{ $product->name }}">
                                 </a>
                             </div>
 
-                            {{-- تفاصيل المنتج والأسعار --}}
                             <div class="ty-info-wrapper mt-3 text-right">
-                                <a href="{{ route('products.show', [$product->id, $product->product_slug ?? 'item']) }}" class="hover:text-rose-500 transition-colors">
-                                    <h3 class="ty-title text-gray-800 font-bold text-sm line-clamp-1">{{ $product->name }}</h3>
-                                </a>
+                                <a href="{{ route('products.show', [$product->id, $product->product_slug ?? 'item']) }}" class="hover:text-rose-500 transition-colors"><h3 class="ty-title text-gray-800 font-bold text-sm line-clamp-1">{{ $product->name }}</h3></a>
                                 <div class="product-rating"><span>4.9</span><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                                 <div class="ty-price-wrapper mt-1 flex items-center justify-end gap-2">
-                                    @if($product->original_price)
-                                        <span class="text-xs text-gray-400 line-through">{{ number_format($product->original_price, 2) }} ₺</span>
-                                    @endif
+                                    @if($product->original_price)<span class="text-xs text-gray-400 line-through">{{ number_format($product->original_price, 2) }} ₺</span>@endif
                                     <span class="ty-final-price font-black text-rose-600 text-base">{{ number_format($product->price, 2) }} ₺</span>
                                 </div>
-
-                                {{-- صف الأزرار السفلي: تجربة AI + أضف للسلة --}}
                                 <div class="mt-3 flex items-center gap-2">
-                                    {{-- زر تجربة الذكاء الاصطناعي --}}
-                                    <button type="button" onclick="openFittingRoom('{{ $product->id }}', '{{ addslashes($product->name) }}', '{{ $prodImg }}')" class="w-1/2 bg-gray-900 hover:bg-black text-white font-bold py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1 transition shadow-sm">
-                                        <span>✨</span>
-                                        <span>تجربة AI</span>
-                                    </button>
-
-                                    {{-- زر السلة --}}
+                                    {{-- تجربة AI داخل نفس الصفحة --}}
+                                    <button type="button" onclick="openFittingRoom('{{ $product->id }}', '{{ addslashes($product->name) }}', '{{ $prodImg }}')" class="w-1/2 bg-gray-900 hover:bg-black text-white font-bold py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1 transition shadow-sm"><span>✨</span><span>تجربة المقاس</span></button>
                                     <form action="{{ url('cart-add/'.$product->id) }}" method="POST" class="w-1/2">
                                         @csrf
-                                        <input type="hidden" name="size" value="Free Size">
-                                        <input type="hidden" name="quantity" value="1">
-                                        <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-2 px-2 rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-1">
-                                            <span>🛍️</span>
-                                            <span>أضف للسلة</span>
-                                        </button>
+                                        <input type="hidden" name="size" value="Free Size"><input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-2 px-2 rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-1"><span>🛍️</span><span>أضف للسلة</span></button>
                                     </form>
                                 </div>
                             </div>
-
                         </div>
                     @endforeach
                 </div>
             @endif
         @endforeach
-
     </div>
 </section>
 
-{{-- Fitting Room Modal (نافذة التجربة الافتراضية) --}}
-<div id="fittingRoomModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-gray-900 text-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl border border-gray-800 text-center">
-        <button onclick="closeFittingRoom()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl font-bold">&times;</button>
-        <div class="mb-4">
-            <span class="text-xs text-rose-400 font-bold uppercase tracking-widest">Fitting Room</span>
-            <h3 id="fittingProductName" class="text-lg font-bold mt-1 text-gray-200">غرفة التجربة الافتراضية</h3>
+{{-- AI Fitting Room: تحليل المقاس داخل نفس الصفحة --}}
+<style>
+    .fit-modal { background:rgba(15,23,42,.72); backdrop-filter:blur(8px); }
+    .fit-card { width:min(980px,100%); max-height:92vh; overflow-y:auto; border:1px solid rgba(255,255,255,.65); border-radius:30px; background:linear-gradient(145deg,#fff,#fff7f7); box-shadow:0 30px 90px rgba(15,23,42,.35); }
+    .fit-man-card { min-height:320px; display:flex; align-items:center; justify-content:center; border-radius:24px; background:radial-gradient(circle at 50% 35%,#fff 0 24%,transparent 25%),linear-gradient(145deg,#fdf2f8,#eef2ff); overflow:hidden; }
+    .fit-human { position:relative; width:150px; height:270px; filter:drop-shadow(0 14px 12px rgba(244,63,94,.15)); }
+    .fit-head { position:absolute; top:0; left:54px; width:44px; height:52px; border-radius:48% 48% 45% 45%; background:#f3bd92; box-shadow:inset 0 -5px 0 rgba(146,64,14,.12); }
+    .fit-hair { position:absolute; top:-7px; left:49px; width:54px; height:34px; border-radius:50% 50% 35% 35%; background:#3b241c; z-index:2; }
+    .fit-neck { position:absolute; top:45px; left:70px; width:13px; height:23px; background:#efb586; }
+    .fit-body { position:absolute; top:62px; left:39px; width:74px; height:112px; border-radius:28px 28px 14px 14px; background:linear-gradient(135deg,#f43f5e,#a855f7); }
+    .fit-arm { position:absolute; top:70px; width:18px; height:104px; border-radius:15px; background:#efb586; }
+    .fit-arm.left { left:22px; transform:rotate(8deg); }.fit-arm.right { right:22px; transform:rotate(-8deg); }
+    .fit-leg { position:absolute; top:164px; width:27px; height:106px; border-radius:0 0 15px 15px; background:#334155; }.fit-leg.left{left:48px}.fit-leg.right{right:48px}
+    .fit-foot { position:absolute; top:258px; width:42px; height:14px; border-radius:15px 8px 8px 8px; background:#111827; }.fit-foot.left{left:38px}.fit-foot.right{right:38px;transform:scaleX(-1)}
+    .fit-result { border-radius:18px; border:1px solid #bbf7d0; background:#f0fdf4; color:#166534; }
+    .fit-result.warning { border-color:#fde68a; background:#fffbeb; color:#92400e; }
+    .fit-size-table { width:100%; border-collapse:separate; border-spacing:0 5px; font-size:.72rem; text-align:center; }
+    .fit-size-table th { color:#9ca3af; font-weight:800; padding:5px; }.fit-size-table td { background:#fff; padding:8px 5px; color:#374151; font-weight:700; }.fit-size-table td:first-child{border-radius:0 10px 10px 0}.fit-size-table td:last-child{border-radius:10px 0 0 10px}
+    .fit-choice { border:1px solid #e5e7eb; border-radius:14px; background:#fff; padding:10px 12px; font-weight:800; outline:none; width:100%; }.fit-choice:focus{border-color:#f43f5e;box-shadow:0 0 0 3px rgba(244,63,94,.1)}
+    @media(max-width:768px){.fit-card{border-radius:22px}.fit-man-card{min-height:270px}.fit-human{transform:scale(.82)}}
+</style>
+
+<div id="fittingRoomModal" class="fit-modal fixed inset-0 z-[200] hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="fittingProductName">
+    <div class="fit-card p-5 md:p-8 relative text-right" dir="rtl">
+        <button type="button" onclick="closeFittingRoom()" class="absolute top-4 left-4 z-10 w-9 h-9 rounded-full bg-gray-100 hover:bg-rose-100 hover:text-rose-600 text-gray-500 text-xl transition" aria-label="إغلاق">&times;</button>
+        <div class="mb-6 pr-2">
+            <span class="inline-flex items-center gap-2 text-xs text-rose-500 font-black tracking-wider"><span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> مساعد المقاس الذكي</span>
+            <h3 id="fittingProductName" class="text-2xl md:text-3xl font-black text-gray-900 mt-2">اختاري العمر لنحلل ملاءمة القطعة</h3>
+            <p class="text-sm text-gray-500 mt-2">تحليل تقديري لمساعدتكِ على اختيار المقاس الأنسب، والقرار النهائي يعتمد على قياسات الطفل الفعلية.</p>
         </div>
-        <div class="relative w-full h-80 bg-gray-800 rounded-2xl overflow-hidden flex items-center justify-center border border-gray-700">
-            <img id="fittingProductImg" src="" class="max-h-full object-contain" alt="Selected Product">
-            <div id="fittingLoader" class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center p-4">
-                <div class="w-10 h-10 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-                <p class="text-sm text-gray-300">جاري قياس وتلبيس القطعة على المانيكان...</p>
+
+        <div class="grid lg:grid-cols-[.8fr_1.2fr] gap-6 items-start">
+            <div>
+                <div class="fit-man-card mb-4">
+                    <div class="fit-human" aria-label="شكل توضيحي لطفل"><span class="fit-hair"></span><span class="fit-head"></span><span class="fit-neck"></span><span class="fit-body"></span><span class="fit-arm left"></span><span class="fit-arm right"></span><span class="fit-leg left"></span><span class="fit-leg right"></span><span class="fit-foot left"></span><span class="fit-foot right"></span></div>
+                </div>
+                <div class="rounded-2xl overflow-hidden bg-pink-50 p-3">
+                    <img id="fittingProductImg" src="" class="w-full h-36 object-contain rounded-xl bg-white" alt="القطعة المختارة">
+                    <p id="fittingProductCaption" class="text-center text-xs font-bold text-rose-600 mt-2"></p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <label class="text-xs font-black text-gray-600">عمر الطفل
+                        <select id="fitAge" class="fit-choice mt-2"><option value="1">سنة واحدة</option><option value="2">سنتان</option><option value="3">3 سنوات</option><option value="4">4 سنوات</option><option value="5">5 سنوات</option><option value="6">6 سنوات</option><option value="7">7 سنوات</option><option value="8">8 سنوات</option><option value="9">9 سنوات</option><option value="10">10 سنوات</option><option value="11">11 سنة</option><option value="12">12 سنة</option></select>
+                    </label>
+                    <label class="text-xs font-black text-gray-600">الطول (سم)
+                        <input id="fitHeight" class="fit-choice mt-2" type="number" min="65" max="180" placeholder="مثلاً 80">
+                    </label>
+                    <label class="text-xs font-black text-gray-600">عرض الصدر (سم)
+                        <input id="fitChest" class="fit-choice mt-2" type="number" min="20" max="100" placeholder="مثلاً 26">
+                    </label>
+                </div>
+
+                <div id="fitResult" class="fit-result p-4" aria-live="polite">
+                    <div class="flex items-center gap-2 font-black"><i class="fas fa-wand-magic-sparkles"></i><span id="fitResultTitle">اختاري العمر لنبدأ التحليل</span></div>
+                    <p id="fitResultText" class="text-sm mt-2 leading-relaxed">سنقارن بيانات الطفل مع جدول المقاسات ونقدم لكِ نصيحة مناسبة.</p>
+                </div>
+
+                <div class="bg-gray-50 rounded-2xl p-4">
+                    <div class="flex justify-between items-center mb-2"><h4 class="font-black text-gray-800">دليل المقاسات التقريبي</h4><span class="text-[10px] text-gray-400">سم</span></div>
+                    <table class="fit-size-table"><thead><tr><th>العمر</th><th>الطول</th><th>عرض الصدر</th><th>المقاس</th></tr></thead><tbody id="fitSizeRows"></tbody></table>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button type="button" onclick="runFitAnalysis()" class="flex-1 py-3.5 rounded-2xl bg-gray-900 hover:bg-black text-white font-black transition"><i class="fas fa-sparkles ml-1"></i> تحليل الملاءمة</button>
+                    <button type="button" onclick="closeFittingRoom()" class="flex-1 py-3.5 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-black transition">إغلاق</button>
+                </div>
             </div>
         </div>
-        <button onclick="closeFittingRoom()" class="w-full mt-5 bg-rose-500 hover:bg-rose-600 font-bold py-3 rounded-xl transition">إغلاق</button>
     </div>
 </div>
 
 <script>
+const fittingSizeChart = {
+    1:{height:80,chest:48,size:'80'}, 2:{height:90,chest:50,size:'90'}, 3:{height:98,chest:52,size:'98'},
+    4:{height:104,chest:54,size:'104'}, 5:{height:110,chest:56,size:'110'}, 6:{height:116,chest:58,size:'116'},
+    7:{height:122,chest:60,size:'122'}, 8:{height:128,chest:64,size:'128'}, 9:{height:134,chest:68,size:'134'},
+    10:{height:140,chest:72,size:'140'}, 11:{height:146,chest:76,size:'146'}, 12:{height:152,chest:80,size:'152'}
+};
+let fittingCurrentProduct = { id:null, name:'', img:'' };
+
 function openFittingRoom(id, name, img) {
+    fittingCurrentProduct = { id, name, img };
     document.getElementById('fittingProductName').innerText = name;
     document.getElementById('fittingProductImg').src = img;
+    document.getElementById('fittingProductCaption').innerText = 'القطعة المختارة: ' + name;
     document.getElementById('fittingRoomModal').classList.remove('hidden');
-    
-    // إخفاء مؤشر التحميل بعد ثانيتين لإظهار النتيجة
-    const loader = document.getElementById('fittingLoader');
-    loader.classList.remove('hidden');
-    setTimeout(() => {
-        loader.classList.add('hidden');
-    }, 1500);
+    document.getElementById('fittingRoomModal').classList.add('flex');
+    renderFitTable();
+    runFitAnalysis();
+    document.body.classList.add('overflow-hidden');
 }
 
 function closeFittingRoom() {
-    document.getElementById('fittingRoomModal').classList.add('hidden');
+    const modal = document.getElementById('fittingRoomModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.classList.remove('overflow-hidden');
 }
+
+function renderFitTable() {
+    const tbody = document.getElementById('fitSizeRows');
+    tbody.innerHTML = Object.entries(fittingSizeChart).map(([age, row]) => `
+        <tr><td>${age} ${age == 1 ? 'سنة' : 'سنوات'}</td><td>${row.height}</td><td>${row.chest}</td><td>${row.size}</td></tr>
+    `).join('');
+}
+
+function runFitAnalysis() {
+    const age = Number(document.getElementById('fitAge').value);
+    const row = fittingSizeChart[age];
+    const heightInput = Number(document.getElementById('fitHeight').value);
+    const chestInput = Number(document.getElementById('fitChest').value);
+    const height = heightInput || row.height;
+    const chest = chestInput || row.chest;
+    const closeEnough = Math.abs(height - row.height) <= 6 && Math.abs(chest - row.chest) <= 4;
+    const result = document.getElementById('fitResult');
+    const title = document.getElementById('fitResultTitle');
+    const text = document.getElementById('fitResultText');
+    result.classList.toggle('warning', !closeEnough);
+
+    if (closeEnough) {
+        title.innerText = `القطعة مناسبة تقريباً لعمر ${age} ${age == 1 ? 'سنة' : 'سنوات'} ✅`;
+        text.innerText = `المقاس المقترح ${row.size}، لطول قريب من ${row.height} سم وعرض صدر قريب من ${row.chest} سم. نصيحتنا: اختاري المقاس الأكبر إذا كان الطفل بين مقاسين أو تفضلين راحة أوسع.`;
+    } else {
+        title.innerText = `نحتاج مقاساً مختلفاً قليلاً ⚠️`;
+        text.innerText = `حسب البيانات المدخلة، المقاس ${row.size} هو الأقرب لعمر الطفل، لكن ننصح بمراجعة الطول ${height} سم وعرض الصدر ${chest} سم قبل الطلب. إذا كان القياس أكبر من الجدول اختاري مقاساً أكبر.`;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    renderFitTable();
+    document.getElementById('fitAge').addEventListener('change', function () {
+        const row = fittingSizeChart[this.value];
+        document.getElementById('fitHeight').value = row.height;
+        document.getElementById('fitChest').value = row.chest;
+        runFitAnalysis();
+    });
+    document.getElementById('fitHeight').addEventListener('input', runFitAnalysis);
+    document.getElementById('fitChest').addEventListener('input', runFitAnalysis);
+    document.getElementById('fittingRoomModal').addEventListener('click', function (event) {
+        if (event.target === this) closeFittingRoom();
+    });
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') closeFittingRoom();
+    });
+});
 </script>
+
 {{-- 🎁 SEASONAL CAMPAIGN --}}
 <section class="campaign-section" aria-label="العرض الموسمي">
     <div class="campaign-content">
-        <div>
-            <span class="campaign-tag">عرض حصري لفترة محدودة</span>
-            <h2 class="campaign-title">خصم 20% على تشكيلة العيد ✨</h2>
-            <p class="campaign-copy">استخدمي الكود <strong>MELEK20</strong> عند إتمام الطلب واستفيدي من العرض.</p>
-        </div>
+        <div><span class="campaign-tag">عرض حصري لفترة محدودة</span><h2 class="campaign-title">خصم 20% على تشكيلة العيد ✨</h2><p class="campaign-copy">استخدمي الكود <strong>MELEK20</strong> عند إتمام الطلب واستفيدي من العرض.</p></div>
         <a href="#shop" class="campaign-button">استفيدي من العرض <span>←</span></a>
     </div>
 </section>
+
+
+
+                            
 {{-- Premium Dynamic Section: المنتجات المنشورة تتبدل تلقائياً كل 3 ثواني --}}
 @php
     $premiumProducts = \App\Models\Product::with('images')
