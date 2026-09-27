@@ -32,6 +32,42 @@
 <!-- كود شاشة الإقلاع (Splash Screen) المخصص للآيفون لتظهر الصورة قبل الدخول للموقع -->
 <link rel="apple-touch-startup-image" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png?v=99">
 
+    @stack('styles')
+
+    <style>
+        /* --- Professional Layout Enhancements --- */
+        :root { --mk-pink:#f43f5e; --mk-ink:#1f2937; --mk-cream:#fffaf0; }
+        html { scroll-behavior: smooth; }
+        body { color: var(--mk-ink); }
+        #main-header { z-index: 80; }
+        #main-header::after { content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; box-shadow:inset 0 1px 0 rgba(255,255,255,.75); }
+        .logo-container { flex-direction:column; gap:2px; line-height:1; }
+        .logo-img { filter: drop-shadow(0 5px 9px rgba(244,63,94,.12)); }
+        .logo-wordmark { color:var(--mk-ink); font-size:10px; font-weight:900; letter-spacing:.18em; }
+        .header-tools { display:flex; align-items:center; gap:9px; }
+        .nav-tool { width:38px; height:38px; display:inline-grid; place-items:center; border:1px solid rgba(31,41,55,.08); border-radius:50%; background:rgba(255,255,255,.82); color:var(--mk-ink); transition:all .25s ease; }
+        .nav-tool:hover { color:var(--mk-pink); border-color:rgba(244,63,94,.3); transform:translateY(-2px); box-shadow:0 7px 16px rgba(244,63,94,.12); }
+        #cart-icon { width:42px; height:42px; display:inline-grid; place-items:center; border:1px solid rgba(244,63,94,.14); border-radius:50%; background:rgba(255,255,255,.9); }
+        #cart-count { right:-3px; top:-3px; }
+        #mobile-menu { width:min(340px,88vw); padding-top:76px; border-radius:28px 0 0 28px; }
+        #mobile-menu-backdrop { opacity:0; visibility:hidden; transition:all .3s ease; }
+        #mobile-menu-backdrop.open { opacity:1; visibility:visible; }
+        #mini-cart { width:min(400px, calc(100vw - 20px)); right:calc(-1 * min(400px, calc(100vw - 20px))); border-radius:28px 0 0 28px; }
+        .mobile-menu-link { display:flex; align-items:center; gap:10px; padding:11px 14px; border-radius:14px; transition:all .2s ease; }
+        .mobile-menu-link:hover { background:#fff1f2; color:var(--mk-pink); transform:translateX(-3px); }
+        @media (max-width:768px) {
+            #main-header { top:8px; left:10px; right:10px; border-radius:20px; }
+            #main-header .max-w-7xl { padding-left:14px; padding-right:14px; }
+            .header-transparent { padding-top:.65rem; padding-bottom:.65rem; }
+            .header-scrolled { top:5px !important; padding-top:.45rem; padding-bottom:.45rem; }
+            .logo-img { height:42px !important; }
+            .logo-wordmark { font-size:8px; }
+            .header-tools { gap:5px; }
+            .nav-tool { width:34px; height:34px; font-size:13px; }
+            #cart-icon { width:36px; height:36px; font-size:15px; }
+        }
+    </style>
+
     <style>
         /* --- Global Styles --- */
         body {
@@ -145,6 +181,7 @@
         <div class="logo-container text-center flex justify-center items-center">
             <a href="/" class="inline-block">
                 <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png" alt="Melekler Logo" class="logo-img h-12 md:h-16 w-auto object-contain transition-all duration-300 rounded-full">
+                <span class="logo-wordmark">MELEKLER FASHION</span>
             </a>
         </div>
 
@@ -167,6 +204,11 @@
                     </div>
                 </div>
             </nav>
+
+            <div class="header-tools hidden md:flex">
+                <a href="{{ url('/search') }}" class="nav-tool" aria-label="البحث" title="البحث"><i class="fas fa-search"></i></a>
+                <a href="{{ url('/wishlist') }}" class="nav-tool" aria-label="المفضلة" title="المفضلة"><i class="far fa-heart"></i></a>
+            </div>
 
             <button id="cart-icon" class="relative nav-icon text-xl">
                 <i class="fas fa-shopping-bag"></i>
@@ -193,10 +235,15 @@
 </header>
 
 {{-- 📱 Mobile Menu --}}
+<div id="mobile-menu-backdrop" class="fixed inset-0 bg-gray-900/30 backdrop-blur-[2px] z-[140]"></div>
 <div id="mobile-menu" class="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-[150] p-8">
     <button id="close-mobile-menu" class="absolute top-6 left-6 text-2xl text-gray-600">&times;</button>
-    <nav class="flex flex-col gap-6 mt-12 font-bold text-gray-800">
-        <a href="/" class="hover:text-pink-500">الرئيسية</a>
+    <div class="mb-5 text-right">
+        <span class="text-[10px] tracking-[.2em] text-gray-400 font-black">MELEKLER FASHION</span>
+        <h2 class="text-xl font-black text-gray-900 mt-1">القائمة الرئيسية</h2>
+    </div>
+    <nav class="flex flex-col gap-3 font-bold text-gray-800">
+        <a href="/" class="mobile-menu-link hover:text-pink-500">الرئيسية</a>
         
         <h3 class="text-gray-400 text-sm mt-4">الأقسام</h3>
         <a href="/category/boys" class="hover:text-pink-500 pr-4">ملابس أولاد</a>
@@ -206,8 +253,8 @@
         <a href="{{ route('category.offers') }}" class="text-red-500 font-black pr-4 hover:text-red-600">🔥 التشكيلة الجديدة %</a>
         
         <hr class="border-gray-100">
-        <a href="/shop" class="hover:text-pink-500">كل المنتجات</a>
-        <a href="/blog" class="hover:text-pink-500">المدونة</a>
+        <a href="/shop" class="mobile-menu-link hover:text-pink-500">كل المنتجات</a>
+        <a href="/blog" class="mobile-menu-link hover:text-pink-500">المدونة</a>
         <hr class="border-gray-100">
         <a href="/admin/dashboard" class="hover:text-pink-500 flex items-center gap-2">
             <i class="fas fa-user-shield text-sm"></i> لوحة التحكم
@@ -345,7 +392,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     document.addEventListener('click', function(e) {
-        if (!miniCart.contains(e.target) && !cartIcon.contains(e.target) && !e.target.closest('.add-to-cart-btn')) {
+        if (miniCart && cartIcon && !miniCart.contains(e.target) && !cartIcon.contains(e.target) && !e.target.closest('.add-to-cart-btn')) {
             closeCart();
         }
     });
@@ -354,8 +401,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const mobileMenu = document.getElementById('mobile-menu');
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const closeMobileMenuButton = document.getElementById('close-mobile-menu');
-    mobileMenuButton.addEventListener('click', () => mobileMenu.classList.add('open'));
-    closeMobileMenuButton.addEventListener('click', () => mobileMenu.classList.remove('open'));
+    const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
+    const closeMobileMenu = () => {
+        if (mobileMenu) mobileMenu.classList.remove('open');
+        if (mobileMenuBackdrop) mobileMenuBackdrop.classList.remove('open');
+    };
+    if (mobileMenuButton) mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.add('open'); mobileMenuBackdrop.classList.add('open'); });
+    if (closeMobileMenuButton) closeMobileMenuButton.addEventListener('click', closeMobileMenu);
+    if (mobileMenuBackdrop) mobileMenuBackdrop.addEventListener('click', closeMobileMenu);
+    if (mobileMenu) mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMobileMenu));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeMobileMenu(); if (typeof closeCart === 'function') closeCart(); } });
 
     // 4. محرك الأجاكس المطور
     $(document).on('submit', 'form[action*="cart/data/store"]', function(e) {
@@ -452,5 +507,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }); // القوس هنا يغلق الـ DOMContentLoaded بشكل سليم قبل إغلاق السكريبت
 </script>
+@stack('scripts')
 </body>
 </html>
