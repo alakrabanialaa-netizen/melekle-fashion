@@ -876,16 +876,14 @@
 
                             
 
-{{--  زر تجربة المقاس الحالي بهذا الزر داخل حلقة المنتجات --}}
+{{-- زر تجربة المقاس: لا نضع JSON داخل onclick لتجنب أخطاء Blade --}}
 <button type="button"
-    onclick="openFittingRoom(
-        {{ Js::from($product->id) }},
-        {{ Js::from($product->name) }},
-        {{ Js::from($prodImg) }},
-        {{ Js::from($product->ages ?? []) }},
-        {{ Js::from($product->sizes ?? []) }}
-    )"
-    class="w-1/2 bg-gray-900 hover:bg-black text-white font-bold py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1 transition shadow-sm">
+    class="fitting-trigger w-1/2 bg-gray-900 hover:bg-black text-white font-bold py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1 transition shadow-sm"
+    data-product-id="{{ $product->id }}"
+    data-product-name="{{ e($product->name) }}"
+    data-product-image="{{ e($prodImg) }}"
+    data-product-ages='{{ e(json_encode($product->ages ?? [])) }}'
+    data-product-sizes='{{ e(json_encode($product->sizes ?? [])) }}'>
     <span>✨</span>
     <span>دليل المقاس</span>
 </button>
@@ -949,8 +947,11 @@ function renderFitProductRows(selectedAge){var body=document.getElementById('fit
 function runFitProductMatch(){var selectedAge=Number(document.getElementById('fitAge').value),match=fitProductData.rows.find(function(r){return fitAgeNumber(r.age)===selectedAge}),badge=document.getElementById('fitProBadge'),result=document.getElementById('fitProResult');badge.className='fit-pro-badge '+(match?'success':'warning');result.className='fit-pro-result '+(match?'':'warning');document.getElementById('fitProBadgeText').innerText=match?'المقاس مطابق لعمر '+fitAgeText(selectedAge)+' ✓':'العمر غير موجود ضمن مقاسات هذه القطعة';document.getElementById('fitProTitle').innerText=match?'مقاس مناسب حسب بيانات المنتج ✅':'لا يوجد تطابق مباشر ⚠️';document.getElementById('fitProText').innerText=match?'المقاس المحفوظ لهذه القطعة هو '+match.size+' لعمر '+fitAgeText(selectedAge)+'. ننصح بمقارنة الطول والصدر قبل الشراء.':'هذه القطعة محفوظة للأعمار: '+(fitProductData.rows.map(function(r){return fitAgeText(fitAgeNumber(r.age));}).join('، ')||'غير محددة')+'. اختَر عمراً موجوداً أو راجع قياسات القطعة.';document.getElementById('fitSavedAge').innerText=match?fitAgeText(selectedAge):'غير مطابق';document.getElementById('fitSavedSize').innerText=match?match.size:'—';renderFitProductRows(selectedAge)}
 function openFittingRoom(id,name,img,ages,sizes){fitProductData={rows:buildFitRows(ages,sizes),name:name,img:img};document.getElementById('fittingProductName').innerText=name;document.getElementById('fittingProductImg').src=img;document.getElementById('fittingProductCaption').innerText=name;var modal=document.getElementById('fittingRoomModal');modal.classList.remove('hidden');modal.classList.add('flex');runFitProductMatch();document.body.classList.add('overflow-hidden')}
 function closeFittingRoom(){var modal=document.getElementById('fittingRoomModal');modal.classList.add('hidden');modal.classList.remove('flex');document.body.classList.remove('overflow-hidden')}
+document.addEventListener('click',function(event){var button=event.target.closest('.fitting-trigger');if(!button)return;var ages=[],sizes=[];try{ages=JSON.parse(button.getAttribute('data-product-ages')||'[]');}catch(e){}try{sizes=JSON.parse(button.getAttribute('data-product-sizes')||'[]');}catch(e){}openFittingRoom(button.getAttribute('data-product-id'),button.getAttribute('data-product-name')||'',button.getAttribute('data-product-image')||'',ages,sizes);});
 document.addEventListener('DOMContentLoaded',function(){var age=document.getElementById('fitAge');if(age)age.addEventListener('change',runFitProductMatch);var modal=document.getElementById('fittingRoomModal');if(modal)modal.addEventListener('click',function(e){if(e.target===modal)closeFittingRoom()});document.addEventListener('keydown',function(e){if(e.key==='Escape')closeFittingRoom()})});
 </script>
+
+                            
 
 
                             
