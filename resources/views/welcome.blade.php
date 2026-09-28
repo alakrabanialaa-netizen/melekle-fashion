@@ -849,7 +849,7 @@
                                     {{-- زر تجربة الذكاء الاصطناعي --}}
                                     <button type="button" onclick="openFittingRoom('{{ $product->id }}', '{{ addslashes($product->name) }}', '{{ $prodImg }}')" class="w-1/2 bg-gray-900 hover:bg-black text-white font-bold py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1 transition shadow-sm">
                                         <span>✨</span>
-                                        <span>تجربة AI</span>
+                                        <span>تجربة المقاس</span>
                                     </button>
 
                                     {{-- زر السلة --}}
@@ -874,38 +874,60 @@
     </div>
 </section>
 
-                            
+{{-- Fitting Room Modal: نسخة آمنة داخل الصفحة --}}
+<style>
+    #fittingRoomModal.fit-safe-modal { background:rgba(15,23,42,.72); backdrop-filter:blur(7px); }
+    .fit-safe-card { width:min(920px,100%); max-height:92vh; overflow-y:auto; border-radius:28px; background:#fffafc; box-shadow:0 25px 80px rgba(15,23,42,.35); }
+    .fit-safe-person { position:relative; width:120px; height:235px; margin:auto; }
+    .fit-safe-head { position:absolute; top:0; left:42px; width:36px; height:44px; border-radius:50%; background:#efb58c; }
+    .fit-safe-hair { position:absolute; top:-5px; left:38px; z-index:2; width:44px; height:28px; border-radius:50%; background:#3b241c; }
+    .fit-safe-body { position:absolute; top:52px; left:30px; width:60px; height:88px; border-radius:22px 22px 12px 12px; background:linear-gradient(135deg,#f43f5e,#a855f7); }
+    .fit-safe-arm { position:absolute; top:58px; width:14px; height:84px; border-radius:12px; background:#efb58c; }.fit-safe-arm.l{left:17px;transform:rotate(8deg)}.fit-safe-arm.r{right:17px;transform:rotate(-8deg)}
+    .fit-safe-leg { position:absolute; top:132px; width:23px; height:90px; border-radius:0 0 12px 12px; background:#334155; }.fit-safe-leg.l{left:35px}.fit-safe-leg.r{right:35px}
+    .fit-safe-result { border-radius:16px; padding:14px; background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; }.fit-safe-result.warning{background:#fffbeb;border-color:#fde68a;color:#92400e}
+    .fit-safe-input { width:100%; margin-top:6px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:12px; outline:none; background:#fff; font-weight:700; }.fit-safe-input:focus{border-color:#f43f5e;box-shadow:0 0 0 3px rgba(244,63,94,.1)}
+    .fit-safe-table{width:100%;border-collapse:separate;border-spacing:0 4px;font-size:.7rem;text-align:center}.fit-safe-table th{padding:5px;color:#9ca3af}.fit-safe-table td{padding:7px;background:#fff;color:#374151;font-weight:700}.fit-safe-table td:first-child{border-radius:0 9px 9px 0}.fit-safe-table td:last-child{border-radius:9px 0 0 9px}
+</style>
 
-{{-- Fitting Room Modal (نافذة التجربة الافتراضية) --}}
-<div id="fittingRoomModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-gray-900 text-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl border border-gray-800 text-center">
-        <button onclick="closeFittingRoom()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl font-bold">&times;</button>
-        <div class="mb-4">
-            <span class="text-xs text-rose-400 font-bold uppercase tracking-widest">Fitting Room</span>
-            <h3 id="fittingProductName" class="text-lg font-bold mt-1 text-gray-200">غرفة التجربة الافتراضية</h3>
+<div id="fittingRoomModal" class="fit-safe-modal fixed inset-0 z-[200] hidden items-center justify-center p-4" role="dialog" aria-modal="true">
+    <div class="fit-safe-card p-5 md:p-7 relative text-right" dir="rtl">
+        <button type="button" onclick="closeFittingRoom()" class="absolute top-4 left-4 w-9 h-9 rounded-full bg-gray-100 hover:bg-rose-100 text-gray-500 text-xl">&times;</button>
+        <div class="mb-5 pr-2">
+            <span class="text-xs text-rose-500 font-black">✨ مساعد المقاس الذكي</span>
+            <h3 id="fittingProductName" class="text-xl md:text-2xl font-black text-gray-900 mt-2">اختاري عمر الطفل</h3>
+            <p class="text-xs text-gray-500 mt-1">تحليل تقديري لمساعدتكِ في اختيار المقاس الأقرب.</p>
         </div>
-        <div class="relative w-full h-80 bg-gray-800 rounded-2xl overflow-hidden flex items-center justify-center border border-gray-700">
-            <img id="fittingProductImg" src="" class="max-h-full object-contain" alt="Selected Product">
-            <div id="fittingLoader" class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center p-4">
-                <div class="w-10 h-10 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-                <p class="text-sm text-gray-300">جاري قياس وتلبيس القطعة على المانيكان...</p>
+        <div class="grid lg:grid-cols-2 gap-5 items-start">
+            <div>
+                <div class="rounded-3xl p-4 bg-gradient-to-br from-pink-50 to-indigo-50 min-h-[285px] flex items-center justify-center">
+                    <div class="fit-safe-person"><span class="fit-safe-hair"></span><span class="fit-safe-head"></span><span class="fit-safe-body"></span><span class="fit-safe-arm l"></span><span class="fit-safe-arm r"></span><span class="fit-safe-leg l"></span><span class="fit-safe-leg r"></span></div>
+                </div>
+                <img id="fittingProductImg" src="" class="mt-3 w-full h-32 object-contain rounded-2xl bg-white" alt="القطعة المختارة">
+                <p id="fittingProductCaption" class="text-center text-xs text-rose-600 font-bold mt-2"></p>
+            </div>
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <label class="text-xs font-black text-gray-600">العمر
+                        <select id="fitAge" class="fit-safe-input"><option value="1">سنة</option><option value="2">سنتان</option><option value="3">3 سنوات</option><option value="4">4 سنوات</option><option value="5">5 سنوات</option><option value="6">6 سنوات</option><option value="7">7 سنوات</option><option value="8">8 سنوات</option><option value="9">9 سنوات</option><option value="10">10 سنوات</option><option value="11">11 سنة</option><option value="12">12 سنة</option></select>
+                    </label>
+                    <label class="text-xs font-black text-gray-600">الطول سم<input id="fitHeight" class="fit-safe-input" type="number" placeholder="80"></label>
+                    <label class="text-xs font-black text-gray-600">الصدر سم<input id="fitChest" class="fit-safe-input" type="number" placeholder="48"></label>
+                </div>
+                <div id="fitSafeResult" class="fit-safe-result" aria-live="polite"><strong id="fitSafeTitle">اختاري العمر لنبدأ</strong><p id="fitSafeText" class="text-xs mt-2 leading-relaxed">سنقارن القياسات مع دليل المقاسات.</p></div>
+                <div class="bg-gray-50 rounded-2xl p-3"><h4 class="text-sm font-black text-gray-800 mb-2">دليل المقاسات التقريبي</h4><table class="fit-safe-table"><thead><tr><th>العمر</th><th>الطول</th><th>الصدر</th><th>المقاس</th></tr></thead><tbody id="fitSafeRows"></tbody></table></div>
+                <div class="flex gap-2"><button type="button" onclick="runSafeFitAnalysis()" class="flex-1 py-3 rounded-xl bg-gray-900 text-white font-black">تحليل الملاءمة</button><button type="button" onclick="closeFittingRoom()" class="flex-1 py-3 rounded-xl bg-rose-500 text-white font-black">إغلاق</button></div>
             </div>
         </div>
-        <button onclick="closeFittingRoom()" class="w-full mt-5 bg-rose-500 hover:bg-rose-600 font-bold py-3 rounded-xl transition">إغلاق</button>
     </div>
 </div>
+
 <script>
-function openFittingRoom(id, name, img) {
-    document.getElementById('fittingProductName').innerText = name;
-    document.getElementById('fittingProductImg').src = img;
-    document.getElementById('fittingRoomModal').classList.remove('hidden');
-    const loader = document.getElementById('fittingLoader');
-    loader.classList.remove('hidden');
-    setTimeout(() => loader.classList.add('hidden'), 1500);
-}
-function closeFittingRoom() {
-    document.getElementById('fittingRoomModal').classList.add('hidden');
-}
+var safeFitChart={1:[80,48,'80'],2:[90,50,'90'],3:[98,52,'98'],4:[104,54,'104'],5:[110,56,'110'],6:[116,58,'116'],7:[122,60,'122'],8:[128,64,'128'],9:[134,68,'134'],10:[140,72,'140'],11:[146,76,'146'],12:[152,80,'152']};
+function renderSafeFitTable(){var b=document.getElementById('fitSafeRows');if(!b)return;b.innerHTML=Object.keys(safeFitChart).map(function(a){var r=safeFitChart[a];return '<tr><td>'+a+'</td><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>';}).join('');}
+function runSafeFitAnalysis(){var age=Number(document.getElementById('fitAge').value),r=safeFitChart[age],h=Number(document.getElementById('fitHeight').value)||r[0],c=Number(document.getElementById('fitChest').value)||r[1],ok=Math.abs(h-r[0])<=6&&Math.abs(c-r[1])<=4,box=document.getElementById('fitSafeResult');box.classList.toggle('warning',!ok);document.getElementById('fitSafeTitle').innerText=ok?'القطعة مناسبة تقريباً للعمر ✅':'يفضل مراجعة المقاس ⚠️';document.getElementById('fitSafeText').innerText='المقاس المقترح '+r[2]+'، لطول قريب من '+r[0]+' سم وصدر قريب من '+r[1]+' سم. '+(ok?'إذا كان الطفل بين مقاسين اختاري الأكبر لراحة أفضل.':'راجعي قياس الطول والصدر واختاري المقاس الأكبر إذا كانت القياسات أعلى من الجدول.');}
+function openFittingRoom(id,name,img){document.getElementById('fittingProductName').innerText=name;document.getElementById('fittingProductImg').src=img;document.getElementById('fittingProductCaption').innerText='القطعة المختارة: '+name;var m=document.getElementById('fittingRoomModal');m.classList.remove('hidden');m.classList.add('flex');renderSafeFitTable();runSafeFitAnalysis();document.body.classList.add('overflow-hidden');}
+function closeFittingRoom(){var m=document.getElementById('fittingRoomModal');m.classList.add('hidden');m.classList.remove('flex');document.body.classList.remove('overflow-hidden');}
+document.addEventListener('DOMContentLoaded',function(){renderSafeFitTable();document.getElementById('fitAge').addEventListener('change',function(){var r=safeFitChart[this.value];document.getElementById('fitHeight').value=r[0];document.getElementById('fitChest').value=r[1];runSafeFitAnalysis();});document.getElementById('fitHeight').addEventListener('input',runSafeFitAnalysis);document.getElementById('fitChest').addEventListener('input',runSafeFitAnalysis);document.getElementById('fittingRoomModal').addEventListener('click',function(e){if(e.target===this)closeFittingRoom();});});
 </script>
 
 {{-- 🎁 SEASONAL CAMPAIGN --}}
@@ -922,7 +944,11 @@ function closeFittingRoom() {
 
 
                             
-{{-- Premium Collection removed temporarily: الصفحة لا تعتمد على $premiumProducts --}}
+
+
+
+                            
+{{-- Premium Dynamic Section removed temporarily to isolate the 500 error. --}}
 
 {{-- 💬 CUSTOMER REVIEWS --}}
 <section class="reviews-section" aria-label="آراء العملاء">
