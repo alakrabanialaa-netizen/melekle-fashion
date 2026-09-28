@@ -874,61 +874,86 @@
     </div>
 </section>
 
-{{-- Fitting Room Modal: نسخة آمنة داخل الصفحة --}}
+                            
+
+{{--  زر تجربة المقاس الحالي بهذا الزر داخل حلقة المنتجات --}}
+<button type="button"
+    onclick="openFittingRoom(
+        {{ Js::from($product->id) }},
+        {{ Js::from($product->name) }},
+        {{ Js::from($prodImg) }},
+        {{ Js::from($product->ages ?? []) }},
+        {{ Js::from($product->sizes ?? []) }}
+    )"
+    class="w-1/2 bg-gray-900 hover:bg-black text-white font-bold py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1 transition shadow-sm">
+    <span>✨</span>
+    <span>دليل المقاس</span>
+</button>
+
+{{-- استبدل نافذة fittingRoomModal القديمة بهذا الجزء --}}
 <style>
-    #fittingRoomModal.fit-safe-modal { background:rgba(15,23,42,.72); backdrop-filter:blur(7px); }
-    .fit-safe-card { width:min(920px,100%); max-height:92vh; overflow-y:auto; border-radius:28px; background:#fffafc; box-shadow:0 25px 80px rgba(15,23,42,.35); }
-    .fit-safe-person { position:relative; width:120px; height:235px; margin:auto; }
-    .fit-safe-head { position:absolute; top:0; left:42px; width:36px; height:44px; border-radius:50%; background:#efb58c; }
-    .fit-safe-hair { position:absolute; top:-5px; left:38px; z-index:2; width:44px; height:28px; border-radius:50%; background:#3b241c; }
-    .fit-safe-body { position:absolute; top:52px; left:30px; width:60px; height:88px; border-radius:22px 22px 12px 12px; background:linear-gradient(135deg,#f43f5e,#a855f7); }
-    .fit-safe-arm { position:absolute; top:58px; width:14px; height:84px; border-radius:12px; background:#efb58c; }.fit-safe-arm.l{left:17px;transform:rotate(8deg)}.fit-safe-arm.r{right:17px;transform:rotate(-8deg)}
-    .fit-safe-leg { position:absolute; top:132px; width:23px; height:90px; border-radius:0 0 12px 12px; background:#334155; }.fit-safe-leg.l{left:35px}.fit-safe-leg.r{right:35px}
-    .fit-safe-result { border-radius:16px; padding:14px; background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; }.fit-safe-result.warning{background:#fffbeb;border-color:#fde68a;color:#92400e}
-    .fit-safe-input { width:100%; margin-top:6px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:12px; outline:none; background:#fff; font-weight:700; }.fit-safe-input:focus{border-color:#f43f5e;box-shadow:0 0 0 3px rgba(244,63,94,.1)}
-    .fit-safe-table{width:100%;border-collapse:separate;border-spacing:0 4px;font-size:.7rem;text-align:center}.fit-safe-table th{padding:5px;color:#9ca3af}.fit-safe-table td{padding:7px;background:#fff;color:#374151;font-weight:700}.fit-safe-table td:first-child{border-radius:0 9px 9px 0}.fit-safe-table td:last-child{border-radius:9px 0 0 9px}
+    #fittingRoomModal.fit-pro-modal { background:rgba(15,23,42,.74); backdrop-filter:blur(10px); }
+    .fit-pro-card { width:min(980px,100%); max-height:93vh; overflow-y:auto; border-radius:30px; background:linear-gradient(145deg,#fff,#fff8fa); box-shadow:0 30px 100px rgba(15,23,42,.4); }
+    .fit-pro-hero { background:linear-gradient(135deg,#fff1f2,#fdf4ff 55%,#eef2ff); border:1px solid #fff; border-radius:24px; }
+    .fit-pro-image { height:220px; width:100%; object-fit:contain; background:#fff; border-radius:18px; }
+    .fit-pro-badge { display:inline-flex; align-items:center; gap:7px; border-radius:999px; padding:7px 12px; font-size:.72rem; font-weight:900; }
+    .fit-pro-badge.neutral { color:#475569; background:#f1f5f9; }.fit-pro-badge.success{color:#166534;background:#dcfce7}.fit-pro-badge.warning{color:#92400e;background:#fef3c7}
+    .fit-pro-label { color:#475569; font-size:.73rem; font-weight:900; }.fit-pro-input{width:100%;margin-top:6px;border:1px solid #e5e7eb;border-radius:14px;background:#fff;padding:12px;font-weight:800;outline:none}.fit-pro-input:focus{border-color:#f43f5e;box-shadow:0 0 0 4px rgba(244,63,94,.1)}
+    .fit-pro-size-card { border:1px solid #e5e7eb; border-radius:20px; background:#fff; padding:16px; text-align:center; }.fit-pro-size-card strong{display:block;color:#e11d48;font-size:1.7rem;font-weight:950}.fit-pro-size-card span{display:block;color:#64748b;font-size:.7rem;font-weight:800;margin-top:3px}
+    .fit-pro-result { border-radius:20px; padding:16px; border:1px solid #bbf7d0; background:#f0fdf4; color:#166534; }.fit-pro-result.warning{border-color:#fde68a;background:#fffbeb;color:#92400e}.fit-pro-result.neutral{border-color:#cbd5e1;background:#f8fafc;color:#475569}
+    .fit-pro-table{width:100%;border-collapse:separate;border-spacing:0 5px;text-align:center;font-size:.75rem}.fit-pro-table th{padding:5px;color:#94a3b8}.fit-pro-table td{padding:9px 6px;background:#fff;color:#334155;font-weight:800}.fit-pro-table tr.is-selected td{background:#ffe4e6;color:#be123c}.fit-pro-table td:first-child{border-radius:0 12px 12px 0}.fit-pro-table td:last-child{border-radius:12px 0 0 12px}
+    @media(max-width:768px){.fit-pro-card{border-radius:22px}.fit-pro-image{height:160px}}
 </style>
 
-<div id="fittingRoomModal" class="fit-safe-modal fixed inset-0 z-[200] hidden items-center justify-center p-4" role="dialog" aria-modal="true">
-    <div class="fit-safe-card p-5 md:p-7 relative text-right" dir="rtl">
-        <button type="button" onclick="closeFittingRoom()" class="absolute top-4 left-4 w-9 h-9 rounded-full bg-gray-100 hover:bg-rose-100 text-gray-500 text-xl">&times;</button>
-        <div class="mb-5 pr-2">
-            <span class="text-xs text-rose-500 font-black">✨ مساعد المقاس الذكي</span>
-            <h3 id="fittingProductName" class="text-xl md:text-2xl font-black text-gray-900 mt-2">اختاري عمر الطفل</h3>
-            <p class="text-xs text-gray-500 mt-1">تحليل تقديري لمساعدتكِ في اختيار المقاس الأقرب.</p>
+<div id="fittingRoomModal" class="fit-pro-modal fixed inset-0 z-[200] hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="fittingProductName">
+    <div class="fit-pro-card p-5 md:p-8 relative" dir="rtl">
+        <button type="button" onclick="closeFittingRoom()" class="absolute top-4 left-4 z-10 w-10 h-10 rounded-full bg-white shadow hover:bg-rose-50 hover:text-rose-600 text-gray-500 text-xl transition" aria-label="إغلاق">&times;</button>
+        <div class="mb-6 pr-2">
+            <span class="text-xs text-rose-500 font-black tracking-wider">✨ مساعد المقاس الذكي</span>
+            <h3 id="fittingProductName" class="text-2xl md:text-3xl font-black text-gray-900 mt-2">دليل المقاس</h3>
+            <p class="text-sm text-gray-500 mt-2">اختَر عمر الطفل وسنقارن مباشرة مع العمر والمقاس المحفوظين لهذه القطعة.</p>
         </div>
-        <div class="grid lg:grid-cols-2 gap-5 items-start">
-            <div>
-                <div class="rounded-3xl p-4 bg-gradient-to-br from-pink-50 to-indigo-50 min-h-[285px] flex items-center justify-center">
-                    <div class="fit-safe-person"><span class="fit-safe-hair"></span><span class="fit-safe-head"></span><span class="fit-safe-body"></span><span class="fit-safe-arm l"></span><span class="fit-safe-arm r"></span><span class="fit-safe-leg l"></span><span class="fit-safe-leg r"></span></div>
+
+        <div class="grid lg:grid-cols-[.85fr_1.15fr] gap-6 items-start">
+            <div class="fit-pro-hero p-4">
+                <img id="fittingProductImg" class="fit-pro-image" src="" alt="القطعة المختارة">
+                <div class="text-center mt-4"><span class="text-xs text-gray-500 font-bold">القطعة المختارة</span><p id="fittingProductCaption" class="text-sm text-gray-900 font-black mt-1"></p></div>
+                <div class="grid grid-cols-2 gap-3 mt-5">
+                    <div class="fit-pro-size-card"><strong id="fitSavedAge">—</strong><span>العمر المحفوظ</span></div>
+                    <div class="fit-pro-size-card"><strong id="fitSavedSize">—</strong><span>مقاس القطعة</span></div>
                 </div>
-                <img id="fittingProductImg" src="" class="mt-3 w-full h-32 object-contain rounded-2xl bg-white" alt="القطعة المختارة">
-                <p id="fittingProductCaption" class="text-center text-xs text-rose-600 font-bold mt-2"></p>
             </div>
+
             <div class="space-y-4">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <label class="text-xs font-black text-gray-600">العمر
-                        <select id="fitAge" class="fit-safe-input"><option value="1">سنة</option><option value="2">سنتان</option><option value="3">3 سنوات</option><option value="4">4 سنوات</option><option value="5">5 سنوات</option><option value="6">6 سنوات</option><option value="7">7 سنوات</option><option value="8">8 سنوات</option><option value="9">9 سنوات</option><option value="10">10 سنوات</option><option value="11">11 سنة</option><option value="12">12 سنة</option></select>
-                    </label>
-                    <label class="text-xs font-black text-gray-600">الطول سم<input id="fitHeight" class="fit-safe-input" type="number" placeholder="80"></label>
-                    <label class="text-xs font-black text-gray-600">الصدر سم<input id="fitChest" class="fit-safe-input" type="number" placeholder="48"></label>
+                <div class="grid sm:grid-cols-3 gap-3">
+                    <label class="fit-pro-label">عمر الطفل<select id="fitAge" class="fit-pro-input"><option value="1">سنة واحدة</option><option value="2">سنتان</option><option value="3">3 سنوات</option><option value="4">4 سنوات</option><option value="5">5 سنوات</option><option value="6">6 سنوات</option><option value="7">7 سنوات</option><option value="8">8 سنوات</option><option value="9">9 سنوات</option><option value="10">10 سنوات</option><option value="11">11 سنة</option><option value="12">12 سنة</option></select></label>
+                    <label class="fit-pro-label">الطول (سم)<input id="fitHeight" class="fit-pro-input" type="number" min="40" max="220" placeholder="اختياري"></label>
+                    <label class="fit-pro-label">الصدر (سم)<input id="fitChest" class="fit-pro-input" type="number" min="20" max="120" placeholder="اختياري"></label>
                 </div>
-                <div id="fitSafeResult" class="fit-safe-result" aria-live="polite"><strong id="fitSafeTitle">اختاري العمر لنبدأ</strong><p id="fitSafeText" class="text-xs mt-2 leading-relaxed">سنقارن القياسات مع دليل المقاسات.</p></div>
-                <div class="bg-gray-50 rounded-2xl p-3"><h4 class="text-sm font-black text-gray-800 mb-2">دليل المقاسات التقريبي</h4><table class="fit-safe-table"><thead><tr><th>العمر</th><th>الطول</th><th>الصدر</th><th>المقاس</th></tr></thead><tbody id="fitSafeRows"></tbody></table></div>
-                <div class="flex gap-2"><button type="button" onclick="runSafeFitAnalysis()" class="flex-1 py-3 rounded-xl bg-gray-900 text-white font-black">تحليل الملاءمة</button><button type="button" onclick="closeFittingRoom()" class="flex-1 py-3 rounded-xl bg-rose-500 text-white font-black">إغلاق</button></div>
+                <div id="fitProBadge" class="fit-pro-badge neutral"><span>●</span><span id="fitProBadgeText">اختَر العمر لعرض المطابقة</span></div>
+                <div id="fitProResult" class="fit-pro-result neutral"><strong id="fitProTitle">جاهز للتحليل</strong><p id="fitProText" class="text-sm mt-2 leading-relaxed">سنقارن العمر المختار مع بيانات المنتج الفعلية.</p></div>
+                <div class="bg-gray-50 rounded-2xl p-4"><h4 class="text-sm font-black text-gray-800 mb-2">المقاسات المحفوظة لهذه القطعة</h4><div class="overflow-x-auto"><table class="fit-pro-table"><thead><tr><th>العمر</th><th>المقاس</th><th>الحالة</th></tr></thead><tbody id="fitProRows"></tbody></table></div></div>
+                <button type="button" onclick="closeFittingRoom()" class="w-full py-3.5 rounded-2xl bg-gray-900 hover:bg-black text-white font-black transition">تم، فهمت المقاس</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-var safeFitChart={1:[80,48,'80'],2:[90,50,'90'],3:[98,52,'98'],4:[104,54,'104'],5:[110,56,'110'],6:[116,58,'116'],7:[122,60,'122'],8:[128,64,'128'],9:[134,68,'134'],10:[140,72,'140'],11:[146,76,'146'],12:[152,80,'152']};
-function renderSafeFitTable(){var b=document.getElementById('fitSafeRows');if(!b)return;b.innerHTML=Object.keys(safeFitChart).map(function(a){var r=safeFitChart[a];return '<tr><td>'+a+'</td><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>';}).join('');}
-function runSafeFitAnalysis(){var age=Number(document.getElementById('fitAge').value),r=safeFitChart[age],h=Number(document.getElementById('fitHeight').value)||r[0],c=Number(document.getElementById('fitChest').value)||r[1],ok=Math.abs(h-r[0])<=6&&Math.abs(c-r[1])<=4,box=document.getElementById('fitSafeResult');box.classList.toggle('warning',!ok);document.getElementById('fitSafeTitle').innerText=ok?'القطعة مناسبة تقريباً للعمر ✅':'يفضل مراجعة المقاس ⚠️';document.getElementById('fitSafeText').innerText='المقاس المقترح '+r[2]+'، لطول قريب من '+r[0]+' سم وصدر قريب من '+r[1]+' سم. '+(ok?'إذا كان الطفل بين مقاسين اختاري الأكبر لراحة أفضل.':'راجعي قياس الطول والصدر واختاري المقاس الأكبر إذا كانت القياسات أعلى من الجدول.');}
-function openFittingRoom(id,name,img){document.getElementById('fittingProductName').innerText=name;document.getElementById('fittingProductImg').src=img;document.getElementById('fittingProductCaption').innerText='القطعة المختارة: '+name;var m=document.getElementById('fittingRoomModal');m.classList.remove('hidden');m.classList.add('flex');renderSafeFitTable();runSafeFitAnalysis();document.body.classList.add('overflow-hidden');}
-function closeFittingRoom(){var m=document.getElementById('fittingRoomModal');m.classList.add('hidden');m.classList.remove('flex');document.body.classList.remove('overflow-hidden');}
-document.addEventListener('DOMContentLoaded',function(){renderSafeFitTable();document.getElementById('fitAge').addEventListener('change',function(){var r=safeFitChart[this.value];document.getElementById('fitHeight').value=r[0];document.getElementById('fitChest').value=r[1];runSafeFitAnalysis();});document.getElementById('fitHeight').addEventListener('input',runSafeFitAnalysis);document.getElementById('fitChest').addEventListener('input',runSafeFitAnalysis);document.getElementById('fittingRoomModal').addEventListener('click',function(e){if(e.target===this)closeFittingRoom();});});
+var fitProductData={rows:[],name:'',img:''};
+function fitToArray(value){if(Array.isArray(value))return value;if(value&&typeof value==='object')return Object.keys(value).map(function(k){return {age:k,size:value[k]};});if(typeof value==='string'){try{var parsed=JSON.parse(value);return fitToArray(parsed);}catch(e){return value.split(',').map(function(v){return v.trim();});}}return []}
+function fitAgeNumber(value){var match=String(value??'').match(/\d+(?:\.\d+)?/);return match?Number(match[0]):null}
+function buildFitRows(ages,sizes){var a=fitToArray(ages),s=fitToArray(sizes),rows=[];if(a.some(function(x){return x&&typeof x==='object'&&!Array.isArray(x)})){a.forEach(function(x,i){rows.push({age:x.age??x.years??x.value,size:x.size??x.sizes??s[i]??'—'});});}else if(s.length&&s[0]&&typeof s[0]==='object'){s.forEach(function(x,i){rows.push({age:x.age??a[i]??'—',size:x.size??x.value??'—'});});}else{a.forEach(function(x,i){rows.push({age:x,size:s[i]??'—'});});}return rows.filter(function(r){return r.age!==undefined&&r.age!==null&&String(r.age)!=='';}).map(function(r){return {age:r.age,size:Array.isArray(r.size)?r.size.join(' / '):String(r.size)};})}
+function fitAgeText(age){return age==1?'سنة':age==2?'سنتان':age+' سنوات'}
+function renderFitProductRows(selectedAge){var body=document.getElementById('fitProRows');if(!body)return;body.innerHTML=fitProductData.rows.length?fitProductData.rows.map(function(r){var selected=fitAgeNumber(r.age)===selectedAge;return '<tr class="'+(selected?'is-selected':'')+'"><td>'+fitAgeText(r.age)+'</td><td>'+r.size+'</td><td>'+(selected?'مطابق ✓':'متاح')+'</td></tr>';}).join(''):'<tr><td colspan="3">لا توجد بيانات مقاس محفوظة لهذه القطعة</td></tr>';}
+function runFitProductMatch(){var selectedAge=Number(document.getElementById('fitAge').value),match=fitProductData.rows.find(function(r){return fitAgeNumber(r.age)===selectedAge}),badge=document.getElementById('fitProBadge'),result=document.getElementById('fitProResult');badge.className='fit-pro-badge '+(match?'success':'warning');result.className='fit-pro-result '+(match?'':'warning');document.getElementById('fitProBadgeText').innerText=match?'المقاس مطابق لعمر '+fitAgeText(selectedAge)+' ✓':'العمر غير موجود ضمن مقاسات هذه القطعة';document.getElementById('fitProTitle').innerText=match?'مقاس مناسب حسب بيانات المنتج ✅':'لا يوجد تطابق مباشر ⚠️';document.getElementById('fitProText').innerText=match?'المقاس المحفوظ لهذه القطعة هو '+match.size+' لعمر '+fitAgeText(selectedAge)+'. ننصح بمقارنة الطول والصدر قبل الشراء.':'هذه القطعة محفوظة للأعمار: '+(fitProductData.rows.map(function(r){return fitAgeText(fitAgeNumber(r.age));}).join('، ')||'غير محددة')+'. اختَر عمراً موجوداً أو راجع قياسات القطعة.';document.getElementById('fitSavedAge').innerText=match?fitAgeText(selectedAge):'غير مطابق';document.getElementById('fitSavedSize').innerText=match?match.size:'—';renderFitProductRows(selectedAge)}
+function openFittingRoom(id,name,img,ages,sizes){fitProductData={rows:buildFitRows(ages,sizes),name:name,img:img};document.getElementById('fittingProductName').innerText=name;document.getElementById('fittingProductImg').src=img;document.getElementById('fittingProductCaption').innerText=name;var modal=document.getElementById('fittingRoomModal');modal.classList.remove('hidden');modal.classList.add('flex');runFitProductMatch();document.body.classList.add('overflow-hidden')}
+function closeFittingRoom(){var modal=document.getElementById('fittingRoomModal');modal.classList.add('hidden');modal.classList.remove('flex');document.body.classList.remove('overflow-hidden')}
+document.addEventListener('DOMContentLoaded',function(){var age=document.getElementById('fitAge');if(age)age.addEventListener('change',runFitProductMatch);var modal=document.getElementById('fittingRoomModal');if(modal)modal.addEventListener('click',function(e){if(e.target===modal)closeFittingRoom()});document.addEventListener('keydown',function(e){if(e.key==='Escape')closeFittingRoom()})});
 </script>
+
+
+                            
 
 {{-- 🎁 SEASONAL CAMPAIGN --}}
 <section class="campaign-section" aria-label="العرض الموسمي">
