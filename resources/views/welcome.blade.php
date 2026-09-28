@@ -944,6 +944,93 @@ document.addEventListener('DOMContentLoaded',function(){renderSafeFitTable();doc
 
 
                             
+{{-- Premium Collection: يعتمد على $premiumProducts القادم من IndexController --}}
+<section id="premium-collection" class="premium-showcase relative overflow-hidden py-20">
+    <div class="max-w-screen-xl mx-auto px-6">
+        <div class="premium-heading text-right mb-8">
+            <span class="lux-badge">اختيارنا لك</span>
+            <h2 class="text-3xl md:text-5xl font-black text-gray-900 mt-2">إطلالة كاملة <span class="lux-gradient">بلمسة واحدة</span> ✨</h2>
+            <p class="text-gray-500 mt-3 max-w-xl mr-0 ml-auto">تشكيلة مختارة من المنتجات المنشورة حديثاً في متجرك.</p>
+        </div>
+
+        @if(isset($premiumProducts) && $premiumProducts->isNotEmpty())
+            <div id="premiumControllerCarousel" class="premium-controller-carousel">
+                @foreach($premiumProducts as $index => $product)
+                    @php
+                        $premiumImage = $product->images->first()->image ?? $product->product_thambnail ?? 'https://via.placeholder.com/800x1000?text=Melekler+Fashion';
+                        $premiumImageUrl = filter_var($premiumImage, FILTER_VALIDATE_URL)
+                            ? $premiumImage
+                            : asset('storage/' . ltrim($premiumImage, '/'));
+                        $productSlug = $product->product_slug ?? 'item';
+                    @endphp
+
+                    <article class="premium-controller-slide {{ $index === 0 ? 'is-active' : '' }}" data-slide="{{ $index }}">
+                        <div class="grid lg:grid-cols-2 gap-8 lg:gap-14 items-center">
+                            <a href="{{ url('/product/item/details/' . $product->id . '/' . $productSlug) }}" class="premium-controller-image group">
+                                <img src="{{ $premiumImageUrl }}" alt="{{ $product->name }}" loading="lazy">
+                                <span>وصل حديثاً ✨</span>
+                            </a>
+
+                            <div class="text-right px-2 md:px-5">
+                                <span class="inline-block rounded-full bg-rose-50 text-rose-600 px-4 py-2 text-xs font-black">إطلالة متكاملة</span>
+                                <h3 class="text-2xl md:text-4xl font-black text-gray-900 mt-5 leading-tight">{{ $product->name }}</h3>
+                                <p class="text-gray-500 leading-relaxed mt-4">قطعة أنيقة من التشكيلة الجديدة، اختيرت لتمنحك إطلالة مرتبة ومميزة.</p>
+                                <div class="flex justify-end items-center gap-3 mt-5">
+                                    <strong class="text-2xl font-black text-rose-600">{{ number_format($product->price, 2) }} ₺</strong>
+                                    @if($product->original_price)
+                                        <del class="text-sm text-gray-400">{{ number_format($product->original_price, 2) }} ₺</del>
+                                    @endif
+                                </div>
+                                <div class="flex gap-3 mt-7">
+                                    <a href="{{ url('/product/item/details/' . $product->id . '/' . $productSlug) }}" class="flex-1 text-center rounded-2xl bg-gray-900 hover:bg-black text-white font-black py-4 transition">عرض التفاصيل</a>
+                                    <form action="{{ url('cart-add/' . $product->id) }}" method="POST" class="flex-1">
+                                        @csrf
+                                        <input type="hidden" name="size" value="Free Size">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="w-full rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-black py-4 transition">أضف للسلة</button>
+                                    </form>
+                                </div>
+                                <div class="premium-controller-dots mt-7" aria-label="التنقل بين المنتجات">
+                                    @foreach($premiumProducts as $dotIndex => $dotProduct)
+                                        <button type="button" data-premium-slide="{{ $dotIndex }}" class="{{ $dotIndex === 0 ? 'is-active' : '' }}" aria-label="المنتج {{ $dotIndex + 1 }}"></button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        @else
+            <div class="rounded-3xl bg-white p-10 text-center text-gray-500">سيظهر أحدث اختيار هنا بعد نشر المنتجات.</div>
+        @endif
+    </div>
+</section>
+
+<style>
+    .premium-showcase{background:linear-gradient(135deg,#fffaf0,#fff 48%,#fff1f2)}
+    .premium-controller-slide{display:none;animation:premiumControllerFade .5s ease both}.premium-controller-slide.is-active{display:block}
+    @keyframes premiumControllerFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .premium-controller-image{position:relative;display:block;height:510px;overflow:hidden;border:5px solid #fff;border-radius:30px;background:#f8fafc;box-shadow:0 18px 42px rgba(31,41,55,.12)}
+    .premium-controller-image img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease}.premium-controller-image:hover img{transform:scale(1.04)}
+    .premium-controller-image span{position:absolute;right:22px;bottom:22px;padding:8px 14px;border-radius:999px;background:#f59e0b;color:#fff;font-size:.75rem;font-weight:900}
+    .premium-controller-dots{display:flex;justify-content:flex-end;gap:7px;direction:ltr}.premium-controller-dots button{width:9px;height:9px;border:0;border-radius:99px;background:#d1d5db;cursor:pointer;transition:.25s}.premium-controller-dots button.is-active{width:28px;background:#f43f5e}
+    @media(max-width:768px){.premium-controller-image{height:350px}.premium-controller-dots{justify-content:center}.premium-controller-slide .flex{flex-direction:column}}
+</style>
+
+<script>
+(function(){
+    var root=document.getElementById('premiumControllerCarousel');
+    if(!root)return;
+    var slides=[].slice.call(root.querySelectorAll('.premium-controller-slide'));
+    var dots=[].slice.call(root.querySelectorAll('[data-premium-slide]'));
+    if(slides.length<2)return;
+    var current=0,timer;
+    function show(index){current=(index+slides.length)%slides.length;slides.forEach(function(s,i){s.classList.toggle('is-active',i===current)});dots.forEach(function(d,i){d.classList.toggle('is-active',i===current)})}
+    function play(){clearInterval(timer);timer=setInterval(function(){show(current+1)},3000)}
+    dots.forEach(function(dot,index){dot.addEventListener('click',function(){show(index);play()})});
+    root.addEventListener('mouseenter',function(){clearInterval(timer)});root.addEventListener('mouseleave',play);show(0);play();
+})();
+</script>
 
 
 
