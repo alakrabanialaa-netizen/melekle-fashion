@@ -847,9 +847,15 @@
                                 {{-- صف الأزرار السفلي: تجربة AI + أضف للسلة --}}
                                 <div class="mt-3 flex items-center gap-2">
                                     {{-- زر تجربة الذكاء الاصطناعي --}}
-                                    <button type="button" onclick="openFittingRoom('{{ $product->id }}', '{{ addslashes($product->name) }}', '{{ $prodImg }}')" class="w-1/2 bg-gray-900 hover:bg-black text-white font-bold py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1 transition shadow-sm">
+                                    <button type="button"
+                                        class="fitting-trigger w-1/2 bg-gray-900 hover:bg-black text-white font-bold py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1 transition shadow-sm"
+                                        data-product-id="{{ $product->id }}"
+                                        data-product-name="{{ e($product->name) }}"
+                                        data-product-image="{{ e($prodImg) }}"
+                                        data-product-ages='{{ e(json_encode($product->ages ?? [])) }}'
+                                        data-product-sizes='{{ e(json_encode($product->sizes ?? [])) }}'>
                                         <span>✨</span>
-                                        <span>تجربة المقاس</span>
+                                        <span>دليل المقاس</span>
                                     </button>
 
                                     {{-- زر السلة --}}
@@ -875,18 +881,6 @@
 </section>
 
                             
-
-{{-- زر تجربة المقاس: لا نضع JSON داخل onclick لتجنب أخطاء Blade --}}
-<button type="button"
-    class="fitting-trigger w-1/2 bg-gray-900 hover:bg-black text-white font-bold py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1 transition shadow-sm"
-    data-product-id="{{ $product->id }}"
-    data-product-name="{{ e($product->name) }}"
-    data-product-image="{{ e($prodImg) }}"
-    data-product-ages='{{ e(json_encode($product->ages ?? [])) }}'
-    data-product-sizes='{{ e(json_encode($product->sizes ?? [])) }}'>
-    <span>✨</span>
-    <span>دليل المقاس</span>
-</button>
 
 {{-- استبدل نافذة fittingRoomModal القديمة بهذا الجزء --}}
 <style>
