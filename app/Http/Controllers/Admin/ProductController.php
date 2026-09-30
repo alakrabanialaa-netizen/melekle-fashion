@@ -94,6 +94,9 @@ class ProductController extends Controller
         if($request->has('cost_price')) {
             $request->merge(['cost_price' => $convertDigits($request->cost_price)]);
         }
+        if($request->has('original_price')) {
+            $request->merge(['original_price' => $convertDigits($request->original_price)]);
+        }
         // تحويل أرقام كمية المستودع (stock أو quantity القادمة من الفورم)
         if($request->has('stock')) {
             $request->merge(['stock' => $convertDigits($request->stock)]);
@@ -105,11 +108,13 @@ class ProductController extends Controller
         $validatedData = $request->validate([
             'product_code' => 'required|string|unique:products,product_code',
             'name'         => 'required|string|max:255',
-            'price'        => 'required|numeric|min:0',
-            'cost_price'   => 'required|numeric|min:0',
-            'stock'        => 'nullable|integer|min:0', // تعديل هنا ليتوافق مع الموديل
+            'price'          => 'required|numeric|min:0',
+            'original_price' => 'nullable|numeric|min:0',
+            'cost_price'     => 'required|numeric|min:0',
+            'stock'          => 'nullable|integer|min:0', // تعديل هنا ليتوافق مع الموديل
             'category'     => 'required|string',
             'color'        => 'nullable|string|max:100',
+            'badge_text'   => 'nullable|string|max:255',
             'description'  => 'nullable|string',
             'sizes'        => 'nullable|array',
             'ages'         => 'nullable|array', 
@@ -122,12 +127,15 @@ class ProductController extends Controller
             return DB::transaction(function () use ($request, $validatedData) {
                 $product = Product::create([
                     'product_code' => $validatedData['product_code'],
-                    'name'         => $validatedData['name'],
-                    'price'        => $validatedData['price'],
-                    'cost_price'   => $validatedData['cost_price'],
-                    'color'        => $validatedData['color'] ?? null,
+                    'name'           => $validatedData['name'],
+                    'price'          => $validatedData['price'],
+                    'original_price' => $validatedData['original_price'] ?? null,
+                    'cost_price'     => $validatedData['cost_price'],
+                    'color'          => $validatedData['color'] ?? null,
+                    'badge_text'     => $validatedData['badge_text'] ?? null,
                     'description'  => $validatedData['description'] ?? null,
-                    'category'     => $validatedData['category'],
+                    'category'     => trim($validatedData['category']),
+                    'status'       => 1,
                     'stock'        => (int)($validatedData['stock'] ?? 0), // استخدام حقل stock للموديل
                     'sizes'        => $request->input('sizes', []),
                     'ages'         => $request->input('ages', []), 
@@ -211,6 +219,7 @@ class ProductController extends Controller
 
         if($request->has('price')) { $request->merge(['price' => $convertDigits($request->price)]); }
         if($request->has('cost_price')) { $request->merge(['cost_price' => $convertDigits($request->cost_price)]); }
+        if($request->has('original_price')) { $request->merge(['original_price' => $convertDigits($request->original_price)]); }
         if($request->has('stock')) { 
             $request->merge(['stock' => $convertDigits($request->stock)]); 
         } elseif($request->has('quantity')) { 
@@ -220,12 +229,14 @@ class ProductController extends Controller
         $validatedData = $request->validate([
             'product_code' => 'required|string|unique:products,product_code,' . $product->id,
             'name'         => 'required|string|max:255',
-            'price'        => 'required|numeric|min:0',
-            'cost_price'   => 'required|numeric|min:0',
-            'category'     => 'required|string',
+            'price'          => 'required|numeric|min:0',
+            'original_price' => 'nullable|numeric|min:0',
+            'cost_price'     => 'required|numeric|min:0',
+            'category'       => 'required|string',
             'description'  => 'nullable|string',
             'stock'        => 'nullable|integer|min:0', // تعديل هنا ليتوافق مع الموديل
             'color'        => 'nullable|string|max:100',
+            'badge_text'   => 'nullable|string|max:255',
             'sizes'        => 'nullable|array',
             'ages'         => 'nullable|array', 
         ]);
@@ -233,12 +244,14 @@ class ProductController extends Controller
         try {
             $product->update([
                 'product_code' => $validatedData['product_code'],
-                'name'         => $validatedData['name'],
-                'price'        => $validatedData['price'],
-                'cost_price'   => $validatedData['cost_price'],
-                'category'     => $validatedData['category'],
+                'name'           => $validatedData['name'],
+                'price'          => $validatedData['price'],
+                'original_price' => $validatedData['original_price'] ?? null,
+                'cost_price'     => $validatedData['cost_price'],
+                'category'       => trim($validatedData['category']),
                 'description'  => $validatedData['description'] ?? null,
                 'color'        => $validatedData['color'] ?? null,
+                'badge_text'  => $validatedData['badge_text'] ?? null,
                 'stock'        => (int)($validatedData['stock'] ?? 0), // تعديل هنا ليتوافق مع الموديل
                 'sizes'        => $request->input('sizes', []),
                 'ages'         => $request->input('ages', []), 
