@@ -30,25 +30,28 @@ class Product extends Model
         });
     }
 
-    protected $fillable = [
-        'product_code',
-        'product_name', // تم التعديل لتطابق Supabase
-        'product_slug', // تم التعديل لتطابق Supabase
-        'name',
-        'price',
-        'stock',
-        'description',
-        'sizes',
-        'colors',
-        'ages',
-        'slug',
-        'cost_price',
-        'original_price',
-        'badge_text',
-        'category',
-        'video',
-        'image',
-    ];
+  protected $fillable = [
+    'product_code',
+    'product_name',
+    'product_slug',
+    'name',
+    'price',
+    'stock',
+    'status',
+    'description',
+    'sizes',
+    'colors',
+    'color',
+    'ages',
+    'slug',
+    'cost_price',
+    'original_price',
+    'badge_text',
+    'category',
+    'video',
+    'image',
+];
+
 
     protected $casts = [
         'sizes' => 'array',
