@@ -13,20 +13,29 @@ class ProductController extends Controller
 {
     // دالة العروض والتصفيات المخصصة للـ Frontend
     public function getOffers()
-    {
-        // جلب تصنيف العروض إن وجد
-        $category = \App\Models\Category::where('category_name', 'like', '%عروض%')
-                                         ->orWhere('category_slug', 'like', '%offers%')
-                                         ->first();
+{
+    $category = \App\Models\Category::where(function ($query) {
+        $query->where('category_name', 'like', '%عروض%')
+              ->orWhere('category_slug', 'like', '%offers%');
+    })->first();
 
-        // جلب المنتجات المخفضة (السعر الأصلي أكبر من السعر الحالي)
-        $products = Product::whereNotNull('original_price')
-                            ->whereRaw('CAST(original_price AS DECIMAL(10,2)) > CAST(price AS DECIMAL(10,2))')
-                            ->where('status', 1)
-                            ->get();
+    $products = Product::with('images')
+        ->where('status', 1)
+        ->where(function ($query) {
+            $query->whereRaw("LOWER(TRIM(category)) IN ('offers', 'offer')")
+                  ->orWhere('category', 'like', '%عروض%')
+                  ->orWhere(function ($discount) {
+                      $discount->whereNotNull('original_price')
+                          ->whereRaw(
+                              'CAST(original_price AS DECIMAL(10,2)) > CAST(price AS DECIMAL(10,2))'
+                          );
+                  });
+        })
+        ->latest()
+        ->get();
 
-        return view('categories.offers', compact('products', 'category'));
-    }
+    return view('categories.offers', compact('products', 'category'));
+}
 
     // دالة المستودع وجرد البضاعة
     public function index(Request $request)
