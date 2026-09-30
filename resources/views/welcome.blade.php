@@ -930,6 +930,92 @@ function closeFittingRoom(){var m=document.getElementById('fittingRoomModal');m.
 document.addEventListener('DOMContentLoaded',function(){renderSafeFitTable();document.getElementById('fitAge').addEventListener('change',function(){var r=safeFitChart[this.value];document.getElementById('fitHeight').value=r[0];document.getElementById('fitChest').value=r[1];runSafeFitAnalysis();});document.getElementById('fitHeight').addEventListener('input',runSafeFitAnalysis);document.getElementById('fitChest').addEventListener('input',runSafeFitAnalysis);document.getElementById('fittingRoomModal').addEventListener('click',function(e){if(e.target===this)closeFittingRoom();});});
 </script>
 
+                            @php
+    $offerProducts = \App\Models\Product::with('images')
+        ->where('status', 1)
+        ->where(function ($query) {
+            $query->whereRaw("LOWER(TRIM(category)) IN ('offers', 'offer')")
+                  ->orWhere('category', 'like', '%عروض%')
+                  ->orWhere(function ($discount) {
+                      $discount->whereNotNull('original_price')
+                          ->whereRaw(
+                              'CAST(original_price AS DECIMAL(10,2)) > CAST(price AS DECIMAL(10,2))'
+                          );
+                  });
+        })
+        ->latest()
+        ->take(12)
+        ->get();
+@endphp
+
+@if($offerProducts->isNotEmpty())
+<section id="special-offers" class="py-16 bg-rose-50/50" dir="rtl">
+    <div class="max-w-screen-xl mx-auto px-6">
+        <div class="flex items-end justify-between gap-4 mb-8">
+            <div>
+                <span class="text-rose-500 font-black text-sm">عروض حصرية</span>
+                <h2 class="text-3xl md:text-4xl font-black text-gray-900 mt-2">
+                    عروض خاصة لا تفوّت
+                </h2>
+            </div>
+
+            <a href="{{ route('category.offers') }}"
+               class="bg-gray-900 text-white rounded-xl px-4 py-2 text-sm font-bold">
+                عرض الكل
+            </a>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            @foreach($offerProducts as $offer)
+                @php
+                    $offerImage = optional($offer->images->first())->image
+                        ?? $offer->product_thambnail
+                        ?? 'https://via.placeholder.com/500x600?text=Offer';
+
+                    $discount = $offer->original_price &&
+                        $offer->original_price > $offer->price
+                        ? round((($offer->original_price - $offer->price ) / $offer->original_price) * 100)
+                        : null;
+                @endphp
+
+                <article class="bg-white rounded-2xl p-3 shadow-sm border border-rose-100">
+                    <a href="{{ route('products.show', [$offer->id, $offer->product_slug ?? 'item']) }}">
+                        <div class="relative aspect-square overflow-hidden rounded-xl bg-gray-100">
+                            @if($discount)
+                                <span class="absolute top-2 right-2 z-10 bg-rose-500 text-white rounded-full px-2 py-1 text-xs font-black">
+                                    -{{ $discount }}%
+                                </span>
+                            @endif
+
+                            <img src="{{ $offerImage }}"
+                                 alt="{{ $offer->name }}"
+                                 class="w-full h-full object-cover">
+                        </div>
+
+                        <h3 class="font-black text-sm text-gray-800 mt-3 line-clamp-2">
+                            {{ $offer->name }}
+                        </h3>
+                    </a>
+
+                    <div class="flex items-center gap-2 mt-2">
+                        <strong class="text-rose-600">
+                            {{ number_format($offer->price, 2) }} ₺
+                        </strong>
+
+                        @if($offer->original_price)
+                            <del class="text-gray-400 text-xs">
+                                {{ number_format($offer->original_price, 2) }} ₺
+                            </del>
+                        @endif
+                    </div>
+                </article>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
+
 {{-- 🎁 SEASONAL CAMPAIGN --}}
 <section class="campaign-section" aria-label="العرض الموسمي">
     <div class="campaign-content">
