@@ -54,6 +54,32 @@
     .border-pink-50, .border-red-100 { border-color:rgba(201,164,92,.28) !important; }
 </style>
 
+{{-- 🖤 Wholesale CTA: زر تجار الجملة فقط --}}
+<section class="wholesale-cta-strip" dir="rtl" aria-label="بوابة تجار الجملة">
+    <div class="wholesale-cta-inner">
+        <div>
+            <span class="wholesale-cta-kicker">MELEKLER BUSINESS</span>
+            <h2>تجار الجملة</h2>
+            <p>تصفح الموديلات والأصناف المخصصة للتجار.</p>
+        </div>
+        <a href="{{ url('/wholesale/login') }}" class="wholesale-cta-button">
+            دخول التجار <i class="fas fa-arrow-left"></i>
+        </a>
+    </div>
+</section>
+
+<style>
+    .wholesale-cta-strip { padding: 18px 16px 0; background: var(--brand-ivory, #f7f7f5); }
+    .wholesale-cta-inner { max-width: 1220px; margin: 0 auto; padding: 18px 22px; display:flex; align-items:center; justify-content:space-between; gap:18px; border-radius:20px; background:linear-gradient(110deg,#0b0b0d,#191919); color:#fff; border:1px solid rgba(201,164,92,.55); box-shadow:0 12px 28px rgba(11,11,13,.14); }
+    .wholesale-cta-kicker { color:#e4c985; font-size:.65rem; font-weight:900; letter-spacing:.16em; }
+    .wholesale-cta-inner h2 { margin:3px 0 0; font-size:1.2rem; font-weight:900; }
+    .wholesale-cta-inner p { margin:3px 0 0; color:rgba(255,255,255,.68); font-size:.75rem; }
+    .wholesale-cta-button { display:inline-flex; align-items:center; gap:9px; flex:0 0 auto; padding:11px 18px; border-radius:12px; background:#c9a45c; color:#0b0b0d !important; font-size:.78rem; font-weight:900; transition:transform .25s,background .25s; }
+    .wholesale-cta-button:hover { background:#e4c985; transform:translateY(-2px); }
+    @media (max-width:640px) { .wholesale-cta-inner { align-items:stretch; flex-direction:column; padding:17px; } .wholesale-cta-button { justify-content:center; width:100%; } }
+</style>
+
+
 
 {{-- 🎨 MASTER STYLESHEET --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
