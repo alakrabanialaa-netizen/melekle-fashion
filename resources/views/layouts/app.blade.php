@@ -146,6 +146,48 @@
             transform: translateX(0);
         }
     </style>
+
+    {{-- ✨ Luxury Black & White Brand Palette: إضافة فقط بدون حذف الألوان القديمة --}}
+    <style>
+        :root {
+            --mk-black: #0b0b0d;
+            --mk-black-soft: #151518;
+            --mk-white: #ffffff;
+            --mk-ivory: #f7f7f5;
+            --mk-gold: #c9a45c;
+            --mk-gold-light: #e4c985;
+            --mk-pink: var(--mk-gold);
+            --mk-ink: var(--mk-black);
+            --mk-cream: var(--mk-ivory);
+        }
+        body { background-color: var(--mk-ivory) !important; color: var(--mk-black) !important; }
+        #main-header.header-transparent,
+        #main-header.header-scrolled { background: rgba(255,255,255,.94) !important; border-color: rgba(11,11,13,.10) !important; box-shadow: 0 10px 30px rgba(11,11,13,.08) !important; }
+        .nav-link, .nav-icon, .logo-wordmark, .nav-tool { color: var(--mk-black) !important; }
+        .nav-link:hover, .nav-icon:hover, .nav-tool:hover, .lang-btn:hover { color: var(--mk-gold) !important; }
+        .nav-tool, #cart-icon, .lang-btn { border-color: rgba(201,164,92,.35) !important; }
+        .nav-tool:hover { border-color: var(--mk-gold) !important; box-shadow: 0 7px 16px rgba(201,164,92,.18) !important; }
+        .logo-img { filter: drop-shadow(0 5px 9px rgba(201,164,92,.25)) !important; }
+        .dropdown-menu, #mobile-menu, #mini-cart { background: var(--mk-white) !important; border-color: rgba(11,11,13,.10) !important; }
+        .dropdown-menu a:hover, .mobile-menu-link:hover { background: var(--mk-ivory) !important; color: var(--mk-gold) !important; }
+        .marquee-footer { background: var(--mk-black) !important; }
+        #cart-count { background: var(--mk-black) !important; border-color: var(--mk-white) !important; }
+        .text-pink-500, .text-pink-600, .text-red-500 { color: var(--mk-gold) !important; }
+        .bg-pink-500, .bg-pink-600, .bg-red-500 { background-color: var(--mk-black) !important; }
+        .hover\:bg-pink-600:hover, .hover\:bg-red-600:hover { background-color: var(--mk-gold) !important; }
+        .hover\:text-pink-500:hover, .hover\:text-red-600:hover { color: var(--mk-gold) !important; }
+        .border-pink-50, .border-red-100 { border-color: rgba(201,164,92,.28) !important; }
+        .bg-pink-50, .bg-red-50 { background-color: rgba(201,164,92,.10) !important; }
+        .text-gray-900, .text-gray-800 { color: var(--mk-black) !important; }
+        .text-gray-600, .text-gray-700 { color: #454545 !important; }
+        .text-gray-400 { color: #777 !important; }
+        .border-gray-100 { border-color: rgba(11,11,13,.10) !important; }
+        .bg-white { background-color: var(--mk-white) !important; }
+        .bg-gray-900 { background-color: var(--mk-black) !important; }
+        .text-white { color: var(--mk-white) !important; }
+        .hover\:bg-black:hover { background-color: var(--mk-gold) !important; color: var(--mk-black) !important; }
+    </style>
+
 </head>
 <body>
 
