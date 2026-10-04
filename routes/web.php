@@ -220,3 +220,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin/wholesale')->name('admin.who
     Route::post('/codes', [WholesaleAccessController::class, 'adminStore'])->name('codes.store');
     Route::patch('/codes/{wholesaleAccessCode}/toggle', [WholesaleAccessController::class, 'adminToggle'])->name('codes.toggle');
 });
+
+require __DIR__.'/wholesale.php';
