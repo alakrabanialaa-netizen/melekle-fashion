@@ -11,20 +11,35 @@ class WholesaleAccessController extends Controller
 {
     public function loginForm()
     {
-        return view('wholesale.login');
+        return view('admin.wholesale.login');
     }
 
     public function login(Request $request)
     {
-        $data = $request->validate(['code' => ['required', 'string', 'max:100']]);
-        $access = WholesaleAccessCode::where('is_active', true)->get()->first(fn (WholesaleAccessCode $item) => $item->matches(trim($data['code'])));
+        $data = $request->validate([
+            'code' => ['required', 'string', 'max:100'],
+        ]);
+
+        $access = WholesaleAccessCode::where('is_active', true)
+            ->get()
+            ->first(function (WholesaleAccessCode $item) use ($data) {
+                return $item->matches(trim($data['code']));
+            });
 
         if (!$access) {
-            return back()->withInput()->withErrors(['code' => 'الكود غير صحيح أو منتهي الصلاحية.']);
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'code' => 'الكود غير صحيح أو منتهي الصلاحية.',
+                ]);
         }
 
-        $access->forceFill(['last_used_at' => now()])->save();
+        $access->forceFill([
+            'last_used_at' => now(),
+        ])->save();
+
         $request->session()->regenerate();
+
         $request->session()->put([
             'wholesale_access_code_id' => $access->id,
             'wholesale_customer_name' => $access->customer_name,
@@ -35,20 +50,33 @@ class WholesaleAccessController extends Controller
 
     public function catalog()
     {
-        $products = Product::query()->where('is_wholesale', true)->latest()->paginate(24);
-        return view('wholesale.catalog', compact('products'));
+        $products = Product::query()
+            ->where('is_wholesale', true)
+            ->latest()
+            ->paginate(24);
+
+        return view('admin.wholesale.catalog', compact('products'));
     }
 
     public function logout(Request $request)
     {
-        $request->session()->forget(['wholesale_access_code_id', 'wholesale_customer_name']);
+        $request->session()->forget([
+            'wholesale_access_code_id',
+            'wholesale_customer_name',
+        ]);
+
         $request->session()->regenerateToken();
-        return redirect()->route('wholesale.login')->with('status', 'تم تسجيل الخروج بأمان.');
+
+        return redirect()
+            ->route('wholesale.login')
+            ->with('status', 'تم تسجيل الخروج بأمان.');
     }
 
     public function adminIndex()
     {
-        return view('admin.wholesale.index', ['codes' => WholesaleAccessCode::latest()->paginate(20)]);
+        return view('admin.wholesale.index', [
+            'codes' => WholesaleAccessCode::latest()->paginate(20),
+        ]);
     }
 
     public function adminStore(Request $request)
@@ -67,12 +95,21 @@ class WholesaleAccessController extends Controller
             'is_active' => true,
         ]);
 
-        return back()->with('status', 'تم إنشاء كود التاجر. احتفظ بالكود وأرسله للزبون بشكل آمن.');
+        return back()->with(
+            'status',
+            'تم إنشاء كود التاجر. احتفظ بالكود وأرسله للزبون بشكل آمن.'
+        );
     }
 
     public function adminToggle(WholesaleAccessCode $wholesaleAccessCode)
     {
-        $wholesaleAccessCode->update(['is_active' => !$wholesaleAccessCode->is_active]);
-        return back()->with('status', 'تم تحديث حالة الكود.');
+        $wholesaleAccessCode->update([
+            'is_active' => !$wholesaleAccessCode->is_active,
+        ]);
+
+        return back()->with(
+            'status',
+            'تم تحديث حالة الكود.'
+        );
     }
 }
