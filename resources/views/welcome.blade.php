@@ -595,21 +595,29 @@
     </div>
 
     {{-- المنتجات المتحركة --}}
-    @php
-        $movingProducts = isset($products)
-            ? collect($products)->filter(fn ($product) => !($product->is_wholesale ?? false))->take(10)
-            : collect();
-    @endphp
+  @php
+    $movingProducts = \App\Models\Product::query()
+        ->where('status', 1)
+        ->where(function ($query) {
+            $query->where('is_wholesale', false)
+                  ->orWhereNull('is_wholesale');
+        })
+        ->with('images')
+        ->latest()
+        ->take(12)
+        ->get();
+@endphp
+
 
     @if($movingProducts->count())
         <div class="mf-products-window">
             <div class="mf-products-track">
                 @foreach($movingProducts as $product)
                     @php
-                        $productImage =
-                            $product->image_url
-                            ?? $product->image
-                            ?? asset('images/placeholder.png');
+                       $productImage = $product->images->first()
+    ? $product->images->first()->image
+    : ($product->product_thambnail ?? 'https://via.placeholder.com/500x650' );
+
 
                         $productUrl = Route::has('products.show')
                             ? route('products.show', [
