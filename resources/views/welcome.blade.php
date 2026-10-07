@@ -554,118 +554,134 @@
 
 
 
-{{-- ✨ MELEKLER FASHION — MOVING COLLECTION SECTION --}}
-<section id="collection" class="mf-moving-collection" dir="rtl" aria-label="مجموعة ميلاكلار فاشن">
+{{-- ✨ MELEKLER FASHION — STATIC MOVING CLOTHING RAIL --}}
+<section id="collection" class="mf-clothing-rail" dir="rtl" aria-label="مجموعة ميلاكلار الجديدة">
 
-    {{-- الشريط العلوي الجديد --}}
-    <div class="mf-top-ribbon">
-        <div class="mf-ribbon-track">
+    {{-- الشريط العلوي --}}
+    <div class="mf-rail-ribbon">
+        <div class="mf-rail-ribbon-track">
             <span>MELEKLER FASHION</span>
             <b>✦</b>
-            <span>NEW SEASON</span>
+            <span>NEW COLLECTION</span>
             <b>✦</b>
             <span>MADE WITH STYLE</span>
             <b>✦</b>
             <span>MELEKLER FASHION</span>
             <b>✦</b>
-            <span>NEW SEASON</span>
+            <span>NEW COLLECTION</span>
             <b>✦</b>
         </div>
     </div>
 
-    {{-- المقدمة --}}
-    <div class="mf-collection-header">
-        <div>
-            <span class="mf-eyebrow">MELEKLER / COLLECTION 2026</span>
-            <h2>قطع مختارة  
-<em>لإطلالة مختلفة</em></h2>
+    {{-- العنوان الرئيسي --}}
+    <div class="mf-rail-intro">
+        <div class="mf-rail-title">
+            <span>MELEKLER / SARAİYEV</span>
+
+            <h2>
+                مجموعة  
+
+                <strong>ميلاكلار الجديدة</strong>
+            </h2>
         </div>
 
-        <div class="mf-header-copy">
+        <div class="mf-rail-description">
             <p>
-                اكتشفي تشكيلتنا الجديدة بتصاميم أنيقة، خامات مريحة،
-                وتفاصيل صنعت لتبقى في الذاكرة.
+                اكتشفي تشكيلتنا الجديدة بتفاصيل أنيقة،
+                ألوان مختارة، وخامات تمنحك الراحة والأناقة.
             </p>
 
-            <a href="#shop" class="mf-view-all">
+            <a href="#shop">
                 استكشفي المجموعة
-                <span>←</span>
+                <b>←</b>
             </a>
         </div>
     </div>
 
- {{-- المنتجات المتحركة --}}
-@php
-    $movingProducts = \App\Models\Product::query()
-        ->where('status', 1)
-        ->whereRaw('("is_wholesale" IS FALSE OR "is_wholesale" IS NULL)')
-        ->with('images')
-        ->latest()
-        ->take(12)
-        ->get();
-@endphp
+    {{-- منطقة علاقة الملابس --}}
+    <div class="mf-rail-stage">
 
+        <div class="mf-rail-background-circle"></div>
 
-    @if($movingProducts->count())
-        <div class="mf-products-window">
-            <div class="mf-products-track">
-                @foreach($movingProducts as $product)
-                    @php
-                       $productImage = $product->images->first()
-    ? $product->images->first()->image
-    : ($product->product_thambnail ?? 'https://via.placeholder.com/500x650' );
+        <div class="mf-rail-line">
+            <span></span>
+        </div>
 
+        <div class="mf-garments">
 
-                        $productUrl = Route::has('products.show')
-                            ? route('products.show', [
-                                $product->id,
-                                $product->product_slug ?? 'item'
-                            ])
-                            : '#';
-                    @endphp
-
-                    <a href="{{ $productUrl }}" class="mf-product-card">
-                        <div class="mf-product-image">
-                            <img
-                                src="{{ $productImage }}"
-                                alt="{{ $product->name }}"
-                                loading="lazy"
-                            >
-
-                            <span class="mf-product-number">
-                                {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
-                            </span>
-
-                            <span class="mf-product-arrow">↗</span>
-
-                            <div class="mf-product-overlay">
-                                <span>عرض المنتج</span>
-                            </div>
-                        </div>
-
-                        <div class="mf-product-info">
-                            <div>
-                                <h3>{{ $product->name }}</h3>
-                                <p>MELEKLER EDITION</p>
-                            </div>
-
-                            <strong>
-                                {{ $product->price }} ₺
-                            </strong>
-                        </div>
-                    </a>
-                @endforeach
+            {{-- قطعة 1 --}}
+            <div class="mf-garment mf-garment-white" tabindex="0">
+                <div class="mf-hanger"></div>
+                <div class="mf-clothing mf-tshirt">
+                    <span>MK</span>
+                </div>
+                <div class="mf-garment-label">01</div>
             </div>
-        </div>
-    @else
-        <div class="mf-empty-products">
-            ستظهر المجموعة الجديدة هنا قريبًا
-        </div>
-    @endif
 
-    {{-- معلومات سريعة أسفل القسم --}}
-    <div class="mf-bottom-details">
-        <span>01 — تصميم تركي مختار</span>
+            {{-- قطعة 2 --}}
+            <div class="mf-garment mf-garment-black" tabindex="0">
+                <div class="mf-hanger"></div>
+                <div class="mf-clothing mf-long-dress"></div>
+                <div class="mf-garment-label">02</div>
+            </div>
+
+            {{-- قطعة 3 --}}
+            <div class="mf-garment mf-garment-beige" tabindex="0">
+                <div class="mf-hanger"></div>
+                <div class="mf-clothing mf-sweater"></div>
+                <div class="mf-garment-label">03</div>
+            </div>
+
+            {{-- قطعة 4 --}}
+            <div class="mf-garment mf-garment-pink" tabindex="0">
+                <div class="mf-hanger"></div>
+                <div class="mf-clothing mf-dress"></div>
+                <div class="mf-garment-label">04</div>
+            </div>
+
+            {{-- قطعة 5 --}}
+            <div class="mf-garment mf-garment-green" tabindex="0">
+                <div class="mf-hanger"></div>
+                <div class="mf-clothing mf-hoodie"></div>
+                <div class="mf-garment-label">05</div>
+            </div>
+
+            {{-- قطعة 6 --}}
+            <div class="mf-garment mf-garment-gray" tabindex="0">
+                <div class="mf-hanger"></div>
+                <div class="mf-clothing mf-jacket"></div>
+                <div class="mf-garment-label">06</div>
+            </div>
+
+            {{-- قطعة 7 --}}
+            <div class="mf-garment mf-garment-lilac" tabindex="0">
+                <div class="mf-hanger"></div>
+                <div class="mf-clothing mf-lilac-dress"></div>
+                <div class="mf-garment-label">07</div>
+            </div>
+
+            {{-- قطعة 8 --}}
+            <div class="mf-garment mf-garment-navy" tabindex="0">
+                <div class="mf-hanger"></div>
+                <div class="mf-clothing mf-navy-dress"></div>
+                <div class="mf-garment-label">08</div>
+            </div>
+
+        </div>
+
+        <div class="mf-rail-center-note">
+            <small>NEW COLLECTION</small>
+            <strong>
+                مرّري على القطع  
+
+                لاكتشاف التفاصيل
+            </strong>
+        </div>
+    </div>
+
+    {{-- المعلومات السفلية --}}
+    <div class="mf-rail-footer">
+        <span>01 — تصاميم تركية مختارة</span>
         <span>02 — خامات مريحة</span>
         <span>03 — شحن سريع وآمن</span>
         <span>04 — تفاصيل صنعت بحب</span>
@@ -673,359 +689,519 @@
 </section>
 
 <style>
-    .mf-moving-collection {
+    .mf-clothing-rail {
         position: relative;
         overflow: hidden;
-        background: #f4f2ed;
-        color: #111113;
-        padding: 0 0 34px;
+        min-height: 760px;
+        background: #f6f5f0;
+        color: #161616;
         isolation: isolate;
     }
 
-    .mf-moving-collection::before {
+    .mf-clothing-rail::after {
         content: "";
         position: absolute;
-        width: 420px;
-        height: 420px;
-        left: -170px;
-        top: 120px;
-        border: 1px solid rgba(174, 137, 67, .22);
+        right: -160px;
+        bottom: -210px;
+        width: 470px;
+        height: 470px;
+        border: 1px solid rgba(166, 128, 57, .16);
         border-radius: 50%;
         box-shadow:
-            0 0 0 35px rgba(174, 137, 67, .05),
-            0 0 0 70px rgba(174, 137, 67, .04);
+            0 0 0 28px rgba(166, 128, 57, .035),
+            0 0 0 57px rgba(166, 128, 57, .025);
         pointer-events: none;
         z-index: -1;
     }
 
-    .mf-top-ribbon {
+    .mf-rail-ribbon {
+        width: 100%;
         overflow: hidden;
-        background: #111113;
-        color: #e6c983;
-        border-bottom: 1px solid rgba(230, 201, 131, .35);
+        background: #121214;
+        color: #e2c17c;
+        border-bottom: 1px solid rgba(226, 193, 124, .35);
         white-space: nowrap;
     }
 
-    .mf-ribbon-track {
+    .mf-rail-ribbon-track {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 22px;
+        gap: 24px;
         min-height: 42px;
         padding: 0 20px;
-        animation: mfRibbonMove 18s linear infinite;
-        font-size: .65rem;
+        animation: mfRailRibbonMove 18s linear infinite;
+        font-size: 10px;
         font-weight: 900;
-        letter-spacing: .18em;
+        letter-spacing: 3px;
     }
 
-    .mf-ribbon-track b {
+    .mf-rail-ribbon-track b {
         color: #fff;
-        font-size: .9rem;
+        font-size: 14px;
     }
 
-    .mf-collection-header {
-        max-width: 1220px;
+    .mf-rail-intro {
+        position: relative;
+        z-index: 2;
+        max-width: 1250px;
         margin: 0 auto;
-        padding: 58px 24px 34px;
+        padding: 72px 32px 42px;
         display: flex;
-        align-items: end;
+        align-items: flex-end;
         justify-content: space-between;
-        gap: 35px;
+        gap: 55px;
     }
 
-    .mf-eyebrow {
-        display: inline-block;
-        margin-bottom: 13px;
-        color: #a27b35;
-        font-size: .68rem;
+    .mf-rail-title {
+        text-align: right;
+    }
+
+    .mf-rail-title > span {
+        display: block;
+        margin-bottom: 18px;
+        color: #a17b38;
+        font-size: 11px;
         font-weight: 900;
-        letter-spacing: .2em;
+        letter-spacing: 4px;
     }
 
-    .mf-collection-header h2 {
+    .mf-rail-title h2 {
         margin: 0;
-        font-size: clamp(2.1rem, 5vw, 4.7rem);
-        line-height: .98;
+        font-size: clamp(46px, 7vw, 104px);
+        line-height: .9;
+        font-weight: 300;
+        letter-spacing: -5px;
+    }
+
+    .mf-rail-title h2 strong {
+        color: #a17b38;
         font-weight: 900;
-        letter-spacing: -.06em;
     }
 
-    .mf-collection-header h2 em {
-        color: #a27b35;
-        font-style: normal;
-    }
-
-    .mf-header-copy {
+    .mf-rail-description {
         max-width: 330px;
+        text-align: right;
     }
 
-    .mf-header-copy p {
-        margin: 0 0 18px;
-        color: #68645d;
-        font-size: .88rem;
-        line-height: 1.9;
+    .mf-rail-description p {
+        margin: 0 0 20px;
+        color: #77736b;
+        font-size: 15px;
+        line-height: 2;
     }
 
-    .mf-view-all {
+    .mf-rail-description a {
         display: inline-flex;
         align-items: center;
         gap: 12px;
-        color: #111113 !important;
-        font-size: .78rem;
+        border-bottom: 1px solid #171717;
+        padding-bottom: 7px;
+        color: #171717 !important;
+        font-size: 13px;
         font-weight: 900;
-        border-bottom: 1px solid #111113;
-        padding-bottom: 5px;
+        text-decoration: none !important;
     }
 
-    .mf-view-all span {
+    .mf-rail-description a b {
         transition: transform .3s ease;
     }
 
-    .mf-view-all:hover span {
+    .mf-rail-description a:hover b {
         transform: translateX(-6px);
     }
 
-    .mf-products-window {
-        width: 100%;
-        overflow: hidden;
-        padding: 12px 0 28px;
-    }
-
-    .mf-products-track {
-        display: flex;
-        gap: 18px;
-        width: max-content;
-        padding: 0 24px;
-        animation: mfProductsMove 38s linear infinite;
-    }
-
-    .mf-products-window:hover .mf-products-track {
-        animation-play-state: paused;
-    }
-
-    .mf-product-card {
-        width: min(245px, 66vw);
-        flex: 0 0 auto;
-        color: #111113 !important;
-        text-decoration: none !important;
-        transform: translateY(0);
-        transition: transform .45s cubic-bezier(.16, 1, .3, 1);
-    }
-
-    .mf-product-card:hover {
-        transform: translateY(-13px);
-    }
-
-    .mf-product-image {
+    .mf-rail-stage {
         position: relative;
-        aspect-ratio: .78;
-        overflow: hidden;
-        background: #e8e5de;
-        border-radius: 3px;
+        max-width: 1320px;
+        min-height: 345px;
+        margin: 0 auto;
+        border: 1px dashed rgba(167, 143, 92, .42);
+        background: rgba(255, 255, 255, .18);
     }
 
-    .mf-product-image::after {
-        content: "";
+    .mf-rail-background-circle {
         position: absolute;
-        inset: 0;
-        background: linear-gradient(
-            135deg,
-            rgba(255,255,255,.32),
-            transparent 35%,
-            rgba(0,0,0,.22)
-        );
-        opacity: .55;
-        transition: opacity .45s ease;
+        top: -270px;
+        left: -245px;
+        width: 540px;
+        height: 540px;
+        border: 1px solid rgba(174, 137, 67, .18);
+        border-radius: 50%;
+        box-shadow:
+            0 0 0 28px rgba(174, 137, 67, .04),
+            0 0 0 57px rgba(174, 137, 67, .035);
         pointer-events: none;
     }
 
-    .mf-product-card:hover .mf-product-image::after {
-        opacity: .15;
+    .mf-rail-line {
+        position: absolute;
+        top: 66px;
+        right: 6%;
+        left: 6%;
+        height: 5px;
+        border-radius: 99px;
+        background: #bdbab2;
+        box-shadow: 0 5px 0 rgba(0, 0, 0, .07);
     }
 
-    .mf-product-image img {
-        width: 100%;
-        height: 100%;
-        display: block;
-        object-fit: cover;
+    .mf-rail-line::before,
+    .mf-rail-line::after {
+        content: "";
+        position: absolute;
+        top: -7px;
+        width: 16px;
+        height: 18px;
+        border: 2px solid #aaa79f;
+        background: #f6f5f0;
+    }
+
+    .mf-rail-line::before {
+        right: -4px;
+    }
+
+    .mf-rail-line::after {
+        left: -4px;
+    }
+
+    .mf-garments {
+        position: absolute;
+        top: 63px;
+        right: 7%;
+        left: 7%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-around;
+        gap: 12px;
+    }
+
+    .mf-garment {
+        position: relative;
+        width: 90px;
+        height: 230px;
+        flex: 0 0 90px;
+        transform-origin: top center;
+        cursor: pointer;
+        outline: none;
         transition:
-            transform .7s cubic-bezier(.16, 1, .3, 1),
+            transform .5s cubic-bezier(.16, 1, .3, 1),
+            filter .4s ease;
+        animation: mfGarmentSwing 5s ease-in-out infinite;
+    }
+
+    .mf-garment:nth-child(2) {
+        animation-delay: -.8s;
+    }
+
+    .mf-garment:nth-child(3) {
+        animation-delay: -1.6s;
+    }
+
+    .mf-garment:nth-child(4) {
+        animation-delay: -2.4s;
+    }
+
+    .mf-garment:nth-child(5) {
+        animation-delay: -3.2s;
+    }
+
+    .mf-garment:nth-child(6) {
+        animation-delay: -4s;
+    }
+
+    .mf-garment:hover,
+    .mf-garment:focus {
+        z-index: 20;
+        transform: translateY(-19px) rotate(-4deg) scale(1.16);
+        filter: drop-shadow(0 18px 12px rgba(0, 0, 0, .18));
+        animation-play-state: paused;
+    }
+
+    .mf-hanger {
+        position: absolute;
+        top: -11px;
+        left: 35px;
+        width: 25px;
+        height: 22px;
+        border: 3px solid #67452b;
+        border-bottom: 0;
+        border-radius: 50% 50% 0 0;
+        z-index: 3;
+    }
+
+    .mf-hanger::after {
+        content: "";
+        position: absolute;
+        top: 17px;
+        left: 9px;
+        width: 3px;
+        height: 25px;
+        background: #67452b;
+    }
+
+    .mf-clothing {
+        position: absolute;
+        top: 22px;
+        left: 7px;
+        width: 77px;
+        height: 174px;
+        box-shadow: 0 13px 18px rgba(0, 0, 0, .13);
+        transition:
+            transform .45s ease,
             filter .45s ease;
     }
 
-    .mf-product-card:hover .mf-product-image img {
-        transform: scale(1.1);
-        filter: contrast(1.05) saturate(1.12);
+    .mf-garment:hover .mf-clothing,
+    .mf-garment:focus .mf-clothing {
+        filter: brightness(1.1) saturate(1.18);
     }
 
-    .mf-product-number {
-        position: absolute;
-        top: 13px;
-        right: 14px;
-        z-index: 2;
-        color: #fff;
-        font-size: .65rem;
-        font-weight: 900;
-        letter-spacing: .12em;
-        text-shadow: 0 2px 10px rgba(0,0,0,.45);
-    }
-
-    .mf-product-arrow {
-        position: absolute;
-        left: 14px;
-        bottom: 13px;
-        z-index: 3;
+    .mf-tshirt {
         display: grid;
         place-items: center;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: rgba(255,255,255,.9);
-        color: #111113;
-        font-size: 1rem;
-        opacity: 0;
-        transform: translateY(10px);
-        transition: opacity .35s ease, transform .35s ease;
+        border-radius: 14px 14px 9px 9px;
+        background: #fff;
+        clip-path: polygon(
+            25% 0,
+            40% 12%,
+            60% 12%,
+            75% 0,
+            100% 18%,
+            84% 42%,
+            72% 34%,
+            72% 100%,
+            28% 100%,
+            28% 34%,
+            16% 42%,
+            0 18%
+        );
+        color: #d1cdc4;
+        font-size: 21px;
+        font-weight: 900;
     }
 
-    .mf-product-card:hover .mf-product-arrow {
-        opacity: 1;
-        transform: translateY(0);
+    .mf-long-dress,
+    .mf-dress,
+    .mf-lilac-dress,
+    .mf-navy-dress {
+        clip-path: polygon(
+            28% 0,
+            72% 0,
+            80% 18%,
+            100% 100%,
+            0 100%,
+            20% 18%
+        );
+        border-radius: 20px 20px 5px 5px;
     }
 
-    .mf-product-overlay {
+    .mf-long-dress {
+        background: #232326;
+    }
+
+    .mf-dress {
+        background: #e3c5c0;
+    }
+
+    .mf-lilac-dress {
+        background: #514969;
+    }
+
+    .mf-navy-dress {
+        background: #292b4f;
+    }
+
+    .mf-sweater {
+        border-radius: 23px 23px 11px 11px;
+        background: #e6d5cb;
+        clip-path: polygon(
+            25% 0,
+            40% 10%,
+            60% 10%,
+            75% 0,
+            100% 20%,
+            82% 42%,
+            70% 34%,
+            70% 100%,
+            30% 100%,
+            30% 34%,
+            18% 42%,
+            0 20%
+        );
+    }
+
+    .mf-hoodie {
+        border-radius: 20px 20px 9px 9px;
+        background: #15825c;
+        clip-path: polygon(
+            25% 0,
+            38% 9%,
+            62% 9%,
+            75% 0,
+            100% 18%,
+            85% 45%,
+            73% 36%,
+            73% 100%,
+            27% 100%,
+            27% 36%,
+            15% 45%,
+            0 18%
+        );
+    }
+
+    .mf-jacket {
+        border-radius: 12px 12px 8px 8px;
+        background: #3c3d40;
+        clip-path: polygon(
+            25% 0,
+            40% 11%,
+            60% 11%,
+            75% 0,
+            100% 20%,
+            82% 39%,
+            70% 34%,
+            70% 100%,
+            30% 100%,
+            30% 34%,
+            18% 39%,
+            0 20%
+        );
+    }
+
+    .mf-garment-label {
         position: absolute;
-        right: 14px;
-        bottom: 14px;
-        left: 14px;
-        z-index: 2;
-        padding: 11px 13px;
-        background: rgba(17,17,19,.86);
-        color: #fff;
-        text-align: center;
-        font-size: .72rem;
+        top: 207px;
+        right: 50%;
+        transform: translateX(50%);
+        color: #97938b;
+        font-size: 9px;
         font-weight: 900;
+        letter-spacing: 2px;
         opacity: 0;
-        transform: translateY(14px);
-        transition: opacity .35s ease, transform .35s ease;
+        transition: opacity .35s ease;
     }
 
-    .mf-product-card:hover .mf-product-overlay {
+    .mf-garment:hover .mf-garment-label,
+    .mf-garment:focus .mf-garment-label {
         opacity: 1;
-        transform: translateY(0);
     }
 
-    .mf-product-info {
-        display: flex;
-        align-items: start;
-        justify-content: space-between;
-        gap: 10px;
-        padding: 13px 2px 0;
-    }
-
-    .mf-product-info h3 {
-        max-width: 160px;
-        margin: 0;
-        overflow: hidden;
-        font-size: .82rem;
-        font-weight: 900;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .mf-product-info p {
-        margin: 4px 0 0;
-        color: #a27b35;
-        font-size: .56rem;
-        font-weight: 900;
-        letter-spacing: .12em;
-    }
-
-    .mf-product-info strong {
-        color: #a27b35;
-        font-size: .82rem;
-        white-space: nowrap;
-    }
-
-    .mf-empty-products {
-        max-width: 1220px;
-        margin: 20px auto 45px;
-        padding: 80px 20px;
-        border: 1px dashed rgba(162,123,53,.45);
-        color: #8d6c32;
+    .mf-rail-center-note {
+        position: absolute;
+        right: 50%;
+        bottom: 26px;
+        transform: translateX(50%);
+        color: #a17b38;
         text-align: center;
-        font-weight: 900;
     }
 
-    .mf-bottom-details {
-        max-width: 1220px;
+    .mf-rail-center-note small {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: 3px;
+    }
+
+    .mf-rail-center-note strong {
+        display: block;
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    .mf-rail-footer {
+        max-width: 1320px;
         margin: 0 auto;
-        padding: 17px 24px 0;
+        padding: 22px 32px 0;
         display: flex;
         justify-content: space-between;
         gap: 18px;
-        border-top: 1px solid rgba(17,17,19,.15);
-        color: #77736b;
-        font-size: .65rem;
-        font-weight: 800;
+        border-top: 1px solid rgba(20, 20, 20, .15);
+        color: #77736c;
+        font-size: 10px;
+        font-weight: 900;
     }
 
-    @keyframes mfProductsMove {
+    @keyframes mfGarmentSwing {
+        0%, 100% {
+            transform: rotate(0deg);
+        }
+
+        50% {
+            transform: rotate(2deg);
+        }
+    }
+
+    @keyframes mfRailRibbonMove {
         0% {
             transform: translateX(0);
         }
+
         100% {
-            transform: translateX(-18%);
+            transform: translateX(-22%);
         }
     }
 
-    @keyframes mfRibbonMove {
-        0% {
-            transform: translateX(0);
-        }
-        100% {
-            transform: translateX(-20%);
-        }
-    }
-
-    @media (max-width: 720px) {
-        .mf-collection-header {
-            align-items: start;
+    @media (max-width: 760px) {
+        .mf-rail-intro {
+            align-items: flex-start;
             flex-direction: column;
-            padding-top: 42px;
+            padding: 52px 22px 30px;
+            gap: 28px;
         }
 
-        .mf-header-copy {
+        .mf-rail-title h2 {
+            font-size: 58px;
+            letter-spacing: -3px;
+        }
+
+        .mf-rail-description {
             max-width: 100%;
         }
 
-        .mf-products-track {
-            animation-duration: 30s;
+        .mf-rail-stage {
+            min-height: 315px;
+            margin: 0 14px;
         }
 
-        .mf-bottom-details {
+        .mf-garments {
+            right: 1%;
+            left: 1%;
+            gap: 0;
+        }
+
+        .mf-garment {
+            width: 47px;
+            flex-basis: 47px;
+            transform: scale(.64);
+        }
+
+        .mf-garment:hover,
+        .mf-garment:focus {
+            transform: translateY(-12px) scale(.78) rotate(-3deg);
+        }
+
+        .mf-rail-footer {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            line-height: 1.7;
+            padding: 18px 22px 0;
+            line-height: 1.8;
         }
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .mf-ribbon-track,
-        .mf-products-track {
+        .mf-rail-ribbon-track,
+        .mf-garment {
             animation: none;
         }
 
-        .mf-product-card,
-        .mf-product-image img,
-        .mf-product-arrow,
-        .mf-product-overlay {
+        .mf-garment,
+        .mf-garment:hover,
+        .mf-garment:focus {
             transition: none;
         }
     }
 </style>
-
 
 
 
