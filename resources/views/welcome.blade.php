@@ -594,14 +594,11 @@
         </div>
     </div>
 
-    {{-- المنتجات المتحركة --}}
-  @php
+ {{-- المنتجات المتحركة --}}
+@php
     $movingProducts = \App\Models\Product::query()
         ->where('status', 1)
-        ->where(function ($query) {
-            $query->where('is_wholesale', false)
-                  ->orWhereNull('is_wholesale');
-        })
+        ->whereRaw('("is_wholesale" IS FALSE OR "is_wholesale" IS NULL)')
         ->with('images')
         ->latest()
         ->take(12)
