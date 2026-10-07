@@ -551,112 +551,480 @@
     </div>
 </section>
 
-{{-- 🛡️ TRUST & SERVICE BAR --}}
-<section class="trust-bar" aria-label="خدمات المتجر">
-    <div class="trust-grid">
-        <div class="trust-item"><i class="fas fa-truck-fast"></i><span>توصيل سريع وآمن</span></div>
-        <div class="trust-item"><i class="fas fa-shield-halved"></i><span>دفع آمن 100%</span></div>
-        <div class="trust-item"><i class="fas fa-rotate-left"></i><span>إرجاع سهل</span></div>
-        <div class="trust-item"><i class="fab fa-whatsapp"></i><span>دعم عبر واتساب</span></div>
+
+
+
+{{-- ✨ MELEKLER FASHION — MOVING COLLECTION SECTION --}}
+<section id="collection" class="mf-moving-collection" dir="rtl" aria-label="مجموعة ميلاكلار فاشن">
+
+    {{-- الشريط العلوي الجديد --}}
+    <div class="mf-top-ribbon">
+        <div class="mf-ribbon-track">
+            <span>MELEKLER FASHION</span>
+            <b>✦</b>
+            <span>NEW SEASON</span>
+            <b>✦</b>
+            <span>MADE WITH STYLE</span>
+            <b>✦</b>
+            <span>MELEKLER FASHION</span>
+            <b>✦</b>
+            <span>NEW SEASON</span>
+            <b>✦</b>
+        </div>
+    </div>
+
+    {{-- المقدمة --}}
+    <div class="mf-collection-header">
+        <div>
+            <span class="mf-eyebrow">MELEKLER / COLLECTION 2026</span>
+            <h2>قطع مختارة  
+<em>لإطلالة مختلفة</em></h2>
+        </div>
+
+        <div class="mf-header-copy">
+            <p>
+                اكتشفي تشكيلتنا الجديدة بتصاميم أنيقة، خامات مريحة،
+                وتفاصيل صنعت لتبقى في الذاكرة.
+            </p>
+
+            <a href="#shop" class="mf-view-all">
+                استكشفي المجموعة
+                <span>←</span>
+            </a>
+        </div>
+    </div>
+
+    {{-- المنتجات المتحركة --}}
+    @php
+        $movingProducts = isset($products)
+            ? collect($products)->filter(fn ($product) => !($product->is_wholesale ?? false))->take(10)
+            : collect();
+    @endphp
+
+    @if($movingProducts->count())
+        <div class="mf-products-window">
+            <div class="mf-products-track">
+                @foreach($movingProducts as $product)
+                    @php
+                        $productImage =
+                            $product->image_url
+                            ?? $product->image
+                            ?? asset('images/placeholder.png');
+
+                        $productUrl = Route::has('products.show')
+                            ? route('products.show', [
+                                $product->id,
+                                $product->product_slug ?? 'item'
+                            ])
+                            : '#';
+                    @endphp
+
+                    <a href="{{ $productUrl }}" class="mf-product-card">
+                        <div class="mf-product-image">
+                            <img
+                                src="{{ $productImage }}"
+                                alt="{{ $product->name }}"
+                                loading="lazy"
+                            >
+
+                            <span class="mf-product-number">
+                                {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
+                            </span>
+
+                            <span class="mf-product-arrow">↗</span>
+
+                            <div class="mf-product-overlay">
+                                <span>عرض المنتج</span>
+                            </div>
+                        </div>
+
+                        <div class="mf-product-info">
+                            <div>
+                                <h3>{{ $product->name }}</h3>
+                                <p>MELEKLER EDITION</p>
+                            </div>
+
+                            <strong>
+                                {{ $product->price }} ₺
+                            </strong>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    @else
+        <div class="mf-empty-products">
+            ستظهر المجموعة الجديدة هنا قريبًا
+        </div>
+    @endif
+
+    {{-- معلومات سريعة أسفل القسم --}}
+    <div class="mf-bottom-details">
+        <span>01 — تصميم تركي مختار</span>
+        <span>02 — خامات مريحة</span>
+        <span>03 — شحن سريع وآمن</span>
+        <span>04 — تفاصيل صنعت بحب</span>
     </div>
 </section>
 
-{{-- 🚀 HERO IMAGE SECTION (FULLSCREEN LUXURY STYLE) --}}
-<div class="relative w-full h-screen min-h-[600px] overflow-hidden bg-gray-900 flex items-center">
-
-    {{-- 🖼️ Background Image with Subtle Zoom Effect --}}
-    <div class="absolute inset-0 z-0">
-        <img 
-            src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/MkdnFgIRAmlobtLe.png" 
-            alt="Melekler Fashion Hero" 
-            class="w-full h-full object-cover object-center scale-105 animate-subtle-zoom"
-        >
-        {{-- Overlays for Text Readability --}}
-        <div class="absolute inset-0 bg-gradient-to-r from-black/45 via-black/20 to-transparent rtl:bg-gradient-to-l"></div>
-        <div class="absolute inset-0 bg-black/5"></div>
-    </div>
-
-    {{-- 📝 Main Content Container --}}
-    <div class="relative z-10 max-w-screen-xl mx-auto px-6 w-full pt-16">
-        <div class="max-w-2xl text-right">
-            
-            {{-- Badge --}}
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 backdrop-blur-md rounded-full mb-6">
-                <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-                <span class="text-white text-xs font-bold tracking-widest uppercase">NEW COLLECTION 2026</span>
-            </div>
-
-            {{-- Title --}}
-            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-white leading-tight mb-6 tracking-tight">
-                عالم من <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-pink-500">الأناقة</span> لصغيرك ✨
-            </h1>
-
-            {{-- Subtitle --}}
-            <p class="text-gray-200 text-lg md:text-xl font-light leading-relaxed mb-10 max-w-xl">
-                اكتشفي أحدث صيحات الموضة التركية المصممة بعناية وفخامة تمنح طفلك إطلالة استثنائية وراحة مطلقة.
-            </p>
-
-            {{-- Action Buttons --}}
-            <div class="flex flex-wrap gap-4 items-center">
-                <a href="#shop" class="group relative px-8 py-4 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-2xl shadow-xl shadow-rose-500/30 transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-3">
-                    <span>تسوقي المجموعة</span>
-                    <span class="group-hover:translate-x-[-4px] transition-transform rtl:group-hover:translate-x-[4px]">←</span>
-                </a>
-                
-                <a href="#collection" class="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-2xl border border-white/20 backdrop-blur-md transition-all duration-300">
-                    استكشفي الأقسام
-                </a>
-            </div>
-
-        </div>
-    </div>
-
-    {{-- ✨ Premium Service Card --}}
-    <div class="hero-offer-card">
-        <span class="hero-offer-icon"><i class="fas fa-truck-fast"></i></span>
-        <div>
-            <strong>توصيل سريع لباب بيتك</strong>
-            <span>شحن مجاني للطلبات فوق 1000 ₺</span>
-        </div>
-    </div>
-
-    {{-- 🌟 Bottom Quick Info Strip --}}
-    <div class="absolute bottom-0 inset-x-0 z-10 bg-gradient-to-t from-black/80 to-transparent pt-10 pb-6">
-        <div class="max-w-screen-xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-white/80 text-xs md:text-sm border-t border-white/10 pt-4">
-            <div class="flex items-center gap-3">
-                <span class="text-xl">✨</span>
-                <span>تصاميم تركية حصرية</span>
-            </div>
-            <div class="flex items-center gap-3">
-                <span class="text-xl">🚚</span>
-                <span>توصيل سريع ومضمون</span>
-            </div>
-            <div class="flex items-center gap-3">
-                <span class="text-xl">🧵</span>
-                <span>أقمشة قطنية 100%</span>
-            </div>
-            <div class="flex items-center gap-3">
-                <span class="text-xl">💎</span>
-                <span>جودة عالية وأسعار منافسة</span>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-{{-- Animate CSS for Hero Image --}}
 <style>
-    @keyframes subtleZoom {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
+    .mf-moving-collection {
+        position: relative;
+        overflow: hidden;
+        background: #f4f2ed;
+        color: #111113;
+        padding: 0 0 34px;
+        isolation: isolate;
     }
-    .animate-subtle-zoom {
-        animation: subtleZoom 20s infinite alternate ease-in-out;
+
+    .mf-moving-collection::before {
+        content: "";
+        position: absolute;
+        width: 420px;
+        height: 420px;
+        left: -170px;
+        top: 120px;
+        border: 1px solid rgba(174, 137, 67, .22);
+        border-radius: 50%;
+        box-shadow:
+            0 0 0 35px rgba(174, 137, 67, .05),
+            0 0 0 70px rgba(174, 137, 67, .04);
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .mf-top-ribbon {
+        overflow: hidden;
+        background: #111113;
+        color: #e6c983;
+        border-bottom: 1px solid rgba(230, 201, 131, .35);
+        white-space: nowrap;
+    }
+
+    .mf-ribbon-track {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 22px;
+        min-height: 42px;
+        padding: 0 20px;
+        animation: mfRibbonMove 18s linear infinite;
+        font-size: .65rem;
+        font-weight: 900;
+        letter-spacing: .18em;
+    }
+
+    .mf-ribbon-track b {
+        color: #fff;
+        font-size: .9rem;
+    }
+
+    .mf-collection-header {
+        max-width: 1220px;
+        margin: 0 auto;
+        padding: 58px 24px 34px;
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 35px;
+    }
+
+    .mf-eyebrow {
+        display: inline-block;
+        margin-bottom: 13px;
+        color: #a27b35;
+        font-size: .68rem;
+        font-weight: 900;
+        letter-spacing: .2em;
+    }
+
+    .mf-collection-header h2 {
+        margin: 0;
+        font-size: clamp(2.1rem, 5vw, 4.7rem);
+        line-height: .98;
+        font-weight: 900;
+        letter-spacing: -.06em;
+    }
+
+    .mf-collection-header h2 em {
+        color: #a27b35;
+        font-style: normal;
+    }
+
+    .mf-header-copy {
+        max-width: 330px;
+    }
+
+    .mf-header-copy p {
+        margin: 0 0 18px;
+        color: #68645d;
+        font-size: .88rem;
+        line-height: 1.9;
+    }
+
+    .mf-view-all {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        color: #111113 !important;
+        font-size: .78rem;
+        font-weight: 900;
+        border-bottom: 1px solid #111113;
+        padding-bottom: 5px;
+    }
+
+    .mf-view-all span {
+        transition: transform .3s ease;
+    }
+
+    .mf-view-all:hover span {
+        transform: translateX(-6px);
+    }
+
+    .mf-products-window {
+        width: 100%;
+        overflow: hidden;
+        padding: 12px 0 28px;
+    }
+
+    .mf-products-track {
+        display: flex;
+        gap: 18px;
+        width: max-content;
+        padding: 0 24px;
+        animation: mfProductsMove 38s linear infinite;
+    }
+
+    .mf-products-window:hover .mf-products-track {
+        animation-play-state: paused;
+    }
+
+    .mf-product-card {
+        width: min(245px, 66vw);
+        flex: 0 0 auto;
+        color: #111113 !important;
+        text-decoration: none !important;
+        transform: translateY(0);
+        transition: transform .45s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .mf-product-card:hover {
+        transform: translateY(-13px);
+    }
+
+    .mf-product-image {
+        position: relative;
+        aspect-ratio: .78;
+        overflow: hidden;
+        background: #e8e5de;
+        border-radius: 3px;
+    }
+
+    .mf-product-image::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            135deg,
+            rgba(255,255,255,.32),
+            transparent 35%,
+            rgba(0,0,0,.22)
+        );
+        opacity: .55;
+        transition: opacity .45s ease;
+        pointer-events: none;
+    }
+
+    .mf-product-card:hover .mf-product-image::after {
+        opacity: .15;
+    }
+
+    .mf-product-image img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        transition:
+            transform .7s cubic-bezier(.16, 1, .3, 1),
+            filter .45s ease;
+    }
+
+    .mf-product-card:hover .mf-product-image img {
+        transform: scale(1.1);
+        filter: contrast(1.05) saturate(1.12);
+    }
+
+    .mf-product-number {
+        position: absolute;
+        top: 13px;
+        right: 14px;
+        z-index: 2;
+        color: #fff;
+        font-size: .65rem;
+        font-weight: 900;
+        letter-spacing: .12em;
+        text-shadow: 0 2px 10px rgba(0,0,0,.45);
+    }
+
+    .mf-product-arrow {
+        position: absolute;
+        left: 14px;
+        bottom: 13px;
+        z-index: 3;
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.9);
+        color: #111113;
+        font-size: 1rem;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity .35s ease, transform .35s ease;
+    }
+
+    .mf-product-card:hover .mf-product-arrow {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .mf-product-overlay {
+        position: absolute;
+        right: 14px;
+        bottom: 14px;
+        left: 14px;
+        z-index: 2;
+        padding: 11px 13px;
+        background: rgba(17,17,19,.86);
+        color: #fff;
+        text-align: center;
+        font-size: .72rem;
+        font-weight: 900;
+        opacity: 0;
+        transform: translateY(14px);
+        transition: opacity .35s ease, transform .35s ease;
+    }
+
+    .mf-product-card:hover .mf-product-overlay {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .mf-product-info {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 13px 2px 0;
+    }
+
+    .mf-product-info h3 {
+        max-width: 160px;
+        margin: 0;
+        overflow: hidden;
+        font-size: .82rem;
+        font-weight: 900;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .mf-product-info p {
+        margin: 4px 0 0;
+        color: #a27b35;
+        font-size: .56rem;
+        font-weight: 900;
+        letter-spacing: .12em;
+    }
+
+    .mf-product-info strong {
+        color: #a27b35;
+        font-size: .82rem;
+        white-space: nowrap;
+    }
+
+    .mf-empty-products {
+        max-width: 1220px;
+        margin: 20px auto 45px;
+        padding: 80px 20px;
+        border: 1px dashed rgba(162,123,53,.45);
+        color: #8d6c32;
+        text-align: center;
+        font-weight: 900;
+    }
+
+    .mf-bottom-details {
+        max-width: 1220px;
+        margin: 0 auto;
+        padding: 17px 24px 0;
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        border-top: 1px solid rgba(17,17,19,.15);
+        color: #77736b;
+        font-size: .65rem;
+        font-weight: 800;
+    }
+
+    @keyframes mfProductsMove {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-18%);
+        }
+    }
+
+    @keyframes mfRibbonMove {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-20%);
+        }
+    }
+
+    @media (max-width: 720px) {
+        .mf-collection-header {
+            align-items: start;
+            flex-direction: column;
+            padding-top: 42px;
+        }
+
+        .mf-header-copy {
+            max-width: 100%;
+        }
+
+        .mf-products-track {
+            animation-duration: 30s;
+        }
+
+        .mf-bottom-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            line-height: 1.7;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .mf-ribbon-track,
+        .mf-products-track {
+            animation: none;
+        }
+
+        .mf-product-card,
+        .mf-product-image img,
+        .mf-product-arrow,
+        .mf-product-overlay {
+            transition: none;
+        }
     }
 </style>
 
 
+
+
+        
 {{-- Features Section --}}
 <div class="grid grid-cols-1 md:grid-cols-3 gap-12 py-20 text-center select-none max-w-7xl mx-auto px-6">
     <div class="group cursor-pointer">
