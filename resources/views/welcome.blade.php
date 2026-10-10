@@ -556,151 +556,142 @@
 
 
 
-{{-- ✨ MELEKLER FASHION — REAL FASHION COLLECTION --}}
-<section id="collection" class="mf-real-collection" dir="rtl" aria-label="مجموعة ميلاكلار الجديدة">
+{{-- ✨ MELEKLER FASHION — KIDS OUTFITS COLLECTION --}}
+<section id="collection" class="mf-kids-collection" dir="rtl" aria-label="مجموعة ملابس الأطفال">
 
-    <div class="mf-real-ribbon">
-        <div class="mf-real-ribbon-track">
+    {{-- الشريط العلوي --}}
+    <div class="mf-kids-ribbon">
+        <div class="mf-kids-ribbon-track">
             <span>MELEKLER FASHION</span>
             <b>✦</b>
-            <span>NEW COLLECTION 2026</span>
+            <span>KIDS COLLECTION 2026</span>
             <b>✦</b>
-            <span>PREMIUM CHILDREN'S WEAR</span>
+            <span>BOYS & GIRLS</span>
             <b>✦</b>
             <span>MELEKLER FASHION</span>
             <b>✦</b>
-            <span>NEW COLLECTION 2026</span>
+            <span>KIDS COLLECTION 2026</span>
+            <b>✦</b>
         </div>
     </div>
 
-    <div class="mf-real-heading">
-        <div class="mf-real-title">
-            <span class="mf-real-overline">MELEKLER / COLLECTION 2026</span>
+    {{-- العنوان والوصف --}}
+    <div class="mf-kids-heading">
+        <div class="mf-kids-title">
+            <span>MELEKLER / KIDS COLLECTION</span>
 
             <h2>
-                قطع مختارة  
+                أزياء  
 
-                <em>لإطلالة مختلفة</em>
+                <em>الصغار</em>
             </h2>
         </div>
 
-        <div class="mf-real-intro">
+        <div class="mf-kids-intro">
             <p>
-                اكتشفي تشكيلتنا الجديدة بتصاميم أنيقة،
-                خامات مريحة، وتفاصيل صنعت لتبقى في الذاكرة.
+                تشكيلتنا الجديدة للأولاد والبنات،
+                بتصاميم مريحة وألوان جميلة تناسب كل لحظة.
             </p>
 
-            <a href="#shop" class="mf-real-link">
-                استكشفي المجموعة
+            <a href="#shop" class="mf-kids-link">
+                اكتشفي المجموعة
                 <span>←</span>
             </a>
         </div>
     </div>
 
-    <div class="mf-real-rail-wrap">
-        <div class="mf-real-rail-background"></div>
+    {{-- علاقة الملابس --}}
+    <div class="mf-kids-rail-wrap">
 
-        <div class="mf-real-rail">
-            <span class="mf-real-rail-pin mf-pin-right"></span>
-            <span class="mf-real-rail-pin mf-pin-left"></span>
+        <div class="mf-kids-background-circle"></div>
+
+        <div class="mf-kids-rail">
+            <span class="mf-kids-pin mf-kids-pin-right"></span>
+            <span class="mf-kids-pin mf-kids-pin-left"></span>
         </div>
 
-        <div class="mf-real-clothes">
+        <div class="mf-kids-clothes">
 
-            <div class="mf-real-piece mf-piece-white">
-                <div class="mf-real-hanger"></div>
+            {{-- طقم أولادي --}}
+            <div class="mf-kids-piece mf-kids-boys" tabindex="0">
+                <div class="mf-kids-hanger"></div>
+
                 <img
-                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/DhwWsLwQxTrtHmVL.png"
-                    alt="تيشيرت أبيض فاخر"
+                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/VjKdRjijDFklpPKY.png"
+                    alt="طقم أولادي كامل"
                     loading="lazy"
                 >
+
                 <span>01</span>
+
+                <div class="mf-kids-label">
+                    <small>BOYS</small>
+                    <strong>طقم أولادي</strong>
+                </div>
             </div>
 
-            <div class="mf-real-piece mf-piece-black">
-                <div class="mf-real-hanger"></div>
+            {{-- طقم بناتي --}}
+            <div class="mf-kids-piece mf-kids-girls" tabindex="0">
+                <div class="mf-kids-hanger"></div>
+
                 <img
-                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/upRsXVcQwMlJqemZ.png"
-                    alt="فستان أسود أنيق"
+                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/hlZUqxPnmSWEMvwA.png"
+                    alt="طقم بناتي كامل"
                     loading="lazy"
                 >
+
                 <span>02</span>
+
+                <div class="mf-kids-label">
+                    <small>GIRLS</small>
+                    <strong>طقم بناتي</strong>
+                </div>
             </div>
 
-            <div class="mf-real-piece mf-piece-green">
-                <div class="mf-real-hanger"></div>
+            {{-- تنورة بنات --}}
+            <div class="mf-kids-piece mf-kids-skirt" tabindex="0">
+                <div class="mf-kids-hanger"></div>
+
                 <img
-                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/AoXtWgXEeKalDRaC.png"
-                    alt="هودي أخضر فاخر"
+                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/FGJjQLvUliWUVtbf.png"
+                    alt="تنورة بنات"
                     loading="lazy"
                 >
+
                 <span>03</span>
-            </div>
 
-            <div class="mf-real-piece mf-piece-lilac">
-                <div class="mf-real-hanger"></div>
-                <img
-                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/nhzrGYKOLcuioLVw.png"
-                    alt="قطعة ليلكية ناعمة"
-                    loading="lazy"
-                >
-                <span>04</span>
-            </div>
-
-            <div class="mf-real-piece mf-piece-navy">
-                <div class="mf-real-hanger"></div>
-                <img
-                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/akbDYrJiJhVRQQyH.png"
-                    alt="جاكيت كحلي أنيق"
-                    loading="lazy"
-                >
-                <span>05</span>
-            </div>
-
-            <div class="mf-real-piece mf-piece-black mf-piece-small">
-                <div class="mf-real-hanger"></div>
-                <img
-                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/upRsXVcQwMlJqemZ.png"
-                    alt="تصميم أسود من المجموعة"
-                    loading="lazy"
-                >
-                <span>06</span>
-            </div>
-
-            <div class="mf-real-piece mf-piece-green mf-piece-small">
-                <div class="mf-real-hanger"></div>
-                <img
-                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/AoXtWgXEeKalDRaC.png"
-                    alt="تصميم أخضر من المجموعة"
-                    loading="lazy"
-                >
-                <span>07</span>
+                <div class="mf-kids-label">
+                    <small>GIRLS</small>
+                    <strong>تنورة بنات</strong>
+                </div>
             </div>
 
         </div>
 
-        <div class="mf-real-center-message">
-            <small>MELEKLER EDITION</small>
-            <strong>
-                اكتشفي  
+        <div class="mf-kids-center-message">
+            <small>NEW KIDS COLLECTION</small>
 
-                التفاصيل
+            <strong>
+                اختاري إطلالة  
+
+                طفلك المميزة
             </strong>
         </div>
     </div>
 
-    <div class="mf-real-bottom">
-        <span>01 — تصاميم تركية مختارة</span>
-        <span>02 — خامات مريحة</span>
-        <span>03 — جودة عالية</span>
-        <span>04 — شحن سريع وآمن</span>
+    {{-- المعلومات السفلية --}}
+    <div class="mf-kids-bottom">
+        <span>01 — أزياء أولادية</span>
+        <span>02 — أزياء بناتية</span>
+        <span>03 — خامات مريحة</span>
+        <span>04 — جودة مختارة</span>
     </div>
 </section>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap' );
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap' );
 
-    .mf-real-collection {
+    .mf-kids-collection {
         position: relative;
         overflow: hidden;
         background: #f7f6f2;
@@ -709,65 +700,66 @@
         isolation: isolate;
     }
 
-    .mf-real-collection::before {
+    .mf-kids-collection::before {
         content: "";
         position: absolute;
-        top: 190px;
-        left: -265px;
+        top: 210px;
+        left: -270px;
         width: 610px;
         height: 610px;
         border: 1px solid rgba(167, 131, 61, .18);
         border-radius: 50%;
         box-shadow:
-            0 0 0 26px rgba(167, 131, 61, .045),
-            0 0 0 55px rgba(167, 131, 61, .03);
+            0 0 0 28px rgba(167, 131, 61, .045),
+            0 0 0 58px rgba(167, 131, 61, .03);
         pointer-events: none;
         z-index: -1;
     }
 
-    .mf-real-ribbon {
+    .mf-kids-ribbon {
+        width: 100%;
         overflow: hidden;
         background: #121214;
         color: #e3c57e;
         white-space: nowrap;
     }
 
-    .mf-real-ribbon-track {
+    .mf-kids-ribbon-track {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 25px;
-        min-height: 40px;
+        min-height: 42px;
         padding: 0 20px;
-        animation: mfRealRibbon 22s linear infinite;
+        animation: mfKidsRibbonMove 20s linear infinite;
         font-family: Arial, sans-serif;
         font-size: 10px;
         font-weight: 700;
         letter-spacing: 3px;
     }
 
-    .mf-real-ribbon-track b {
-        color: white;
+    .mf-kids-ribbon-track b {
+        color: #ffffff;
         font-size: 14px;
     }
 
-    .mf-real-heading {
+    .mf-kids-heading {
         position: relative;
         z-index: 2;
         max-width: 1240px;
-        margin: auto;
+        margin: 0 auto;
         padding: 72px 32px 45px;
         display: flex;
-        align-items: end;
+        align-items: flex-end;
         justify-content: space-between;
         gap: 60px;
     }
 
-    .mf-real-title {
+    .mf-kids-title {
         text-align: right;
     }
 
-    .mf-real-overline {
+    .mf-kids-title > span {
         display: block;
         margin-bottom: 18px;
         color: #a27d3a;
@@ -777,32 +769,32 @@
         letter-spacing: 3px;
     }
 
-    .mf-real-title h2 {
+    .mf-kids-title h2 {
         margin: 0;
-        font-size: clamp(42px, 6.5vw, 94px);
+        font-size: clamp(48px, 7vw, 98px);
         font-weight: 900;
-        line-height: 1.08;
+        line-height: 1.05;
         letter-spacing: -3px;
     }
 
-    .mf-real-title h2 em {
+    .mf-kids-title h2 em {
         color: #a27d3a;
         font-style: normal;
     }
 
-    .mf-real-intro {
-        max-width: 345px;
+    .mf-kids-intro {
+        max-width: 350px;
         text-align: right;
     }
 
-    .mf-real-intro p {
+    .mf-kids-intro p {
         margin: 0 0 20px;
         color: #77746d;
         font-size: 14px;
         line-height: 2;
     }
 
-    .mf-real-link {
+    .mf-kids-link {
         display: inline-flex;
         align-items: center;
         gap: 13px;
@@ -814,24 +806,24 @@
         text-decoration: none !important;
     }
 
-    .mf-real-link span {
+    .mf-kids-link span {
         transition: transform .3s ease;
     }
 
-    .mf-real-link:hover span {
+    .mf-kids-link:hover span {
         transform: translateX(-7px);
     }
 
-    .mf-real-rail-wrap {
+    .mf-kids-rail-wrap {
         position: relative;
         max-width: 1370px;
-        min-height: 390px;
+        min-height: 465px;
         margin: 0 auto;
         border: 1px dashed rgba(155, 132, 83, .4);
-        background: rgba(255,255,255,.25);
+        background: rgba(255, 255, 255, .25);
     }
 
-    .mf-real-rail-background {
+    .mf-kids-background-circle {
         position: absolute;
         top: -305px;
         left: -260px;
@@ -842,19 +834,19 @@
         pointer-events: none;
     }
 
-    .mf-real-rail {
+    .mf-kids-rail {
         position: absolute;
         top: 73px;
-        right: 5%;
-        left: 5%;
+        right: 7%;
+        left: 7%;
         height: 5px;
         border-radius: 20px;
         background: #b9b6ae;
-        box-shadow: 0 5px 0 rgba(0,0,0,.07);
+        box-shadow: 0 5px 0 rgba(0, 0, 0, .07);
     }
 
-    .mf-real-rail::before,
-    .mf-real-rail::after {
+    .mf-kids-rail::before,
+    .mf-kids-rail::after {
         content: "";
         position: absolute;
         top: -7px;
@@ -864,70 +856,57 @@
         background: #f7f6f2;
     }
 
-    .mf-real-rail::before {
+    .mf-kids-rail::before {
         right: -4px;
     }
 
-    .mf-real-rail::after {
+    .mf-kids-rail::after {
         left: -4px;
     }
 
-    .mf-real-clothes {
+    .mf-kids-clothes {
         position: absolute;
-        top: 67px;
-        right: 7%;
-        left: 7%;
+        top: 64px;
+        right: 13%;
+        left: 13%;
         display: flex;
         align-items: flex-start;
         justify-content: space-around;
-        gap: 5px;
+        gap: 35px;
     }
 
-    .mf-real-piece {
+    .mf-kids-piece {
         position: relative;
-        width: 125px;
-        height: 250px;
-        flex: 0 1 125px;
-        transform-origin: top center;
+        width: 230px;
+        height: 300px;
+        flex: 1 1 230px;
+        max-width: 285px;
         cursor: pointer;
-        animation: mfRealSwing 5s ease-in-out infinite;
+        outline: none;
+        transform-origin: top center;
+        animation: mfKidsSwing 5s ease-in-out infinite;
         transition:
-            transform .55s cubic-bezier(.16,1,.3,1),
+            transform .55s cubic-bezier(.16, 1, .3, 1),
             filter .45s ease;
     }
 
-    .mf-real-piece:nth-child(2) {
-        animation-delay: -.7s;
+    .mf-kids-piece:nth-child(2) {
+        animation-delay: -1.5s;
     }
 
-    .mf-real-piece:nth-child(3) {
-        animation-delay: -1.4s;
+    .mf-kids-piece:nth-child(3) {
+        animation-delay: -3s;
     }
 
-    .mf-real-piece:nth-child(4) {
-        animation-delay: -2.1s;
-    }
-
-    .mf-real-piece:nth-child(5) {
-        animation-delay: -2.8s;
-    }
-
-    .mf-real-piece:nth-child(6) {
-        animation-delay: -3.5s;
-    }
-
-    .mf-real-piece:nth-child(7) {
-        animation-delay: -4.2s;
-    }
-
-    .mf-real-piece:hover {
+    .mf-kids-piece:hover,
+    .mf-kids-piece:focus {
         z-index: 20;
-        transform: translateY(-20px) scale(1.14) rotate(-3deg);
-        filter: drop-shadow(0 20px 17px rgba(0,0,0,.2));
+        transform: translateY(-20px) scale(1.1) rotate(-2deg);
+        filter: drop-shadow(0 20px 18px rgba(0, 0, 0, .2));
         animation-play-state: paused;
     }
 
-    .mf-real-hanger {
+    .mf-kids-hanger {
         position: absolute;
         top: -9px;
         left: calc(50% - 13px);
@@ -936,10 +915,10 @@
         border: 3px solid #67472d;
         border-bottom: 0;
         border-radius: 50% 50% 0 0;
-        z-index: 2;
+        z-index: 3;
     }
 
-    .mf-real-hanger::after {
+    .mf-kids-hanger::after {
         content: "";
         position: absolute;
         top: 18px;
@@ -949,45 +928,80 @@
         background: #67472d;
     }
 
-    .mf-real-piece img {
+    .mf-kids-piece img {
         position: absolute;
-        top: 15px;
+        top: 12px;
         left: 0;
         width: 100%;
-        height: 225px;
+        height: 275px;
         display: block;
         object-fit: contain;
         object-position: center top;
-        filter: drop-shadow(0 9px 7px rgba(0,0,0,.1));
+        filter: drop-shadow(0 10px 8px rgba(0, 0, 0, .12));
         transition:
-            transform .55s cubic-bezier(.16,1,.3,1),
+            transform .55s cubic-bezier(.16, 1, .3, 1),
             filter .45s ease;
     }
 
-    .mf-real-piece:hover img {
+    .mf-kids-piece:hover img,
+    .mf-kids-piece:focus img {
         transform: scale(1.06);
-        filter: drop-shadow(0 18px 13px rgba(0,0,0,.2));
+        filter: drop-shadow(0 18px 14px rgba(0, 0, 0, .2));
     }
 
-    .mf-real-piece > span {
+    .mf-kids-piece > span {
         position: absolute;
         right: 50%;
-        bottom: 0;
+        bottom: 41px;
         transform: translateX(50%);
         color: #9b968c;
         font-family: Arial, sans-serif;
-        font-size: 9px;
+        font-size: 10px;
         font-weight: 700;
         letter-spacing: 2px;
         opacity: 0;
         transition: opacity .35s ease;
     }
 
-    .mf-real-piece:hover > span {
+    .mf-kids-piece:hover > span,
+    .mf-kids-piece:focus > span {
         opacity: 1;
     }
 
-    .mf-real-center-message {
+    .mf-kids-label {
+        position: absolute;
+        right: 50%;
+        bottom: 0;
+        min-width: 130px;
+        transform: translateX(50%);
+        text-align: center;
+        opacity: 0;
+        transition: opacity .35s ease, transform .35s ease;
+    }
+
+    .mf-kids-piece:hover .mf-kids-label,
+    .mf-kids-piece:focus .mf-kids-label {
+        opacity: 1;
+        transform: translateX(50%) translateY(-4px);
+    }
+
+    .mf-kids-label small {
+        display: block;
+        margin-bottom: 3px;
+        color: #a27d3a;
+        font-family: Arial, sans-serif;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 2px;
+    }
+
+    .mf-kids-label strong {
+        color: #242426;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .mf-kids-center-message {
         position: absolute;
         right: 50%;
         bottom: 25px;
@@ -996,7 +1010,7 @@
         text-align: center;
     }
 
-    .mf-real-center-message small {
+    .mf-kids-center-message small {
         display: block;
         margin-bottom: 6px;
         font-family: Arial, sans-serif;
@@ -1005,26 +1019,26 @@
         letter-spacing: 3px;
     }
 
-    .mf-real-center-message strong {
+    .mf-kids-center-message strong {
         display: block;
         font-size: 13px;
         line-height: 1.9;
     }
 
-    .mf-real-bottom {
+    .mf-kids-bottom {
         max-width: 1370px;
-        margin: auto;
+        margin: 0 auto;
         padding: 22px 32px 28px;
         display: flex;
         justify-content: space-between;
         gap: 18px;
-        border-top: 1px solid rgba(20,20,20,.14);
+        border-top: 1px solid rgba(20, 20, 20, .14);
         color: #77736b;
         font-size: 10px;
         font-weight: 800;
     }
 
-    @keyframes mfRealSwing {
+    @keyframes mfKidsSwing {
         0%, 100% {
             transform: rotate(0deg);
         }
@@ -1034,7 +1048,7 @@
         }
     }
 
-    @keyframes mfRealRibbon {
+    @keyframes mfKidsRibbonMove {
         from {
             transform: translateX(0);
         }
@@ -1045,48 +1059,49 @@
     }
 
     @media (max-width: 800px) {
-        .mf-real-heading {
+        .mf-kids-heading {
             align-items: flex-start;
             flex-direction: column;
             padding: 52px 22px 32px;
             gap: 28px;
         }
 
-        .mf-real-title h2 {
-            font-size: 55px;
+        .mf-kids-title h2 {
+            font-size: 58px;
             letter-spacing: -2px;
         }
 
-        .mf-real-intro {
+        .mf-kids-intro {
             max-width: 100%;
         }
 
-        .mf-real-rail-wrap {
-            min-height: 350px;
+        .mf-kids-rail-wrap {
+            min-height: 385px;
             margin: 0 14px;
         }
 
-        .mf-real-clothes {
-            right: 1%;
-            left: 1%;
-            gap: 0;
+        .mf-kids-clothes {
+            right: 4%;
+            left: 4%;
+            gap: 4px;
         }
 
-        .mf-real-piece {
-            width: 74px;
-            height: 225px;
-            flex-basis: 74px;
+        .mf-kids-piece {
+            width: 31%;
+            height: 260px;
+            flex-basis: 31%;
         }
 
-        .mf-real-piece img {
-            height: 205px;
+        .mf-kids-piece img {
+            height: 235px;
         }
 
-        .mf-piece-small {
-            display: none;
+        .mf-kids-piece:hover,
+        .mf-kids-piece:focus {
+            transform: translateY(-13px) scale(1.07) rotate(-2deg);
         }
 
-        .mf-real-bottom {
+        .mf-kids-bottom {
             display: grid;
             grid-template-columns: 1fr 1fr;
             padding: 18px 22px 25px;
@@ -1095,20 +1110,19 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .mf-real-ribbon-track,
-        .mf-real-piece {
+        .mf-kids-ribbon-track,
+        .mf-kids-piece {
             animation: none;
         }
 
-        .mf-real-piece,
-        .mf-real-piece:hover,
-        .mf-real-piece img {
+        .mf-kids-piece,
+        .mf-kids-piece:hover,
+        .mf-kids-piece:focus,
+        .mf-kids-piece img {
             transition: none;
         }
     }
 </style>
-
-
 
 
 
