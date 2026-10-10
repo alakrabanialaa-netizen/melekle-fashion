@@ -554,575 +554,477 @@
 
 
 
-{{-- ✨ MELEKLER FASHION — STATIC MOVING CLOTHING RAIL --}}
-<section id="collection" class="mf-clothing-rail" dir="rtl" aria-label="مجموعة ميلاكلار الجديدة">
 
-    {{-- الشريط العلوي --}}
-    <div class="mf-rail-ribbon">
-        <div class="mf-rail-ribbon-track">
+
+{{-- ✨ MELEKLER FASHION — REAL FASHION COLLECTION --}}
+<section id="collection" class="mf-real-collection" dir="rtl" aria-label="مجموعة ميلاكلار الجديدة">
+
+    <div class="mf-real-ribbon">
+        <div class="mf-real-ribbon-track">
             <span>MELEKLER FASHION</span>
             <b>✦</b>
-            <span>NEW COLLECTION</span>
+            <span>NEW COLLECTION 2026</span>
             <b>✦</b>
-            <span>MADE WITH STYLE</span>
+            <span>PREMIUM CHILDREN'S WEAR</span>
             <b>✦</b>
             <span>MELEKLER FASHION</span>
             <b>✦</b>
-            <span>NEW COLLECTION</span>
-            <b>✦</b>
+            <span>NEW COLLECTION 2026</span>
         </div>
     </div>
 
-    {{-- العنوان الرئيسي --}}
-    <div class="mf-rail-intro">
-        <div class="mf-rail-title">
-            <span>MELEKLER / SARAİYEV</span>
+    <div class="mf-real-heading">
+        <div class="mf-real-title">
+            <span class="mf-real-overline">MELEKLER / COLLECTION 2026</span>
 
             <h2>
-                مجموعة  
+                قطع مختارة  
 
-                <strong>ميلاكلار الجديدة</strong>
+                <em>لإطلالة مختلفة</em>
             </h2>
         </div>
 
-        <div class="mf-rail-description">
+        <div class="mf-real-intro">
             <p>
-                اكتشفي تشكيلتنا الجديدة بتفاصيل أنيقة،
-                ألوان مختارة، وخامات تمنحك الراحة والأناقة.
+                اكتشفي تشكيلتنا الجديدة بتصاميم أنيقة،
+                خامات مريحة، وتفاصيل صنعت لتبقى في الذاكرة.
             </p>
 
-            <a href="#shop">
+            <a href="#shop" class="mf-real-link">
                 استكشفي المجموعة
-                <b>←</b>
+                <span>←</span>
             </a>
         </div>
     </div>
 
-    {{-- منطقة علاقة الملابس --}}
-    <div class="mf-rail-stage">
+    <div class="mf-real-rail-wrap">
+        <div class="mf-real-rail-background"></div>
 
-        <div class="mf-rail-background-circle"></div>
-
-        <div class="mf-rail-line">
-            <span></span>
+        <div class="mf-real-rail">
+            <span class="mf-real-rail-pin mf-pin-right"></span>
+            <span class="mf-real-rail-pin mf-pin-left"></span>
         </div>
 
-        <div class="mf-garments">
+        <div class="mf-real-clothes">
 
-            {{-- قطعة 1 --}}
-            <div class="mf-garment mf-garment-white" tabindex="0">
-                <div class="mf-hanger"></div>
-                <div class="mf-clothing mf-tshirt">
-                    <span>MK</span>
-                </div>
-                <div class="mf-garment-label">01</div>
+            <div class="mf-real-piece mf-piece-white">
+                <div class="mf-real-hanger"></div>
+                <img
+                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/DhwWsLwQxTrtHmVL.png"
+                    alt="تيشيرت أبيض فاخر"
+                    loading="lazy"
+                >
+                <span>01</span>
             </div>
 
-            {{-- قطعة 2 --}}
-            <div class="mf-garment mf-garment-black" tabindex="0">
-                <div class="mf-hanger"></div>
-                <div class="mf-clothing mf-long-dress"></div>
-                <div class="mf-garment-label">02</div>
+            <div class="mf-real-piece mf-piece-black">
+                <div class="mf-real-hanger"></div>
+                <img
+                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/upRsXVcQwMlJqemZ.png"
+                    alt="فستان أسود أنيق"
+                    loading="lazy"
+                >
+                <span>02</span>
             </div>
 
-            {{-- قطعة 3 --}}
-            <div class="mf-garment mf-garment-beige" tabindex="0">
-                <div class="mf-hanger"></div>
-                <div class="mf-clothing mf-sweater"></div>
-                <div class="mf-garment-label">03</div>
+            <div class="mf-real-piece mf-piece-green">
+                <div class="mf-real-hanger"></div>
+                <img
+                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/AoXtWgXEeKalDRaC.png"
+                    alt="هودي أخضر فاخر"
+                    loading="lazy"
+                >
+                <span>03</span>
             </div>
 
-            {{-- قطعة 4 --}}
-            <div class="mf-garment mf-garment-pink" tabindex="0">
-                <div class="mf-hanger"></div>
-                <div class="mf-clothing mf-dress"></div>
-                <div class="mf-garment-label">04</div>
+            <div class="mf-real-piece mf-piece-lilac">
+                <div class="mf-real-hanger"></div>
+                <img
+                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/nhzrGYKOLcuioLVw.png"
+                    alt="قطعة ليلكية ناعمة"
+                    loading="lazy"
+                >
+                <span>04</span>
             </div>
 
-            {{-- قطعة 5 --}}
-            <div class="mf-garment mf-garment-green" tabindex="0">
-                <div class="mf-hanger"></div>
-                <div class="mf-clothing mf-hoodie"></div>
-                <div class="mf-garment-label">05</div>
+            <div class="mf-real-piece mf-piece-navy">
+                <div class="mf-real-hanger"></div>
+                <img
+                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/akbDYrJiJhVRQQyH.png"
+                    alt="جاكيت كحلي أنيق"
+                    loading="lazy"
+                >
+                <span>05</span>
             </div>
 
-            {{-- قطعة 6 --}}
-            <div class="mf-garment mf-garment-gray" tabindex="0">
-                <div class="mf-hanger"></div>
-                <div class="mf-clothing mf-jacket"></div>
-                <div class="mf-garment-label">06</div>
+            <div class="mf-real-piece mf-piece-black mf-piece-small">
+                <div class="mf-real-hanger"></div>
+                <img
+                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/upRsXVcQwMlJqemZ.png"
+                    alt="تصميم أسود من المجموعة"
+                    loading="lazy"
+                >
+                <span>06</span>
             </div>
 
-            {{-- قطعة 7 --}}
-            <div class="mf-garment mf-garment-lilac" tabindex="0">
-                <div class="mf-hanger"></div>
-                <div class="mf-clothing mf-lilac-dress"></div>
-                <div class="mf-garment-label">07</div>
-            </div>
-
-            {{-- قطعة 8 --}}
-            <div class="mf-garment mf-garment-navy" tabindex="0">
-                <div class="mf-hanger"></div>
-                <div class="mf-clothing mf-navy-dress"></div>
-                <div class="mf-garment-label">08</div>
+            <div class="mf-real-piece mf-piece-green mf-piece-small">
+                <div class="mf-real-hanger"></div>
+                <img
+                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/AoXtWgXEeKalDRaC.png"
+                    alt="تصميم أخضر من المجموعة"
+                    loading="lazy"
+                >
+                <span>07</span>
             </div>
 
         </div>
 
-        <div class="mf-rail-center-note">
-            <small>NEW COLLECTION</small>
+        <div class="mf-real-center-message">
+            <small>MELEKLER EDITION</small>
             <strong>
-                مرّري على القطع  
+                اكتشفي  
 
-                لاكتشاف التفاصيل
+                التفاصيل
             </strong>
         </div>
     </div>
 
-    {{-- المعلومات السفلية --}}
-    <div class="mf-rail-footer">
+    <div class="mf-real-bottom">
         <span>01 — تصاميم تركية مختارة</span>
         <span>02 — خامات مريحة</span>
-        <span>03 — شحن سريع وآمن</span>
-        <span>04 — تفاصيل صنعت بحب</span>
+        <span>03 — جودة عالية</span>
+        <span>04 — شحن سريع وآمن</span>
     </div>
 </section>
 
 <style>
-    .mf-clothing-rail {
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap' );
+
+    .mf-real-collection {
         position: relative;
         overflow: hidden;
-        min-height: 760px;
-        background: #f6f5f0;
-        color: #161616;
+        background: #f7f6f2;
+        color: #171719;
+        font-family: 'Cairo', sans-serif;
         isolation: isolate;
     }
 
-    .mf-clothing-rail::after {
+    .mf-real-collection::before {
         content: "";
         position: absolute;
-        right: -160px;
-        bottom: -210px;
-        width: 470px;
-        height: 470px;
-        border: 1px solid rgba(166, 128, 57, .16);
+        top: 190px;
+        left: -265px;
+        width: 610px;
+        height: 610px;
+        border: 1px solid rgba(167, 131, 61, .18);
         border-radius: 50%;
         box-shadow:
-            0 0 0 28px rgba(166, 128, 57, .035),
-            0 0 0 57px rgba(166, 128, 57, .025);
+            0 0 0 26px rgba(167, 131, 61, .045),
+            0 0 0 55px rgba(167, 131, 61, .03);
         pointer-events: none;
         z-index: -1;
     }
 
-    .mf-rail-ribbon {
-        width: 100%;
+    .mf-real-ribbon {
         overflow: hidden;
         background: #121214;
-        color: #e2c17c;
-        border-bottom: 1px solid rgba(226, 193, 124, .35);
+        color: #e3c57e;
         white-space: nowrap;
     }
 
-    .mf-rail-ribbon-track {
+    .mf-real-ribbon-track {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 24px;
-        min-height: 42px;
+        gap: 25px;
+        min-height: 40px;
         padding: 0 20px;
-        animation: mfRailRibbonMove 18s linear infinite;
+        animation: mfRealRibbon 22s linear infinite;
+        font-family: Arial, sans-serif;
         font-size: 10px;
-        font-weight: 900;
+        font-weight: 700;
         letter-spacing: 3px;
     }
 
-    .mf-rail-ribbon-track b {
-        color: #fff;
+    .mf-real-ribbon-track b {
+        color: white;
         font-size: 14px;
     }
 
-    .mf-rail-intro {
+    .mf-real-heading {
         position: relative;
         z-index: 2;
-        max-width: 1250px;
-        margin: 0 auto;
-        padding: 72px 32px 42px;
+        max-width: 1240px;
+        margin: auto;
+        padding: 72px 32px 45px;
         display: flex;
-        align-items: flex-end;
+        align-items: end;
         justify-content: space-between;
-        gap: 55px;
+        gap: 60px;
     }
 
-    .mf-rail-title {
+    .mf-real-title {
         text-align: right;
     }
 
-    .mf-rail-title > span {
+    .mf-real-overline {
         display: block;
         margin-bottom: 18px;
-        color: #a17b38;
-        font-size: 11px;
-        font-weight: 900;
-        letter-spacing: 4px;
+        color: #a27d3a;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 3px;
     }
 
-    .mf-rail-title h2 {
+    .mf-real-title h2 {
         margin: 0;
-        font-size: clamp(46px, 7vw, 104px);
-        line-height: .9;
-        font-weight: 300;
-        letter-spacing: -5px;
-    }
-
-    .mf-rail-title h2 strong {
-        color: #a17b38;
+        font-size: clamp(42px, 6.5vw, 94px);
         font-weight: 900;
+        line-height: 1.08;
+        letter-spacing: -3px;
     }
 
-    .mf-rail-description {
-        max-width: 330px;
+    .mf-real-title h2 em {
+        color: #a27d3a;
+        font-style: normal;
+    }
+
+    .mf-real-intro {
+        max-width: 345px;
         text-align: right;
     }
 
-    .mf-rail-description p {
+    .mf-real-intro p {
         margin: 0 0 20px;
-        color: #77736b;
-        font-size: 15px;
+        color: #77746d;
+        font-size: 14px;
         line-height: 2;
     }
 
-    .mf-rail-description a {
+    .mf-real-link {
         display: inline-flex;
         align-items: center;
-        gap: 12px;
-        border-bottom: 1px solid #171717;
+        gap: 13px;
+        border-bottom: 1px solid #191919;
         padding-bottom: 7px;
-        color: #171717 !important;
+        color: #191919 !important;
         font-size: 13px;
-        font-weight: 900;
+        font-weight: 800;
         text-decoration: none !important;
     }
 
-    .mf-rail-description a b {
+    .mf-real-link span {
         transition: transform .3s ease;
     }
 
-    .mf-rail-description a:hover b {
-        transform: translateX(-6px);
+    .mf-real-link:hover span {
+        transform: translateX(-7px);
     }
 
-    .mf-rail-stage {
+    .mf-real-rail-wrap {
         position: relative;
-        max-width: 1320px;
-        min-height: 345px;
+        max-width: 1370px;
+        min-height: 390px;
         margin: 0 auto;
-        border: 1px dashed rgba(167, 143, 92, .42);
-        background: rgba(255, 255, 255, .18);
+        border: 1px dashed rgba(155, 132, 83, .4);
+        background: rgba(255,255,255,.25);
     }
 
-    .mf-rail-background-circle {
+    .mf-real-rail-background {
         position: absolute;
-        top: -270px;
-        left: -245px;
-        width: 540px;
-        height: 540px;
-        border: 1px solid rgba(174, 137, 67, .18);
+        top: -305px;
+        left: -260px;
+        width: 590px;
+        height: 590px;
+        border: 1px solid rgba(174, 137, 67, .16);
         border-radius: 50%;
-        box-shadow:
-            0 0 0 28px rgba(174, 137, 67, .04),
-            0 0 0 57px rgba(174, 137, 67, .035);
         pointer-events: none;
     }
 
-    .mf-rail-line {
+    .mf-real-rail {
         position: absolute;
-        top: 66px;
-        right: 6%;
-        left: 6%;
+        top: 73px;
+        right: 5%;
+        left: 5%;
         height: 5px;
-        border-radius: 99px;
-        background: #bdbab2;
-        box-shadow: 0 5px 0 rgba(0, 0, 0, .07);
+        border-radius: 20px;
+        background: #b9b6ae;
+        box-shadow: 0 5px 0 rgba(0,0,0,.07);
     }
 
-    .mf-rail-line::before,
-    .mf-rail-line::after {
+    .mf-real-rail::before,
+    .mf-real-rail::after {
         content: "";
         position: absolute;
         top: -7px;
         width: 16px;
-        height: 18px;
+        height: 19px;
         border: 2px solid #aaa79f;
-        background: #f6f5f0;
+        background: #f7f6f2;
     }
 
-    .mf-rail-line::before {
+    .mf-real-rail::before {
         right: -4px;
     }
 
-    .mf-rail-line::after {
+    .mf-real-rail::after {
         left: -4px;
     }
 
-    .mf-garments {
+    .mf-real-clothes {
         position: absolute;
-        top: 63px;
+        top: 67px;
         right: 7%;
         left: 7%;
         display: flex;
         align-items: flex-start;
         justify-content: space-around;
-        gap: 12px;
+        gap: 5px;
     }
 
-    .mf-garment {
+    .mf-real-piece {
         position: relative;
-        width: 90px;
-        height: 230px;
-        flex: 0 0 90px;
+        width: 125px;
+        height: 250px;
+        flex: 0 1 125px;
         transform-origin: top center;
         cursor: pointer;
-        outline: none;
+        animation: mfRealSwing 5s ease-in-out infinite;
         transition:
-            transform .5s cubic-bezier(.16, 1, .3, 1),
-            filter .4s ease;
-        animation: mfGarmentSwing 5s ease-in-out infinite;
-    }
-
-    .mf-garment:nth-child(2) {
-        animation-delay: -.8s;
-    }
-
-    .mf-garment:nth-child(3) {
-        animation-delay: -1.6s;
-    }
-
-    .mf-garment:nth-child(4) {
-        animation-delay: -2.4s;
-    }
-
-    .mf-garment:nth-child(5) {
-        animation-delay: -3.2s;
-    }
-
-    .mf-garment:nth-child(6) {
-        animation-delay: -4s;
-    }
-
-    .mf-garment:hover,
-    .mf-garment:focus {
-        z-index: 20;
-        transform: translateY(-19px) rotate(-4deg) scale(1.16);
-        filter: drop-shadow(0 18px 12px rgba(0, 0, 0, .18));
-        animation-play-state: paused;
-    }
-
-    .mf-hanger {
-        position: absolute;
-        top: -11px;
-        left: 35px;
-        width: 25px;
-        height: 22px;
-        border: 3px solid #67452b;
-        border-bottom: 0;
-        border-radius: 50% 50% 0 0;
-        z-index: 3;
-    }
-
-    .mf-hanger::after {
-        content: "";
-        position: absolute;
-        top: 17px;
-        left: 9px;
-        width: 3px;
-        height: 25px;
-        background: #67452b;
-    }
-
-    .mf-clothing {
-        position: absolute;
-        top: 22px;
-        left: 7px;
-        width: 77px;
-        height: 174px;
-        box-shadow: 0 13px 18px rgba(0, 0, 0, .13);
-        transition:
-            transform .45s ease,
+            transform .55s cubic-bezier(.16,1,.3,1),
             filter .45s ease;
     }
 
-    .mf-garment:hover .mf-clothing,
-    .mf-garment:focus .mf-clothing {
-        filter: brightness(1.1) saturate(1.18);
+    .mf-real-piece:nth-child(2) {
+        animation-delay: -.7s;
     }
 
-    .mf-tshirt {
-        display: grid;
-        place-items: center;
-        border-radius: 14px 14px 9px 9px;
-        background: #fff;
-        clip-path: polygon(
-            25% 0,
-            40% 12%,
-            60% 12%,
-            75% 0,
-            100% 18%,
-            84% 42%,
-            72% 34%,
-            72% 100%,
-            28% 100%,
-            28% 34%,
-            16% 42%,
-            0 18%
-        );
-        color: #d1cdc4;
-        font-size: 21px;
-        font-weight: 900;
+    .mf-real-piece:nth-child(3) {
+        animation-delay: -1.4s;
     }
 
-    .mf-long-dress,
-    .mf-dress,
-    .mf-lilac-dress,
-    .mf-navy-dress {
-        clip-path: polygon(
-            28% 0,
-            72% 0,
-            80% 18%,
-            100% 100%,
-            0 100%,
-            20% 18%
-        );
-        border-radius: 20px 20px 5px 5px;
+    .mf-real-piece:nth-child(4) {
+        animation-delay: -2.1s;
     }
 
-    .mf-long-dress {
-        background: #232326;
+    .mf-real-piece:nth-child(5) {
+        animation-delay: -2.8s;
     }
 
-    .mf-dress {
-        background: #e3c5c0;
+    .mf-real-piece:nth-child(6) {
+        animation-delay: -3.5s;
     }
 
-    .mf-lilac-dress {
-        background: #514969;
+    .mf-real-piece:nth-child(7) {
+        animation-delay: -4.2s;
     }
 
-    .mf-navy-dress {
-        background: #292b4f;
+    .mf-real-piece:hover {
+        z-index: 20;
+        transform: translateY(-20px) scale(1.14) rotate(-3deg);
+        filter: drop-shadow(0 20px 17px rgba(0,0,0,.2));
+        animation-play-state: paused;
     }
 
-    .mf-sweater {
-        border-radius: 23px 23px 11px 11px;
-        background: #e6d5cb;
-        clip-path: polygon(
-            25% 0,
-            40% 10%,
-            60% 10%,
-            75% 0,
-            100% 20%,
-            82% 42%,
-            70% 34%,
-            70% 100%,
-            30% 100%,
-            30% 34%,
-            18% 42%,
-            0 20%
-        );
-    }
-
-    .mf-hoodie {
-        border-radius: 20px 20px 9px 9px;
-        background: #15825c;
-        clip-path: polygon(
-            25% 0,
-            38% 9%,
-            62% 9%,
-            75% 0,
-            100% 18%,
-            85% 45%,
-            73% 36%,
-            73% 100%,
-            27% 100%,
-            27% 36%,
-            15% 45%,
-            0 18%
-        );
-    }
-
-    .mf-jacket {
-        border-radius: 12px 12px 8px 8px;
-        background: #3c3d40;
-        clip-path: polygon(
-            25% 0,
-            40% 11%,
-            60% 11%,
-            75% 0,
-            100% 20%,
-            82% 39%,
-            70% 34%,
-            70% 100%,
-            30% 100%,
-            30% 34%,
-            18% 39%,
-            0 20%
-        );
-    }
-
-    .mf-garment-label {
+    .mf-real-hanger {
         position: absolute;
-        top: 207px;
+        top: -9px;
+        left: calc(50% - 13px);
+        width: 26px;
+        height: 22px;
+        border: 3px solid #67472d;
+        border-bottom: 0;
+        border-radius: 50% 50% 0 0;
+        z-index: 2;
+    }
+
+    .mf-real-hanger::after {
+        content: "";
+        position: absolute;
+        top: 18px;
+        left: 9px;
+        width: 3px;
+        height: 25px;
+        background: #67472d;
+    }
+
+    .mf-real-piece img {
+        position: absolute;
+        top: 15px;
+        left: 0;
+        width: 100%;
+        height: 225px;
+        display: block;
+        object-fit: contain;
+        object-position: center top;
+        filter: drop-shadow(0 9px 7px rgba(0,0,0,.1));
+        transition:
+            transform .55s cubic-bezier(.16,1,.3,1),
+            filter .45s ease;
+    }
+
+    .mf-real-piece:hover img {
+        transform: scale(1.06);
+        filter: drop-shadow(0 18px 13px rgba(0,0,0,.2));
+    }
+
+    .mf-real-piece > span {
+        position: absolute;
         right: 50%;
+        bottom: 0;
         transform: translateX(50%);
-        color: #97938b;
+        color: #9b968c;
+        font-family: Arial, sans-serif;
         font-size: 9px;
-        font-weight: 900;
+        font-weight: 700;
         letter-spacing: 2px;
         opacity: 0;
         transition: opacity .35s ease;
     }
 
-    .mf-garment:hover .mf-garment-label,
-    .mf-garment:focus .mf-garment-label {
+    .mf-real-piece:hover > span {
         opacity: 1;
     }
 
-    .mf-rail-center-note {
+    .mf-real-center-message {
         position: absolute;
         right: 50%;
-        bottom: 26px;
+        bottom: 25px;
         transform: translateX(50%);
         color: #a17b38;
         text-align: center;
     }
 
-    .mf-rail-center-note small {
+    .mf-real-center-message small {
         display: block;
-        margin-bottom: 7px;
+        margin-bottom: 6px;
+        font-family: Arial, sans-serif;
         font-size: 9px;
-        font-weight: 900;
+        font-weight: 800;
         letter-spacing: 3px;
     }
 
-    .mf-rail-center-note strong {
+    .mf-real-center-message strong {
         display: block;
         font-size: 13px;
-        line-height: 1.8;
+        line-height: 1.9;
     }
 
-    .mf-rail-footer {
-        max-width: 1320px;
-        margin: 0 auto;
-        padding: 22px 32px 0;
+    .mf-real-bottom {
+        max-width: 1370px;
+        margin: auto;
+        padding: 22px 32px 28px;
         display: flex;
         justify-content: space-between;
         gap: 18px;
-        border-top: 1px solid rgba(20, 20, 20, .15);
-        color: #77736c;
+        border-top: 1px solid rgba(20,20,20,.14);
+        color: #77736b;
         font-size: 10px;
-        font-weight: 900;
+        font-weight: 800;
     }
 
-    @keyframes mfGarmentSwing {
+    @keyframes mfRealSwing {
         0%, 100% {
             transform: rotate(0deg);
         }
@@ -1132,76 +1034,81 @@
         }
     }
 
-    @keyframes mfRailRibbonMove {
-        0% {
+    @keyframes mfRealRibbon {
+        from {
             transform: translateX(0);
         }
 
-        100% {
-            transform: translateX(-22%);
+        to {
+            transform: translateX(-20%);
         }
     }
 
-    @media (max-width: 760px) {
-        .mf-rail-intro {
+    @media (max-width: 800px) {
+        .mf-real-heading {
             align-items: flex-start;
             flex-direction: column;
-            padding: 52px 22px 30px;
+            padding: 52px 22px 32px;
             gap: 28px;
         }
 
-        .mf-rail-title h2 {
-            font-size: 58px;
-            letter-spacing: -3px;
+        .mf-real-title h2 {
+            font-size: 55px;
+            letter-spacing: -2px;
         }
 
-        .mf-rail-description {
+        .mf-real-intro {
             max-width: 100%;
         }
 
-        .mf-rail-stage {
-            min-height: 315px;
+        .mf-real-rail-wrap {
+            min-height: 350px;
             margin: 0 14px;
         }
 
-        .mf-garments {
+        .mf-real-clothes {
             right: 1%;
             left: 1%;
             gap: 0;
         }
 
-        .mf-garment {
-            width: 47px;
-            flex-basis: 47px;
-            transform: scale(.64);
+        .mf-real-piece {
+            width: 74px;
+            height: 225px;
+            flex-basis: 74px;
         }
 
-        .mf-garment:hover,
-        .mf-garment:focus {
-            transform: translateY(-12px) scale(.78) rotate(-3deg);
+        .mf-real-piece img {
+            height: 205px;
         }
 
-        .mf-rail-footer {
+        .mf-piece-small {
+            display: none;
+        }
+
+        .mf-real-bottom {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            padding: 18px 22px 0;
+            padding: 18px 22px 25px;
             line-height: 1.8;
         }
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .mf-rail-ribbon-track,
-        .mf-garment {
+        .mf-real-ribbon-track,
+        .mf-real-piece {
             animation: none;
         }
 
-        .mf-garment,
-        .mf-garment:hover,
-        .mf-garment:focus {
+        .mf-real-piece,
+        .mf-real-piece:hover,
+        .mf-real-piece img {
             transition: none;
         }
     }
 </style>
+
+
 
 
 
