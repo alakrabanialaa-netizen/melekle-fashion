@@ -23,9 +23,12 @@ class AccountingController extends Controller
 
         /*
          * المحاسبة تعتمد فقط على المنتجات التي تم تفعيل
-         * خيار "إدخال المنتج إلى المستودع والمحاسبة" لها.
+         * خيار إدخالها إلى المستودع والمحاسبة.
+         *
+         * IS TRUE متوافقة مع PostgreSQL
+         * ولا تتحول إلى مقارنة Boolean مع الرقم 1.
          */
-        $warehouseQuery = Product::where('track_inventory', true);
+        $warehouseQuery = Product::whereRaw('"track_inventory" IS TRUE');
 
         $totalStockPieces = (clone $warehouseQuery)
             ->sum(DB::raw('CAST(stock AS INTEGER)'));
@@ -40,7 +43,7 @@ class AccountingController extends Controller
                 'CAST(stock AS NUMERIC) * CAST(price AS NUMERIC)'
             ));
 
-        $warehouseProducts = Product::where('track_inventory', true)
+        $warehouseProducts = Product::whereRaw('"track_inventory" IS TRUE')
             ->latest()
             ->get();
 
@@ -80,7 +83,7 @@ class AccountingController extends Controller
             'price' => 'nullable|numeric',
         ]);
 
-        $product = Product::where('track_inventory', true)
+        $product = Product::whereRaw('"track_inventory" IS TRUE')
             ->findOrFail($id);
 
         $updateData = [];
@@ -174,7 +177,7 @@ class AccountingController extends Controller
         ]);
 
         $product = Product::where('product_code', $request->product_code)
-            ->where('track_inventory', true)
+            ->whereRaw('"track_inventory" IS TRUE')
             ->first();
 
         if (!$product) {
