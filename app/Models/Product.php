@@ -50,6 +50,7 @@ class Product extends Model
     'category',
     'video',
     'image',
+    'track_inventory',
 ];
 
 
@@ -57,6 +58,8 @@ class Product extends Model
         'sizes' => 'array',
         'colors' => 'array',
         'ages' => 'array',
+        'track_inventory' => 'boolean',
+
     ];
 
     // علاقة الصور (مع حماية في حال عدم وجود الجدول)
