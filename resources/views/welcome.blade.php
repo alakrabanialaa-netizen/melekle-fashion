@@ -288,95 +288,214 @@
     @media (max-width:768px) { .trust-grid{grid-template-columns:repeat(2,1fr);gap:16px 8px}.trust-item{font-size:.68rem}.campaign-section{margin:18px 12px 0;padding:26px 22px;border-radius:24px}.campaign-content{align-items:flex-start;flex-direction:column}.campaign-button{width:100%;justify-content:center}.reviews-grid{grid-template-columns:1fr;max-width:420px}.reviews-section{padding:52px 16px}.whatsapp-float{right:14px;bottom:76px;padding:11px;width:46px;height:46px;justify-content:center}.whatsapp-float span{display:none} }
 </style>
 
-{{-- ✨ PREMIUM CATEGORY CIRCLES (تظهر مباشرة تحت النافر) --}}
+
+
+{{-- ✨ PREMIUM CATEGORY NAVIGATION --}}
 <style>
-    .category-strip {
+    :root {
+        --category-pink: #e94868;
+        --category-gold: #c18a3c;
+        --category-dark: #202027;
+        --category-muted: #85818a;
+        --category-bg: #fbfaf7;
+    }
+
+    .mf-category-section {
         position: relative;
         z-index: 20;
-        padding: 22px 16px 24px;
+        overflow: hidden;
+        padding: 26px 16px 30px;
         background:
-            radial-gradient(circle at 12% 0%, rgba(244,63,94,.09), transparent 30%),
-            radial-gradient(circle at 88% 100%, rgba(245,158,11,.10), transparent 28%),
-            #fffaf0;
-        border-bottom: 1px solid rgba(31,41,55,.07);
+            radial-gradient(
+                circle at 5% 0%,
+                rgba(233, 72, 104, .10),
+                transparent 28%
+            ),
+            radial-gradient(
+                circle at 95% 100%,
+                rgba(193, 138, 60, .11),
+                transparent 30%
+            ),
+            var(--category-bg);
+        border-bottom: 1px solid rgba(32, 32, 39, .08);
     }
-    .category-panel {
-        max-width: 1220px;
+
+    .mf-category-section::before {
+        content: "";
+        position: absolute;
+        top: -100px;
+        left: 7%;
+        width: 190px;
+        height: 190px;
+        border: 1px solid rgba(193, 138, 60, .12);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .mf-category-section::after {
+        content: "";
+        position: absolute;
+        right: 8%;
+        bottom: -125px;
+        width: 220px;
+        height: 220px;
+        border: 1px solid rgba(233, 72, 104, .10);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .mf-category-panel {
+        position: relative;
+        z-index: 2;
+        max-width: 1280px;
         margin: 0 auto;
-        padding: 18px 20px 20px;
-        border: 1px solid rgba(255,255,255,.95);
-        border-radius: 30px;
-        background: rgba(255,255,255,.74);
-        box-shadow: 0 18px 45px rgba(31,41,55,.08), inset 0 1px 0 rgba(255,255,255,.9);
-        backdrop-filter: blur(14px);
+        padding: 22px 24px 24px;
+        border: 1px solid rgba(255, 255, 255, .95);
+        border-radius: 28px;
+        background: rgba(255, 255, 255, .78);
+        box-shadow:
+            0 20px 55px rgba(32, 32, 39, .08),
+            inset 0 1px 0 rgba(255, 255, 255, .95);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
     }
-    .category-heading {
+
+    .mf-category-header {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .mf-category-heading {
+        display: flex;
+        align-items: center;
         gap: 12px;
-        margin: 0 0 17px;
-        color: #1f2937;
-        font-size: .82rem;
+        margin: 0;
+        color: var(--category-dark);
+        font-size: .94rem;
         font-weight: 900;
-        letter-spacing: .08em;
+        letter-spacing: .02em;
     }
-    .category-heading::before,
-    .category-heading::after {
-        content: '';
-        width: min(110px, 15vw);
-        height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(244,63,94,.35));
+
+    .mf-category-heading::before {
+        content: "";
+        display: block;
+        width: 5px;
+        height: 25px;
+        border-radius: 20px;
+        background: linear-gradient(
+            to bottom,
+            var(--category-pink),
+            var(--category-gold)
+        );
     }
-    .category-heading::after { transform: rotate(180deg); }
-    .category-scroll {
+
+    .mf-category-header-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--category-muted) !important;
+        font-size: .72rem;
+        font-weight: 800;
+        text-decoration: none !important;
+        transition: color .25s ease;
+    }
+
+    .mf-category-header-link span {
+        color: var(--category-gold);
+        font-size: 1rem;
+        transition: transform .25s ease;
+    }
+
+    .mf-category-header-link:hover {
+        color: var(--category-pink) !important;
+    }
+
+    .mf-category-header-link:hover span {
+        transform: translateX(-4px);
+    }
+
+    .mf-category-scroll {
         display: flex;
         align-items: flex-start;
-        justify-content: space-evenly;
-        gap: 16px;
+        justify-content: space-between;
+        gap: 18px;
         overflow-x: auto;
+        padding: 5px 4px 10px;
         scrollbar-width: none;
-        padding: 5px 4px 3px;
+        scroll-behavior: smooth;
     }
-    .category-scroll::-webkit-scrollbar { display: none; }
-    .category-item {
+
+    .mf-category-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    .mf-category-item {
         position: relative;
-        flex: 0 0 104px;
-        color: #374151;
+        flex: 0 0 112px;
+        color: #4a4850;
         text-align: center;
-        text-decoration: none;
-        transition: transform .35s cubic-bezier(.16,1,.3,1), color .25s ease;
+        text-decoration: none !important;
+        transition:
+            color .25s ease,
+            transform .35s cubic-bezier(.16, 1, .3, 1);
     }
-    .category-item:hover { transform: translateY(-7px); color: var(--brand-pink); }
-    .category-orbit {
+
+    .mf-category-item:hover {
+        color: var(--category-pink);
+        transform: translateY(-6px);
+    }
+
+    .mf-category-orbit {
         position: relative;
-        width: 82px;
-        height: 82px;
+        display: block;
+        width: 86px;
+        height: 86px;
+        margin: 0 auto 11px;
         padding: 3px;
-        margin: 0 auto 9px;
         border-radius: 50%;
-        background: conic-gradient(from 210deg, #f59e0b, #f43f5e, #a855f7, #f59e0b);
-        box-shadow: 0 8px 20px rgba(244,63,94,.16);
-        transition: transform .35s ease, box-shadow .35s ease;
+        background: conic-gradient(
+            from 210deg,
+            #f4b343,
+            #e94868 38%,
+            #a855c7 70%,
+            #f4b343
+        );
+        box-shadow:
+            0 0 0 3px #fff,
+            0 10px 24px rgba(233, 72, 104, .18);
+        transition:
+            transform .4s cubic-bezier(.16, 1, .3, 1),
+            box-shadow .4s ease;
     }
-    .category-orbit::before {
-        content: '';
+
+    .mf-category-orbit::before {
+        content: "";
         position: absolute;
-        inset: -5px;
-        border: 1px solid rgba(244,63,94,.18);
-        border-radius: inherit;
-        transform: scale(.92);
-        transition: transform .35s ease, border-color .35s ease;
+        inset: -6px;
+        border: 1px solid rgba(233, 72, 104, .18);
+        border-radius: 50%;
+        transform: scale(.94);
+        transition:
+            transform .4s ease,
+            border-color .4s ease;
     }
-    .category-item:hover .category-orbit {
-        transform: scale(1.07) rotate(5deg);
-        box-shadow: 0 14px 28px rgba(244,63,94,.28);
+
+    .mf-category-item:hover .mf-category-orbit {
+        transform: rotate(6deg) scale(1.08);
+        box-shadow:
+            0 0 0 3px #fff,
+            0 15px 30px rgba(233, 72, 104, .28);
     }
-    .category-item:hover .category-orbit::before {
+
+    .mf-category-item:hover .mf-category-orbit::before {
+        border-color: rgba(193, 138, 60, .55);
         transform: scale(1.08);
-        border-color: rgba(244,63,94,.45);
     }
-    .category-icon {
+
+    .mf-category-icon {
         position: relative;
         z-index: 1;
         display: flex;
@@ -384,106 +503,80 @@
         justify-content: center;
         width: 100%;
         height: 100%;
-        border: 4px solid #fffaf0;
-        border-radius: inherit;
-        background: linear-gradient(145deg, #ffffff, #fff5f4);
-        color: var(--brand-pink);
-        font-size: 27px;
-        box-shadow: inset 0 0 0 1px rgba(31,41,55,.04);
+        border: 4px solid #fffaf3;
+        border-radius: 50%;
+        background:
+            linear-gradient(
+                145deg,
+                #ffffff,
+                #fff2f4
+            );
+        color: var(--category-pink);
+        font-size: 28px;
+        box-shadow:
+            inset 0 0 0 1px rgba(32, 32, 39, .04);
+        transition:
+            background .35s ease,
+            color .35s ease;
     }
-    .category-name {
+
+    .mf-category-item:hover .mf-category-icon {
+        background: linear-gradient(145deg, #fff8f5, #ffe5ea);
+        color: var(--category-gold);
+    }
+
+    .mf-category-name {
         display: block;
-        font-size: .78rem;
+        margin-top: 2px;
+        color: inherit;
+        font-size: .8rem;
         font-weight: 900;
-        line-height: 1.4;
+        line-height: 1.45;
         white-space: nowrap;
     }
-    .category-note {
+
+    .mf-category-note {
         display: block;
         margin-top: 3px;
-        color: #9ca3af;
-        font-size: .58rem;
+        color: #a2a0a6;
+        font-size: .59rem;
         font-weight: 700;
+        white-space: nowrap;
     }
-    .category-item::after {
-        content: '';
-        position: absolute;
-        left: 50%;
-        bottom: -8px;
-        width: 5px;
-        height: 5px;
-        border-radius: 50%;
-        background: var(--brand-pink);
-        opacity: 0;
-        transform: translateX(-50%) scale(.4);
-        transition: opacity .25s ease, transform .25s ease;
-    }
-    .category-item:hover::after { opacity: 1; transform: translateX(-50%) scale(1); }
-    @media (max-width: 768px) {
-        .category-strip { padding: 14px 9px 17px; }
-        .category-panel { padding: 16px 8px 17px; border-radius: 24px; }
-        .category-heading { margin-bottom: 14px; font-size: .73rem; }
-        .category-scroll { justify-content: flex-start; gap: 18px; padding-inline: 8px; }
-        .category-item { flex-basis: 82px; }
-        .category-orbit { width: 68px; height: 68px; }
-        .category-icon { font-size: 23px; border-width: 3px; }
-        .category-note { display: none; }
-    }
-</style>
 
-<style>
-    /* Instagram-style story circles: fixed, perfectly round and never compressed */
-    .category-strip .category-scroll {
-        align-items: flex-start !important;
-        justify-content: center !important;
-        flex-wrap: nowrap !important;
+    .mf-category-item::after {
+        content: "";
+        position: absolute;
+        right: 50%;
+        bottom: -9px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: linear-gradient(
+            135deg,
+            var(--category-pink),
+            var(--category-gold)
+        );
+        opacity: 0;
+        transform: translateX(50%) scale(.3);
+        transition:
+            opacity .25s ease,
+            transform .25s ease;
     }
-    .category-strip .category-item {
-        flex: 0 0 104px !important;
-        width: 104px !important;
-        min-width: 104px !important;
+
+    .mf-category-item:hover::after,
+    .mf-category-item:focus-visible::after {
+        opacity: 1;
+        transform: translateX(50%) scale(1);
     }
-    .category-strip .category-orbit {
-        display: block !important;
-        width: 84px !important;
-        min-width: 84px !important;
-        height: 84px !important;
-        min-height: 84px !important;
-        aspect-ratio: 1 / 1 !important;
-        padding: 3px !important;
-        margin: 0 auto 10px !important;
-        border-radius: 50% !important;
-        background: conic-gradient(from 220deg, #f7b731, #f43f5e 38%, #c026d3 68%, #f7b731) !important;
-        box-shadow: 0 0 0 2px #fff, 0 7px 20px rgba(244,63,94,.22) !important;
+
+    .mf-category-item:focus-visible {
+        outline: 3px solid rgba(233, 72, 104, .22);
+        outline-offset: 7px;
+        border-radius: 18px;
     }
-    .category-strip .category-orbit::before {
-        inset: -5px !important;
-        width: auto !important;
-        height: auto !important;
-        border-radius: 50% !important;
-        border: 1px solid rgba(244,63,94,.28) !important;
-    }
-    .category-strip .category-icon {
-        display: flex !important;
-        width: 100% !important;
-        height: 100% !important;
-        min-height: 0 !important;
-        border-radius: 50% !important;
-        border: 4px solid #fffaf0 !important;
-        background: linear-gradient(145deg, #fff, #fff1f4) !important;
-        font-size: 27px !important;
-    }
-    .category-strip .category-name { font-size: .8rem !important; }
-    @media (max-width: 768px) {
-        .category-strip .category-scroll {
-            justify-content: flex-start !important;
-            overflow-x: auto !important;
-            padding: 6px 8px 8px !important;
-        }
-        .category-strip .category-item { width: 82px !important; min-width: 82px !important; flex-basis: 82px !important; }
-        .category-strip .category-orbit { width: 70px !important; min-width: 70px !important; height: 70px !important; min-height: 70px !important; }
-        .category-strip .category-icon { font-size: 23px !important; }
-    }
+
+    /* بطاقة التوصيل داخل الـHero */
     .hero-offer-card {
         position: absolute;
         z-index: 12;
@@ -492,66 +585,252 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        max-width: 245px;
-        padding: 12px 16px;
-        border: 1px solid rgba(255,255,255,.32);
+        max-width: 255px;
+        padding: 13px 16px;
+        border: 1px solid rgba(255, 255, 255, .30);
         border-radius: 18px;
-        background: rgba(17,24,39,.38);
-        box-shadow: 0 14px 30px rgba(0,0,0,.16);
+        background: rgba(17, 24, 39, .42);
+        box-shadow: 0 16px 34px rgba(0, 0, 0, .18);
         color: #fff;
-        backdrop-filter: blur(12px);
+        backdrop-filter: blur(13px);
+        -webkit-backdrop-filter: blur(13px);
     }
+
     .hero-offer-icon {
         display: grid;
         place-items: center;
-        width: 38px;
-        height: 38px;
-        flex: 0 0 38px;
+        width: 39px;
+        height: 39px;
+        flex: 0 0 39px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #f59e0b, #f43f5e);
+        background: linear-gradient(135deg, #f4b343, #e94868);
+        color: #fff;
         font-size: 17px;
     }
-    .hero-offer-card strong { display: block; font-size: .8rem; }
-    .hero-offer-card span { display: block; margin-top: 2px; color: rgba(255,255,255,.76); font-size: .68rem; }
+
+    .hero-offer-card strong {
+        display: block;
+        font-size: .8rem;
+        font-weight: 900;
+    }
+
+    .hero-offer-card span {
+        display: block;
+        margin-top: 3px;
+        color: rgba(255, 255, 255, .78);
+        font-size: .67rem;
+        font-weight: 600;
+    }
+
+    @media (max-width: 900px) {
+        .mf-category-scroll {
+            justify-content: flex-start;
+        }
+    }
+
     @media (max-width: 768px) {
-        .hero-offer-card { left: 18px; bottom: 112px; max-width: 205px; padding: 10px 12px; }
-        .hero-offer-icon { width: 32px; height: 32px; flex-basis: 32px; font-size: 14px; }
+        .mf-category-section {
+            padding: 15px 9px 18px;
+        }
+
+        .mf-category-panel {
+            padding: 17px 10px 18px;
+            border-radius: 24px;
+        }
+
+        .mf-category-header {
+            margin-bottom: 15px;
+        }
+
+        .mf-category-heading {
+            font-size: .78rem;
+        }
+
+        .mf-category-header-link {
+            font-size: .64rem;
+        }
+
+        .mf-category-scroll {
+            justify-content: flex-start;
+            gap: 19px;
+            padding-inline: 7px;
+        }
+
+        .mf-category-item {
+            flex-basis: 84px;
+        }
+
+        .mf-category-orbit {
+            width: 70px;
+            height: 70px;
+            margin-bottom: 9px;
+        }
+
+        .mf-category-icon {
+            border-width: 3px;
+            font-size: 23px;
+        }
+
+        .mf-category-name {
+            font-size: .72rem;
+        }
+
+        .mf-category-note {
+            display: none;
+        }
+
+        .hero-offer-card {
+            left: 18px;
+            bottom: 112px;
+            max-width: 210px;
+            padding: 10px 12px;
+        }
+
+        .hero-offer-icon {
+            width: 33px;
+            height: 33px;
+            flex-basis: 33px;
+            font-size: 14px;
+        }
+
+        .hero-offer-card strong {
+            font-size: .72rem;
+        }
+
+        .hero-offer-card span {
+            font-size: .6rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .mf-category-item,
+        .mf-category-orbit,
+        .mf-category-orbit::before,
+        .mf-category-icon {
+            transition: none;
+        }
     }
 </style>
 
-<section class="category-strip" dir="rtl" aria-label="تصفح الأقسام">
-    <div class="category-panel">
-        <h2 class="category-heading">تسوّقي حسب القسم</h2>
-        <div class="category-scroll">
-            <a href="{{ Route::has('category.boys') ? route('category.boys') : '/category/boys' }}" class="category-item">
-                <span class="category-orbit"><span class="category-icon"><i class="fas fa-crown"></i></span></span>
-                <span class="category-name">أولاد</span><span class="category-note">ستايل مميز</span>
-            </a>
-            <a href="{{ Route::has('category.girls') ? route('category.girls') : '/category/girls' }}" class="category-item">
-                <span class="category-orbit"><span class="category-icon"><i class="fas fa-gem"></i></span></span>
-                <span class="category-name">بنات</span><span class="category-note">أناقة ناعمة</span>
-            </a>
-            <a href="{{ Route::has('category.babies') ? route('category.babies') : '/category/babies' }}" class="category-item">
-                <span class="category-orbit"><span class="category-icon"><i class="fas fa-baby"></i></span></span>
-                <span class="category-name">بيبي</span><span class="category-note">راحة وحب</span>
-            </a>
-            <a href="{{ Route::has('category.women') ? route('category.women') : '/category/women' }}" class="category-item">
-                <span class="category-orbit"><span class="category-icon"><i class="fas fa-person-dress"></i></span></span>
-                <span class="category-name">نسائي</span><span class="category-note">إطلالتكِ</span>
-            </a>
-            <a href="#shop" class="category-item">
-                <span class="category-orbit"><span class="category-icon"><i class="fas fa-sparkles"></i></span></span>
-                <span class="category-name">وصل حديثاً</span><span class="category-note">كوني أولاً</span>
-            </a>
-            <a href="#shop" class="category-item">
-                <span class="category-orbit"><span class="category-icon"><i class="fas fa-fire"></i></span></span>
-                <span class="category-name">الأكثر طلباً</span><span class="category-note">اختياراتنا</span>
+<section
+    class="mf-category-section"
+    dir="rtl"
+    aria-label="تصفح أقسام المتجر"
+>
+    <div class="mf-category-panel">
+
+        <div class="mf-category-header">
+            <h2 class="mf-category-heading">
+                اكتشفي مجموعتنا
+            </h2>
+
+            <a href="#shop" class="mf-category-header-link">
+                عرض جميع المنتجات
+                <span>←</span>
             </a>
         </div>
+
+        <nav class="mf-category-scroll" aria-label="أقسام المنتجات">
+
+            {{-- أولاد --}}
+            <a
+                href="{{ Route::has('category.boys') ? route('category.boys') : '/category/boys' }}"
+                class="mf-category-item"
+                aria-label="تصفح ملابس الأولاد"
+            >
+                <span class="mf-category-orbit">
+                    <span class="mf-category-icon">
+                        <i class="fas fa-crown" aria-hidden="true"></i>
+                    </span>
+                </span>
+
+                <span class="mf-category-name">أولاد</span>
+                <span class="mf-category-note">ستايل مميز</span>
+            </a>
+
+            {{-- بنات --}}
+            <a
+                href="{{ Route::has('category.girls') ? route('category.girls') : '/category/girls' }}"
+                class="mf-category-item"
+                aria-label="تصفح ملابس البنات"
+            >
+                <span class="mf-category-orbit">
+                    <span class="mf-category-icon">
+                        <i class="fas fa-gem" aria-hidden="true"></i>
+                    </span>
+                </span>
+
+                <span class="mf-category-name">بنات</span>
+                <span class="mf-category-note">أناقة ناعمة</span>
+            </a>
+
+            {{-- بيبي --}}
+            <a
+                href="{{ Route::has('category.babies') ? route('category.babies') : '/category/babies' }}"
+                class="mf-category-item"
+                aria-label="تصفح ملابس البيبي"
+            >
+                <span class="mf-category-orbit">
+                    <span class="mf-category-icon">
+                        <i class="fas fa-baby" aria-hidden="true"></i>
+                    </span>
+                </span>
+
+                <span class="mf-category-name">بيبي</span>
+                <span class="mf-category-note">راحة وحب</span>
+            </a>
+
+            {{-- نسائي --}}
+            <a
+                href="{{ Route::has('category.women') ? route('category.women') : '/category/women' }}"
+                class="mf-category-item"
+                aria-label="تصفح الملابس النسائية"
+            >
+                <span class="mf-category-orbit">
+                    <span class="mf-category-icon">
+                        <i class="fas fa-person-dress" aria-hidden="true"></i>
+                    </span>
+                </span>
+
+                <span class="mf-category-name">نسائي</span>
+                <span class="mf-category-note">إطلالتكِ</span>
+            </a>
+
+            {{-- وصل حديثًا --}}
+            <a
+                href="#shop"
+                class="mf-category-item"
+                aria-label="مشاهدة المنتجات الجديدة"
+            >
+                <span class="mf-category-orbit">
+                    <span class="mf-category-icon">
+                        <i class="fas fa-sparkles" aria-hidden="true"></i>
+                    </span>
+                </span>
+
+                <span class="mf-category-name">وصل حديثًا</span>
+                <span class="mf-category-note">كوني أولًا</span>
+            </a>
+
+            {{-- الأكثر طلبًا --}}
+            <a
+                href="#shop"
+                class="mf-category-item"
+                aria-label="مشاهدة المنتجات الأكثر طلبًا"
+            >
+                <span class="mf-category-orbit">
+                    <span class="mf-category-icon">
+                        <i class="fas fa-fire" aria-hidden="true"></i>
+                    </span>
+                </span>
+
+                <span class="mf-category-name">الأكثر طلبًا</span>
+                <span class="mf-category-note">اختياراتنا</span>
+            </a>
+
+        </nav>
     </div>
 </section>
-
-
 
 
 
