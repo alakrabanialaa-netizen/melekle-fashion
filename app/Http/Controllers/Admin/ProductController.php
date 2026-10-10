@@ -121,6 +121,7 @@ class ProductController extends Controller
             'images'       => 'nullable|array',
             'images.*'     => 'image|mimes:jpeg,png,webp,gif|max:5120',
             'video'        => 'nullable|file|mimes:mp4,mov,ogg,qt|max:30720',
+            'track_inventory' => 'nullable|boolean',
         ]);
 
         try {
@@ -239,6 +240,8 @@ class ProductController extends Controller
             'badge_text'   => 'nullable|string|max:255',
             'sizes'        => 'nullable|array',
             'ages'         => 'nullable|array', 
+            'track_inventory' => 'nullable|boolean',
+
         ]);
 
         try {
@@ -253,6 +256,7 @@ class ProductController extends Controller
                 'color'        => $validatedData['color'] ?? null,
                 'badge_text'  => $validatedData['badge_text'] ?? null,
                 'stock'        => (int)($validatedData['stock'] ?? 0), // تعديل هنا ليتوافق مع الموديل
+                'track_inventory' => $request->boolean('track_inventory'),
                 'sizes'        => $request->input('sizes', []),
                 'ages'         => $request->input('ages', []), 
                 'slug'         => $this->generateSlug($validatedData['name'], $product->id),
