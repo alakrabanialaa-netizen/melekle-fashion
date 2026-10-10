@@ -223,6 +223,27 @@
                 </div>
             </div>
 
+            <div class="mt-5 rounded-xl border border-indigo-100 bg-indigo-50 p-4" dir="rtl">
+    <label class="flex cursor-pointer items-center gap-3">
+        <input
+            type="checkbox"
+            name="track_inventory"
+            value="1"
+            class="h-5 w-5 rounded border-gray-300 text-indigo-600"
+        >
+
+        <span class="text-sm font-bold text-indigo-900">
+            إدخال المنتج إلى المستودع والمحاسبة
+        </span>
+    </label>
+
+    <p class="mt-2 text-xs text-indigo-700">
+        فعّل هذا الخيار إذا كان المنتج له كمية وتكلفة ويجب متابعته محاسبيًا.
+        إذا تركته دون تحديد، سيظهر المنتج على الموقع فقط.
+    </p>
+</div>
+
+            
             {{-- 5. الأزرار --}}
             <div class="flex items-center justify-center gap-6 pt-6">
                 <button type="submit" class="bg-indigo-600 text-white px-12 py-4 rounded-xl font-bold text-lg hover:bg-indigo-700 transform hover:scale-105 transition-all shadow-lg active:scale-95">
