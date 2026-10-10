@@ -7,45 +7,71 @@ use App\Models\Product;
 use App\Models\Expense;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class AccountingController extends Controller
 {
-    // 1. دالة العرض الرئيسية الموحدة 
     public function index()
     {
-        // جلب المصاريف ورأس المال
         $totalExpenses = Expense::sum('amount');
         $capital = DB::table('capital_transactions')->sum('amount');
 
-        // المبيعات اليدوية وتكلفتها
         $totalSales = DB::table('manual_sales')->sum('total_price');
         $costOfGoodsSold = DB::table('manual_sales')->sum('total_cost');
 
-        // الحسبة المالية: صافي الربح
         $netProfit = $totalSales - $costOfGoodsSold - $totalExpenses;
 
-        // جرد المستودع الحالي
-        $totalStockPieces = Product::sum(DB::raw('CAST(stock AS INT)'));
-        $inventoryCostValue = Product::sum(DB::raw('CAST(stock AS NUMERIC) * CAST(cost_price AS NUMERIC)'));
-        $inventorySaleValue = Product::sum(DB::raw('CAST(stock AS NUMERIC) * CAST(price AS NUMERIC)'));
+        /*
+         * المحاسبة تعتمد فقط على المنتجات التي تم تفعيل
+         * خيار "إدخال المنتج إلى المستودع والمحاسبة" لها.
+         */
+        $warehouseQuery = Product::where('track_inventory', true);
 
-        // جلب البيانات المتوافقة مع متغيرات الـ Blade تماماً
-        $warehouseProducts = Product::latest()->get(); 
-        $manualSales = DB::table('manual_sales')->latest()->get(); 
-        $expensesList = Expense::latest()->get(); 
-        $capitalTransactions = DB::table('capital_transactions')->latest()->take(5)->get();
+        $totalStockPieces = (clone $warehouseQuery)
+            ->sum(DB::raw('CAST(stock AS INTEGER)'));
+
+        $inventoryCostValue = (clone $warehouseQuery)
+            ->sum(DB::raw(
+                'CAST(stock AS NUMERIC) * CAST(cost_price AS NUMERIC)'
+            ));
+
+        $inventorySaleValue = (clone $warehouseQuery)
+            ->sum(DB::raw(
+                'CAST(stock AS NUMERIC) * CAST(price AS NUMERIC)'
+            ));
+
+        $warehouseProducts = Product::where('track_inventory', true)
+            ->latest()
+            ->get();
+
+        $manualSales = DB::table('manual_sales')
+            ->latest()
+            ->get();
+
+        $expensesList = Expense::latest()->get();
+
+        $capitalTransactions = DB::table('capital_transactions')
+            ->latest()
+            ->take(5)
+            ->get();
 
         return view('admin.accounting.index', compact(
-            'totalSales', 'totalExpenses', 'netProfit', 'totalStockPieces', 
-            'inventoryCostValue', 'inventorySaleValue', 'warehouseProducts', 
-            'manualSales', 'expensesList', 'capitalTransactions', 'capital'
+            'totalSales',
+            'totalExpenses',
+            'netProfit',
+            'totalStockPieces',
+            'inventoryCostValue',
+            'inventorySaleValue',
+            'warehouseProducts',
+            'manualSales',
+            'expensesList',
+            'capitalTransactions',
+            'capital'
         ));
     }
 
-    // 2. تحديث بيانات المنتج في المستودع (نسخة مرنة ومضمونة لمنع تعليق الـ Validation)
     public function updateProduct(Request $request, $id)
     {
-        // تحقق مرن يسمح بالقيم الفارغة لتجنب الرفض التلقائي من النظام
         $request->validate([
             'product_code' => 'nullable|string',
             'color' => 'nullable|string',
@@ -54,38 +80,45 @@ class AccountingController extends Controller
             'price' => 'nullable|numeric',
         ]);
 
-        $product = Product::findOrFail($id);
+        $product = Product::where('track_inventory', true)
+            ->findOrFail($id);
 
-        // بناء مصفوفة التحديث ديناميكياً لتعديل الحقول المرسلة فقط
         $updateData = [];
 
         if ($request->has('product_code')) {
             $updateData['product_code'] = $request->product_code;
         }
+
         if ($request->has('color')) {
             $updateData['color'] = $request->color;
         }
+
         if ($request->has('stock')) {
             $updateData['stock'] = $request->stock;
         }
+
         if ($request->has('cost_price')) {
             $updateData['cost_price'] = $request->cost_price ?? 0;
         }
+
         if ($request->has('price')) {
             $updateData['price'] = $request->price ?? 0;
-            // تضمن تحديث الحقل الأساسي للمتجر ليظهر السعر الجديد فوراً للعملاء
-            if (\Schema::hasColumn('products', 'selling_price')) {
+
+            if (Schema::hasColumn('products', 'selling_price')) {
                 $updateData['selling_price'] = $request->price ?? 0;
             }
         }
 
-        // حفظ التعديلات في قاعدة البيانات
         $product->update($updateData);
 
-        return redirect()->back()->with('success', 'تم تحديث بيانات الصنف في المستودع وتعديل الأسعار والمخزون في الموقع فوراً!');
+        return redirect()
+            ->back()
+            ->with(
+                'success',
+                'تم تحديث بيانات الصنف في المستودع وتعديل الأسعار والمخزون بنجاح.'
+            );
     }
 
-    // 3. تسجيل مصروف تشغيلي جديد
     public function storeExpense(Request $request)
     {
         $request->validate([
@@ -98,10 +131,11 @@ class AccountingController extends Controller
             'amount' => $request->amount,
         ]);
 
-        return redirect()->back()->with('success', 'تم تسجيل المصروف التشغيلي بنجاح!');
+        return redirect()
+            ->back()
+            ->with('success', 'تم تسجيل المصروف التشغيلي بنجاح.');
     }
 
-    // 4. تحديث قيد مصروف تشغيلي
     public function updateExpense(Request $request, $id)
     {
         $request->validate([
@@ -114,57 +148,91 @@ class AccountingController extends Controller
             'amount' => $request->amount,
         ]);
 
-        return redirect()->back()->with('success', 'تم تعديل قيد المصروف بنجاح!');
+        return redirect()
+            ->back()
+            ->with('success', 'تم تعديل قيد المصروف بنجاح.');
     }
 
-    // 5. حذف قيد مصروف تشغيلي
     public function destroyExpense($id)
     {
         Expense::where('id', $id)->delete();
-        return redirect()->back()->with('success', 'تم حذف قيد المصروف بنجاح وتحديث الحسبة المالية!');
+
+        return redirect()
+            ->back()
+            ->with(
+                'success',
+                'تم حذف قيد المصروف وتحديث الحسبة المالية.'
+            );
     }
-        
-    // 6. دالة البيع اليدوي والخصم من المستودع تلقائياً
+
     public function storeSale(Request $request)
     {
         $request->validate([
             'product_code' => 'required|string',
             'quantity' => 'required|integer|min:1',
-            'sale_price' => 'required|numeric'
+            'sale_price' => 'required|numeric',
         ]);
 
-        $product = Product::where('product_code', $request->product_code)->first();
+        $product = Product::where('product_code', $request->product_code)
+            ->where('track_inventory', true)
+            ->first();
 
         if (!$product) {
-            return redirect()->back()->with('error', 'خطأ: كود المنتج غير موجود في المستودع!');
+            return redirect()
+                ->back()
+                ->with(
+                    'error',
+                    'كود المنتج غير موجود ضمن منتجات المستودع.'
+                );
         }
 
-        if ((int)$product->stock < (int)$request->quantity) {
-            return redirect()->back()->with('error', 'خطأ: الكمية المطلوبة غير متوفرة في المستودع! المتاح حالياً: ' . $product->stock);
+        if ((int) $product->stock < (int) $request->quantity) {
+            return redirect()
+                ->back()
+                ->with(
+                    'error',
+                    'الكمية المطلوبة غير متوفرة في المستودع. المتاح حاليًا: '
+                    . $product->stock
+                );
         }
 
         $totalPrice = $request->quantity * $request->sale_price;
-        $totalCost = $request->quantity * (float)$product->cost_price;
+        $totalCost = $request->quantity * (float) $product->cost_price;
 
         DB::beginTransaction();
+
         try {
             DB::table('manual_sales')->insert([
                 'product_code' => $product->product_code,
-                'product_name' => $product->name ?? $product->product_name ?? 'منتج غير محدد',
+                'product_name' => $product->name
+                    ?? $product->product_name
+                    ?? 'منتج غير محدد',
                 'quantity' => $request->quantity,
                 'sale_price' => $request->sale_price,
                 'total_price' => $totalPrice,
                 'total_cost' => $totalCost,
-                'created_at' => now()
+                'created_at' => now(),
             ]);
 
             $product->decrement('stock', $request->quantity);
 
             DB::commit();
-            return redirect()->back()->with('success', 'تم تسجيل المبيعات وخصم القطع من المخزن بنجاح!');
+
+            return redirect()
+                ->back()
+                ->with(
+                    'success',
+                    'تم تسجيل البيع وخصم القطع من المستودع بنجاح.'
+                );
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'حدث خطأ أثناء المعالجة: ' . $e->getMessage());
+
+            return redirect()
+                ->back()
+                ->with(
+                    'error',
+                    'حدث خطأ أثناء المعالجة: ' . $e->getMessage()
+                );
         }
     }
 }
