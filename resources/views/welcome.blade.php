@@ -712,128 +712,84 @@
     }
 </style>
 
+<style>
+    .mf-smart-choice { padding: 18px 16px 0; background: var(--brand-ivory, #f7f7f5); }
+    .mf-smart-choice-inner { max-width: 1220px; margin: 0 auto; padding: 22px 26px; display:flex; align-items:center; justify-content:space-between; gap:24px; border:1px solid rgba(201,164,92,.28); border-radius:22px; background:#fff; box-shadow:0 12px 28px rgba(11,11,13,.07); }
+    .mf-smart-choice-kicker { color:#a47b32; font-size:.65rem; font-weight:900; letter-spacing:.16em; }
+    .mf-smart-choice h2 { margin:4px 0 0; color:#0b0b0d; font-size:1.35rem; font-weight:900; }
+    .mf-smart-choice p { margin:4px 0 0; color:#77736c; font-size:.78rem; }
+    .mf-smart-choice-actions { display:flex; flex-wrap:wrap; gap:8px; }
+    .mf-smart-choice-btn { padding:10px 16px; border:1px solid rgba(201,164,92,.45); border-radius:999px; color:#0b0b0d !important; background:#fbfaf6; font-size:.76rem; font-weight:900; transition:.25s ease; }
+    .mf-smart-choice-btn:hover { color:#fff !important; background:#0b0b0d; border-color:#0b0b0d; transform:translateY(-2px); }
+    @media (max-width:700px) { .mf-smart-choice-inner { align-items:stretch; flex-direction:column; padding:18px; } .mf-smart-choice-actions { display:grid; grid-template-columns:repeat(3,1fr); } .mf-smart-choice-btn { text-align:center; padding:9px 6px; } }
+</style>
+
 <section
     class="mf-category-section"
     dir="rtl"
     aria-label="تصفح أقسام المتجر"
 >
     <div class="mf-category-panel">
-
         <div class="mf-category-header">
-            <h2 class="mf-category-heading">
-                اكتشفي مجموعتنا
-            </h2>
-
-            <a href="#shop" class="mf-category-header-link">
-                عرض جميع المنتجات
-                <span>←</span>
-            </a>
+            <h2 class="mf-category-heading">تسوّقي حسب القسم</h2>
+            <a href="#shop" class="mf-category-header-link">عرض المنتجات <span>←</span></a>
         </div>
 
         <nav class="mf-category-scroll" aria-label="أقسام المنتجات">
-
-            {{-- أولاد --}}
-            <a
-                href="{{ Route::has('category.boys') ? route('category.boys') : '/category/boys' }}"
-                class="mf-category-item"
-                aria-label="تصفح ملابس الأولاد"
-            >
-                <span class="mf-category-orbit">
-                    <span class="mf-category-icon">
-                        <i class="fas fa-crown" aria-hidden="true"></i>
-                    </span>
-                </span>
-
-                <span class="mf-category-name">أولاد</span>
-                <span class="mf-category-note">ستايل مميز</span>
+            <a href="{{ Route::has('category.boys') ? route('category.boys') : '/category/boys' }}" class="mf-category-item" aria-label="ملابس الأطفال">
+                <span class="mf-category-orbit"><span class="mf-category-icon"><i class="fas fa-child" aria-hidden="true"></i></span></span>
+                <span class="mf-category-name">ملابس الأطفال</span>
+                <span class="mf-category-note">راحة وأناقة</span>
             </a>
 
-            {{-- بنات --}}
-            <a
-                href="{{ Route::has('category.girls') ? route('category.girls') : '/category/girls' }}"
-                class="mf-category-item"
-                aria-label="تصفح ملابس البنات"
-            >
-                <span class="mf-category-orbit">
-                    <span class="mf-category-icon">
-                        <i class="fas fa-gem" aria-hidden="true"></i>
-                    </span>
-                </span>
-
-                <span class="mf-category-name">بنات</span>
-                <span class="mf-category-note">أناقة ناعمة</span>
-            </a>
-
-            {{-- بيبي --}}
-            <a
-                href="{{ Route::has('category.babies') ? route('category.babies') : '/category/babies' }}"
-                class="mf-category-item"
-                aria-label="تصفح ملابس البيبي"
-            >
-                <span class="mf-category-orbit">
-                    <span class="mf-category-icon">
-                        <i class="fas fa-baby" aria-hidden="true"></i>
-                    </span>
-                </span>
-
-                <span class="mf-category-name">بيبي</span>
-                <span class="mf-category-note">راحة وحب</span>
-            </a>
-
-            {{-- نسائي --}}
-            <a
-                href="{{ Route::has('category.women') ? route('category.women') : '/category/women' }}"
-                class="mf-category-item"
-                aria-label="تصفح الملابس النسائية"
-            >
-                <span class="mf-category-orbit">
-                    <span class="mf-category-icon">
-                        <i class="fas fa-person-dress" aria-hidden="true"></i>
-                    </span>
-                </span>
-
-                <span class="mf-category-name">نسائي</span>
+            <a href="{{ Route::has('category.women') ? route('category.women') : '/category/women' }}" class="mf-category-item" aria-label="الملابس النسائية">
+                <span class="mf-category-orbit"><span class="mf-category-icon"><i class="fas fa-person-dress" aria-hidden="true"></i></span></span>
+                <span class="mf-category-name">ملابس نسائية</span>
                 <span class="mf-category-note">إطلالتكِ</span>
             </a>
 
-            {{-- وصل حديثًا --}}
-            <a
-                href="#shop"
-                class="mf-category-item"
-                aria-label="مشاهدة المنتجات الجديدة"
-            >
-                <span class="mf-category-orbit">
-                    <span class="mf-category-icon">
-                        <i class="fas fa-sparkles" aria-hidden="true"></i>
-                    </span>
-                </span>
-
-                <span class="mf-category-name">وصل حديثًا</span>
-                <span class="mf-category-note">كوني أولًا</span>
+            <a href="#shop" class="mf-category-item" aria-label="الملابس والإكسسوارات">
+                <span class="mf-category-orbit"><span class="mf-category-icon"><i class="fas fa-gem" aria-hidden="true"></i></span></span>
+                <span class="mf-category-name">أزياء وإكسسوارات</span>
+                <span class="mf-category-note">كمّلي إطلالتكِ</span>
             </a>
 
-            {{-- الأكثر طلبًا --}}
-            <a
-                href="#shop"
-                class="mf-category-item"
-                aria-label="مشاهدة المنتجات الأكثر طلبًا"
-            >
-                <span class="mf-category-orbit">
-                    <span class="mf-category-icon">
-                        <i class="fas fa-fire" aria-hidden="true"></i>
-                    </span>
-                </span>
-
-                <span class="mf-category-name">الأكثر طلبًا</span>
-                <span class="mf-category-note">اختياراتنا</span>
+            <a href="#shop" class="mf-category-item" aria-label="الكوزمتيك والعناية">
+                <span class="mf-category-orbit"><span class="mf-category-icon"><i class="fas fa-sparkles" aria-hidden="true"></i></span></span>
+                <span class="mf-category-name">كوزمتيك وعناية</span>
+                <span class="mf-category-note">جمالكِ أولًا</span>
             </a>
 
+            <a href="#shop" class="mf-category-item" aria-label="الديكورات المنزلية">
+                <span class="mf-category-orbit"><span class="mf-category-icon"><i class="fas fa-couch" aria-hidden="true"></i></span></span>
+                <span class="mf-category-name">ديكورات</span>
+                <span class="mf-category-note">لمسة لبيتكِ</span>
+            </a>
+
+            <a href="#shop" class="mf-category-item" aria-label="الأدوات المنزلية">
+                <span class="mf-category-orbit"><span class="mf-category-icon"><i class="fas fa-house" aria-hidden="true"></i></span></span>
+                <span class="mf-category-name">أدوات منزلية</span>
+                <span class="mf-category-note">اختيارات عملية</span>
+            </a>
         </nav>
     </div>
 </section>
 
-
-
+{{-- مساعد اختيار مبدئي: واجهة فقط في المرحلة الأولى، بدون تغيير قاعدة البيانات --}}
+<section class="mf-smart-choice" dir="rtl" aria-label="مساعد اختيار القسم">
+    <div class="mf-smart-choice-inner">
+        <div>
+            <span class="mf-smart-choice-kicker">SMART SHOPPING</span>
+            <h2>شو حابة تكتشفي اليوم؟</h2>
+            <p>اختاري اهتمامك لنوصلك بسرعة إلى المنتجات المناسبة.</p>
+        </div>
+        <div class="mf-smart-choice-actions">
+            <a href="#shop" class="mf-smart-choice-btn">الأزياء</a>
+            <a href="#shop" class="mf-smart-choice-btn">الجمال</a>
+            <a href="#shop" class="mf-smart-choice-btn">المنزل</a>
+        </div>
+    </div>
+</section>
 
 {{-- ✨ MELEKLER FASHION — KIDS OUTFITS COLLECTION --}}
 <section id="collection" class="mf-kids-collection" dir="rtl" aria-label="مجموعة ملابس الأطفال">
@@ -1569,11 +1525,11 @@
         <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
             <div class="text-right w-full md:w-auto">
                 <span class="lux-badge block mb-2">وصل حديثاً</span>
-                <h2 class="text-3xl md:text-5xl font-black text-gray-900 leading-tight">قطعنا <span class="lux-gradient">الجديدة</span> الساحرة ✨</h2>
+                <h2 class="text-3xl md:text-5xl font-black text-gray-900 leading-tight">وصل حديثًا <span class="lux-gradient">من كل الأقسام</span> ✨</h2>
             </div>
             <div class="filter-bar w-full md:w-auto">
                 <div class="filter-group flex w-full">
-                    <input type="text" class="filter-input" placeholder="ابحث عن قطعة...">
+                    <input type="text" class="filter-input" placeholder="ابحثي عن منتج أو قسم...">
                     <button class="apply-button">بحث</button>
                 </div>
             </div>
@@ -1583,24 +1539,34 @@
         @php
             $static_categories = [
                 [
-                    'name' => 'ملابس الأولاد', 
-                    'route' => 'category.boys', 
-                    'keywords' => ['%ولد%', '%ولادي%', '%boy%', '%boys%']
+                    'name' => 'ملابس الأطفال',
+                    'route' => 'category.boys',
+                    'keywords' => ['%ولد%', '%ولادي%', '%بنات%', '%بناتي%', '%أطفال%', '%اطفال%', '%طفل%', '%boy%', '%boys%', '%girl%', '%girls%', '%kids%', '%baby%']
                 ],
                 [
-                    'name' => 'ملابس البنات', 
-                    'route' => 'category.girls', 
-                    'keywords' => ['%بنات%', '%بناتي%', '%girl%', '%girls%']
+                    'name' => 'الملابس النسائية',
+                    'route' => 'category.women',
+                    'keywords' => ['%نساء%', '%نسائي%', '%نسائية%', '%أمهات%', '%women%', '%woman%']
                 ],
                 [
-                    'name' => 'ملابس الرضع', 
-                    'route' => 'category.babies', 
-                    'keywords' => ['%رضع%', '%طفل%', '%أطفال%', '%اطفال%', '%baby%', '%babies%']
+                    'name' => 'الأزياء والإكسسوارات',
+                    'route' => null,
+                    'keywords' => ['%إكسسوارات%', '%اكسسوارات%', '%accessor%', '%bag%', '%حقيبة%', '%حذاء%', '%shoe%']
                 ],
                 [
-                    'name' => 'ملابس الأمهات', 
-                    'route' => 'category.women', 
-                    'keywords' => ['%أمهات%', '%نساء%', '%نسائي%', '%mother%', '%women%']
+                    'name' => 'كوزمتيك وعناية',
+                    'route' => null,
+                    'keywords' => ['%كوزمتيك%', '%تجميل%', '%عناية%', '%بشرة%', '%مكياج%', '%عطر%', '%cosmetic%', '%beauty%', '%makeup%', '%skincare%']
+                ],
+                [
+                    'name' => 'ديكورات منزلية',
+                    'route' => null,
+                    'keywords' => ['%ديكور%', '%ديكورات%', '%decor%', '%home decor%']
+                ],
+                [
+                    'name' => 'أدوات منزلية',
+                    'route' => null,
+                    'keywords' => ['%منزلية%', '%أدوات منزلية%', '%مطبخ%', '%household%', '%kitchen%', '%home%']
                 ]
             ];
         @endphp
@@ -1625,7 +1591,7 @@
                         <h3 class="text-2xl md:text-3xl font-black text-gray-800">{{ $cat['name'] }}</h3>
                     </div>
                     <div>
-                        <a href="{{ Route::has($cat['route']) ? route($cat['route']) : '/category/'.explode('.', $cat['route'])[1] }}" class="apply-button text-xs md:text-sm inline-block px-4 py-2 rounded-xl transition-all">عرض الكل &larr;</a>
+                        <a href="{{ $cat['route'] && Route::has($cat['route']) ? route($cat['route']) : '#shop' }}" class="apply-button text-xs md:text-sm inline-block px-4 py-2 rounded-xl transition-all">عرض الكل &larr;</a>
                     </div>
                 </div>
 
