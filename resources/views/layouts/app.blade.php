@@ -12,7 +12,7 @@
 
 <!-- أيقونة الآيفون (iOS) -->
 <link class="apple-touch-icon" href="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png?v=3">
-    <title>MK| @yield('title', 'Premium Fashion')</title>
+    <title>MK GROUP | @yield('title', 'STORE')</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -188,6 +188,22 @@
         .hover\:bg-black:hover { background-color: var(--mk-gold) !important; color: var(--mk-black) !important; }
     </style>
 
+    <style>
+        .mk-mega-menu { width:min(760px,calc(100vw - 40px)); padding:18px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; background:#fff; border:1px solid rgba(201,164,92,.22); border-radius:24px; box-shadow:0 24px 55px rgba(11,11,13,.14); }
+        .mk-mega-column { padding:10px; border-radius:18px; background:#fbfaf6; }
+        .mk-mega-title { display:flex; align-items:center; gap:8px; padding:5px 8px 10px; color:#0b0b0d; font-size:.82rem; font-weight:900; border-bottom:1px solid rgba(201,164,92,.25); }
+        .mk-mega-title i,.mk-mobile-group-title i { color:#c9a45c; }
+        .mk-mega-link { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:4px; padding:8px; border-radius:10px; color:#5f5b53; font-size:.72rem; font-weight:700; transition:.2s ease; }
+        .mk-mega-link:hover { color:#0b0b0d; background:#f1eadb; transform:translateX(-3px); }
+        .mk-mega-link::after { content:'←'; color:#c9a45c; opacity:0; transition:.2s ease; }
+        .mk-mega-link:hover::after { opacity:1; }
+        .mk-mobile-group { margin-top:12px; padding:12px; border-radius:16px; background:#fbfaf6; border:1px solid rgba(201,164,92,.18); }
+        .mk-mobile-group-title { display:flex; align-items:center; gap:8px; margin-bottom:5px; color:#0b0b0d; font-weight:900; }
+        .mk-mobile-sub { display:block; padding:7px 28px; color:#5f5b53; font-size:.82rem; font-weight:700; }
+        .mk-mobile-sub:hover { color:#c9a45c; }
+        @media (max-width:900px) { .mk-mega-menu { grid-template-columns:1fr; } }
+    </style>
+
 </head>
 <body>
 
@@ -231,20 +247,44 @@
         <div class="flex items-center gap-6 justify-end">
             <nav class="hidden lg:flex items-center gap-8 text-sm">
                 <a href="/" class="nav-link">الرئيسية</a>
-                
                 <div class="relative group">
-                    <button class="nav-link flex items-center gap-1.5">
+                    <button type="button" class="nav-link flex items-center gap-1.5" aria-haspopup="true">
                         <span>الأقسام</span>
                         <i class="fas fa-chevron-down text-[9px] transition-transform group-hover:rotate-180"></i>
                     </button>
-                    <div class="dropdown-menu absolute right-0 mt-4 w-56 bg-white rounded-3xl shadow-2xl py-4 border border-pink-50 overflow-hidden z-[120]">
-                        <a href="/category/boys" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👦 ملابس أولاد</a>
-                        <a href="/category/girls" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👧 ملابس بنات</a>
-                        <a href="/category/babies" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👶 ملابس رضع</a>
-                        <a href="/category/mothers" class="block px-6 py-3 text-gray-600 hover:bg-pink-50 hover:text-pink-500 transition font-bold">👩 ملابس نساء</a>
-                        <a href="{{ route('category.offers') }}" class="block px-6 py-3 text-red-500 bg-red-50 hover:bg-red-100 transition font-black border-t border-dashed border-red-100">🔥 عروض تركية</a>
+                    <div class="dropdown-menu mk-mega-menu absolute right-0 mt-4 z-[120]" role="menu">
+                        <div class="mk-mega-column">
+                            <div class="mk-mega-title"><i class="fas fa-shirt"></i><span>ملابس</span></div>
+                            <a href="/category/boys" class="mk-mega-link">أطفال أولاد</a>
+                            <a href="/category/girls" class="mk-mega-link">أطفال بنات</a>
+                            <a href="/category/babies" class="mk-mega-link">بيبي ورضّع</a>
+                            <a href="/category/mothers" class="mk-mega-link">ملابس نسائية</a>
+                            <a href="{{ url('/?category=shoes') }}" class="mk-mega-link">أحذية</a>
+                            <a href="{{ url('/?category=bags') }}" class="mk-mega-link">شنط وحقائب</a>
+                        </div>
+                        <div class="mk-mega-column">
+                            <div class="mk-mega-title"><i class="fas fa-sparkles"></i><span>كوزمتيك وعناية</span></div>
+                            <a href="{{ url('/?category=skincare') }}" class="mk-mega-link">العناية بالبشرة</a>
+                            <a href="{{ url('/?category=cleansing') }}" class="mk-mega-link">تنظيف البشرة</a>
+                            <a href="{{ url('/?category=moisturizers') }}" class="mk-mega-link">ترطيب البشرة</a>
+                            <a href="{{ url('/?category=serums') }}" class="mk-mega-link">السيرومات</a>
+                            <a href="{{ url('/?category=sunscreen') }}" class="mk-mega-link">واقي الشمس</a>
+                            <a href="{{ url('/?category=haircare') }}" class="mk-mega-link">العناية بالشعر</a>
+                            <a href="{{ url('/?category=makeup') }}" class="mk-mega-link">مكياج وعطور</a>
+                        </div>
+                        <div class="mk-mega-column">
+                            <div class="mk-mega-title"><i class="fas fa-couch"></i><span>ديكورات ومنزل</span></div>
+                            <a href="{{ url('/?category=wall-decor') }}" class="mk-mega-link">ديكورات جدران</a>
+                            <a href="{{ url('/?category=decor') }}" class="mk-mega-link">ديكورات أساسية</a>
+                            <a href="{{ url('/?category=lighting') }}" class="mk-mega-link">إضاءة</a>
+                            <a href="{{ url('/?category=organizers') }}" class="mk-mega-link">منظمات وترتيب</a>
+                            <a href="{{ url('/?category=kitchen') }}" class="mk-mega-link">مطبخ وسفرة</a>
+                            <a href="{{ url('/?category=home-tools') }}" class="mk-mega-link">أدوات منزلية</a>
+                            <a href="{{ url('/?category=gifts') }}" class="mk-mega-link">هدايا منزلية</a>
+                        </div>
                     </div>
                 </div>
+                <a href="{{ route('category.offers') }}" class="nav-link text-red-500">العروض</a>
             </nav>
 
             <div class="header-tools hidden md:flex">
@@ -286,13 +326,36 @@
     </div>
     <nav class="flex flex-col gap-3 font-bold text-gray-800">
         <a href="/" class="mobile-menu-link hover:text-pink-500">الرئيسية</a>
-        
-        <h3 class="text-gray-400 text-sm mt-4">الأقسام</h3>
-        <a href="/category/boys" class="hover:text-pink-500 pr-4">ملابس أولاد</a>
-        <a href="/category/girls" class="hover:text-pink-500 pr-4">ملابس بنات</a>
-        <a href="/category/babies" class="hover:text-pink-500 pr-4">ملابس رضع</a>
-        <a href="/category/mothers" class="hover:text-pink-500 pr-4">ملابس نساء</a>
-        <a href="{{ route('category.offers') }}" class="text-red-500 font-black pr-4 hover:text-red-600">🔥 التشكيلة الجديدة %</a>
+        <div class="mk-mobile-group">
+            <div class="mk-mobile-group-title"><i class="fas fa-shirt"></i><span>ملابس</span></div>
+            <a href="/category/boys" class="mk-mobile-sub">أطفال أولاد</a>
+            <a href="/category/girls" class="mk-mobile-sub">أطفال بنات</a>
+            <a href="/category/babies" class="mk-mobile-sub">بيبي ورضّع</a>
+            <a href="/category/mothers" class="mk-mobile-sub">ملابس نسائية</a>
+            <a href="{{ url('/?category=shoes') }}" class="mk-mobile-sub">أحذية</a>
+            <a href="{{ url('/?category=bags') }}" class="mk-mobile-sub">شنط وحقائب</a>
+        </div>
+        <div class="mk-mobile-group">
+            <div class="mk-mobile-group-title"><i class="fas fa-sparkles"></i><span>كوزمتيك وعناية</span></div>
+            <a href="{{ url('/?category=skincare') }}" class="mk-mobile-sub">العناية بالبشرة</a>
+            <a href="{{ url('/?category=cleansing') }}" class="mk-mobile-sub">تنظيف البشرة</a>
+            <a href="{{ url('/?category=moisturizers') }}" class="mk-mobile-sub">ترطيب البشرة</a>
+            <a href="{{ url('/?category=serums') }}" class="mk-mobile-sub">السيرومات</a>
+            <a href="{{ url('/?category=sunscreen') }}" class="mk-mobile-sub">واقي الشمس</a>
+            <a href="{{ url('/?category=haircare') }}" class="mk-mobile-sub">العناية بالشعر</a>
+            <a href="{{ url('/?category=makeup') }}" class="mk-mobile-sub">مكياج وعطور</a>
+        </div>
+        <div class="mk-mobile-group">
+            <div class="mk-mobile-group-title"><i class="fas fa-couch"></i><span>ديكورات ومنزل</span></div>
+            <a href="{{ url('/?category=wall-decor') }}" class="mk-mobile-sub">ديكورات جدران</a>
+            <a href="{{ url('/?category=decor') }}" class="mk-mobile-sub">ديكورات أساسية</a>
+            <a href="{{ url('/?category=lighting') }}" class="mk-mobile-sub">إضاءة</a>
+            <a href="{{ url('/?category=organizers') }}" class="mk-mobile-sub">منظمات وترتيب</a>
+            <a href="{{ url('/?category=kitchen') }}" class="mk-mobile-sub">مطبخ وسفرة</a>
+            <a href="{{ url('/?category=home-tools') }}" class="mk-mobile-sub">أدوات منزلية</a>
+        </div>
+        <a href="{{ route('category.offers') }}" class="mobile-menu-link text-red-500 font-black">🔥 العروض</a>
+
         
         <hr class="border-gray-100">
         <a href="/shop" class="mobile-menu-link hover:text-pink-500">كل المنتجات</a>
