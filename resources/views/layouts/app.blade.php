@@ -239,7 +239,7 @@
         <div class="logo-container text-center flex justify-center items-center">
             <a href="/" class="inline-block">
                 <img src="https://mykfqkcohkiptzqkzgyx.supabase.co/storage/v1/object/public/MELEKLER/icon-192.png" alt="Melekler Logo" class="logo-img h-12 md:h-16 w-auto object-contain transition-all duration-300 rounded-full">
-                <span class="logo-wordmark">MELEKLER FASHION</span>
+                <span class="logo-wordmark">MK GROUP </span>
             </a>
         </div>
 
