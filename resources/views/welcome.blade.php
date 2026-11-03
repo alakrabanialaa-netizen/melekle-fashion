@@ -768,573 +768,88 @@
     </div>
 </section>
 
-{{-- ✨ MELEKLER FASHION — KIDS OUTFITS COLLECTION --}}
-<section id="collection" class="mf-kids-collection" dir="rtl" aria-label="مجموعة ملابس الأطفال">
 
-    {{-- الشريط العلوي --}}
-    <div class="mf-kids-ribbon">
-        <div class="mf-kids-ribbon-track">
-            <span>MELEKLER FASHION</span>
-            <b>✦</b>
-            <span>KIDS COLLECTION 2026</span>
-            <b>✦</b>
-            <span>BOYS & GIRLS</span>
-            <b>✦</b>
-            <span>MELEKLER FASHION</span>
-            <b>✦</b>
-            <span>KIDS COLLECTION 2026</span>
-            <b>✦</b>
+
+{{-- ✨ MELEKLER — DISCOVER OUR WORLD --}}
+<section id="collection" class="mf-discovery-section" dir="rtl" aria-label="اكتشفي أقسام المتجر">
+    <div class="mf-discovery-ribbon" aria-hidden="true">
+        <div class="mf-discovery-ribbon-track">
+            <span>MELEKLER SELECTED</span><b>✦</b>
+            <span>FASHION · BEAUTY · HOME</span><b>✦</b>
+            <span>MELEKLER SELECTED</span><b>✦</b>
+            <span>FASHION · BEAUTY · HOME</span><b>✦</b>
         </div>
     </div>
 
-    {{-- العنوان والوصف --}}
-    <div class="mf-kids-heading">
-        <div class="mf-kids-title">
-            <span>MELEKLER / KIDS COLLECTION</span>
-
-            <h2>
-                أزياء  
-
-                <em>الصغار</em>
-            </h2>
+    <div class="mf-discovery-heading">
+        <div>
+            <span class="mf-discovery-kicker">MELEKLER / SELECTED WORLD</span>
+            <h2>كل ما تحبينه،<em>في مكان واحد</em></h2>
         </div>
-
-        <div class="mf-kids-intro">
-            <p>
-                تشكيلتنا الجديدة للأولاد والبنات،
-                بتصاميم مريحة وألوان جميلة تناسب كل لحظة.
-            </p>
-
-            <a href="#shop" class="mf-kids-link">
-                اكتشفي المجموعة
-                <span>←</span>
-            </a>
+        <div class="mf-discovery-intro">
+            <p>اختيارات مرتبة للأزياء والجمال والمنزل، بتفاصيل مختارة لتناسب يومك وذوقك.</p>
+            <a href="#shop" class="mf-discovery-link">استكشفي المتجر <span>←</span></a>
         </div>
     </div>
 
-    {{-- علاقة الملابس --}}
-    <div class="mf-kids-rail-wrap">
-
-        <div class="mf-kids-background-circle"></div>
-
-        <div class="mf-kids-rail">
-            <span class="mf-kids-pin mf-kids-pin-right"></span>
-            <span class="mf-kids-pin mf-kids-pin-left"></span>
-        </div>
-
-        <div class="mf-kids-clothes">
-
-            {{-- طقم أولادي --}}
-            <div class="mf-kids-piece mf-kids-boys" tabindex="0">
-                <div class="mf-kids-hanger"></div>
-
-                <img
-                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/VjKdRjijDFklpPKY.png"
-                    alt="طقم أولادي كامل"
-                    loading="lazy"
-                >
-
-                <span>01</span>
-
-                <div class="mf-kids-label">
-                    <small>BOYS</small>
-                    <strong>طقم أولادي</strong>
-                </div>
-            </div>
-
-            {{-- طقم بناتي --}}
-            <div class="mf-kids-piece mf-kids-girls" tabindex="0">
-                <div class="mf-kids-hanger"></div>
-
-                <img
-                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/hlZUqxPnmSWEMvwA.png"
-                    alt="طقم بناتي كامل"
-                    loading="lazy"
-                >
-
-                <span>02</span>
-
-                <div class="mf-kids-label">
-                    <small>GIRLS</small>
-                    <strong>طقم بناتي</strong>
-                </div>
-            </div>
-
-            {{-- تنورة بنات --}}
-            <div class="mf-kids-piece mf-kids-skirt" tabindex="0">
-                <div class="mf-kids-hanger"></div>
-
-                <img
-                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663166720664/FGJjQLvUliWUVtbf.png"
-                    alt="تنورة بنات"
-                    loading="lazy"
-                >
-
-                <span>03</span>
-
-                <div class="mf-kids-label">
-                    <small>GIRLS</small>
-                    <strong>تنورة بنات</strong>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="mf-kids-center-message">
-            <small>NEW KIDS COLLECTION</small>
-
-            <strong>
-                اختاري إطلالة  
-
-                طفلك المميزة
-            </strong>
-        </div>
+    <div class="mf-discovery-grid">
+        <a href="#shop" class="mf-discovery-card mf-discovery-fashion">
+            <div class="mf-discovery-card-top"><small>01 / FASHION</small><i class="fas fa-shirt"></i></div>
+            <div class="mf-discovery-card-copy"><h3>أزياء لكل أفراد العائلة</h3><p>أطفال، نسائي، أحذية وشنط</p><span>اكتشفي الأزياء <b>←</b></span></div>
+        </a>
+        <a href="#shop" class="mf-discovery-card mf-discovery-beauty">
+            <div class="mf-discovery-card-top"><small>02 / BEAUTY</small><i class="fas fa-sparkles"></i></div>
+            <div class="mf-discovery-card-copy"><h3>جمالك يبدأ من هنا</h3><p>عناية بالبشرة، شعر، مكياج وعطور</p><span>اكتشفي الجمال <b>←</b></span></div>
+        </a>
+        <a href="#shop" class="mf-discovery-card mf-discovery-home">
+            <div class="mf-discovery-card-top"><small>03 / HOME</small><i class="fas fa-couch"></i></div>
+            <div class="mf-discovery-card-copy"><h3>لمسات جميلة لبيتك</h3><p>ديكورات، إضاءة، مطبخ وأدوات منزلية</p><span>اكتشفي المنزل <b>←</b></span></div>
+        </a>
     </div>
 
-    {{-- المعلومات السفلية --}}
-    <div class="mf-kids-bottom">
-        <span>01 — أزياء أولادية</span>
-        <span>02 — أزياء بناتية</span>
-        <span>03 — خامات مريحة</span>
-        <span>04 — جودة مختارة</span>
+    <div class="mf-discovery-bottom">
+        <span>01 — اختيارات متنوعة</span>
+        <span>02 — جودة مختارة</span>
+        <span>03 — تجربة تسوق سهلة</span>
+        <span>04 — شحن موثوق</span>
     </div>
 </section>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap' );
-
-    .mf-kids-collection {
-        position: relative;
-        overflow: hidden;
-        background: #f7f6f2;
-        color: #171719;
-        font-family: 'Cairo', sans-serif;
-        isolation: isolate;
-    }
-
-    .mf-kids-collection::before {
-        content: "";
-        position: absolute;
-        top: 210px;
-        left: -270px;
-        width: 610px;
-        height: 610px;
-        border: 1px solid rgba(167, 131, 61, .18);
-        border-radius: 50%;
-        box-shadow:
-            0 0 0 28px rgba(167, 131, 61, .045),
-            0 0 0 58px rgba(167, 131, 61, .03);
-        pointer-events: none;
-        z-index: -1;
-    }
-
-    .mf-kids-ribbon {
-        width: 100%;
-        overflow: hidden;
-        background: #121214;
-        color: #e3c57e;
-        white-space: nowrap;
-    }
-
-    .mf-kids-ribbon-track {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 25px;
-        min-height: 42px;
-        padding: 0 20px;
-        animation: mfKidsRibbonMove 20s linear infinite;
-        font-family: Arial, sans-serif;
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 3px;
-    }
-
-    .mf-kids-ribbon-track b {
-        color: #ffffff;
-        font-size: 14px;
-    }
-
-    .mf-kids-heading {
-        position: relative;
-        z-index: 2;
-        max-width: 1240px;
-        margin: 0 auto;
-        padding: 72px 32px 45px;
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 60px;
-    }
-
-    .mf-kids-title {
-        text-align: right;
-    }
-
-    .mf-kids-title > span {
-        display: block;
-        margin-bottom: 18px;
-        color: #a27d3a;
-        font-family: Arial, sans-serif;
-        font-size: 10px;
-        font-weight: 800;
-        letter-spacing: 3px;
-    }
-
-    .mf-kids-title h2 {
-        margin: 0;
-        font-size: clamp(48px, 7vw, 98px);
-        font-weight: 900;
-        line-height: 1.05;
-        letter-spacing: -3px;
-    }
-
-    .mf-kids-title h2 em {
-        color: #a27d3a;
-        font-style: normal;
-    }
-
-    .mf-kids-intro {
-        max-width: 350px;
-        text-align: right;
-    }
-
-    .mf-kids-intro p {
-        margin: 0 0 20px;
-        color: #77746d;
-        font-size: 14px;
-        line-height: 2;
-    }
-
-    .mf-kids-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 13px;
-        border-bottom: 1px solid #191919;
-        padding-bottom: 7px;
-        color: #191919 !important;
-        font-size: 13px;
-        font-weight: 800;
-        text-decoration: none !important;
-    }
-
-    .mf-kids-link span {
-        transition: transform .3s ease;
-    }
-
-    .mf-kids-link:hover span {
-        transform: translateX(-7px);
-    }
-
-    .mf-kids-rail-wrap {
-        position: relative;
-        max-width: 1370px;
-        min-height: 465px;
-        margin: 0 auto;
-        border: 1px dashed rgba(155, 132, 83, .4);
-        background: rgba(255, 255, 255, .25);
-    }
-
-    .mf-kids-background-circle {
-        position: absolute;
-        top: -305px;
-        left: -260px;
-        width: 590px;
-        height: 590px;
-        border: 1px solid rgba(174, 137, 67, .16);
-        border-radius: 50%;
-        pointer-events: none;
-    }
-
-    .mf-kids-rail {
-        position: absolute;
-        top: 73px;
-        right: 7%;
-        left: 7%;
-        height: 5px;
-        border-radius: 20px;
-        background: #b9b6ae;
-        box-shadow: 0 5px 0 rgba(0, 0, 0, .07);
-    }
-
-    .mf-kids-rail::before,
-    .mf-kids-rail::after {
-        content: "";
-        position: absolute;
-        top: -7px;
-        width: 16px;
-        height: 19px;
-        border: 2px solid #aaa79f;
-        background: #f7f6f2;
-    }
-
-    .mf-kids-rail::before {
-        right: -4px;
-    }
-
-    .mf-kids-rail::after {
-        left: -4px;
-    }
-
-    .mf-kids-clothes {
-        position: absolute;
-        top: 64px;
-        right: 13%;
-        left: 13%;
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-around;
-        gap: 35px;
-    }
-
-    .mf-kids-piece {
-        position: relative;
-        width: 230px;
-        height: 300px;
-        flex: 1 1 230px;
-        max-width: 285px;
-        cursor: pointer;
-        outline: none;
-        transform-origin: top center;
-        animation: mfKidsSwing 5s ease-in-out infinite;
-        transition:
-            transform .55s cubic-bezier(.16, 1, .3, 1),
-            filter .45s ease;
-    }
-
-    .mf-kids-piece:nth-child(2) {
-        animation-delay: -1.5s;
-    }
-
-    .mf-kids-piece:nth-child(3) {
-        animation-delay: -3s;
-    }
-
-    .mf-kids-piece:hover,
-    .mf-kids-piece:focus {
-        z-index: 20;
-        transform: translateY(-20px) scale(1.1) rotate(-2deg);
-        filter: drop-shadow(0 20px 18px rgba(0, 0, 0, .2));
-        animation-play-state: paused;
-    }
-
-    .mf-kids-hanger {
-        position: absolute;
-        top: -9px;
-        left: calc(50% - 13px);
-        width: 26px;
-        height: 22px;
-        border: 3px solid #67472d;
-        border-bottom: 0;
-        border-radius: 50% 50% 0 0;
-        z-index: 3;
-    }
-
-    .mf-kids-hanger::after {
-        content: "";
-        position: absolute;
-        top: 18px;
-        left: 9px;
-        width: 3px;
-        height: 25px;
-        background: #67472d;
-    }
-
-    .mf-kids-piece img {
-        position: absolute;
-        top: 12px;
-        left: 0;
-        width: 100%;
-        height: 275px;
-        display: block;
-        object-fit: contain;
-        object-position: center top;
-        filter: drop-shadow(0 10px 8px rgba(0, 0, 0, .12));
-        transition:
-            transform .55s cubic-bezier(.16, 1, .3, 1),
-            filter .45s ease;
-    }
-
-    .mf-kids-piece:hover img,
-    .mf-kids-piece:focus img {
-        transform: scale(1.06);
-        filter: drop-shadow(0 18px 14px rgba(0, 0, 0, .2));
-    }
-
-    .mf-kids-piece > span {
-        position: absolute;
-        right: 50%;
-        bottom: 41px;
-        transform: translateX(50%);
-        color: #9b968c;
-        font-family: Arial, sans-serif;
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        opacity: 0;
-        transition: opacity .35s ease;
-    }
-
-    .mf-kids-piece:hover > span,
-    .mf-kids-piece:focus > span {
-        opacity: 1;
-    }
-
-    .mf-kids-label {
-        position: absolute;
-        right: 50%;
-        bottom: 0;
-        min-width: 130px;
-        transform: translateX(50%);
-        text-align: center;
-        opacity: 0;
-        transition: opacity .35s ease, transform .35s ease;
-    }
-
-    .mf-kids-piece:hover .mf-kids-label,
-    .mf-kids-piece:focus .mf-kids-label {
-        opacity: 1;
-        transform: translateX(50%) translateY(-4px);
-    }
-
-    .mf-kids-label small {
-        display: block;
-        margin-bottom: 3px;
-        color: #a27d3a;
-        font-family: Arial, sans-serif;
-        font-size: 9px;
-        font-weight: 800;
-        letter-spacing: 2px;
-    }
-
-    .mf-kids-label strong {
-        color: #242426;
-        font-size: 12px;
-        font-weight: 800;
-    }
-
-    .mf-kids-center-message {
-        position: absolute;
-        right: 50%;
-        bottom: 25px;
-        transform: translateX(50%);
-        color: #a17b38;
-        text-align: center;
-    }
-
-    .mf-kids-center-message small {
-        display: block;
-        margin-bottom: 6px;
-        font-family: Arial, sans-serif;
-        font-size: 9px;
-        font-weight: 800;
-        letter-spacing: 3px;
-    }
-
-    .mf-kids-center-message strong {
-        display: block;
-        font-size: 13px;
-        line-height: 1.9;
-    }
-
-    .mf-kids-bottom {
-        max-width: 1370px;
-        margin: 0 auto;
-        padding: 22px 32px 28px;
-        display: flex;
-        justify-content: space-between;
-        gap: 18px;
-        border-top: 1px solid rgba(20, 20, 20, .14);
-        color: #77736b;
-        font-size: 10px;
-        font-weight: 800;
-    }
-
-    @keyframes mfKidsSwing {
-        0%, 100% {
-            transform: rotate(0deg);
-        }
-
-        50% {
-            transform: rotate(2deg);
-        }
-    }
-
-    @keyframes mfKidsRibbonMove {
-        from {
-            transform: translateX(0);
-        }
-
-        to {
-            transform: translateX(-20%);
-        }
-    }
-
-    @media (max-width: 800px) {
-        .mf-kids-heading {
-            align-items: flex-start;
-            flex-direction: column;
-            padding: 52px 22px 32px;
-            gap: 28px;
-        }
-
-        .mf-kids-title h2 {
-            font-size: 58px;
-            letter-spacing: -2px;
-        }
-
-        .mf-kids-intro {
-            max-width: 100%;
-        }
-
-        .mf-kids-rail-wrap {
-            min-height: 385px;
-            margin: 0 14px;
-        }
-
-        .mf-kids-clothes {
-            right: 4%;
-            left: 4%;
-            gap: 4px;
-        }
-
-        .mf-kids-piece {
-            width: 31%;
-            height: 260px;
-            flex-basis: 31%;
-        }
-
-        .mf-kids-piece img {
-            height: 235px;
-        }
-
-        .mf-kids-piece:hover,
-        .mf-kids-piece:focus {
-            transform: translateY(-13px) scale(1.07) rotate(-2deg);
-        }
-
-        .mf-kids-bottom {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            padding: 18px 22px 25px;
-            line-height: 1.8;
-        }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        .mf-kids-ribbon-track,
-        .mf-kids-piece {
-            animation: none;
-        }
-
-        .mf-kids-piece,
-        .mf-kids-piece:hover,
-        .mf-kids-piece:focus,
-        .mf-kids-piece img {
-            transition: none;
-        }
-    }
+    .mf-discovery-section { overflow:hidden; background:#f7f6f2; color:#171719; isolation:isolate; }
+    .mf-discovery-ribbon { overflow:hidden; padding:11px 0; background:#0b0b0d; color:#e4c985; }
+    .mf-discovery-ribbon-track { display:flex; width:max-content; align-items:center; gap:24px; animation:mfDiscoveryTicker 28s linear infinite; font-size:.68rem; font-weight:900; letter-spacing:.18em; white-space:nowrap; }
+    .mf-discovery-ribbon-track b { color:#fff; font-size:1rem; }
+    @keyframes mfDiscoveryTicker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .mf-discovery-heading { max-width:1220px; margin:0 auto; padding:58px 28px 34px; display:flex; align-items:end; justify-content:space-between; gap:30px; }
+    .mf-discovery-kicker { color:#a47b32; font-size:.68rem; font-weight:900; letter-spacing:.16em; }
+    .mf-discovery-heading h2 { margin:10px 0 0; font-size:clamp(2rem,5vw,4.5rem); line-height:1.05; font-weight:900; letter-spacing:-.04em; }
+    .mf-discovery-heading h2 em { display:block; color:#b58b3c; font-style:normal; }
+    .mf-discovery-intro { max-width:340px; text-align:right; }
+    .mf-discovery-intro p { margin:0 0 15px; color:#77736c; font-size:.84rem; line-height:1.9; }
+    .mf-discovery-link { display:inline-flex; gap:10px; align-items:center; color:#0b0b0d !important; font-size:.78rem; font-weight:900; border-bottom:1px solid #0b0b0d; padding-bottom:5px; }
+    .mf-discovery-grid { max-width:1220px; margin:0 auto; padding:0 28px 34px; display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .mf-discovery-card { min-height:390px; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:space-between; padding:24px; border-radius:24px; color:#fff !important; transition:transform .35s ease, box-shadow .35s ease; }
+    .mf-discovery-card::before { content:''; position:absolute; width:230px; height:230px; top:-90px; left:-70px; border:1px solid rgba(255,255,255,.24); border-radius:50%; box-shadow:0 0 0 22px rgba(255,255,255,.06),0 0 0 45px rgba(255,255,255,.04); }
+    .mf-discovery-card:hover { transform:translateY(-8px); box-shadow:0 22px 42px rgba(11,11,13,.18); }
+    .mf-discovery-fashion { background:linear-gradient(145deg,#111214,#67502c); }
+    .mf-discovery-beauty { background:linear-gradient(145deg,#34242a,#9c6574); }
+    .mf-discovery-home { background:linear-gradient(145deg,#28302d,#8b805f); }
+    .mf-discovery-card-top,.mf-discovery-card-copy { position:relative; z-index:1; }
+    .mf-discovery-card-top { display:flex; align-items:center; justify-content:space-between; color:#e4c985; }
+    .mf-discovery-card-top small { font-size:.64rem; font-weight:900; letter-spacing:.14em; }
+    .mf-discovery-card-top i { display:grid; place-items:center; width:48px; height:48px; border:1px solid rgba(255,255,255,.35); border-radius:50%; font-size:1.15rem; }
+    .mf-discovery-card-copy h3 { margin:0 0 8px; font-size:1.55rem; font-weight:900; line-height:1.25; }
+    .mf-discovery-card-copy p { margin:0 0 22px; color:rgba(255,255,255,.74); font-size:.76rem; line-height:1.8; }
+    .mf-discovery-card-copy span { display:flex; justify-content:space-between; align-items:center; padding-top:13px; border-top:1px solid rgba(255,255,255,.24); font-size:.75rem; font-weight:900; }
+    .mf-discovery-card-copy b { font-size:1.1rem; color:#e4c985; }
+    .mf-discovery-bottom { max-width:1220px; margin:0 auto; padding:22px 28px 28px; display:grid; grid-template-columns:repeat(4,1fr); gap:14px; border-top:1px solid rgba(11,11,13,.13); color:#6e6a62; font-size:.7rem; font-weight:800; text-align:center; }
+    @media(max-width:800px){ .mf-discovery-heading{display:block;padding:42px 18px 25px}.mf-discovery-intro{max-width:none;margin-top:22px}.mf-discovery-grid{grid-template-columns:1fr;padding:0 18px 25px}.mf-discovery-card{min-height:280px}.mf-discovery-bottom{grid-template-columns:repeat(2,1fr);padding:18px}.mf-discovery-card-copy h3{font-size:1.35rem} }
+    @media(prefers-reduced-motion:reduce){.mf-discovery-ribbon-track{animation:none}.mf-discovery-card{transition:none}}
 </style>
+
+
+
 
 
 
