@@ -1011,110 +1011,122 @@
 </style>
 
 
-{{-- 🗓️ LUXURY EVENT & CALENDAR SECTION --}}
-<section class="mt-16 py-20 text-white relative bg-gradient-to-br from-rose-500 via-rose-600 to-pink-600 overflow-hidden select-none">
-    
-    {{-- 🎨 Decorative Top Pattern --}}
-    <div class="absolute top-0 inset-x-0 h-4 bg-[radial-gradient(circle_at_bottom,_transparent_60%,_#ffffff_65%)] bg-[length:16px_16px] opacity-20"></div>
+{{-- ✦ MELEKLER DISCOVERY ORBIT — قسم تفاعلي لاكتشاف عوالم المتجر --}}
+<section class="mk-orbit-section" dir="rtl" aria-label="اكتشفي عوالم Melekler">
+    <div class="mk-orbit-glow mk-orbit-glow-one"></div>
+    <div class="mk-orbit-glow mk-orbit-glow-two"></div>
 
-    <div class="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row gap-12 items-center justify-between relative z-10">
-        
-        {{-- 📝 Event Info Card (Right Side in RTL) --}}
-        <div class="lg:w-1/2 space-y-6 text-right w-full">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 border border-white/30 text-xs font-bold tracking-wider uppercase backdrop-blur-md">
-                <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-                <span>فعالية خاصة قادمة</span>
-            </div>
+    <div class="mk-orbit-header">
+        <span class="mk-orbit-kicker">MELEKLER / DISCOVERY MODE</span>
+        <h2>اختاري عالمكِ<br><em>واتركي الباقي علينا</em></h2>
+        <p>ثلاثة عوالم، اختيارات لا تنتهي، وتجربة تسوق مصممة لتكتشفي شيئًا جديدًا كل مرة.</p>
+    </div>
 
-            <h2 class="text-3xl md:text-5xl font-black tracking-tight leading-tight text-white">
-                عرض ربيع <span class="text-amber-300">2026</span> الأكبر ✨
-            </h2>
-
-            <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl relative overflow-hidden group">
-                <div class="flex flex-wrap gap-4 text-xs md:text-sm mb-6 font-bold text-rose-100 items-center justify-start">
-                    <span class="flex items-center gap-1.5 bg-black/20 px-3 py-1.5 rounded-xl border border-white/10">📅 17 أبريل 2026</span>
-                    <span class="flex items-center gap-1.5 bg-black/20 px-3 py-1.5 rounded-xl border border-white/10">⏰ 09:00 صباحاً</span>
-                    <span class="flex items-center gap-1.5 bg-black/20 px-3 py-1.5 rounded-xl border border-white/10">📍 اسطنبول</span>
-                </div>
-
-                <p class="mb-8 leading-relaxed text-white/90 text-sm md:text-base font-light">
-                    انضموا إلينا في إطلاق التشكيلة الجديدة لربيع 2026! خصومات حصرية، هدايا مميزة للأطفال، وأنشطة تفاعلية لا تُنسى طوال اليوم.
-                </p>
-
-                {{-- ⏳ Live Countdown Timer --}}
-                <div class="grid grid-cols-4 gap-2 text-center mb-8 bg-black/20 p-3 rounded-2xl border border-white/10">
-                    <div>
-                        <span class="block text-xl md:text-2xl font-black text-amber-300" id="days">00</span>
-                        <span class="text-[10px] text-rose-200">يوم</span>
-                    </div>
-                    <div>
-                        <span class="block text-xl md:text-2xl font-black text-amber-300" id="hours">00</span>
-                        <span class="text-[10px] text-rose-200">ساعة</span>
-                    </div>
-                    <div>
-                        <span class="block text-xl md:text-2xl font-black text-amber-300" id="minutes">00</span>
-                        <span class="text-[10px] text-rose-200">دقيقة</span>
-                    </div>
-                    <div>
-                        <span class="block text-xl md:text-2xl font-black text-amber-300" id="seconds">00</span>
-                        <span class="text-[10px] text-rose-200">ثانية</span>
-                    </div>
-                </div>
-
-                <a href="#register" class="inline-flex items-center gap-2 bg-white text-rose-600 font-extrabold px-8 py-3.5 rounded-2xl hover:bg-amber-400 hover:text-gray-900 transition-all shadow-lg hover:shadow-xl text-sm transform hover:-translate-y-0.5">
-                    <span>احجزي مقعدك الآن</span>
-                    <span>←</span>
-                </a>
-            </div>
+    <div class="mk-orbit-stage">
+        <div class="mk-orbit-ring mk-orbit-ring-one"></div>
+        <div class="mk-orbit-ring mk-orbit-ring-two"></div>
+        <div class="mk-orbit-center">
+            <span class="mk-orbit-center-mark">MK</span>
+            <small>YOUR WORLD</small>
+            <strong>اكتشفي<br>اختياركِ</strong>
+            <a href="#shop">ابدئي الآن <span>←</span></a>
         </div>
 
-        {{-- 📅 Visual Calendar (Left Side in RTL) --}}
-        <div class="lg:w-1/2 flex flex-col items-center w-full">
-            <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-6 md:p-8 border border-white/20 w-full max-w-md shadow-2xl">
-                
-                {{-- Month Header --}}
-                <div class="flex justify-between items-center mb-6 border-b border-white/15 pb-4">
-                    <span class="text-sm font-bold text-rose-200">2026</span>
-                    <h3 class="text-2xl font-black text-white tracking-wider">أبريل / April</h3>
-                    <span class="text-amber-300 text-lg">✨</span>
-                </div>
-                
-                {{-- Calendar Grid --}}
-                <div dir="ltr" class="w-full">
-                    {{-- Days of Week --}}
-                    <div class="grid grid-cols-7 text-center font-black text-xs md:text-sm mb-4 opacity-80 text-rose-100">
-                        <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
-                    </div>
+        <a href="{{ url('/category/boys') }}" class="mk-orbit-card mk-orbit-card-fashion">
+            <span class="mk-orbit-number">01</span>
+            <i class="fas fa-shirt"></i>
+            <strong>الأزياء</strong>
+            <small>أطفال · نسائي · أحذية · شنط</small>
+        </a>
 
-                    {{-- Days Grid --}}
-                    <div class="grid grid-cols-7 gap-y-2 text-center text-xs md:text-sm">
-                        {{-- Offset for April 2026 starting on Wednesday (3 empty slots) --}}
-                        <div></div><div></div><div></div>
+        <a href="{{ url('/?category=skincare') }}" class="mk-orbit-card mk-orbit-card-beauty">
+            <span class="mk-orbit-number">02</span>
+            <i class="fas fa-sparkles"></i>
+            <strong>الجمال</strong>
+            <small>بشرة · شعر · مكياج · عطور</small>
+        </a>
 
-                        @for ($d = 1; $d <= 30; $d++)
-                            <div class="flex items-center justify-center">
-                                <div class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-full font-bold transition-all duration-300 {{ $d == 17 ? 'bg-amber-400 text-gray-900 shadow-lg shadow-amber-400/50 scale-110 ring-4 ring-amber-400/30 font-black' : 'hover:bg-white/10 text-white' }}">
-                                    {{ $d }}
-                                </div>
-                            </div>
-                        @endfor
-                    </div>
-                </div>
+        <a href="{{ url('/?category=decor') }}" class="mk-orbit-card mk-orbit-card-home">
+            <span class="mk-orbit-number">03</span>
+            <i class="fas fa-couch"></i>
+            <strong>المنزل</strong>
+            <small>ديكور · إضاءة · مطبخ · ترتيب</small>
+        </a>
+    </div>
 
-                {{-- Calendar Footer Note --}}
-                <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-rose-100">
-                    <div class="flex items-center gap-2">
-                        <span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
-                        <span>يوم الفعالية</span>
-                    </div>
-                    <span class="opacity-75">معرض اسطنبول الدولي</span>
-                </div>
-
-            </div>
-        </div>
-
+    <div class="mk-orbit-footer">
+        <span>مرّري المؤشر لاكتشاف العوالم</span>
+        <span class="mk-orbit-footer-line"></span>
+        <span>FASHION · BEAUTY · HOME</span>
     </div>
 </section>
+
+<style>
+    .mk-orbit-section {
+        position: relative;
+        overflow: hidden;
+        min-height: 760px;
+        padding: 86px 24px 34px;
+        color: #f8f5ed;
+        background: #0b0b0d;
+        isolation: isolate;
+    }
+    .mk-orbit-section::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        opacity: .28;
+        background-image: linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+        background-size: 52px 52px;
+        mask-image: radial-gradient(circle at center, #000, transparent 74%);
+    }
+    .mk-orbit-glow { position:absolute; z-index:-1; width:420px; height:420px; border-radius:50%; filter:blur(80px); opacity:.22; pointer-events:none; }
+    .mk-orbit-glow-one { top:-160px; right:-110px; background:#c9a45c; }
+    .mk-orbit-glow-two { bottom:-190px; left:-100px; background:#765cbd; }
+    .mk-orbit-header { max-width:1180px; margin:0 auto; text-align:center; }
+    .mk-orbit-kicker { color:#e4c985; font-size:.66rem; font-weight:900; letter-spacing:.2em; }
+    .mk-orbit-header h2 { margin:14px 0 12px; font-size:clamp(2.2rem,6vw,5.2rem); line-height:1.02; font-weight:900; letter-spacing:-.05em; }
+    .mk-orbit-header h2 em { color:#c9a45c; font-style:normal; }
+    .mk-orbit-header p { max-width:460px; margin:0 auto; color:rgba(248,245,237,.62); font-size:.82rem; line-height:1.9; }
+    .mk-orbit-stage { position:relative; width:min(850px,100%); height:490px; margin:46px auto 0; }
+    .mk-orbit-ring { position:absolute; top:50%; left:50%; border:1px solid rgba(228,201,133,.27); border-radius:50%; transform:translate(-50%,-50%) rotate(-12deg); pointer-events:none; }
+    .mk-orbit-ring-one { width:360px; height:360px; }
+    .mk-orbit-ring-two { width:580px; height:270px; transform:translate(-50%,-50%) rotate(28deg); border-color:rgba(255,255,255,.15); }
+    .mk-orbit-center { position:absolute; top:50%; left:50%; z-index:5; width:220px; height:220px; display:flex; align-items:center; flex-direction:column; justify-content:center; text-align:center; border:1px solid rgba(228,201,133,.55); border-radius:50%; background:radial-gradient(circle at 35% 25%,#393126,#111113 65%); box-shadow:0 0 0 14px rgba(201,164,92,.05),0 20px 70px rgba(0,0,0,.5); transform:translate(-50%,-50%); }
+    .mk-orbit-center-mark { color:#e4c985; font-size:1.15rem; font-weight:900; letter-spacing:.2em; }
+    .mk-orbit-center small { margin-top:5px; color:rgba(255,255,255,.48); font-size:.52rem; letter-spacing:.2em; }
+    .mk-orbit-center strong { margin:8px 0 12px; font-size:1.2rem; line-height:1.35; }
+    .mk-orbit-center a { color:#e4c985 !important; font-size:.7rem; font-weight:900; }
+    .mk-orbit-center a span { display:inline-block; margin-right:7px; transition:.25s; }
+    .mk-orbit-center a:hover span { transform:translateX(-5px); }
+    .mk-orbit-card { position:absolute; z-index:4; width:210px; min-height:150px; padding:18px; display:flex; flex-direction:column; justify-content:space-between; border:1px solid rgba(255,255,255,.19); border-radius:22px; color:#fff !important; box-shadow:0 18px 45px rgba(0,0,0,.22); backdrop-filter:blur(12px); transition:transform .45s cubic-bezier(.16,1,.3,1), border-color .3s, box-shadow .3s; }
+    .mk-orbit-card:hover { z-index:10; border-color:#e4c985; box-shadow:0 22px 58px rgba(0,0,0,.45); transform:translateY(-10px) scale(1.08) !important; }
+    .mk-orbit-card i { position:absolute; top:18px; left:18px; color:#e4c985; font-size:1.2rem; }
+    .mk-orbit-card strong { margin-top:27px; font-size:1.25rem; font-weight:900; }
+    .mk-orbit-card small { color:rgba(255,255,255,.65); font-size:.66rem; line-height:1.7; }
+    .mk-orbit-number { color:#e4c985; font-size:.6rem; font-weight:900; letter-spacing:.15em; }
+    .mk-orbit-card-fashion { top:24px; right:7%; background:linear-gradient(145deg,rgba(102,75,35,.88),rgba(22,22,24,.94)); transform:rotate(5deg); }
+    .mk-orbit-card-beauty { bottom:18px; right:13%; background:linear-gradient(145deg,rgba(111,65,83,.88),rgba(27,20,25,.94)); transform:rotate(-5deg); }
+    .mk-orbit-card-home { bottom:70px; left:7%; background:linear-gradient(145deg,rgba(62,82,72,.88),rgba(18,25,22,.94)); transform:rotate(5deg); }
+    .mk-orbit-footer { max-width:850px; margin:2px auto 0; display:flex; align-items:center; justify-content:center; gap:18px; color:rgba(255,255,255,.42); font-size:.58rem; font-weight:900; letter-spacing:.13em; }
+    .mk-orbit-footer-line { width:80px; height:1px; background:#c9a45c; opacity:.65; }
+    @media(max-width:700px){
+        .mk-orbit-section { min-height:auto; padding:58px 16px 30px; }
+        .mk-orbit-stage { height:auto; margin-top:34px; display:grid; grid-template-columns:1fr; gap:12px; }
+        .mk-orbit-ring { display:none; }
+        .mk-orbit-center { position:relative; top:auto; left:auto; transform:none; width:190px; height:190px; margin:0 auto 8px; }
+        .mk-orbit-card { position:relative; inset:auto !important; width:100%; min-height:125px; transform:none !important; }
+        .mk-orbit-card:hover { transform:translateY(-5px) !important; }
+        .mk-orbit-footer { flex-wrap:wrap; margin-top:24px; line-height:1.8; }
+    }
+    @media(prefers-reduced-motion:reduce){ .mk-orbit-card,.mk-orbit-center a span { transition:none; } }
+</style>
+
+
+
+
+
 
 {{-- ⏱️ Countdown Timer Script --}}
 <script>
