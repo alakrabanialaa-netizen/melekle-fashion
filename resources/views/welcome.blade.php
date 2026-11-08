@@ -854,30 +854,162 @@
 
 
         
-{{-- Features Section --}}
-<div class="grid grid-cols-1 md:grid-cols-3 gap-12 py-20 text-center select-none max-w-7xl mx-auto px-6">
-    <div class="group cursor-pointer">
-        <div class="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-emerald-200 group-hover:rotate-12 transition-all duration-300 transform group-hover:scale-105">
-            <span class="text-4xl">🍼</span>
-        </div>
-        <h3 class="font-black text-emerald-500 text-xl mb-3">عن منتجاتنا</h3>
-        <p class="text-gray-400 text-sm px-6 leading-relaxed">ملابس خاصة صنعت بعناية فائقة لحديثي الولادة.</p>
+{{-- Store Features Section --}}
+<section class="mk-store-features" dir="rtl" aria-label="مزايا متجر Melekler">
+    <div class="mk-store-features-header">
+        <span>MELEKLER EXPERIENCE</span>
+        <h2>تجربة تسوق مصممة لكِ</h2>
+        <p>كل ما تحتاجينه للأزياء والجمال والمنزل، في مكان واحد وباختيارات مختارة.</p>
     </div>
-    <div class="group cursor-pointer">
-        <div class="w-24 h-24 bg-rose-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-rose-200 group-hover:-rotate-12 transition-all duration-300 transform group-hover:scale-105">
-            <span class="text-4xl">🧷</span>
-        </div>
-        <h3 class="font-black text-rose-500 text-xl mb-3">خبرتنا</h3>
-        <p class="text-gray-400 text-sm px-6 leading-relaxed">صنعت كل قطعة بحب وشغف مخصص لطفلكِ.</p>
+
+    <div class="mk-store-features-grid">
+        <article class="mk-store-feature-card">
+            <div class="mk-store-feature-icon">
+                <i class="fas fa-layer-group"></i>
+            </div>
+            <div>
+                <h3>تشكيلة متنوعة</h3>
+                <p>أزياء، كوزمتيك، ديكورات وأدوات منزلية ضمن متجر واحد.</p>
+            </div>
+        </article>
+
+        <article class="mk-store-feature-card">
+            <div class="mk-store-feature-icon">
+                <i class="fas fa-gem"></i>
+            </div>
+            <div>
+                <h3>منتجات مختارة</h3>
+                <p>نختار المنتجات بعناية لتجمع بين الجودة، الجمال، والسعر المناسب.</p>
+            </div>
+        </article>
+
+        <article class="mk-store-feature-card">
+            <div class="mk-store-feature-icon">
+                <i class="fas fa-bag-shopping"></i>
+            </div>
+            <div>
+                <h3>تسوق سهل</h3>
+                <p>تصفح واضح، طلب سريع، وتجربة مريحة من اختيار المنتج حتى التوصيل.</p>
+            </div>
+        </article>
+
+        <article class="mk-store-feature-card">
+            <div class="mk-store-feature-icon">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <div>
+                <h3>دعم قريب منك</h3>
+                <p>فريقنا جاهز لمساعدتك والإجابة عن أسئلتك قبل وبعد الطلب.</p>
+            </div>
+        </article>
     </div>
-    <div class="group cursor-pointer">
-        <div class="w-24 h-24 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-2 border-dashed border-sky-200 group-hover:rotate-12 transition-all duration-300 transform group-hover:scale-105">
-            <span class="text-4xl">🪄</span>
-        </div>
-        <h3 class="font-black text-sky-500 text-xl mb-3">متعة كبيرة للصغار</h3>
-        <p class="text-gray-400 text-sm px-6 leading-relaxed">مع كل قطعة من متجرنا ستحصل على هدية مميزة مخصصة.</p>
-    </div>
-</div>
+</section>
+
+<style>
+    .mk-store-features {
+        padding: 70px 22px;
+        background: #f7f6f2;
+        color: #0b0b0d;
+    }
+
+    .mk-store-features-header {
+        max-width: 650px;
+        margin: 0 auto 34px;
+        text-align: center;
+    }
+
+    .mk-store-features-header > span {
+        color: #a47b32;
+        font-size: .68rem;
+        font-weight: 900;
+        letter-spacing: .16em;
+    }
+
+    .mk-store-features-header h2 {
+        margin: 10px 0 8px;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-weight: 900;
+    }
+
+    .mk-store-features-header p {
+        margin: 0;
+        color: #77736c;
+        font-size: .86rem;
+        line-height: 1.9;
+    }
+
+    .mk-store-features-grid {
+        max-width: 1180px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+    }
+
+    .mk-store-feature-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        min-height: 170px;
+        padding: 22px 18px;
+        background: #fff;
+        border: 1px solid rgba(201, 164, 92, .24);
+        border-radius: 22px;
+        box-shadow: 0 10px 25px rgba(11, 11, 13, .05);
+        transition: transform .3s ease, box-shadow .3s ease;
+    }
+
+    .mk-store-feature-card:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 18px 32px rgba(11, 11, 13, .11);
+    }
+
+    .mk-store-feature-icon {
+        flex: 0 0 43px;
+        width: 43px;
+        height: 43px;
+        display: grid;
+        place-items: center;
+        border-radius: 14px;
+        background: #0b0b0d;
+        color: #e4c985;
+        font-size: 1rem;
+    }
+
+    .mk-store-feature-card h3 {
+        margin: 2px 0 8px;
+        font-size: .98rem;
+        font-weight: 900;
+    }
+
+    .mk-store-feature-card p {
+        margin: 0;
+        color: #77736c;
+        font-size: .76rem;
+        line-height: 1.9;
+    }
+
+    @media (max-width: 900px) {
+        .mk-store-features-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 560px) {
+        .mk-store-features {
+            padding: 48px 16px;
+        }
+
+        .mk-store-features-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .mk-store-feature-card {
+            min-height: auto;
+        }
+    }
+</style>
+
 
 {{-- 🗓️ LUXURY EVENT & CALENDAR SECTION --}}
 <section class="mt-16 py-20 text-white relative bg-gradient-to-br from-rose-500 via-rose-600 to-pink-600 overflow-hidden select-none">
