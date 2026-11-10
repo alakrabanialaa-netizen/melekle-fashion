@@ -22,6 +22,7 @@ class Product extends Model
                     $table->text('sizes')->nullable();
                 });
             }
+
             if (!Schema::hasColumn('products', 'ages')) {
                 Schema::table('products', function (Blueprint $table) {
                     $table->text('ages')->nullable();
@@ -30,53 +31,59 @@ class Product extends Model
         });
     }
 
-  protected $fillable = [
-    'product_code',
-    'product_name',
-    'product_slug',
-    'name',
-    'price',
-    'stock',
-    'status',
-    'description',
-    'sizes',
-    'colors',
-    'color',
-    'ages',
-    'slug',
-    'cost_price',
-    'original_price',
-    'badge_text',
-    'category',
-    'video',
-    'image',
-    'track_inventory',
-];
+    protected $fillable = [
+        'product_code',
+        'product_name',
+        'product_slug',
+        'name',
+        'price',
+        'stock',
+        'status',
+        'description',
+        'sizes',
+        'colors',
+        'color',
+        'ages',
+        'slug',
+        'cost_price',
+        'original_price',
+        'badge_text',
+        'category',
 
+        // التصنيف الرئيسي والفرعي الجديد
+        'main_category',
+        'sub_category',
+
+        'video',
+        'image',
+        'track_inventory',
+    ];
 
     protected $casts = [
         'sizes' => 'array',
         'colors' => 'array',
         'ages' => 'array',
         'track_inventory' => 'boolean',
-
     ];
 
-    // علاقة الصور (مع حماية في حال عدم وجود الجدول)
+    // علاقة الصور
     public function images()
     {
         return $this->hasMany(ProductImage::class, 'product_id');
     }
 
+    // علاقة المتغيرات
     public function variants()
     {
         return $this->hasMany(ProductVariant::class, 'product_id');
     }
 
-    // لضمان جلب اسم المنتج سواء كان العمود اسمه name أو product_name
+    // جلب اسم المنتج سواء كان العمود اسمه name أو product_name
     public function getNameAttribute()
     {
-        return $this->attributes['product_name'] ?? $this->attributes['name'] ?? '';
+        return $this->attributes['product_name']
+            ?? $this->attributes['name']
+            ?? '';
     }
 
     public function getRouteKeyName()
