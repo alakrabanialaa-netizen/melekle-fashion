@@ -113,6 +113,8 @@ class ProductController extends Controller
             'cost_price'     => 'required|numeric|min:0',
             'stock'          => 'nullable|integer|min:0', // تعديل هنا ليتوافق مع الموديل
             'category'     => 'required|string',
+            'main_category' => 'required|in:fashion,beauty,home',
+            'sub_category'  => 'required|string|max:50',
             'color'        => 'nullable|string|max:100',
             'badge_text'   => 'nullable|string|max:255',
             'description'  => 'nullable|string',
@@ -122,6 +124,7 @@ class ProductController extends Controller
             'images.*'     => 'image|mimes:jpeg,png,webp,gif|max:5120',
             'video'        => 'nullable|file|mimes:mp4,mov,ogg,qt|max:30720',
             'track_inventory' => 'nullable|boolean',
+            'is_wholesale'   => 'nullable|boolean',
         ]);
 
         try {
@@ -136,6 +139,10 @@ class ProductController extends Controller
                     'badge_text'     => $validatedData['badge_text'] ?? null,
                     'description'  => $validatedData['description'] ?? null,
                     'category'     => trim($validatedData['category']),
+                    'main_category' => $validatedData['main_category'],
+                    'sub_category'  => $validatedData['sub_category'],
+                    'is_wholesale' => $request->boolean('is_wholesale'),
+                    'track_inventory' => $request->boolean('track_inventory'),
                     'status'       => 1,
                     'stock'        => (int)($validatedData['stock'] ?? 0), // استخدام حقل stock للموديل
                     'sizes'        => $request->input('sizes', []),
@@ -234,6 +241,8 @@ class ProductController extends Controller
             'original_price' => 'nullable|numeric|min:0',
             'cost_price'     => 'required|numeric|min:0',
             'category'       => 'required|string',
+            'main_category'  => 'nullable|in:fashion,beauty,home',
+            'sub_category'   => 'nullable|string|max:50',
             'description'  => 'nullable|string',
             'stock'        => 'nullable|integer|min:0', // تعديل هنا ليتوافق مع الموديل
             'color'        => 'nullable|string|max:100',
@@ -241,6 +250,7 @@ class ProductController extends Controller
             'sizes'        => 'nullable|array',
             'ages'         => 'nullable|array', 
             'track_inventory' => 'nullable|boolean',
+            'is_wholesale'    => 'nullable|boolean',
 
         ]);
 
@@ -252,6 +262,9 @@ class ProductController extends Controller
                 'original_price' => $validatedData['original_price'] ?? null,
                 'cost_price'     => $validatedData['cost_price'],
                 'category'       => trim($validatedData['category']),
+                'main_category'  => $validatedData['main_category'] ?? $product->main_category,
+                'sub_category'   => $validatedData['sub_category'] ?? $product->sub_category,
+                'is_wholesale'   => $request->boolean('is_wholesale'),
                 'description'  => $validatedData['description'] ?? null,
                 'color'        => $validatedData['color'] ?? null,
                 'badge_text'  => $validatedData['badge_text'] ?? null,
