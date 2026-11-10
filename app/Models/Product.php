@@ -57,6 +57,7 @@ class Product extends Model
         'video',
         'image',
         'track_inventory',
+        'is_wholesale',
     ];
 
     protected $casts = [
@@ -64,6 +65,7 @@ class Product extends Model
         'colors' => 'array',
         'ages' => 'array',
         'track_inventory' => 'boolean',
+        'is_wholesale' => 'boolean',
     ];
 
     // علاقة الصور
