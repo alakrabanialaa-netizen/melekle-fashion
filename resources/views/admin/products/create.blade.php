@@ -62,6 +62,38 @@
         <option value="offers" {{ old('category') == 'offers' ? 'selected' : '' }}>🇹🇷 عروض خاصة</option>
     </select>
 </div>
+
+                    {{-- التصنيف الجديد للمتجر متعدد الأقسام --}}
+                    <div>
+                        <label for="main_category" class="block text-sm font-bold text-gray-700 mb-2">
+                            القسم الرئيسي الجديد <span class="text-rose-500">*</span>
+                        </label>
+                        <select
+                            name="main_category"
+                            id="main_category"
+                            class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none appearance-none bg-white transition-all font-medium"
+                            required
+                        >
+                            <option value="">-- اختر القسم الرئيسي --</option>
+                            <option value="fashion" {{ old('main_category') === 'fashion' ? 'selected' : '' }}>الأزياء والموضة</option>
+                            <option value="beauty" {{ old('main_category') === 'beauty' ? 'selected' : '' }}>الكوزمتيك والجمال</option>
+                            <option value="home" {{ old('main_category') === 'home' ? 'selected' : '' }}>المنزل والديكور</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="sub_category" class="block text-sm font-bold text-gray-700 mb-2">
+                            القسم الفرعي <span class="text-rose-500">*</span>
+                        </label>
+                        <select
+                            name="sub_category"
+                            id="sub_category"
+                            class="w-full px-4 py-3 border-gray-300 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none appearance-none bg-white transition-all font-medium"
+                            required
+                        >
+                            <option value="">-- اختر القسم الرئيسي أولًا --</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -257,4 +289,63 @@
         </div>
     </form>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const mainCategory = document.getElementById('main_category');
+        const subCategory = document.getElementById('sub_category');
+
+        const categories = {
+            fashion: [
+                { value: 'kids', label: 'ملابس الأطفال' },
+                { value: 'women', label: 'الملابس النسائية' },
+                { value: 'baby', label: 'ملابس البيبي والرضع' },
+                { value: 'shoes', label: 'الأحذية' },
+                { value: 'bags', label: 'الشنط' },
+                { value: 'accessories', label: 'الإكسسوارات' }
+            ],
+            beauty: [
+                { value: 'skincare', label: 'العناية بالبشرة' },
+                { value: 'haircare', label: 'العناية بالشعر' },
+                { value: 'makeup', label: 'المكياج' },
+                { value: 'perfumes', label: 'العطور' },
+                { value: 'bodycare', label: 'العناية بالجسم' }
+            ],
+            home: [
+                { value: 'decor', label: 'الديكورات' },
+                { value: 'lighting', label: 'الإضاءة' },
+                { value: 'kitchen', label: 'أدوات المطبخ' },
+                { value: 'household', label: 'الأدوات المنزلية' },
+                { value: 'storage', label: 'التخزين والتنظيم' }
+            ]
+        };
+
+        const oldSubCategory = @json(old('sub_category'));
+
+        function updateSubCategories() {
+            const options = categories[mainCategory.value] || [];
+            subCategory.innerHTML = '';
+
+            if (options.length === 0) {
+                subCategory.innerHTML = '<option value="">-- اختر القسم الرئيسي أولًا --</option>';
+                subCategory.disabled = true;
+                return;
+            }
+
+            subCategory.disabled = false;
+            subCategory.innerHTML = '<option value="">-- اختر القسم الفرعي --</option>';
+
+            options.forEach(function (item) {
+                const option = document.createElement('option');
+                option.value = item.value;
+                option.textContent = item.label;
+                option.selected = item.value === oldSubCategory;
+                subCategory.appendChild(option);
+            });
+        }
+
+        mainCategory.addEventListener('change', updateSubCategories);
+        updateSubCategories();
+    });
+</script>
+
 @endsection
